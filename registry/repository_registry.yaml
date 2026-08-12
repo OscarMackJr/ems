@@ -113,3 +113,16 @@ repositories:
   archived: false
   fork: false
   status: Classified
+- id: REPO-EMS
+  name: ems
+  github: OscarMackJr/ems
+  default_branch: main
+  owner: Software Development
+  tier: Tier1
+  service_criticality: High
+  production: false
+  internet_exposed: false
+  contains_customer_data: false
+  ai_enabled: true
+  data_classification:
+  - Internal
