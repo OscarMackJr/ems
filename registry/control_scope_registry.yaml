@@ -1,0 +1,795 @@
+version: 2A-1.0
+controls:
+- control_id: EMS-CTRL-001
+  control_name: Control 001
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: Semantics indicate the control governs EMS/document-control operation.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-002
+  control_name: Control 002
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: Semantics indicate the control governs EMS/document-control operation.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-003
+  control_name: Control 003
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: Semantics indicate repository-local implementation/evidence.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-004
+  control_name: Control 004
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: Semantics indicate repository-local implementation/evidence.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-005
+  control_name: Control 005
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: Semantics indicate the control governs EMS/document-control operation.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-006
+  control_name: Control 006
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: Recovery readiness is evidenced at the deployable service/runtime boundary
+    because recovery objectives, procedures, and recovery exercises apply to services.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-007
+  control_name: Control 007
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: AI-assisted development governance is an organization-wide engineering
+    policy covering approved AI services, confidential-data protection, and human
+    accountability.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-008
+  control_name: Control 008
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: Semantics indicate the control governs EMS/document-control operation.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-009
+  control_name: Branch Protection Required
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-010
+  control_name: Pull Request Review
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-011
+  control_name: CODEOWNERS Enforcement
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-012
+  control_name: Signed Commits
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-013
+  control_name: Protected Release Tags
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-014
+  control_name: Mandatory Issue Linkage
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-015
+  control_name: Repository Template Compliance
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-016
+  control_name: Control 016
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: Evidence integrity and retention governs control evidence identification,
+    integrity protection, retrieval, and retention and is therefore an EMS evidence-management
+    control.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-017
+  control_name: Secure Coding Standard
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-018
+  control_name: Secret Scanning
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 5 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-019
+  control_name: Dependency Vulnerability Scanning
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 5 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-020
+  control_name: License Compliance
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-021
+  control_name: SBOM Generation
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-022
+  control_name: Security Advisory Monitoring
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: Security advisory monitoring is primarily provided by shared security/platform
+    capabilities and may be inherited by repositories.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-023
+  control_name: Vulnerability Remediation Targets
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: Vulnerability remediation targets are established as organizational security
+    policy and applied across repositories/services.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-024
+  control_name: Security Exception Approval
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: Security exception approval is an organizational governance decision,
+    not a repository-local implementation control.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-025
+  control_name: Unit Test Minimum
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 2 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-026
+  control_name: Integration Testing
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-027
+  control_name: Regression Testing
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-028
+  control_name: Contract/API Testing
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-029
+  control_name: Performance Testing
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: The control governs runtime/service behavior and should be evidenced
+    at the deployable service boundary. Wave 2A impact shows 6 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-030
+  control_name: Disaster Recovery Testing
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: The control governs runtime/service behavior and should be evidenced
+    at the deployable service boundary. Wave 2A impact shows 6 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-031
+  control_name: Test Evidence Retention
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 4 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-032
+  control_name: Test Environment Isolation
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: The control is primarily implemented by shared engineering/cloud/platform
+    capabilities and may be inherited. Wave 2A impact shows 6 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-033
+  control_name: Reproducible Builds
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 1 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-034
+  control_name: Release Manifest Generation
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-035
+  control_name: SHA-256 Integrity Verification
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-036
+  control_name: Release Signing
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-037
+  control_name: Build Artifact Retention
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 4 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-038
+  control_name: Version Number Governance
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-039
+  control_name: Release Approval Workflow
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-040
+  control_name: Rollback Procedure
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: The control governs runtime/service behavior and should be evidenced
+    at the deployable service boundary. Wave 2A impact shows 6 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-041
+  control_name: Infrastructure as Code Required
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: The control is primarily implemented by shared engineering/cloud/platform
+    capabilities and may be inherited. Wave 2A impact shows 1 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-042
+  control_name: IaC Security Scanning
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: The control is primarily implemented by shared engineering/cloud/platform
+    capabilities and may be inherited. Wave 2A impact shows 1 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-043
+  control_name: Least Privilege IAM
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: The control is primarily implemented by shared engineering/cloud/platform
+    capabilities and may be inherited. Wave 2A impact shows 1 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-044
+  control_name: Secrets Management
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: The control is primarily implemented by shared engineering/cloud/platform
+    capabilities and may be inherited. Wave 2A impact shows 1 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-045
+  control_name: Cloud Resource Tagging
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: The control is primarily implemented by shared engineering/cloud/platform
+    capabilities and may be inherited. Wave 2A impact shows 1 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-046
+  control_name: Backup Verification
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: The control governs runtime/service behavior and should be evidenced
+    at the deployable service boundary. Wave 2A impact shows 1 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-047
+  control_name: Restore Validation
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: The control governs runtime/service behavior and should be evidenced
+    at the deployable service boundary. Wave 2A impact shows 1 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-048
+  control_name: Environment Separation
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: The control is primarily implemented by shared engineering/cloud/platform
+    capabilities and may be inherited. Wave 2A impact shows 1 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-049
+  control_name: Approved AI Platforms
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 3 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-050
+  control_name: Prompt Data Classification
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 3 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-051
+  control_name: Human Review of AI Code
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 3 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-052
+  control_name: AI Attribution
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 3 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-053
+  control_name: AI Security Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 3 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-054
+  control_name: AI Model Risk Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 3 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-055
+  control_name: Control 055
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: Policy Before Execution is implemented by the shared execution/control
+    platform before workloads or agents are allowed to run.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-056
+  control_name: Control 056
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: Agent Identity Verification is enforced by the shared identity/execution
+    platform rather than independently by each repository.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-057
+  control_name: Control 057
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: Audit Envelope Generation is produced by the shared execution/control
+    plane; EMS consumes and retains the resulting evidence.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-058
+  control_name: Control 058
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: Fail-Closed Authorization is a runtime authorization-enforcement responsibility
+    of the shared platform.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-059
+  control_name: Control 059
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: Execution Isolation Validation governs sandbox/runtime isolation and
+    belongs at the shared compute/execution platform boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-060
+  control_name: Control 060
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: Zero Trust Integration Testing validates integration of shared Zero Trust
+    execution and security capabilities and is a platform-level control.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-061
+  control_name: Database Migration Review
+  scope: APPLICATION
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Application evidence
+  rationale: The control governs an application/data change boundary spanning one
+    or more repositories. Wave 2A impact shows 1 NOT_EVALUATED repository row(s) for
+    this control. Classification reviewed against the control's primary operating
+    boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-062
+  control_name: Schema Version Control
+  scope: APPLICATION
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Application evidence
+  rationale: The control governs an application/data change boundary spanning one
+    or more repositories. Wave 2A impact shows 1 NOT_EVALUATED repository row(s) for
+    this control. Classification reviewed against the control's primary operating
+    boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-063
+  control_name: Data Classification
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 1 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-064
+  control_name: Database Backup Validation
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: The control governs runtime/service behavior and should be evidenced
+    at the deployable service boundary. Wave 2A impact shows 1 NOT_EVALUATED repository
+    row(s) for this control. Classification reviewed against the control's primary
+    operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-065
+  control_name: Data Retention Compliance
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 1 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-066
+  control_name: Production Data Protection
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 1 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-067
+  control_name: Controlled Document Metadata
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: The control governs the operation, documentation, evidence, or review
+    of EMS itself. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-068
+  control_name: Cross-Reference Validation
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: The control governs the operation, documentation, evidence, or review
+    of EMS itself. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-069
+  control_name: Requirements Traceability
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: The control governs the operation, documentation, evidence, or review
+    of EMS itself. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-070
+  control_name: Revision History
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: The control governs the operation, documentation, evidence, or review
+    of EMS itself. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-071
+  control_name: Executive Release Validation
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: The control governs the operation, documentation, evidence, or review
+    of EMS itself. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-072
+  control_name: PDF/DOCX Generation Validation
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: The control governs the operation, documentation, evidence, or review
+    of EMS itself. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-073
+  control_name: Engineering KPI Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-074
+  control_name: Quarterly Management Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-075
+  control_name: Continuous Compliance Scan
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: The control governs the operation, documentation, evidence, or review
+    of EMS itself. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-076
+  control_name: Corrective Action Tracking
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: The control governs the operation, documentation, evidence, or review
+    of EMS itself. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-077
+  control_name: Technical Debt Register
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-078
+  control_name: Lessons Learned Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: The control is established or reviewed once at the organizational/entity
+    governance level. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-079
+  control_name: Repository Health Review
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: The control is enforced or evidenced independently at the repository
+    boundary. Wave 2A impact shows 0 NOT_EVALUATED repository row(s) for this control.
+    Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED
+- control_id: EMS-CTRL-080
+  control_name: Annual EMS Review
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: The control governs the operation, documentation, evidence, or review
+    of EMS itself. Wave 2A impact shows 6 NOT_EVALUATED repository row(s) for this
+    control. Classification reviewed against the control's primary operating boundary.
+  classification_status: APPROVED

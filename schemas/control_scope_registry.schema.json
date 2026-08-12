@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EMS Control Scope Registry",
+  "type": "object",
+  "required": [
+    "version",
+    "controls"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 80,
+      "maxItems": 80,
+      "items": {
+        "type": "object",
+        "required": [
+          "control_id",
+          "control_name",
+          "scope",
+          "scope_owner",
+          "inheritance_allowed",
+          "evidence_authority",
+          "rationale",
+          "classification_status"
+        ],
+        "properties": {
+          "control_id": {
+            "type": "string",
+            "pattern": "^EMS-CTRL-[0-9]{3}$"
+          },
+          "control_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "enum": [
+              "REPOSITORY",
+              "SERVICE",
+              "APPLICATION",
+              "PLATFORM",
+              "ORGANIZATION",
+              "EMS"
+            ]
+          },
+          "scope_owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inheritance_allowed": {
+            "type": "boolean"
+          },
+          "evidence_authority": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "classification_status": {
+            "enum": [
+              "PROVISIONAL",
+              "APPROVED"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
