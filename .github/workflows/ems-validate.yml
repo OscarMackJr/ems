@@ -59,7 +59,8 @@ jobs:
       - name: Secret-pattern sanity check
         shell: bash
         run: |
-          if grep -RInE '(gh[opsu]_[A-Za-z0-9_]{20,}|BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AZURE_CLIENT_SECRET=|AWS_SECRET_ACCESS_KEY=)' . \
+          secret_pattern='(gh[opsu]*[A-Za-z0-9_]{20,}|BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|(AZURE_CLIENT_SECRET|AWS_SECRET_ACCESS_KEY)[[:space:]]*=)'
+          if grep -RInE "$secret_pattern" . \
             --exclude-dir=.git --exclude-dir=.venv --exclude='*.md'; then
             echo "Potential secret detected."
             exit 1
