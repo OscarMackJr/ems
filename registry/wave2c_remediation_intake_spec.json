@@ -1,0 +1,80 @@
+{
+  "wave": "2C",
+  "branch": "feature/wave2c-remediation",
+  "source_release": "ems-v0.5.0-wave2b",
+  "promotion_policy": "FAIL_CLOSED",
+  "controls": [
+    {
+      "control_id": "EMS-CTRL-049",
+      "control_name": "Approved AI Platforms",
+      "scope": "ORGANIZATION",
+      "intake_classification": "HYBRID",
+      "default_owner_role": "Engineering Management / Security",
+      "required_evidence": "Operating record showing approved AI platform inventory, ownership/approval, and handling of an unapproved platform through block, rejection, escalation, or approved exception.",
+      "wave2b_gap": "unapproved_platform_handling_detected"
+    },
+    {
+      "control_id": "EMS-CTRL-050",
+      "control_name": "Prompt Data Classification",
+      "scope": "ORGANIZATION",
+      "intake_classification": "HYBRID",
+      "default_owner_role": "Engineering Management / Security",
+      "required_evidence": "Operating record showing prompt data classification or sensitive/confidential-data handling actually applied to AI usage.",
+      "wave2b_gap": "sensitive_data_handling_detected"
+    },
+    {
+      "control_id": "EMS-CTRL-053",
+      "control_name": "AI Security Review",
+      "scope": "ORGANIZATION",
+      "intake_classification": "HYBRID",
+      "default_owner_role": "Security",
+      "required_evidence": "AI security review or assessment record containing tracked finding, risk, exception, remediation, owner, and disposition history.",
+      "wave2b_gap": "risk_or_finding_tracking_detected"
+    },
+    {
+      "control_id": "EMS-CTRL-063",
+      "control_name": "Data Classification",
+      "scope": "ORGANIZATION",
+      "intake_classification": "MANUAL",
+      "default_owner_role": "Data Owner / Security",
+      "required_evidence": "Data-classification record with classification level, owner/steward, system or dataset scope, and review/update history.",
+      "wave2b_gap": "data_owner_or_steward_recorded"
+    },
+    {
+      "control_id": "EMS-CTRL-065",
+      "control_name": "Data Retention Compliance",
+      "scope": "ORGANIZATION",
+      "intake_classification": "HYBRID",
+      "default_owner_role": "Data Owner / Legal / Security",
+      "required_evidence": "Retention record or schedule with retention period, data scope/category, authority, and actual disposition or retention execution evidence.",
+      "wave2b_gap": "retention_period_recorded;data_scope_or_category_recorded"
+    },
+    {
+      "control_id": "EMS-CTRL-066",
+      "control_name": "Production Data Protection",
+      "scope": "ORGANIZATION",
+      "intake_classification": "HYBRID",
+      "default_owner_role": "Engineering / Security",
+      "required_evidence": "Production-data protection record showing protected scope, control/handling, accountable owner, and validation/review evidence.",
+      "wave2b_gap": "protection_control_or_handling_recorded"
+    },
+    {
+      "control_id": "EMS-CTRL-072",
+      "control_name": "PDF/DOCX Generation Validation",
+      "scope": "EMS",
+      "intake_classification": "AUTOMATABLE",
+      "default_owner_role": "EMS Automation",
+      "required_evidence": "Successful controlled DOCX and PDF generation, retained output validation, and provenance tying generated outputs to controlled source/release.",
+      "wave2b_gap": "controlled_document_generation_outputs_detected;expected_formats_detected_or_validated"
+    },
+    {
+      "control_id": "EMS-CTRL-080",
+      "control_name": "Annual EMS Review",
+      "scope": "EMS",
+      "intake_classification": "MANUAL",
+      "default_owner_role": "Engineering Management",
+      "required_evidence": "Completed annual EMS management review with date, participants, findings, decisions, actions, owners, and retained review record.",
+      "wave2b_gap": "annual_ems_review_operating_evidence_missing"
+    }
+  ]
+}
