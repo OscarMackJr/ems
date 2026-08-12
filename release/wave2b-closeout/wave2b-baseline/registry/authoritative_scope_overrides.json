@@ -1,0 +1,52 @@
+{
+  "version": "2A.1-authoritative-overrides-v1",
+  "reviewer": "EMS Architecture",
+  "review_date": "2026-08-12",
+  "decisions": {
+    "EMS-CTRL-006": {
+      "decision": "RECLASSIFY",
+      "scope": "SERVICE",
+      "rationale": "Recovery readiness is evidenced at the deployable service/runtime boundary because recovery objectives, procedures, and recovery exercises apply to services."
+    },
+    "EMS-CTRL-007": {
+      "decision": "APPROVED",
+      "scope": "ORGANIZATION",
+      "rationale": "AI-assisted development governance is an organization-wide engineering policy covering approved AI services, confidential-data protection, and human accountability."
+    },
+    "EMS-CTRL-016": {
+      "decision": "RECLASSIFY",
+      "scope": "EMS",
+      "rationale": "Evidence integrity and retention governs control evidence identification, integrity protection, retrieval, and retention and is therefore an EMS evidence-management control."
+    },
+    "EMS-CTRL-055": {
+      "decision": "RECLASSIFY",
+      "scope": "PLATFORM",
+      "rationale": "Policy Before Execution is implemented by the shared execution/control platform before workloads or agents are allowed to run."
+    },
+    "EMS-CTRL-056": {
+      "decision": "RECLASSIFY",
+      "scope": "PLATFORM",
+      "rationale": "Agent Identity Verification is enforced by the shared identity/execution platform rather than independently by each repository."
+    },
+    "EMS-CTRL-057": {
+      "decision": "RECLASSIFY",
+      "scope": "PLATFORM",
+      "rationale": "Audit Envelope Generation is produced by the shared execution/control plane; EMS consumes and retains the resulting evidence."
+    },
+    "EMS-CTRL-058": {
+      "decision": "RECLASSIFY",
+      "scope": "PLATFORM",
+      "rationale": "Fail-Closed Authorization is a runtime authorization-enforcement responsibility of the shared platform."
+    },
+    "EMS-CTRL-059": {
+      "decision": "RECLASSIFY",
+      "scope": "PLATFORM",
+      "rationale": "Execution Isolation Validation governs sandbox/runtime isolation and belongs at the shared compute/execution platform boundary."
+    },
+    "EMS-CTRL-060": {
+      "decision": "RECLASSIFY",
+      "scope": "PLATFORM",
+      "rationale": "Zero Trust Integration Testing validates integration of shared Zero Trust execution and security capabilities and is a platform-level control."
+    }
+  }
+}

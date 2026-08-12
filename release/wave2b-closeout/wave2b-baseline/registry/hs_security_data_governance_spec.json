@@ -1,0 +1,62 @@
+{
+  "version": "2B2.6",
+  "collector_id": "HS-SECURITY-DATA-GOVERNANCE",
+  "collector_family": "security_data_governance",
+  "controls": {
+    "EMS-CTRL-023": {
+      "name": "Vulnerability Remediation Targets",
+      "scope": "ORGANIZATION",
+      "assertions": [
+        "vulnerability_findings_detected",
+        "severity_or_priority_recorded",
+        "remediation_target_or_due_date_recorded",
+        "owner_or_accountability_recorded",
+        "remediation_status_or_closure_history_retained"
+      ]
+    },
+    "EMS-CTRL-024": {
+      "name": "Security Exception Approval",
+      "scope": "ORGANIZATION",
+      "assertions": [
+        "security_exception_record_detected",
+        "exception_scope_and_reason_recorded",
+        "approver_or_authority_recorded",
+        "expiry_or_review_date_recorded",
+        "exception_status_or_closure_history_retained"
+      ]
+    },
+    "EMS-CTRL-063": {
+      "name": "Data Classification",
+      "scope": "ORGANIZATION",
+      "assertions": [
+        "data_classification_record_detected",
+        "classification_level_recorded",
+        "data_owner_or_steward_recorded",
+        "system_or_dataset_scope_recorded",
+        "classification_review_or_update_history_retained"
+      ]
+    },
+    "EMS-CTRL-065": {
+      "name": "Data Retention Compliance",
+      "scope": "ORGANIZATION",
+      "assertions": [
+        "retention_schedule_or_record_detected",
+        "retention_period_recorded",
+        "data_scope_or_category_recorded",
+        "owner_or_authority_recorded",
+        "retention_execution_or_disposition_evidence_retained"
+      ]
+    },
+    "EMS-CTRL-066": {
+      "name": "Production Data Protection",
+      "scope": "ORGANIZATION",
+      "assertions": [
+        "production_data_protection_record_detected",
+        "sensitive_or_production_data_scope_recorded",
+        "protection_control_or_handling_recorded",
+        "owner_or_responsible_party_recorded",
+        "protection_validation_or_review_evidence_retained"
+      ]
+    }
+  }
+}

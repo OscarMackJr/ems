@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "records"
+  ],
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "record_id",
+          "data_scope_or_category",
+          "retention_period",
+          "owner_or_authority",
+          "disposition_action",
+          "execution_date"
+        ],
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "data_scope_or_category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "retention_period": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner_or_authority": {
+            "type": "string",
+            "minLength": 1
+          },
+          "disposition_action": {
+            "enum": [
+              "RETAIN",
+              "DELETE",
+              "PURGE",
+              "ARCHIVE",
+              "LEGAL_HOLD"
+            ]
+          },
+          "execution_date": {
+            "type": "string",
+            "minLength": 8
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

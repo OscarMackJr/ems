@@ -1,0 +1,18 @@
+version: 2B1-1.0
+supported_scopes:
+  - EMS
+  - ORGANIZATION
+
+rules:
+  - id: INH-001
+    description: Higher-scope evidence must exist before repository inheritance is allowed.
+  - id: INH-002
+    description: Higher-scope FAIL is inherited as an effective FAIL, not masked as INHERITED-only.
+  - id: INH-003
+    description: Higher-scope WARNING is inherited as effective WARNING with provenance.
+  - id: INH-004
+    description: Higher-scope PASS is represented at repository level as INHERITED with inherited_status PASS.
+  - id: INH-005
+    description: Missing or NOT_EVALUATED higher-scope evidence leaves repository effective status NOT_EVALUATED with reason HIGHER_SCOPE_EVIDENCE_MISSING.
+  - id: INH-006
+    description: Repository-local results are never overwritten for controls classified REPOSITORY.

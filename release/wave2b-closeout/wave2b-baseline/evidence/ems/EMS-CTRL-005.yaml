@@ -1,0 +1,13 @@
+evidence_id: EMS-EMS-CTRL-005-HS-EVIDENCE-INTEGRITY-RELEASE-2026-08-12
+control_id: EMS-CTRL-005
+scope: EMS
+authority_id: EMS-GOVERNANCE
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-EVIDENCE-INTEGRITY-RELEASE satisfied all required assertions
+  for EMS-CTRL-005.
+evidence_references:
+- C:\temp\standars\ems\registry\repository_overrides.yaml
+- C:\temp\standars\ems\registry\repository_registry.yaml
+notes: collector_id=HS-EVIDENCE-INTEGRITY-RELEASE; collector_version=2B2.2

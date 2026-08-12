@@ -1,0 +1,21 @@
+control_id: EMS-CTRL-079
+name: Repository Health Review
+mode: rollup
+domains:
+  governance:
+    controls: [EMS-CTRL-009, EMS-CTRL-010, EMS-CTRL-011, EMS-CTRL-015]
+  security:
+    controls: [EMS-CTRL-018, EMS-CTRL-019, EMS-CTRL-020, EMS-CTRL-021]
+  testing:
+    controls: [EMS-CTRL-025, EMS-CTRL-026, EMS-CTRL-031]
+  build_release:
+    controls: [EMS-CTRL-033, EMS-CTRL-034, EMS-CTRL-037, EMS-CTRL-039]
+evaluation:
+  PASS:
+    max_fail: 0
+    max_warning: 2
+    max_not_evaluated: 0
+  WARNING:
+    max_fail: 0
+  FAIL:
+    min_fail: 1

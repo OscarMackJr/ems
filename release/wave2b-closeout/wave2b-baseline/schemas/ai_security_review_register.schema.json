@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "records"
+  ],
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "review_id",
+          "ai_platform_or_model",
+          "use_case",
+          "review_date",
+          "reviewer",
+          "finding_id",
+          "finding_severity",
+          "risk",
+          "remediation",
+          "owner",
+          "status"
+        ],
+        "properties": {
+          "review_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ai_platform_or_model": {
+            "type": "string",
+            "minLength": 1
+          },
+          "use_case": {
+            "type": "string",
+            "minLength": 1
+          },
+          "review_date": {
+            "type": "string",
+            "minLength": 8
+          },
+          "reviewer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "finding_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "finding_severity": {
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH",
+              "CRITICAL",
+              "NONE"
+            ]
+          },
+          "risk": {
+            "type": "string",
+            "minLength": 1
+          },
+          "remediation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "OPEN",
+              "IN_PROGRESS",
+              "ACCEPTED",
+              "CLOSED"
+            ]
+          },
+          "target_date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "closure_date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

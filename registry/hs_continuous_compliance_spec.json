@@ -1,0 +1,29 @@
+{
+  "version": "2B2.3",
+  "collector_id": "HS-CONTINUOUS-COMPLIANCE",
+  "collector_family": "continuous_compliance",
+  "scope": "EMS",
+  "controls": {
+    "EMS-CTRL-075": {
+      "name": "Continuous Compliance Scan",
+      "assertions": [
+        "continuous_compliance_execution_detected",
+        "managed_repository_population_evaluated",
+        "control_results_generated",
+        "scan_output_retained",
+        "latest_execution_identifiable"
+      ]
+    },
+    "EMS-CTRL-076": {
+      "name": "Corrective Action Tracking",
+      "assertions": [
+        "findings_or_exceptions_detected",
+        "corrective_action_tracking_structure_exists",
+        "owner_or_disposition_recorded",
+        "open_items_remain_traceable",
+        "closed_items_preserve_resolution_history",
+        "corrective_action_evidence_retained"
+      ]
+    }
+  }
+}

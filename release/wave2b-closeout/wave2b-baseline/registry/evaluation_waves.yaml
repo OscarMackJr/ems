@@ -1,0 +1,88 @@
+program:
+  name: EMS Pass 4.5 Evidence Coverage Expansion
+  version: 4.5-draft
+waves:
+- id: WAVE-1
+  name: Repository Evidence Expansion
+  status: Executable
+  controls:
+  - EMS-CTRL-009
+  - EMS-CTRL-010
+  - EMS-CTRL-012
+  - EMS-CTRL-013
+  - EMS-CTRL-014
+  - EMS-CTRL-018
+  - EMS-CTRL-019
+  - EMS-CTRL-020
+  - EMS-CTRL-021
+  - EMS-CTRL-022
+  - EMS-CTRL-025
+  - EMS-CTRL-026
+  - EMS-CTRL-027
+  - EMS-CTRL-028
+  - EMS-CTRL-029
+  - EMS-CTRL-031
+  - EMS-CTRL-033
+  - EMS-CTRL-034
+  - EMS-CTRL-035
+  - EMS-CTRL-036
+  - EMS-CTRL-037
+  - EMS-CTRL-038
+  - EMS-CTRL-039
+  - EMS-CTRL-079
+- id: WAVE-2
+  name: Control Scope Correction
+  status: Planned
+  controls:
+  - EMS-CTRL-067
+  - EMS-CTRL-068
+  - EMS-CTRL-069
+  - EMS-CTRL-070
+  - EMS-CTRL-071
+  - EMS-CTRL-072
+  - EMS-CTRL-073
+  - EMS-CTRL-074
+  - EMS-CTRL-075
+  - EMS-CTRL-076
+  - EMS-CTRL-078
+  - EMS-CTRL-080
+- id: WAVE-3
+  name: Inherited Evidence
+  status: Planned
+  controls:
+  - EMS-CTRL-017
+  - EMS-CTRL-023
+  - EMS-CTRL-024
+  - EMS-CTRL-067
+  - EMS-CTRL-068
+  - EMS-CTRL-069
+  - EMS-CTRL-070
+  - EMS-CTRL-071
+  - EMS-CTRL-072
+  - EMS-CTRL-073
+  - EMS-CTRL-074
+  - EMS-CTRL-076
+  - EMS-CTRL-080
+- id: WAVE-4
+  name: Manual and Hybrid Evidence
+  status: Planned
+  controls:
+  - EMS-CTRL-030
+  - EMS-CTRL-032
+  - EMS-CTRL-040
+  - EMS-CTRL-043
+  - EMS-CTRL-045
+  - EMS-CTRL-046
+  - EMS-CTRL-047
+  - EMS-CTRL-048
+  - EMS-CTRL-049
+  - EMS-CTRL-050
+  - EMS-CTRL-051
+  - EMS-CTRL-052
+  - EMS-CTRL-053
+  - EMS-CTRL-054
+  - EMS-CTRL-063
+  - EMS-CTRL-064
+  - EMS-CTRL-065
+  - EMS-CTRL-066
+  - EMS-CTRL-077

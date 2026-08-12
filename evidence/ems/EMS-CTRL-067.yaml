@@ -1,0 +1,31 @@
+evidence_id: EMS-EMS-CTRL-067-HS-DOCUMENT-CONTROL-2026-08-12
+control_id: EMS-CTRL-067
+scope: EMS
+authority_id: EMS-GOVERNANCE
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-DOCUMENT-CONTROL collector satisfied all required assertions
+  for EMS-CTRL-067.
+evidence_references:
+- C:\temp\standars\ems\config\branch_governance.json
+- C:\temp\standars\ems\config\github_governance.yaml
+- C:\temp\standars\ems\config\license_compliance_policy.draft.yaml
+- C:\temp\standars\ems\config\repository_overrides.example.yaml
+- C:\temp\standars\ems\registry\adjudication_rules.json
+- C:\temp\standars\ems\registry\applicability_profiles.yaml
+- C:\temp\standars\ems\registry\authoritative_scope_overrides.json
+- C:\temp\standars\ems\registry\automated_scope_review_model.json
+- C:\temp\standars\ems\registry\collector_acceptance.json
+- C:\temp\standars\ems\registry\control_catalog.yaml
+- C:\temp\standars\ems\registry\control_definition_recovery_config.json
+- C:\temp\standars\ems\registry\control_scope_registry.yaml
+- C:\temp\standars\ems\registry\control_scope_taxonomy.yaml
+- C:\temp\standars\ems\registry\evaluation_waves.yaml
+- C:\temp\standars\ems\registry\evidence_authority_registry.yaml
+- C:\temp\standars\ems\registry\evidence_source_policy.json
+- C:\temp\standars\ems\registry\github_control_mapping.yaml
+- C:\temp\standars\ems\registry\higher_scope_collector_families.json
+- C:\temp\standars\ems\registry\higher_scope_evidence_discovery_config.json
+- C:\temp\standars\ems\registry\hs_document_control_spec.json
+notes: collector_id=HS-DOCUMENT-CONTROL; collector_version=2B2.1

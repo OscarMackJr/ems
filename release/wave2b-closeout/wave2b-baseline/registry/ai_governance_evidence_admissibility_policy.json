@@ -1,0 +1,17 @@
+{
+  "version": "2B2.5a",
+  "allowed_primary_source_class": "OPERATING_EVIDENCE",
+  "source_classes": [
+    "OPERATING_EVIDENCE",
+    "DECISIONAL",
+    "DEFINITIONAL",
+    "PRIOR_COMPLIANCE_RESULT",
+    "GENERATED_PROPOSAL",
+    "UNKNOWN"
+  ],
+  "promotion_rule": {
+    "all_material_assertions_require_operating_evidence": true,
+    "minimum_operating_sources_per_material_assertion": 1,
+    "fail_closed": true
+  }
+}

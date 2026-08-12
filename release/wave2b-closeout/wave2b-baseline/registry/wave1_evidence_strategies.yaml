@@ -1,0 +1,49 @@
+strategies:
+  EMS-CTRL-009:
+    collector: branch_protection
+  EMS-CTRL-010:
+    collector: pull_request_reviews
+  EMS-CTRL-012:
+    collector: signed_commits
+  EMS-CTRL-013:
+    collector: protected_release_tags
+  EMS-CTRL-014:
+    collector: issue_linkage
+  EMS-CTRL-018:
+    collector: secret_scanning
+  EMS-CTRL-019:
+    collector: dependency_scanning
+  EMS-CTRL-020:
+    collector: license_compliance
+  EMS-CTRL-021:
+    collector: sbom
+  EMS-CTRL-022:
+    collector: security_advisories
+  EMS-CTRL-025:
+    collector: unit_testing
+  EMS-CTRL-026:
+    collector: integration_testing
+  EMS-CTRL-027:
+    collector: regression_testing
+  EMS-CTRL-028:
+    collector: contract_testing
+  EMS-CTRL-029:
+    collector: performance_testing
+  EMS-CTRL-031:
+    collector: test_evidence_retention
+  EMS-CTRL-033:
+    collector: reproducible_builds
+  EMS-CTRL-034:
+    collector: release_manifest
+  EMS-CTRL-035:
+    collector: sha256_integrity
+  EMS-CTRL-036:
+    collector: release_signing
+  EMS-CTRL-037:
+    collector: artifact_retention
+  EMS-CTRL-038:
+    collector: version_governance
+  EMS-CTRL-039:
+    collector: release_workflow
+  EMS-CTRL-079:
+    collector: repository_health

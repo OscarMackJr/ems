@@ -1,0 +1,48 @@
+{
+  "version": "4.5-policy-decisions-v1",
+  "effective_date": "2026-08-11",
+  "decisions": {
+    "EMS-CTRL-012": {
+      "policy_decision": "Signed commits are recommended for normal development and required only for designated high-assurance or release-signing workflows.",
+      "policy_owner": "Software Development",
+      "policy_notes": "Normal development repositories are not required to enforce universal signed commits.",
+      "approved_status_mapping": "WARNING"
+    },
+    "EMS-CTRL-014": {
+      "policy_decision": "Production changes must be traceable to an approved work item through pull request, commit, or automated linkage. GitHub Issues are not specifically required.",
+      "policy_owner": "Software Development",
+      "policy_notes": "The control measures change traceability rather than requiring a specific issue-tracking product.",
+      "approved_status_mapping": "WARNING"
+    },
+    "EMS-CTRL-020": {
+      "policy_decision": "Dependency licenses must be evaluated against an approved EMS dependency-license policy using automated scan evidence. Repository LICENSE-file presence alone is insufficient.",
+      "policy_owner": "Software Development / Security",
+      "policy_notes": "Remain POLICY_PENDING until the approved dependency-license allow/deny/review policy and authoritative collector are complete.",
+      "approved_status_mapping": "POLICY_PENDING"
+    },
+    "EMS-CTRL-034": {
+      "policy_decision": "Formal releases must generate an EMS-approved release manifest.",
+      "policy_owner": "Software Development",
+      "policy_notes": "Applicability is determined per repository by the Policy Applicability engine. Non-releasing repositories remain NOT_APPLICABLE.",
+      "approved_status_mapping": "WARNING"
+    },
+    "EMS-CTRL-036": {
+      "policy_decision": "Distributable production release artifacts must use approved signing or attestation.",
+      "policy_owner": "Software Development / Security",
+      "policy_notes": "Applicability is determined per repository. Repositories without distributable release artifacts remain NOT_APPLICABLE.",
+      "approved_status_mapping": "WARNING"
+    },
+    "EMS-CTRL-038": {
+      "policy_decision": "Repositories using release or version tags must follow the EMS-approved versioning convention.",
+      "policy_owner": "Software Development",
+      "policy_notes": "Applicability is determined per repository. Existing inconsistent release tags remain WARNING until normalized.",
+      "approved_status_mapping": "WARNING"
+    },
+    "EMS-CTRL-039": {
+      "policy_decision": "Controlled production releases or deployments must use an approved release or deployment approval workflow.",
+      "policy_owner": "Software Development",
+      "policy_notes": "Applicability is determined per repository. Non-releasing and non-deploying repositories remain NOT_APPLICABLE.",
+      "approved_status_mapping": "WARNING"
+    }
+  }
+}

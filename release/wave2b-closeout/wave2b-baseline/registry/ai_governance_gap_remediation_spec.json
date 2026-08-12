@@ -1,0 +1,53 @@
+{
+  "version": "2B2.5b",
+  "collector_id": "HS-AI-GOVERNANCE-GAP-REMEDIATION",
+  "controls": {
+    "EMS-CTRL-049": {
+      "name": "Approved AI Platforms",
+      "scope": "ORGANIZATION",
+      "missing_assertion": "unapproved_platform_handling_detected",
+      "required_operating_signals": [
+        "unapproved ai platform",
+        "blocked",
+        "rejected",
+        "denied",
+        "exception",
+        "escalated"
+      ]
+    },
+    "EMS-CTRL-050": {
+      "name": "Prompt Data Classification",
+      "scope": "ORGANIZATION",
+      "missing_assertion": "sensitive_data_handling_detected",
+      "required_operating_signals": [
+        "prompt",
+        "sensitive",
+        "confidential",
+        "restricted",
+        "classification",
+        "redact"
+      ]
+    },
+    "EMS-CTRL-053": {
+      "name": "AI Security Review",
+      "scope": "ORGANIZATION",
+      "missing_assertion": "risk_or_finding_tracking_detected",
+      "required_operating_signals": [
+        "ai security",
+        "finding",
+        "risk",
+        "remediation",
+        "exception",
+        "assessment"
+      ]
+    }
+  },
+  "allowed_locations": [
+    "evidence",
+    "reviews",
+    "assessments",
+    "registers",
+    "generated/wave2/higher-scope-remediation"
+  ],
+  "fail_closed": true
+}

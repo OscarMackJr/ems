@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "stage": "C:\\temp\\standars\\ems\\release\\wave2b-closeout\\wave2b-baseline",
+  "file_count": 266,
+  "zip": "C:\\temp\\standars\\ems\\release\\wave2b-closeout\\EMS_Wave2B_BranchReady_Closeout.zip",
+  "zip_sha256": "2accd9b70b1cea87bbc376cb7d106a3ffc0c47b57d1ee4e4d33bbdb1edd4fbfd"
+}

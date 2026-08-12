@@ -1,0 +1,17 @@
+{
+  "version": "2A.1-1.0",
+  "decision_values": [
+    "APPROVED",
+    "RECLASSIFY",
+    "DEFER"
+  ],
+  "allowed_scopes": [
+    "REPOSITORY",
+    "SERVICE",
+    "APPLICATION",
+    "PLATFORM",
+    "ORGANIZATION",
+    "EMS"
+  ],
+  "priority_rule": "Review non-REPOSITORY controls first because they drive higher-scope inheritance candidates."
+}

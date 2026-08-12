@@ -1,0 +1,28 @@
+evidence_id: ORGANIZATION-EMS-CTRL-078-HS-MANAGEMENT-REVIEW-2026-08-12
+control_id: EMS-CTRL-078
+scope: ORGANIZATION
+authority_id: ENGINEERING-LEADERSHIP
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-MANAGEMENT-REVIEW satisfied all required assertions for EMS-CTRL-078.
+evidence_references:
+- C:\temp\standars\ems\generated\wave2\control-definition-recovery\recovery_sources.json
+- C:\temp\standars\ems\generated\wave2\control_scope_matrix.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-collector-architecture\higher_scope_evidence_requirements.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-collectors\management-review-qualified\qualified_management_review.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-collectors\management-review\assertions.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-evidence-qualified\classified_evidence_candidates.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-evidence-qualified\qualified_best_candidates.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-evidence-qualified\qualified_evidence_candidates.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-evidence-qualified\qualified_evidence_gaps.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-evidence\evidence_candidates.csv
+- C:\temp\standars\ems\generated\wave2\inheritance\higher_scope_results.json
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_adjudication_queue.authoritative.csv
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_adjudication_queue.csv
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_adjudication_queue.resolved.csv
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_adjudication_queue.reviewed.csv
+- C:\temp\standars\ems\registry\control_catalog.yaml
+- C:\temp\standars\ems\registry\control_scope_registry.yaml
+- C:\temp\standars\ems\registry\hs_management_review_spec.json
+notes: collector_id=HS-MANAGEMENT-REVIEW; collector_version=2B2.4

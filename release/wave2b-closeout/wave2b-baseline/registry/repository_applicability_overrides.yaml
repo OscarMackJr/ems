@@ -1,0 +1,12 @@
+version: 1
+# Optional authoritative repository facts.
+# Set only when the automated evidence cannot correctly determine applicability.
+repositories: {}
+#
+# Example:
+# repositories:
+#   nono:
+#     formal_release: true
+#     distributable_release_artifacts: true
+#     release_tags: true
+#     controlled_release_or_deployment: true

@@ -1,0 +1,26 @@
+version: 1.1
+control_id: EMS-CTRL-015
+required:
+  - id: codeowners
+    any_of: [.github/CODEOWNERS, CODEOWNERS, docs/CODEOWNERS]
+  - id: readme
+    any_of: [README.md, README.rst, README]
+  - id: gitignore
+    any_of: [.gitignore]
+conditional:
+  - id: workflow
+    applies_when: software_repository
+  - id: dependency_manifest
+    applies_when: software_repository
+recognized_dependency_manifests:
+  - package.json
+  - pyproject.toml
+  - requirements.txt
+  - Pipfile
+  - Cargo.toml
+  - global.json
+  - Directory.Build.props
+  - Directory.Packages.props
+  - packages.lock.json
+  - "*.csproj"
+  - "*.sln"

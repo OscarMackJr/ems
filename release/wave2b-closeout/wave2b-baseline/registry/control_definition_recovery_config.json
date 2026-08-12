@@ -1,0 +1,34 @@
+{
+  "version": "2A.1-control-definition-recovery-v1",
+  "target_controls": [
+    "EMS-CTRL-001",
+    "EMS-CTRL-002",
+    "EMS-CTRL-003",
+    "EMS-CTRL-004",
+    "EMS-CTRL-005",
+    "EMS-CTRL-006",
+    "EMS-CTRL-007",
+    "EMS-CTRL-008",
+    "EMS-CTRL-016",
+    "EMS-CTRL-055",
+    "EMS-CTRL-056",
+    "EMS-CTRL-057",
+    "EMS-CTRL-058",
+    "EMS-CTRL-059",
+    "EMS-CTRL-060"
+  ],
+  "search_extensions": [
+    ".md",
+    ".txt",
+    ".json",
+    ".csv",
+    ".yaml",
+    ".yml"
+  ],
+  "exclude_path_fragments": [
+    "\\.venv\\",
+    "\\site-packages\\",
+    "\\__pycache__\\"
+  ],
+  "auto_apply_min_confidence": 0.9
+}

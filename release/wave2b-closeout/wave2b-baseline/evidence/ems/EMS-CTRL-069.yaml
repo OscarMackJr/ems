@@ -1,0 +1,28 @@
+evidence_id: EMS-EMS-CTRL-069-HS-DOCUMENT-CONTROL-2026-08-12
+control_id: EMS-CTRL-069
+scope: EMS
+authority_id: EMS-GOVERNANCE
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-DOCUMENT-CONTROL collector satisfied all required assertions
+  for EMS-CTRL-069.
+evidence_references:
+- C:\temp\standars\ems\docs\GITHUB_CONTROL_MAPPING.md
+- C:\temp\standars\ems\generated\wave2\higher-scope-collector-architecture\higher_scope_evidence_requirements.csv
+- C:\temp\standars\ems\registry\adjudication_rules.json
+- C:\temp\standars\ems\registry\control_catalog.yaml
+- C:\temp\standars\ems\registry\control_catalog.yaml.pre-definition-recovery.bak
+- C:\temp\standars\ems\registry\control_catalog.yaml.pre-lineage-recovery.bak
+- C:\temp\standars\ems\registry\control_scope_registry.yaml
+- C:\temp\standars\ems\registry\github_control_mapping.yaml
+- C:\temp\standars\ems\registry\hs_document_control_spec.json
+- C:\temp\standars\ems\registry\repository_template_baseline.yaml
+- C:\temp\standars\ems\requirements.txt
+- C:\temp\standars\ems\scripts\Apply-PolicyStatusMappings.py
+- C:\temp\standars\ems\scripts\Collect-RefinedEvidence-v2.py
+- C:\temp\standars\ems\scripts\Collect-RefinedEvidence.py
+- C:\temp\standars\ems\scripts\Discover-HigherScopeEvidence.py
+- C:\temp\standars\ems\scripts\Recover-ControlDefinitions.py
+- C:\temp\standars\ems\scripts\Resolve-ScopeReviewExceptions.py
+notes: collector_id=HS-DOCUMENT-CONTROL; collector_version=2B2.1

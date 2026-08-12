@@ -1,0 +1,32 @@
+evidence_id: EMS-EMS-CTRL-075-HS-CONTINUOUS-COMPLIANCE-2026-08-12
+control_id: EMS-CTRL-075
+scope: EMS
+authority_id: EMS-GOVERNANCE
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-CONTINUOUS-COMPLIANCE satisfied all required assertions for EMS-CTRL-075.
+evidence_references:
+- C:\temp\standars\ems\generated\wave2\control_scope_matrix.csv
+- C:\temp\standars\ems\generated\wave2\control_scope_validation.json
+- C:\temp\standars\ems\generated\wave2\higher-scope-collector-architecture\architecture_validation.json
+- C:\temp\standars\ems\generated\wave2\higher-scope-collectors\continuous-compliance-qualified\continuous_compliance_gaps.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-collectors\continuous-compliance-qualified\qualified_continuous_compliance.csv
+- C:\temp\standars\ems\generated\wave2\higher-scope-collectors\continuous-compliance\envelope_validation.json
+- C:\temp\standars\ems\generated\wave2\higher-scope-collectors\document-control\envelope_validation.json
+- C:\temp\standars\ems\generated\wave2\higher-scope-collectors\evidence-integrity-release\envelope_validation.json
+- C:\temp\standars\ems\generated\wave2\higher-scope-evidence-qualified\promotion_validation.json
+- C:\temp\standars\ems\generated\wave2\higher-scope-evidence\candidate_validation.json
+- C:\temp\standars\ems\generated\wave2\inheritance\effective_compliance_with_inheritance.csv
+- C:\temp\standars\ems\generated\wave2\inheritance\inheritance_impact_report.json
+- C:\temp\standars\ems\generated\wave2\inheritance\inheritance_validation.json
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\authoritative_scope_override_report.json
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\authoritative_scope_validation.json
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_adjudication_validation.json
+- C:\temp\standars\ems\registry\hs_continuous_compliance_spec.json
+- C:\temp\standars\ems\releases\Pass4_5_Wave1_Baseline\generated\adjudication\wave1_adjudication_queue.csv
+- C:\temp\standars\ems\releases\Pass4_5_Wave1_Baseline\generated\collector-acceptance\effective_compliance.csv
+- C:\temp\standars\ems\releases\Pass4_5_Wave1_Baseline\generated\wave1\wave1_observations.json
+- C:\temp\standars\ems\releases\wave1-input\effective_compliance_postpolicy.csv
+- C:\temp\standars\ems\schemas\hs_continuous_compliance_envelope.schema.json
+notes: collector_id=HS-CONTINUOUS-COMPLIANCE; collector_version=2B2.3

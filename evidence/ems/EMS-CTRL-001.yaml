@@ -1,0 +1,25 @@
+evidence_id: EMS-EMS-CTRL-001-HS-DOCUMENT-CONTROL-2026-08-12
+control_id: EMS-CTRL-001
+scope: EMS
+authority_id: EMS-GOVERNANCE
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-DOCUMENT-CONTROL collector satisfied all required assertions
+  for EMS-CTRL-001.
+evidence_references:
+- C:\temp\standars\ems\config\branch_governance.json
+- C:\temp\standars\ems\config\github_governance.yaml
+- C:\temp\standars\ems\config\license_compliance_policy.draft.yaml
+- C:\temp\standars\ems\registry\control_catalog.yaml
+- C:\temp\standars\ems\registry\control_catalog.yaml.pre-definition-recovery.bak
+- C:\temp\standars\ems\registry\control_catalog.yaml.pre-lineage-recovery.bak
+- C:\temp\standars\ems\registry\evidence_source_policy.json
+- C:\temp\standars\ems\registry\inheritance_policy.yaml
+- C:\temp\standars\ems\registry\policy_applicability.yaml
+- C:\temp\standars\ems\registry\policy_decisions.json
+- C:\temp\standars\ems\releases\Pass4_5_Wave1_Baseline\WAVE1_BASELINE_MANIFEST.json
+- C:\temp\standars\ems\scripts\Set-NonoReleaseTagProtection.ps1
+- C:\temp\standars\ems\scripts\Test-NonoReleaseTagProtection.ps1
+- C:\temp\standars\ems\scripts\collectors\higher-scope\Collect-HS-EVIDENCE-INTEGRITY-RELEASE.ps1
+notes: collector_id=HS-DOCUMENT-CONTROL; collector_version=2B2.1

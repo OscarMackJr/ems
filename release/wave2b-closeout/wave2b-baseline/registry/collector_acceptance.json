@@ -1,0 +1,39 @@
+{
+  "version": "4.5-collector-acceptance-v1",
+  "accepted_collectors": [
+    {
+      "control_id": "EMS-CTRL-015",
+      "version": "v2",
+      "status": "ACCEPTED"
+    },
+    {
+      "control_id": "EMS-CTRL-025",
+      "version": "v2",
+      "status": "ACCEPTED"
+    },
+    {
+      "control_id": "EMS-CTRL-031",
+      "version": "v2",
+      "status": "ACCEPTED"
+    },
+    {
+      "control_id": "EMS-CTRL-033",
+      "version": "v2",
+      "status": "ACCEPTED"
+    },
+    {
+      "control_id": "EMS-CTRL-037",
+      "version": "v2",
+      "status": "ACCEPTED"
+    },
+    {
+      "control_id": "EMS-CTRL-079",
+      "version": "v2",
+      "status": "ACCEPTED_WITH_POLICY_PENDING"
+    }
+  ],
+  "policy_pending_controls": [
+    "EMS-CTRL-020"
+  ],
+  "policy_pending_status": "POLICY_PENDING"
+}

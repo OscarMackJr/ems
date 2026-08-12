@@ -1,0 +1,23 @@
+profiles:
+  Tier1:
+    required_families: [Source Control & GitHub, Secure Development, Testing, Build & Release, Cloud Engineering, Data Engineering, Documentation, Operational Excellence]
+    always_required_controls: [EMS-CTRL-009, EMS-CTRL-010, EMS-CTRL-018, EMS-CTRL-019, EMS-CTRL-021, EMS-CTRL-033, EMS-CTRL-039, EMS-CTRL-079]
+  Tier2:
+    required_families: [Source Control & GitHub, Secure Development, Testing, Build & Release, Documentation, Operational Excellence]
+    always_required_controls: [EMS-CTRL-009, EMS-CTRL-010, EMS-CTRL-018, EMS-CTRL-019, EMS-CTRL-033, EMS-CTRL-079]
+  Tier3:
+    required_families: [Source Control & GitHub, Secure Development, Documentation]
+    always_required_controls: [EMS-CTRL-009, EMS-CTRL-010, EMS-CTRL-018, EMS-CTRL-019]
+  Tier4:
+    required_families: [Source Control & GitHub, Secure Development]
+    always_required_controls: [EMS-CTRL-018]
+conditional_rules:
+  - name: AI controls
+    when: {ai_enabled: true}
+    add_families: [AI Engineering]
+  - name: Cloud controls
+    when_any_technology: [AWS, Azure, Terraform]
+    add_families: [Cloud Engineering]
+  - name: Data controls
+    when_any_technology: [PostgreSQL, SQL Server, MSSQL, Snowflake]
+    add_families: [Data Engineering]

@@ -1,0 +1,44 @@
+evidence_id: EMS-EMS-CTRL-071-HS-EVIDENCE-INTEGRITY-RELEASE-2026-08-12
+control_id: EMS-CTRL-071
+scope: EMS
+authority_id: EMS-GOVERNANCE
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-EVIDENCE-INTEGRITY-RELEASE satisfied all required assertions
+  for EMS-CTRL-071.
+evidence_references:
+- C:\temp\standars\ems\registry\adjudication_rules.json
+- C:\temp\standars\ems\registry\adjudication_rules.json.pre-na-routing-fix.bak
+- C:\temp\standars\ems\registry\authoritative_scope_overrides.json
+- C:\temp\standars\ems\registry\automated_scope_review_model.json
+- C:\temp\standars\ems\registry\control_catalog.yaml
+- C:\temp\standars\ems\registry\control_scope_registry.yaml
+- C:\temp\standars\ems\registry\control_scope_registry.yaml.pre-adjudication.bak
+- C:\temp\standars\ems\registry\evidence_source_policy.json
+- C:\temp\standars\ems\registry\hs_document_control_spec.json
+- C:\temp\standars\ems\registry\inheritance_policy.yaml
+- C:\temp\standars\ems\registry\policy_applicability.yaml
+- C:\temp\standars\ems\registry\policy_decisions.json
+- C:\temp\standars\ems\registry\repository_template_baseline.yaml
+- C:\temp\standars\ems\registry\scope_adjudication_config.json
+- C:\temp\standars\ems\registry\wave1_closeout_config.json
+- C:\temp\standars\ems\releases\Pass4_5_Wave1_Baseline\WAVE1_BASELINE_MANIFEST.json
+- C:\temp\standars\ems\scripts\Apply-Adjudication-Fix.ps1
+- C:\temp\standars\ems\scripts\Apply-PolicyDecisions.ps1
+- C:\temp\standars\ems\scripts\Apply-PolicyReviewDecisions.py
+- C:\temp\standars\ems\scripts\Apply-ScopeRegistryAdjudication.ps1
+- C:\temp\standars\ems\scripts\Freeze-Wave1Baseline.ps1
+- C:\temp\standars\ems\scripts\Freeze-Wave1Baseline.py
+- C:\temp\standars\ems\scripts\Run-Wave2B1-Inheritance.ps1.pre-baseline-discovery-fix.bak
+- C:\temp\standars\ems\scripts\Validate-ControlScopeRegistry.py
+- C:\temp\standars\ems\scripts\Validate-EvidencePromotion.py
+- C:\temp\standars\ems\scripts\Validate-GitHubObservations.py
+- C:\temp\standars\ems\scripts\Validate-HSDocumentControlEvidence.py
+- C:\temp\standars\ems\scripts\Validate-HSEvidenceIntegrityRelease.py
+- C:\temp\standars\ems\scripts\Validate-HigherScopeEvidenceArchitecture.py
+- C:\temp\standars\ems\scripts\Validate-HigherScopeEvidenceCandidates.py
+- C:\temp\standars\ems\scripts\Validate-Inheritance.py
+- C:\temp\standars\ems\scripts\Validate-PolicyApplicability.py
+- C:\temp\standars\ems\scripts\Validate-ScopeRegistryAdjudication.ps1
+notes: collector_id=HS-EVIDENCE-INTEGRITY-RELEASE; collector_version=2B2.2

@@ -1,0 +1,20 @@
+{
+  "version": "2B2.2",
+  "collector_id": "HS-EVIDENCE-INTEGRITY-RELEASE",
+  "collector_family": "evidence_integrity_release",
+  "scope": "EMS",
+  "controls": {
+    "EMS-CTRL-005": {
+      "name": "Repository Classification"
+    },
+    "EMS-CTRL-016": {
+      "name": "Evidence integrity and retention"
+    },
+    "EMS-CTRL-071": {
+      "name": "Executive Release Validation"
+    },
+    "EMS-CTRL-072": {
+      "name": "PDF/DOCX Generation Validation"
+    }
+  }
+}
