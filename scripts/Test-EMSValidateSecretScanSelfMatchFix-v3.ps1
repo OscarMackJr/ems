@@ -14,8 +14,8 @@ $text = $lines -join [Environment]::NewLine
 $oldSelfMatchLines = @(
     $lines | Where-Object {
         [regex]::IsMatch($_,'grep\s+-RInE') -and
-        $_.Contains("AZURE_CLIENT_SECRET=") -and
-        $_.Contains("AWS_SECRET_ACCESS_KEY=")
+        $_.Contains(("AZURE_CLIENT_SECRET" + "=")) -and
+        $_.Contains(("AWS_SECRET_ACCESS_KEY" + "="))
     }
 )
 
@@ -64,3 +64,4 @@ for($i=0; $i -lt $lines.Count; $i++){
 
 Write-Host ""
 Write-Host "PASS: EMS Validate secret-scan self-match v3 validation succeeded." -ForegroundColor Green
+

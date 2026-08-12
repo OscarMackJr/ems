@@ -80,8 +80,8 @@ try{
     $oldSelfMatchLines = @(
         $patchedLines | Where-Object {
             [regex]::IsMatch($_,'grep\s+-RInE') -and
-            $_.Contains("AZURE_CLIENT_SECRET=") -and
-            $_.Contains("AWS_SECRET_ACCESS_KEY=")
+            $_.Contains(("AZURE_CLIENT_SECRET" + "=")) -and
+            $_.Contains(("AWS_SECRET_ACCESS_KEY" + "="))
         }
     )
 
@@ -120,3 +120,4 @@ catch{
     Copy-Item $backup $workflow -Force
     throw
 }
+
