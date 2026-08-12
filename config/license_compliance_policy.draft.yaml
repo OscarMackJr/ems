@@ -1,0 +1,13 @@
+document:
+  id: EMS-POL-LICENSE-001
+  title: Open Source and Dependency License Compliance Policy
+  status: DRAFT_REQUIRES_APPROVAL
+repository_licensing:
+  private_internal_repository_license_file_required: false
+  public_or_distributed_repository_license_file_required: true
+dependency_licensing:
+  policy_status: DRAFT_REQUIRES_APPROVAL
+  allowed_spdx_licenses: []
+  prohibited_spdx_licenses: []
+  unknown_license_disposition: POLICY_REVIEW
+  scan_required: true

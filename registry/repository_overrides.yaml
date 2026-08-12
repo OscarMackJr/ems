@@ -1,0 +1,69 @@
+overrides:
+  - github: OscarMackJr/nono
+    owner: Software Development
+    tier: Tier2
+    service_criticality: Medium
+    production: false
+    internet_exposed: true
+    contains_customer_data: false
+    ai_enabled: true
+    data_classification:
+      - Internal
+
+  - github: OscarMackJr/bluto
+    owner: Software Development
+    tier: Tier2
+    service_criticality: Low
+    production: false
+    internet_exposed: false
+    contains_customer_data: false
+    ai_enabled: true
+    data_classification:
+      - Internal
+
+  - github: OscarMackJr/olive
+    owner: Software Development
+    tier: Tier2
+    service_criticality: High
+    production: true
+    internet_exposed: true
+    contains_customer_data: true
+    ai_enabled: false
+    data_classification:
+      - Confidential
+
+
+  - github: OscarMackJr/fiskroad
+    owner: Software Development
+    tier: Tier1
+    service_criticality: Low
+    production: false
+    internet_exposed: false
+    contains_customer_data: false
+    ai_enabled: true
+    data_classification:
+      - Internal
+
+  - github: OscarMackJr/hometown
+    owner: Software Development
+    tier: Tier2
+    service_criticality: High
+    production: true
+    internet_exposed: true
+    contains_customer_data: true
+    ai_enabled: false
+    data_classification:
+      - Confidential
+
+
+
+  - github: OscarMackJr/popeye
+    owner: Software Development
+    tier: Tier2
+    service_criticality: High
+    production: true
+    internet_exposed: true
+    contains_customer_data: true
+    ai_enabled: false
+    data_classification:
+      - Confidential

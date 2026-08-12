@@ -1,0 +1,33 @@
+{
+  "version": "Pass4.5-Wave1",
+  "files": [
+    {
+      "path": "generated/collector-acceptance/effective_compliance.csv",
+      "sha256": "218d3c2551ae64f32cefc2f7fc9f09b56bddd0cc83f9457c7d25c36b285279e9"
+    },
+    {
+      "path": "generated/adjudication/wave1_adjudication_queue.csv",
+      "sha256": "86fe4ab4cfa5cea3a9c0e8ad621d96140bf4751bbbd4ad96635f9ca084832c7d"
+    },
+    {
+      "path": "generated/adjudication/wave1_adjudication_final_summary.json",
+      "sha256": "607ea46629164d647500ac9a64ecd6f5a99773ae81623d506527dd077a60b301"
+    },
+    {
+      "path": "generated/wave1/wave1_observations.json",
+      "sha256": "17f133eb7106d9eb227149049480c773d21f9dea7e984cee742066b1f409cf41"
+    },
+    {
+      "path": "generated/wave1/wave1_coverage_summary.json",
+      "sha256": "467b08b3b4e8b3454fbb455c014f223c84349f861bac879e98ab72d5113eaccc"
+    },
+    {
+      "path": "registry/collector_acceptance.json",
+      "sha256": "a68b49617ba1e3a066aeb2a6cfa0ad2e73629dcbc2aa58194537be8bd34f03d5"
+    },
+    {
+      "path": "registry/adjudication_rules.json",
+      "sha256": "fa30ea18b91ff4cda761ba23168373abbe707e322ee0bb9acf90c03ad4cb3f81"
+    }
+  ]
+}

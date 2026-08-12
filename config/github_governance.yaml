@@ -1,0 +1,17 @@
+github:
+  organization: OscarMackJr
+
+  codeowners:
+    default_team_slug: twg-global-appdev
+    status: provisional
+    owner: Head of Software Development
+    review_due: 2026-12-31
+
+  repositories:
+    source_of_truth: discovery_plus_overrides
+    require_team_repository_access: true
+
+  enforcement:
+    require_pull_request: true
+    require_approving_review: true
+    require_code_owner_review: true

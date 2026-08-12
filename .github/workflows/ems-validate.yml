@@ -1,0 +1,66 @@
+name: EMS Validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Python syntax validation
+        shell: bash
+        run: |
+          find scripts -name "*.py" -print0 2>/dev/null | xargs -0 -r -n1 python -m py_compile
+
+      - name: YAML parse validation
+        shell: bash
+        run: |
+          python - <<'PY'
+          import pathlib, yaml
+          roots = [pathlib.Path("registry"), pathlib.Path("controls"), pathlib.Path("config")]
+          for root in roots:
+              if not root.exists():
+                  continue
+              for p in root.rglob("*.y*ml"):
+                  with p.open("r", encoding="utf-8") as fh:
+                      yaml.safe_load(fh)
+                  print("OK", p)
+          PY
+
+      - name: JSON parse validation
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          for root_name in ("registry","controls","config","schemas"):
+              root = pathlib.Path(root_name)
+              if not root.exists():
+                  continue
+              for p in root.rglob("*.json"):
+                  json.loads(p.read_text(encoding="utf-8"))
+                  print("OK", p)
+          PY
+
+      - name: Secret-pattern sanity check
+        shell: bash
+        run: |
+          if grep -RInE '(gh[opsu]_[A-Za-z0-9_]{20,}|BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AZURE_CLIENT_SECRET=|AWS_SECRET_ACCESS_KEY=)' . \
+            --exclude-dir=.git --exclude-dir=.venv --exclude='*.md'; then
+            echo "Potential secret detected."
+            exit 1
+          fi

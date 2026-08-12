@@ -1,0 +1,15 @@
+{
+  "organization": "OscarMackJr",
+  "repositories": [
+    "bluto",
+    "fiskroad",
+    "hometown",
+    "nono",
+    "olive",
+    "popeye"
+  ],
+  "required_approving_review_count": 1,
+  "require_code_owner_reviews": true,
+  "dismiss_stale_reviews": false,
+  "require_last_push_approval": false
+}

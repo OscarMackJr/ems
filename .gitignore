@@ -1,0 +1,32 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+generated/
+temp/
+logs/
+.cache/
+
+# Raw/collected evidence should not be source-controlled by default.
+evidence/raw/
+evidence/cache/
+
+# Local backups and transient files.
+*.bak
+*.tmp
+*.swp
+
+# Secrets / local environment
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*.p12
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

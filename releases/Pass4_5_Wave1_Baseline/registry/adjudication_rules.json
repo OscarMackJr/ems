@@ -1,0 +1,90 @@
+{
+  "version": "4.5-wave1-adjudication-v1",
+  "status_scope": [
+    "FAIL",
+    "WARNING",
+    "NOT_APPLICABLE"
+  ],
+  "default_dispositions": {
+    "FAIL": "REMEDIATE",
+    "WARNING": "COLLECTOR_REVIEW",
+    "NOT_APPLICABLE": "CONFIRM_NA"
+  },
+  "control_rules": {
+    "EMS-CTRL-012": {
+      "default_disposition": "POLICY_REVIEW",
+      "reason": "Signed-commit expectations may depend on repository policy and contributor model."
+    },
+    "EMS-CTRL-013": {
+      "default_disposition": "CONFIRM_NA",
+      "reason": "Protected release tags are only applicable where release tags are used.",
+      "warning_disposition": "REMEDIATE",
+      "not_applicable_disposition": "CONFIRM_NA"
+    },
+    "EMS-CTRL-014": {
+      "default_disposition": "POLICY_REVIEW",
+      "reason": "Issue-linkage enforcement depends on the approved change-management workflow."
+    },
+    "EMS-CTRL-020": {
+      "default_disposition": "POLICY_REVIEW",
+      "warning_disposition": "POLICY_REVIEW",
+      "fail_disposition": "POLICY_REVIEW",
+      "reason": "License compliance requires an approved dependency-license policy and scan evidence; repository LICENSE-file presence alone is insufficient."
+    },
+    "EMS-CTRL-025": {
+      "default_disposition": "COLLECTOR_REVIEW",
+      "reason": "Unit-test detection by workflow naming may under-detect actual test execution."
+    },
+    "EMS-CTRL-031": {
+      "default_disposition": "COLLECTOR_REVIEW",
+      "reason": "Artifact presence alone may not prove the intended retention period."
+    },
+    "EMS-CTRL-033": {
+      "default_disposition": "COLLECTOR_REVIEW",
+      "reason": "Reproducible-build logic should be verified before accepting regressions from prior PASS/WARNING states."
+    },
+    "EMS-CTRL-034": {
+      "default_disposition": "POLICY_REVIEW",
+      "reason": "Release manifest requirements should be confirmed for repositories that do not produce formal releases."
+    },
+    "EMS-CTRL-035": {
+      "default_disposition": "CONFIRM_NA",
+      "reason": "Checksum verification is typically applicable when distributable release artifacts exist.",
+      "warning_disposition": "POLICY_REVIEW",
+      "not_applicable_disposition": "CONFIRM_NA"
+    },
+    "EMS-CTRL-036": {
+      "default_disposition": "CONFIRM_NA",
+      "reason": "Release signing is typically applicable when distributable release artifacts exist.",
+      "warning_disposition": "POLICY_REVIEW",
+      "not_applicable_disposition": "CONFIRM_NA"
+    },
+    "EMS-CTRL-037": {
+      "default_disposition": "COLLECTOR_REVIEW",
+      "reason": "Artifact existence does not fully prove retention policy compliance."
+    },
+    "EMS-CTRL-038": {
+      "default_disposition": "CONFIRM_NA",
+      "reason": "Version-governance checks are typically applicable when release/version tags are used.",
+      "warning_disposition": "POLICY_REVIEW",
+      "not_applicable_disposition": "CONFIRM_NA"
+    },
+    "EMS-CTRL-039": {
+      "default_disposition": "POLICY_REVIEW",
+      "reason": "Release approval workflow applicability depends on whether the repository performs controlled releases/deployments."
+    },
+    "EMS-CTRL-079": {
+      "default_disposition": "COLLECTOR_REVIEW",
+      "reason": "Repository health is a composite control and should be adjudicated against the intended EMS assertions."
+    }
+  },
+  "allowed_dispositions": [
+    "REMEDIATE",
+    "COLLECTOR_REVIEW",
+    "POLICY_REVIEW",
+    "CONFIRM_NA",
+    "ACCEPT",
+    "EXCEPTION_REQUEST",
+    "DEFER"
+  ]
+}

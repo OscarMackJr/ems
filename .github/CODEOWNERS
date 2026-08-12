@@ -1,0 +1,11 @@
+# EMS managed CODEOWNERS
+
+* @OscarMackJr/twg-global-appdev
+
+/controls/ @OscarMackJr/twg-global-appdev
+/registry/ @OscarMackJr/twg-global-appdev
+/schemas/ @OscarMackJr/twg-global-appdev
+/collectors/ @OscarMackJr/twg-global-appdev
+/scripts/ @OscarMackJr/twg-global-appdev
+/.github/workflows/ @OscarMackJr/twg-global-appdev
+
