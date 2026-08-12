@@ -1,0 +1,7 @@
+{"version":"2B2-v1","families":[
+{"collector_id":"HS-DOCUMENT-CONTROL","family":"document_control","control_ids":["EMS-CTRL-001","EMS-CTRL-002","EMS-CTRL-008","EMS-CTRL-067","EMS-CTRL-068","EMS-CTRL-069","EMS-CTRL-070"]},
+{"collector_id":"HS-EVIDENCE-INTEGRITY-RELEASE","family":"evidence_integrity_release","control_ids":["EMS-CTRL-005","EMS-CTRL-016","EMS-CTRL-071","EMS-CTRL-072"]},
+{"collector_id":"HS-CONTINUOUS-COMPLIANCE","family":"continuous_compliance","control_ids":["EMS-CTRL-075","EMS-CTRL-076"]},
+{"collector_id":"HS-MANAGEMENT-REVIEW","family":"management_review","control_ids":["EMS-CTRL-073","EMS-CTRL-074","EMS-CTRL-077","EMS-CTRL-078","EMS-CTRL-080"]},
+{"collector_id":"HS-AI-GOVERNANCE","family":"ai_governance","control_ids":["EMS-CTRL-007","EMS-CTRL-049","EMS-CTRL-050","EMS-CTRL-052","EMS-CTRL-053","EMS-CTRL-054"]},
+{"collector_id":"HS-SECURITY-DATA-GOVERNANCE","family":"security_data_governance","control_ids":["EMS-CTRL-023","EMS-CTRL-024","EMS-CTRL-063","EMS-CTRL-065","EMS-CTRL-066"]}]}

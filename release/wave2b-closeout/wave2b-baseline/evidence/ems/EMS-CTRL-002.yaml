@@ -1,0 +1,12 @@
+evidence_id: EMS-EMS-CTRL-002-HS-DOCUMENT-CONTROL-2026-08-12
+control_id: EMS-CTRL-002
+scope: EMS
+authority_id: EMS-GOVERNANCE
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-DOCUMENT-CONTROL collector satisfied all required assertions
+  for EMS-CTRL-002.
+evidence_references:
+- C:\temp\standars\ems\registry\control_catalog.yaml
+notes: collector_id=HS-DOCUMENT-CONTROL; collector_version=2B2.1

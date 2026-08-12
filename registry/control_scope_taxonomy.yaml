@@ -1,0 +1,26 @@
+version: 2A-1.0
+scopes:
+  REPOSITORY:
+    description: >-
+      Control is evaluated independently for each source repository.
+    inheritance_allowed: false
+  SERVICE:
+    description: >-
+      Control is evaluated at a deployable service boundary and may be inherited by repositories that implement the service.
+    inheritance_allowed: true
+  APPLICATION:
+    description: >-
+      Control is evaluated at an application/product boundary and may be inherited by constituent repositories.
+    inheritance_allowed: true
+  PLATFORM:
+    description: >-
+      Control is evaluated against a shared engineering/runtime platform and may be inherited by dependent repositories or services.
+    inheritance_allowed: true
+  ORGANIZATION:
+    description: >-
+      Control is implemented and evidenced once at the organizational/entity level.
+    inheritance_allowed: true
+  EMS:
+    description: >-
+      Control governs the Engineering Management System itself and is evidenced at EMS scope.
+    inheritance_allowed: true

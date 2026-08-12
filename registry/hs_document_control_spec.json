@@ -1,0 +1,69 @@
+{
+  "version": "2B2.1",
+  "collector_id": "HS-DOCUMENT-CONTROL",
+  "collector_family": "document_control",
+  "scope": "EMS",
+  "controls": {
+    "EMS-CTRL-001": {
+      "name": "Engineering Governance Policy",
+      "assertions": [
+        "governance_authority_source_exists",
+        "controlled_version_or_release_marker_exists",
+        "approval_or_status_metadata_exists",
+        "governance_source_discoverable"
+      ]
+    },
+    "EMS-CTRL-002": {
+      "name": "Controlled Document Management",
+      "assertions": [
+        "controlled_document_inventory_detected",
+        "document_ids_unique",
+        "version_or_status_metadata_detected",
+        "controlled_artifacts_retrievable"
+      ]
+    },
+    "EMS-CTRL-008": {
+      "name": "Controlled documentation and evidence",
+      "assertions": [
+        "evidence_artifact_structure_exists",
+        "evidence_control_association_detected",
+        "evidence_provenance_detected",
+        "controlled_evidence_location_detected"
+      ]
+    },
+    "EMS-CTRL-067": {
+      "name": "Controlled Document Metadata",
+      "assertions": [
+        "controlled_ids_detected",
+        "metadata_owner_or_authority_detected",
+        "metadata_status_detected",
+        "metadata_version_detected"
+      ]
+    },
+    "EMS-CTRL-068": {
+      "name": "Cross-Reference Validation",
+      "assertions": [
+        "cross_reference_sources_detected",
+        "referenced_control_ids_resolve",
+        "no_dangling_control_references"
+      ]
+    },
+    "EMS-CTRL-069": {
+      "name": "Requirements Traceability",
+      "assertions": [
+        "requirements_or_traceability_sources_detected",
+        "control_mapping_detected",
+        "orphaned_required_mappings_zero"
+      ]
+    },
+    "EMS-CTRL-070": {
+      "name": "Revision History",
+      "assertions": [
+        "git_repository_detected",
+        "git_history_detected",
+        "tag_or_release_history_detected",
+        "current_revision_identifiable"
+      ]
+    }
+  }
+}

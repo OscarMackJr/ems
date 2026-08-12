@@ -1,0 +1,22 @@
+version: 2B1-1.0
+authorities:
+  EMS:
+    authority_id: EMS-GOVERNANCE
+    name: EMS Governance
+    evidence_root: evidence/ems
+    inheritable: true
+    allowed_statuses:
+      - PASS
+      - WARNING
+      - FAIL
+      - NOT_EVALUATED
+  ORGANIZATION:
+    authority_id: ENGINEERING-LEADERSHIP
+    name: Engineering Leadership
+    evidence_root: evidence/organization
+    inheritable: true
+    allowed_statuses:
+      - PASS
+      - WARNING
+      - FAIL
+      - NOT_EVALUATED

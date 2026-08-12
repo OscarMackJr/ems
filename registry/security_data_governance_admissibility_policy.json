@@ -1,0 +1,13 @@
+{
+  "version": "2B2.6",
+  "allowed_primary_source_class": "OPERATING_EVIDENCE",
+  "source_classes": [
+    "OPERATING_EVIDENCE",
+    "DECISIONAL",
+    "DEFINITIONAL",
+    "PRIOR_COMPLIANCE_RESULT",
+    "GENERATED_PROPOSAL",
+    "UNKNOWN"
+  ],
+  "fail_closed": true
+}

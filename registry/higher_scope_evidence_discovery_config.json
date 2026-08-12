@@ -1,0 +1,29 @@
+{
+  "version": "2B1-evidence-discovery-v1",
+  "target_scopes": [
+    "EMS",
+    "ORGANIZATION"
+  ],
+  "min_auto_promote_confidence": 0.9,
+  "candidate_extensions": [
+    ".yaml",
+    ".yml",
+    ".json",
+    ".csv",
+    ".md",
+    ".txt",
+    ".ps1",
+    ".py"
+  ],
+  "exclude_fragments": [
+    "\\.venv\\",
+    "\\site-packages\\",
+    "\\__pycache__\\",
+    "\\generated\\wave2\\higher-scope-evidence\\proposed_evidence_records\\"
+  ],
+  "status_policy": {
+    "HIGH": "PASS_OR_WARNING_CANDIDATE",
+    "MEDIUM": "REVIEW_REQUIRED",
+    "LOW": "NOT_EVALUATED"
+  }
+}

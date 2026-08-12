@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "records"
+  ],
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "record_id",
+          "system_or_dataset",
+          "data_scope",
+          "protection_control",
+          "owner_or_responsible_party",
+          "validation_date",
+          "validation_result"
+        ],
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "system_or_dataset": {
+            "type": "string",
+            "minLength": 1
+          },
+          "data_scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "protection_control": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner_or_responsible_party": {
+            "type": "string",
+            "minLength": 1
+          },
+          "validation_date": {
+            "type": "string",
+            "minLength": 8
+          },
+          "validation_result": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "CONDITIONAL"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

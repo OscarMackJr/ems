@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "records"
+  ],
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "platform_id",
+          "platform_name",
+          "approval_status",
+          "owner",
+          "approval_date",
+          "review_date",
+          "approved_use_cases",
+          "data_classifications_allowed"
+        ],
+        "properties": {
+          "platform_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "platform_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "approval_status": {
+            "enum": [
+              "APPROVED",
+              "REJECTED",
+              "CONDITIONAL",
+              "PENDING",
+              "EXCEPTION"
+            ]
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "approval_date": {
+            "type": "string",
+            "minLength": 8
+          },
+          "review_date": {
+            "type": "string",
+            "minLength": 8
+          },
+          "approved_use_cases": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "data_classifications_allowed": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "exception_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "exception_status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "decision": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "decision_date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

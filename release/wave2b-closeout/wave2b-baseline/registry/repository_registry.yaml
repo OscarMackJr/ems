@@ -1,0 +1,128 @@
+repositories:
+- id: REPO-001
+  name: bluto
+  github: OscarMackJr/bluto
+  owner: Software Development
+  tier: Tier2
+  service_criticality: Low
+  production: false
+  internet_exposed: false
+  contains_customer_data: false
+  ai_enabled: true
+  technologies:
+  - C#
+  data_classification:
+  - Internal
+  visibility: PUBLIC
+  default_branch: implementation/bootstrap
+  archived: false
+  fork: false
+  status: Classified
+- id: REPO-002
+  name: fiskroad
+  github: OscarMackJr/fiskroad
+  owner: Software Development
+  tier: Tier1
+  service_criticality: Low
+  production: false
+  internet_exposed: false
+  contains_customer_data: false
+  ai_enabled: true
+  technologies:
+  - Shell
+  data_classification:
+  - Internal
+  visibility: PRIVATE
+  default_branch: main
+  archived: false
+  fork: false
+  status: Classified
+- id: REPO-003
+  name: hometown
+  github: OscarMackJr/hometown
+  owner: Software Development
+  tier: Tier2
+  service_criticality: High
+  production: true
+  internet_exposed: true
+  contains_customer_data: true
+  ai_enabled: false
+  technologies:
+  - JavaScript
+  data_classification:
+  - Confidential
+  visibility: PUBLIC
+  default_branch: main
+  archived: false
+  fork: false
+  status: Classified
+- id: REPO-004
+  name: nono
+  github: OscarMackJr/nono
+  owner: Software Development
+  tier: Tier2
+  service_criticality: Medium
+  production: false
+  internet_exposed: true
+  contains_customer_data: false
+  ai_enabled: true
+  technologies:
+  - Rust
+  data_classification:
+  - Internal
+  visibility: PUBLIC
+  default_branch: main
+  archived: false
+  fork: true
+  status: Classified
+- id: REPO-005
+  name: olive
+  github: OscarMackJr/olive
+  owner: Software Development
+  tier: Tier2
+  service_criticality: High
+  production: true
+  internet_exposed: true
+  contains_customer_data: true
+  ai_enabled: false
+  technologies:
+  - C#
+  data_classification:
+  - Confidential
+  visibility: PUBLIC
+  default_branch: main
+  archived: false
+  fork: false
+  status: Classified
+- id: REPO-006
+  name: popeye
+  github: OscarMackJr/popeye
+  owner: Software Development
+  tier: Tier2
+  service_criticality: High
+  production: true
+  internet_exposed: true
+  contains_customer_data: true
+  ai_enabled: false
+  technologies:
+  - HCL
+  data_classification:
+  - Confidential
+  visibility: PUBLIC
+  default_branch: main
+  archived: false
+  fork: false
+  status: Classified
+- id: REPO-EMS
+  name: ems
+  github: OscarMackJr/ems
+  default_branch: main
+  owner: Software Development
+  tier: Tier1
+  service_criticality: High
+  production: false
+  internet_exposed: false
+  contains_customer_data: false
+  ai_enabled: true
+  data_classification:
+  - Internal

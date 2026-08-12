@@ -1,0 +1,62 @@
+{
+  "version": "2B2.4",
+  "collector_id": "HS-MANAGEMENT-REVIEW",
+  "collector_family": "management_review",
+  "controls": {
+    "EMS-CTRL-073": {
+      "name": "Engineering KPI Review",
+      "scope": "ORGANIZATION",
+      "assertions": [
+        "kpi_review_artifact_detected",
+        "engineering_metrics_present",
+        "review_owner_or_approver_present",
+        "review_date_identifiable",
+        "review_outcome_or_action_recorded"
+      ]
+    },
+    "EMS-CTRL-074": {
+      "name": "Quarterly Management Review",
+      "scope": "ORGANIZATION",
+      "assertions": [
+        "quarterly_review_artifact_detected",
+        "management_participation_detected",
+        "review_period_identifiable",
+        "decisions_or_actions_recorded",
+        "review_evidence_retained"
+      ]
+    },
+    "EMS-CTRL-077": {
+      "name": "Technical Debt Register",
+      "scope": "ORGANIZATION",
+      "assertions": [
+        "technical_debt_register_detected",
+        "debt_items_identifiable",
+        "owner_or_accountability_recorded",
+        "status_or_priority_recorded",
+        "retained_history_detected"
+      ]
+    },
+    "EMS-CTRL-078": {
+      "name": "Lessons Learned Review",
+      "scope": "ORGANIZATION",
+      "assertions": [
+        "lessons_learned_artifact_detected",
+        "source_event_or_project_identifiable",
+        "lessons_or_findings_recorded",
+        "actions_or_followups_recorded",
+        "review_evidence_retained"
+      ]
+    },
+    "EMS-CTRL-080": {
+      "name": "Annual EMS Review",
+      "scope": "EMS",
+      "assertions": [
+        "annual_review_artifact_detected",
+        "ems_scope_explicit",
+        "review_year_identifiable",
+        "review_outcome_or_approval_recorded",
+        "annual_review_evidence_retained"
+      ]
+    }
+  }
+}

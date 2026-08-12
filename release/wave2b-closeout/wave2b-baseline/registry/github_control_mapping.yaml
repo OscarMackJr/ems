@@ -1,0 +1,56 @@
+mapping:
+  version: 4.3-draft
+controls:
+  EMS-CTRL-009:
+    name: Branch Protection Required
+    collector: branch_protection
+    evidence_id: EVID-002
+  EMS-CTRL-010:
+    name: Pull Request Review
+    collector: pull_request_rules
+    evidence_id: EVID-001
+  EMS-CTRL-011:
+    name: CODEOWNERS Enforcement
+    collector: codeowners_enforcement
+    evidence_id: EVID-017
+    assertions:
+      codeowners_present: true
+      pull_request_required: true
+      code_owner_review_required: true
+    evaluation:
+      pass: all_required_assertions_true
+      warning: codeowners_present_but_enforcement_incomplete
+      fail: codeowners_absent
+      not_evaluated: enforcement_state_unavailable
+  EMS-CTRL-015:
+    name: Repository Template Compliance
+    collector: repository_files
+    evidence_id: EVID-017
+  EMS-CTRL-016:
+    name: Repository Metadata Validation
+    collector: repository_metadata
+    evidence_id: EVID-017
+  EMS-CTRL-018:
+    name: Secret Scanning
+    collector: secret_scanning
+    evidence_id: EVID-007
+  EMS-CTRL-019:
+    name: Dependency Vulnerability Scanning
+    collector: dependency_security
+    evidence_id: EVID-006
+  EMS-CTRL-021:
+    name: SBOM Generation
+    collector: sbom
+    evidence_id: EVID-009
+  EMS-CTRL-033:
+    name: Reproducible Builds
+    collector: build_workflow
+    evidence_id: EVID-003
+  EMS-CTRL-039:
+    name: Release Approval Workflow
+    collector: release_workflow
+    evidence_id: EVID-010
+  EMS-CTRL-079:
+    name: Repository Health Review
+    collector: repository_health
+    evidence_id: EVID-020

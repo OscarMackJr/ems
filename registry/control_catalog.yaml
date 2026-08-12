@@ -1,0 +1,782 @@
+version: 2A-1.0
+controls:
+- control_id: EMS-CTRL-001
+  control_name: Engineering Governance Policy
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Establish and maintain the engineering governance policy control as
+    part of the Engineering Management System.
+  definition_recovery_source: C:\temp\standars\Pass4_1\registry\control_catalog.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-002
+  control_name: Controlled Document Management
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Establish and maintain the controlled document management control as
+    part of the Engineering Management System.
+  definition_recovery_source: C:\temp\standars\Pass4_1\registry\control_catalog.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-003
+  control_name: Third-party dependency governance
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Third-party and open-source dependencies must be inventoried, scanned,
+    reviewed, and remediated based on risk.
+  definition_recovery_source: C:\temp\standars\Pass2\registry\control_registry.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-004
+  control_name: Secrets and identity protection
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL
+  description: Secrets must not be committed to source and production workloads should
+    prefer managed identities or short-lived credentials.
+  definition_recovery_source: C:\temp\standars\Pass2\registry\control_registry.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-005
+  control_name: Repository Classification
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Establish and maintain the repository classification control as part
+    of the Engineering Management System.
+  definition_recovery_source: C:\temp\standars\Pass4_1\registry\control_catalog.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-006
+  control_name: Recovery readiness
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Services must have risk-based recovery objectives, documented recovery
+    procedures, and periodic recovery exercises.
+  definition_recovery_source: C:\temp\standars\Pass2\registry\control_registry.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-007
+  control_name: AI-assisted development governance
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: AI-assisted development must use approved services, protect confidential
+    data, and retain human accountability for submitted work.
+  definition_recovery_source: C:\temp\standars\Pass2\registry\control_registry.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-008
+  control_name: Controlled documentation and evidence
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: EMS documents and evidence must be versioned, reviewable, integrity-checked,
+    and retained according to policy.
+  definition_recovery_source: C:\temp\standars\Pass2\registry\control_registry.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-009
+  control_name: Branch Protection Required
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-010
+  control_name: Pull Request Review
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-011
+  control_name: CODEOWNERS Enforcement
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-012
+  control_name: Signed Commits
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-013
+  control_name: Protected Release Tags
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-014
+  control_name: Mandatory Issue Linkage
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-015
+  control_name: Repository Template Compliance
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-016
+  control_name: Evidence integrity and retention
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Control evidence is identifiable, integrity-protected, retrievable,
+    and retained according to defined expectations.
+  definition_recovery_source: C:\temp\standars\Pass3\registry\control_registry.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-017
+  control_name: Secure Coding Standard
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-018
+  control_name: Secret Scanning
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-019
+  control_name: Dependency Vulnerability Scanning
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-020
+  control_name: License Compliance
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-021
+  control_name: SBOM Generation
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-022
+  control_name: Security Advisory Monitoring
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: 'Wave 2A seed classification: PLATFORM-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-023
+  control_name: Vulnerability Remediation Targets
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-024
+  control_name: Security Exception Approval
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-025
+  control_name: Unit Test Minimum
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-026
+  control_name: Integration Testing
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-027
+  control_name: Regression Testing
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-028
+  control_name: Contract/API Testing
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-029
+  control_name: Performance Testing
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: 'Wave 2A seed classification: SERVICE-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-030
+  control_name: Disaster Recovery Testing
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: 'Wave 2A seed classification: SERVICE-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-031
+  control_name: Test Evidence Retention
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-032
+  control_name: Test Environment Isolation
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: 'Wave 2A seed classification: PLATFORM-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-033
+  control_name: Reproducible Builds
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-034
+  control_name: Release Manifest Generation
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-035
+  control_name: SHA-256 Integrity Verification
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-036
+  control_name: Release Signing
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-037
+  control_name: Build Artifact Retention
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-038
+  control_name: Version Number Governance
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-039
+  control_name: Release Approval Workflow
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-040
+  control_name: Rollback Procedure
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: 'Wave 2A seed classification: SERVICE-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-041
+  control_name: Infrastructure as Code Required
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: 'Wave 2A seed classification: PLATFORM-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-042
+  control_name: IaC Security Scanning
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: 'Wave 2A seed classification: PLATFORM-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-043
+  control_name: Least Privilege IAM
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: 'Wave 2A seed classification: PLATFORM-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-044
+  control_name: Secrets Management
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: 'Wave 2A seed classification: PLATFORM-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-045
+  control_name: Cloud Resource Tagging
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: 'Wave 2A seed classification: PLATFORM-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-046
+  control_name: Backup Verification
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: 'Wave 2A seed classification: SERVICE-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-047
+  control_name: Restore Validation
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: 'Wave 2A seed classification: SERVICE-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-048
+  control_name: Environment Separation
+  scope: PLATFORM
+  scope_owner: Software Development / Platform
+  inheritance_allowed: true
+  evidence_authority: Platform evidence
+  rationale: 'Wave 2A seed classification: PLATFORM-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-049
+  control_name: Approved AI Platforms
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-050
+  control_name: Prompt Data Classification
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-051
+  control_name: Human Review of AI Code
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-052
+  control_name: AI Attribution
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-053
+  control_name: AI Security Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-054
+  control_name: AI Model Risk Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-055
+  control_name: Policy Before Execution
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Establish and maintain the policy before execution control as part
+    of the Engineering Management System.
+  definition_recovery_source: C:\temp\standars\Pass4_1\registry\control_catalog.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-056
+  control_name: Agent Identity Verification
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Establish and maintain the agent identity verification control as part
+    of the Engineering Management System.
+  definition_recovery_source: C:\temp\standars\Pass4_1\registry\control_catalog.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-057
+  control_name: Audit Envelope Generation
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Establish and maintain the audit envelope generation control as part
+    of the Engineering Management System.
+  definition_recovery_source: C:\temp\standars\Pass4_1\registry\control_catalog.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-058
+  control_name: Fail-Closed Authorization
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Establish and maintain the fail-closed authorization control as part
+    of the Engineering Management System.
+  definition_recovery_source: C:\temp\standars\Pass4_1\registry\control_catalog.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-059
+  control_name: Execution Isolation Validation
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Establish and maintain the execution isolation validation control as
+    part of the Engineering Management System.
+  definition_recovery_source: C:\temp\standars\Pass4_1\registry\control_catalog.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-060
+  control_name: Zero Trust Integration Testing
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+  description: Establish and maintain the zero trust integration testing control as
+    part of the Engineering Management System.
+  definition_recovery_source: C:\temp\standars\Pass4_1\registry\control_catalog.yaml
+  definition_recovery_confidence: 1.0
+- control_id: EMS-CTRL-061
+  control_name: Database Migration Review
+  scope: APPLICATION
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Application evidence
+  rationale: 'Wave 2A seed classification: APPLICATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-062
+  control_name: Schema Version Control
+  scope: APPLICATION
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Application evidence
+  rationale: 'Wave 2A seed classification: APPLICATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-063
+  control_name: Data Classification
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-064
+  control_name: Database Backup Validation
+  scope: SERVICE
+  scope_owner: Software Development
+  inheritance_allowed: true
+  evidence_authority: Service evidence
+  rationale: 'Wave 2A seed classification: SERVICE-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-065
+  control_name: Data Retention Compliance
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-066
+  control_name: Production Data Protection
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-067
+  control_name: Controlled Document Metadata
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-068
+  control_name: Cross-Reference Validation
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-069
+  control_name: Requirements Traceability
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-070
+  control_name: Revision History
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-071
+  control_name: Executive Release Validation
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-072
+  control_name: PDF/DOCX Generation Validation
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-073
+  control_name: Engineering KPI Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-074
+  control_name: Quarterly Management Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-075
+  control_name: Continuous Compliance Scan
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-076
+  control_name: Corrective Action Tracking
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-077
+  control_name: Technical Debt Register
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-078
+  control_name: Lessons Learned Review
+  scope: ORGANIZATION
+  scope_owner: Engineering Leadership
+  inheritance_allowed: true
+  evidence_authority: Organizational evidence
+  rationale: 'Wave 2A seed classification: ORGANIZATION-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-079
+  control_name: Repository Health Review
+  scope: REPOSITORY
+  scope_owner: Software Development
+  inheritance_allowed: false
+  evidence_authority: Repository evidence
+  rationale: 'Wave 2A seed classification: REPOSITORY-scoped based on the control''s
+    primary operating boundary.'
+  classification_status: PROVISIONAL
+- control_id: EMS-CTRL-080
+  control_name: Annual EMS Review
+  scope: EMS
+  scope_owner: EMS Governance
+  inheritance_allowed: true
+  evidence_authority: EMS evidence
+  rationale: 'Wave 2A seed classification: EMS-scoped based on the control''s primary
+    operating boundary.'
+  classification_status: PROVISIONAL

@@ -1,0 +1,21 @@
+evidence_id: EMS-EMS-CTRL-076-HS-CONTINUOUS-COMPLIANCE-2026-08-12
+control_id: EMS-CTRL-076
+scope: EMS
+authority_id: EMS-GOVERNANCE
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-CONTINUOUS-COMPLIANCE satisfied all required assertions for EMS-CTRL-076.
+evidence_references:
+- C:\temp\standars\ems\generated\wave2\higher-scope-remediation.csv
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_adjudication_queue.authoritative.csv
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_adjudication_queue.csv
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_adjudication_queue.resolved.csv
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_adjudication_queue.reviewed.csv
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_review_exceptions.csv
+- C:\temp\standars\ems\generated\wave2\scope-adjudication\scope_registry_review_exceptions_resolved.csv
+- C:\temp\standars\ems\registry\collector_acceptance.json
+- C:\temp\standars\ems\registry\wave1_closeout_config.json
+- C:\temp\standars\ems\releases\Pass4_5_Wave1_Baseline\generated\adjudication\wave1_adjudication_queue.csv
+- C:\temp\standars\ems\releases\Pass4_5_Wave1_Baseline\registry\collector_acceptance.json
+notes: collector_id=HS-CONTINUOUS-COMPLIANCE; collector_version=2B2.3

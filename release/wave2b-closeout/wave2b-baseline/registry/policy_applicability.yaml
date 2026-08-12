@@ -1,0 +1,47 @@
+version: 1
+policy_model: EMS_PASS4_5_POLICY_APPLICABILITY
+
+controls:
+  EMS-CTRL-034:
+    name: Release Manifest Generation
+    applicability_basis: formal_release
+    policy: Formal releases must generate an EMS-approved release manifest.
+    applicable_when:
+      any:
+        - github_release_count_gt: 0
+        - release_workflow_detected: true
+        - repository_override_formal_release: true
+    not_applicable_reason: No formal release behavior or approved formal-release designation was detected.
+
+  EMS-CTRL-036:
+    name: Release Signing
+    applicability_basis: distributable_release_artifacts
+    policy: Distributable production release artifacts must use approved signing or attestation.
+    applicable_when:
+      any:
+        - github_release_asset_count_gt: 0
+        - release_asset_workflow_detected: true
+        - repository_override_distributable_release_artifacts: true
+    not_applicable_reason: No distributable release artifacts or approved distributable-release designation was detected.
+
+  EMS-CTRL-038:
+    name: Version Number Governance
+    applicability_basis: release_tags
+    policy: Repositories using release/version tags must follow the EMS-approved versioning convention.
+    applicable_when:
+      any:
+        - release_tag_count_gt: 0
+        - repository_override_release_tags: true
+    not_applicable_reason: No release/version tags or approved release-tag designation was detected.
+
+  EMS-CTRL-039:
+    name: Release Approval Workflow
+    applicability_basis: controlled_release_or_deployment
+    policy: Controlled production releases or deployments require an approved release/deployment approval workflow.
+    applicable_when:
+      any:
+        - release_workflow_detected: true
+        - deployment_workflow_detected: true
+        - github_environment_count_gt: 0
+        - repository_override_controlled_release_or_deployment: true
+    not_applicable_reason: No controlled release/deployment behavior or approved designation was detected.

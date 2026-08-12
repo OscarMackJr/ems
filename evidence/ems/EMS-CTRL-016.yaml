@@ -1,0 +1,25 @@
+evidence_id: EMS-EMS-CTRL-016-HS-EVIDENCE-INTEGRITY-RELEASE-2026-08-12
+control_id: EMS-CTRL-016
+scope: EMS
+authority_id: EMS-GOVERNANCE
+status: PASS
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: HS-EVIDENCE-INTEGRITY-RELEASE satisfied all required assertions
+  for EMS-CTRL-016.
+evidence_references:
+- C:\temp\standars\ems\generated\wave2\control_scope_matrix.csv
+- C:\temp\standars\ems\registry\adjudication_rules.json
+- C:\temp\standars\ems\registry\control_catalog.yaml
+- C:\temp\standars\ems\registry\control_scope_registry.yaml
+- C:\temp\standars\ems\registry\repository_template_baseline.yaml
+- C:\temp\standars\ems\registry\wave1_evidence_strategies.yaml
+- C:\temp\standars\ems\releases\Pass4_5_Wave1_Baseline\WAVE1_BASELINE_MANIFEST.json
+- C:\temp\standars\ems\scripts\Classify-EvidenceSources.py
+- C:\temp\standars\ems\scripts\Collect-Wave1Evidence.py
+- C:\temp\standars\ems\scripts\Discover-HigherScopeEvidence.py
+- C:\temp\standars\ems\scripts\Evaluate-EvidenceSufficiency.py
+- C:\temp\standars\ems\scripts\Freeze-Wave1Baseline.ps1
+- C:\temp\standars\ems\scripts\Freeze-Wave1Baseline.py
+- C:\temp\standars\ems\scripts\Run-Wave2B1-Inheritance.ps1.pre-baseline-discovery-fix.bak
+notes: collector_id=HS-EVIDENCE-INTEGRITY-RELEASE; collector_version=2B2.2

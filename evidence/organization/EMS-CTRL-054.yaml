@@ -1,0 +1,13 @@
+{
+  "control_id": "EMS-CTRL-054",
+  "scope": "ORGANIZATION",
+  "status": "PASS",
+  "authority_id": "ENGINEERING-LEADERSHIP",
+  "evidence_class": "OPERATING_EVIDENCE",
+  "evidence_references": [
+    "C:\\temp\\standars\\ems\\generated\\wave2\\higher-scope-evidence-qualified\\classified_evidence_candidates.csv",
+    "C:\\temp\\standars\\ems\\generated\\wave2\\higher-scope-evidence-qualified\\qualified_evidence_candidates.csv",
+    "C:\\temp\\standars\\ems\\generated\\wave2\\higher-scope-evidence-qualified\\qualified_evidence_gaps.csv"
+  ],
+  "notes": "Promoted by Wave 2B.2.5a after assertion-level operating-evidence qualification."
+}

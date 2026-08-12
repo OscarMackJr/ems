@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "evidence_id",
+    "control_id",
+    "control_name",
+    "scope",
+    "collector_id",
+    "collector_version",
+    "status",
+    "evidence_class",
+    "assertions",
+    "evidence_sources",
+    "evidence_date",
+    "promotion_candidate"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string"
+    },
+    "control_id": {
+      "type": "string",
+      "pattern": "^EMS-CTRL-[0-9]{3}$"
+    },
+    "control_name": {
+      "type": "string"
+    },
+    "scope": {
+      "const": "EMS"
+    },
+    "collector_id": {
+      "const": "HS-EVIDENCE-INTEGRITY-RELEASE"
+    },
+    "collector_version": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "WARNING",
+        "FAIL",
+        "NOT_EVALUATED"
+      ]
+    },
+    "evidence_class": {
+      "const": "OPERATING_EVIDENCE"
+    },
+    "assertions": {
+      "type": "object"
+    },
+    "evidence_sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_date": {
+      "type": "string"
+    },
+    "promotion_candidate": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

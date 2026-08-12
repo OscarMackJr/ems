@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "records"
+  ],
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "assessment_id",
+          "ai_platform",
+          "use_case",
+          "prompt_data_classification",
+          "contains_confidential_data",
+          "contains_customer_data",
+          "redaction_required",
+          "redaction_performed",
+          "reviewer",
+          "decision",
+          "assessment_date"
+        ],
+        "properties": {
+          "assessment_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ai_platform": {
+            "type": "string",
+            "minLength": 1
+          },
+          "use_case": {
+            "type": "string",
+            "minLength": 1
+          },
+          "prompt_data_classification": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contains_confidential_data": {
+            "type": "boolean"
+          },
+          "contains_customer_data": {
+            "type": "boolean"
+          },
+          "redaction_required": {
+            "type": "boolean"
+          },
+          "redaction_performed": {
+            "type": "boolean"
+          },
+          "reviewer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "decision": {
+            "enum": [
+              "APPROVED",
+              "REJECTED",
+              "CONDITIONAL",
+              "ESCALATED"
+            ]
+          },
+          "assessment_date": {
+            "type": "string",
+            "minLength": 8
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

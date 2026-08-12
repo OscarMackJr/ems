@@ -1,0 +1,23 @@
+{
+  "version": "4.5-wave1-closeout-v1",
+  "accepted_collector_controls": [
+    "EMS-CTRL-015",
+    "EMS-CTRL-025",
+    "EMS-CTRL-031",
+    "EMS-CTRL-033",
+    "EMS-CTRL-037",
+    "EMS-CTRL-079"
+  ],
+  "policy_pending_controls": [
+    "EMS-CTRL-020"
+  ],
+  "freeze_required_outputs": [
+    "generated/collector-acceptance/effective_compliance.csv",
+    "generated/adjudication/wave1_adjudication_queue.csv",
+    "generated/adjudication/wave1_adjudication_final_summary.json",
+    "generated/wave1/wave1_observations.json",
+    "generated/wave1/wave1_coverage_summary.json",
+    "registry/collector_acceptance.json",
+    "registry/adjudication_rules.json"
+  ]
+}

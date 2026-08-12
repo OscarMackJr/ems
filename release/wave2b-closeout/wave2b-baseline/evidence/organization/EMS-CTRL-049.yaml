@@ -1,0 +1,11 @@
+evidence_id: ORGANIZATION-EMS-CTRL-049-PENDING
+control_id: EMS-CTRL-049
+scope: ORGANIZATION
+authority_id: ENGINEERING-LEADERSHIP
+status: NOT_EVALUATED
+evidence_date: '2026-08-12'
+expires_on: null
+evidence_summary: Higher-scope evidence has not yet been supplied.
+evidence_references: []
+notes: Seeded by Wave 2B.1. Replace with controlled evidence before inheritance can
+  resolve.

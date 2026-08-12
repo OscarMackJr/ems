@@ -1,0 +1,19 @@
+{
+  "control_id": "EMS-CTRL-023",
+  "scope": "ORGANIZATION",
+  "status": "PASS",
+  "authority_id": "SECURITY-DATA-GOVERNANCE",
+  "evidence_class": "OPERATING_EVIDENCE",
+  "evidence_references": [
+    "C:\\temp\\standars\\ems\\docs\\REPOSITORY_CLASSIFICATION_GUIDE.md",
+    "C:\\temp\\standars\\ems\\generated\\wave2\\higher-scope-evidence-qualified\\classified_evidence_candidates.csv",
+    "C:\\temp\\standars\\ems\\generated\\wave2\\higher-scope-evidence-qualified\\qualified_evidence_candidates.csv",
+    "C:\\temp\\standars\\ems\\generated\\wave2\\higher-scope-evidence-qualified\\qualified_evidence_gaps.csv",
+    "C:\\temp\\standars\\ems\\generated\\wave2\\higher-scope-evidence\\evidence_candidates.csv",
+    "C:\\temp\\standars\\ems\\generated\\wave2\\higher-scope-evidence\\evidence_discovery_summary.json",
+    "C:\\temp\\standars\\ems\\registry\\evidence_authority_registry.yaml",
+    "C:\\temp\\standars\\ems\\registry\\higher_scope_evidence_discovery_config.json",
+    "C:\\temp\\standars\\ems\\registry\\hs_management_review_spec.json"
+  ],
+  "notes": "Promoted by Wave 2B.2.6a after register-backed requalification."
+}
