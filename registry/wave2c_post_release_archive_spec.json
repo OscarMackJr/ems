@@ -1,0 +1,17 @@
+{
+  "wave": "2C",
+  "release_tag": "ems-v0.6.0-wave2c",
+  "expected_branch": "main",
+  "post_merge_root": "release/wave2c/post-merge",
+  "release_zip": "release/wave2c/post-merge/ems-v0.6.0-wave2c.zip",
+  "release_manifest": "release/wave2c/post-merge/wave2c_post_merge_manifest.json",
+  "post_merge_certification": "release/wave2c/post-merge/post_merge_certification.json",
+  "release_summary": "release/wave2c/post-merge/release_summary.json",
+  "registry_output": "registry/release_baselines/wave2c_baseline_registration.json",
+  "next_wave_baseline": {
+    "baseline_tag": "ems-v0.6.0-wave2c",
+    "baseline_state": "AUTHORITATIVE",
+    "next_wave": "2D"
+  },
+  "control_results_mutation_allowed": false
+}

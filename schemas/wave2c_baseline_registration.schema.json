@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "release_tag",
+    "status",
+    "main_commit_sha",
+    "tag_commit_sha",
+    "release_zip_sha256",
+    "release_manifest_sha256",
+    "baseline_state",
+    "next_wave",
+    "control_results_changed"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2C"
+    },
+    "release_tag": {
+      "const": "ems-v0.6.0-wave2c"
+    },
+    "status": {
+      "const": "PASS"
+    },
+    "baseline_state": {
+      "const": "AUTHORITATIVE"
+    },
+    "next_wave": {
+      "const": "2D"
+    },
+    "control_results_changed": {
+      "const": false
+    }
+  }
+}
