@@ -1,0 +1,22 @@
+{
+  "component": "EMS",
+  "phase": "Pilot Acceptance Baseline Persistence & Certification",
+  "version": "1.0",
+  "wave": "2D",
+  "control_id": "EMS-CTRL-009",
+  "target_id": "REPO-001",
+  "acceptance_record": "generated/wave2d/pilot-acceptance/EMS-CTRL-009/REPO-001/acceptance_record.json",
+  "promotion_record": "generated/wave2d/pilot-acceptance/EMS-CTRL-009/REPO-001/promotion_record.json",
+  "promotion_validation": "generated/wave2d/pilot-acceptance/EMS-CTRL-009/REPO-001/acceptance_validation.json",
+  "authoritative_evidence": "evidence/wave2d/EMS-CTRL-009/REPO-001/evidence.json",
+  "applicability_source": "generated/wave2d/evaluation-matrix/evaluation_matrix_adjudicated.csv",
+  "baseline_registration": "registry/release_baselines/wave2d_pilot_ctrl009_repo001_baseline.json",
+  "certification_output": "generated/wave2d/pilot-acceptance-baseline/EMS-CTRL-009/REPO-001/baseline_certification.json",
+  "manifest_output": "generated/wave2d/pilot-acceptance-baseline/EMS-CTRL-009/REPO-001/baseline_manifest.json",
+  "expected_states": {
+    "acceptance_state": "ACCEPTED",
+    "promotion_state": "PROMOTED",
+    "result_state": "PASS",
+    "applicability_decision": "APPLICABLE"
+  }
+}

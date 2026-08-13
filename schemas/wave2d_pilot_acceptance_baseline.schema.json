@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "baseline_version",
+    "wave",
+    "control_id",
+    "target_id",
+    "status",
+    "baseline_state",
+    "acceptance_state",
+    "promotion_state",
+    "result_state",
+    "applicability_decision",
+    "hashes"
+  ],
+  "properties": {
+    "baseline_version": {
+      "const": "1.0"
+    },
+    "wave": {
+      "const": "2D"
+    },
+    "control_id": {
+      "const": "EMS-CTRL-009"
+    },
+    "target_id": {
+      "const": "REPO-001"
+    },
+    "status": {
+      "const": "PASS"
+    },
+    "baseline_state": {
+      "const": "AUTHORITATIVE"
+    },
+    "acceptance_state": {
+      "const": "ACCEPTED"
+    },
+    "promotion_state": {
+      "const": "PROMOTED"
+    },
+    "result_state": {
+      "const": "PASS"
+    },
+    "applicability_decision": {
+      "const": "APPLICABLE"
+    },
+    "hashes": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

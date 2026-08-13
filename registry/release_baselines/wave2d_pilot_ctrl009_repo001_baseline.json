@@ -1,0 +1,31 @@
+{
+  "baseline_version": "1.0",
+  "registered_at_utc": "2026-08-13T20:06:54.049159+00:00",
+  "wave": "2D",
+  "control_id": "EMS-CTRL-009",
+  "target_id": "REPO-001",
+  "request_id": "PILOT-EMS-CTRL-009-REPO-001",
+  "status": "PASS",
+  "baseline_state": "AUTHORITATIVE",
+  "acceptance_state": "ACCEPTED",
+  "promotion_state": "PROMOTED",
+  "result_state": "PASS",
+  "applicability_decision": "APPLICABLE",
+  "decision_owner": "Oscar Mack",
+  "decision_source": "HUMAN_EMS_PILOT_ACCEPTANCE",
+  "decision_rationale": "Accepted after EMS independently validated the Hayes Verify return envelope, referenced SHA-256 hashes, authoritative Wave 2D applicability decision, sufficient evidence state, and PASS evaluation result for EMS-CTRL-009 / REPO-001.",
+  "hashes": {
+    "acceptance_record_sha256": "596103704825deb64a00aef3c17e2f1371ea0f5a10fec829c0d479539b71b8c5",
+    "promotion_record_sha256": "61ad2db89e7477cc48ab85bb3887062bf28fe9413d18c96a4a0bde6deb8463f3",
+    "promotion_validation_sha256": "6c69bbef3b81d74e377d498ef4261d838fa04253ed76fe5c551694ca91630413",
+    "authoritative_evidence_sha256": "aab946afca70d52918052524143484915c5ff4678edec58d67b64f82f6769212",
+    "applicability_source_sha256": "60c784eff99dd82e16b94c043f0fcc7402399977c99c614af4a1ffaa830f17df"
+  },
+  "authoritative_paths": {
+    "acceptance_record": "generated/wave2d/pilot-acceptance/EMS-CTRL-009/REPO-001/acceptance_record.json",
+    "promotion_record": "generated/wave2d/pilot-acceptance/EMS-CTRL-009/REPO-001/promotion_record.json",
+    "authoritative_evidence": "evidence/wave2d/EMS-CTRL-009/REPO-001/evidence.json",
+    "applicability_source": "generated/wave2d/evaluation-matrix/evaluation_matrix_adjudicated.csv"
+  },
+  "errors": []
+}
