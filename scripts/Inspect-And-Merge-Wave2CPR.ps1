@@ -40,7 +40,7 @@ if($pr.baseRefName -ne "main"){Fail "Unexpected base branch."}
 if($pr.mergeable -ne "MERGEABLE"){Fail "PR is not mergeable."}
 
 Write-Host "`n=== Validate local frozen certification ===" -ForegroundColor Cyan
-& (Join-Path $EMSPath "scripts\Test-Wave2C-PRReadiness.ps1") -EMSPath $EMSPath
+& (Join-Path $EMSPath "scripts\Test-Wave2C-PostPushReadiness.ps1") -EMSPath $EMSPath
 if(-not $?){Fail "Local Wave 2C certification gate failed."}
 
 Write-Host "`n=== Inspect PR checks ===" -ForegroundColor Cyan
