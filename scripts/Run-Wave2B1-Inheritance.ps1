@@ -1,6 +1,5 @@
 [CmdletBinding()]
 param(
-    [string]$BaselinePath,
     [string]$EMSPath="C:\temp\standars\ems"
 )
 
@@ -22,15 +21,7 @@ $candidates=@(
     (Join-Path $EMSPath "generated\collector-acceptance\effective_compliance.csv")
 )
 $baseline=$candidates|Where-Object{Test-Path $_}|Select-Object -First 1
-if($BaselinePath){
-    if(-not(Test-Path $BaselinePath)){
-        throw "Explicit Wave 1 compliance baseline not found: $BaselinePath"
-    }
-    $baseline=(Resolve-Path $BaselinePath).Path
-}
-if(-not $baseline){
-    throw "Wave 1 compliance baseline not found. Supply -BaselinePath <path-to-effective_compliance_postpolicy.csv>."
-}
+if(-not $baseline){throw "Wave 1 compliance baseline not found."}
 
 Write-Host "Seeding higher-scope evidence records..." -ForegroundColor Cyan
 & $py (Join-Path $EMSPath "scripts\Seed-HigherScopeEvidence.py") `
