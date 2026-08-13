@@ -1,0 +1,56 @@
+{
+  "wave": "2C.2a",
+  "controls": [
+    "EMS-CTRL-049",
+    "EMS-CTRL-050",
+    "EMS-CTRL-053"
+  ],
+  "registers": {
+    "approved_ai_platforms.csv": {
+      "key_fields": [
+        "platform_name",
+        "approval_status"
+      ],
+      "required_fields": [
+        "platform_name",
+        "owner",
+        "approval_authority",
+        "approval_status",
+        "unapproved_handling",
+        "evidence_reference"
+      ]
+    },
+    "prompt_data_classification.csv": {
+      "key_fields": [
+        "record_id"
+      ],
+      "required_fields": [
+        "record_id",
+        "platform_name",
+        "use_case",
+        "data_classification",
+        "sensitive_data_handling",
+        "owner",
+        "reviewed_at",
+        "evidence_reference"
+      ]
+    },
+    "ai_security_reviews.csv": {
+      "key_fields": [
+        "review_id"
+      ],
+      "required_fields": [
+        "review_id",
+        "platform_or_use_case",
+        "review_date",
+        "reviewer",
+        "finding_or_risk",
+        "owner",
+        "disposition",
+        "evidence_reference"
+      ]
+    }
+  },
+  "promotion_policy": "EXPLICIT_REVIEW_REQUIRED",
+  "automatic_promotion": false
+}

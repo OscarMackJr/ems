@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "control_id",
+    "status",
+    "sufficiency",
+    "promotion_eligible",
+    "assertions",
+    "outputs"
+  ],
+  "properties": {
+    "control_id": {
+      "const": "EMS-CTRL-072"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "WARNING",
+        "FAIL"
+      ]
+    },
+    "sufficiency": {
+      "enum": [
+        "SUFFICIENT",
+        "INSUFFICIENT"
+      ]
+    },
+    "promotion_eligible": {
+      "type": "boolean"
+    },
+    "assertions": {
+      "type": "object"
+    },
+    "outputs": {
+      "type": "array"
+    }
+  }
+}

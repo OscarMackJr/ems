@@ -1,0 +1,23 @@
+{
+  "wave": "2C.1c",
+  "control_id": "EMS-CTRL-072",
+  "control_name": "PDF/DOCX Generation Validation",
+  "scope": "EMS",
+  "qualification_source": "generated/wave2c/ctrl072-reconciliation/ctrl072_reconciliation_evidence.json",
+  "qualified_queue_source": "generated/wave2c/ctrl072-reconciliation/remediation_queue.qualified.csv",
+  "authoritative_evidence_destination": "evidence/ems/EMS-CTRL-072.yaml",
+  "promotion_record": "generated/wave2c/ctrl072-promotion/promotion_record.json",
+  "updated_queue": "generated/wave2c/remediation_queue.csv",
+  "expected_pre_promotion_open_count": 8,
+  "expected_post_promotion_open_count": 7,
+  "remaining_open_controls": [
+    "EMS-CTRL-049",
+    "EMS-CTRL-050",
+    "EMS-CTRL-053",
+    "EMS-CTRL-063",
+    "EMS-CTRL-065",
+    "EMS-CTRL-066",
+    "EMS-CTRL-080"
+  ],
+  "promotion_policy": "EXPLICIT_ONLY"
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "status",
+    "open_remediation_count",
+    "promotion_performed",
+    "inheritance_validation"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2C.4"
+    },
+    "open_remediation_count": {
+      "const": 0
+    },
+    "promotion_performed": {
+      "const": true
+    }
+  }
+}

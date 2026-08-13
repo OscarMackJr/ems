@@ -1,0 +1,2 @@
+record_id,platform_name,use_case,data_classification,sensitive_data_handling,owner,reviewed_at,evidence_reference
+"AI-DATA-001","ChatGPT Enterprise","Software engineering assistance","INTERNAL","Confidential/restricted client data is prohibited from prompts unless specifically approved.","Head of Software Development","2026-08-13T00:34:49.0877603Z","ORG-AI-DATA-001"

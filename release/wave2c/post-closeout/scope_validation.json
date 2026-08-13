@@ -1,0 +1,830 @@
+{
+  "status": "PASS",
+  "changed_paths": [
+    {
+      "path": "evidence/ems/EMS-CTRL-072.yaml",
+      "allowed": true
+    },
+    {
+      "path": "evidence/ems/EMS-CTRL-080.yaml",
+      "allowed": true
+    },
+    {
+      "path": "evidence/organization/EMS-CTRL-049.yaml",
+      "allowed": true
+    },
+    {
+      "path": "evidence/organization/EMS-CTRL-050.yaml",
+      "allowed": true
+    },
+    {
+      "path": "evidence/organization/EMS-CTRL-053.yaml",
+      "allowed": true
+    },
+    {
+      "path": "evidence/organization/EMS-CTRL-063.yaml",
+      "allowed": true
+    },
+    {
+      "path": "evidence/organization/EMS-CTRL-065.yaml",
+      "allowed": true
+    },
+    {
+      "path": "evidence/organization/EMS-CTRL-066.yaml",
+      "allowed": true
+    },
+    {
+      "path": "registers/wave2c/ai-governance/ai_security_reviews.csv",
+      "allowed": true
+    },
+    {
+      "path": "registers/wave2c/ai-governance/approved_ai_platforms.csv",
+      "allowed": true
+    },
+    {
+      "path": "registers/wave2c/ai-governance/prompt_data_classification.csv",
+      "allowed": true
+    },
+    {
+      "path": "registers/wave2c/data-governance/data_classification_register.csv",
+      "allowed": true
+    },
+    {
+      "path": "registers/wave2c/data-governance/data_retention_register.csv",
+      "allowed": true
+    },
+    {
+      "path": "registers/wave2c/data-governance/production_data_protection_register.csv",
+      "allowed": true
+    },
+    {
+      "path": "registers/wave2c/ems-review/annual_ems_review_register.csv",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c1_ctrl072_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c1a_document_generation_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c1b_ctrl072_reconciliation_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c1c_ctrl072_promotion_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c2_ai_governance_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c2a_ai_governance_capture_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c2b_ai_governance_promotion_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c3_data_governance_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c3a_data_governance_promotion_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c4_annual_review_closeout_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "registry/wave2c_post_closeout_release_spec.json",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/EMS-CTRL-011.docx",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/EMS-CTRL-011.pdf",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/GITHUB_CONTROL_MAPPING.docx",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/GITHUB_CONTROL_MAPPING.pdf",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/PASS4_3_RUNBOOK.docx",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/PASS4_3_RUNBOOK.pdf",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/README.docx",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/README.pdf",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/REPOSITORY_CLASSIFICATION_GUIDE.docx",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/REPOSITORY_CLASSIFICATION_GUIDE.pdf",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/RUNBOOK.docx",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/controlled-documents/RUNBOOK.pdf",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/branch_certification.json",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/ems-wave2c-post-closeout-artifacts.zip",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/release_package_summary.json",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/scope_validation.json",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/wave2c_frozen_artifact_manifest.csv",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/wave2c_frozen_artifact_manifest.json",
+      "allowed": true
+    },
+    {
+      "path": "schemas/wave2c1_ctrl072_evidence.schema.json",
+      "allowed": true
+    },
+    {
+      "path": "schemas/wave2c1a_generation_manifest.schema.json",
+      "allowed": true
+    },
+    {
+      "path": "schemas/wave2c1b_ctrl072_reconciliation.schema.json",
+      "allowed": true
+    },
+    {
+      "path": "schemas/wave2c1c_ctrl072_promotion_record.schema.json",
+      "allowed": true
+    },
+    {
+      "path": "schemas/wave2c2b_ai_governance_promotion_record.schema.json",
+      "allowed": true
+    },
+    {
+      "path": "schemas/wave2c3_qualification_summary.schema.json",
+      "allowed": true
+    },
+    {
+      "path": "schemas/wave2c3a_data_governance_promotion_record.schema.json",
+      "allowed": true
+    },
+    {
+      "path": "schemas/wave2c4_closeout_record.schema.json",
+      "allowed": true
+    },
+    {
+      "path": "schemas/wave2c_post_closeout_branch_certification.schema.json",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Add-AIPlatformRecord.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Add-AISecurityReviewRecord.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Add-AnnualEMSReviewRecord.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Add-DataClassificationRecord.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Add-DataRetentionRecord.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Add-ProductionDataProtectionRecord.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Add-PromptDataClassificationRecord.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Apply-Wave2B1-BaselineDiscoveryFix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Apply-Wave2B1-Pass45ParamFix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Bootstrap-Wave2C.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Build-Wave2C2AIGovernanceEvidence.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Certify-Wave2CPostCloseoutBranch.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Closeout-Wave2C4.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Collect-Wave2C1-CTRL072.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Discover-ControlledDocumentSources.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Find-Wave1BaselineInputs.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Freeze-Wave2CPostCloseoutArtifacts.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Generate-ControlledDocuments.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Initialize-Wave2C3DataGovernanceRegisters.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Initialize-Wave2C4AnnualReview.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Inspect-And-Merge-Wave2BPR-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Inspect-And-Merge-Wave2BPR-v3.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-AuthoritativeScopeOverrides.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-ControlDefinitionRecovery.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-EMSSecretScanCleanup-v7a.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-EMSSecretScanTransientCleanup-v7.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-EMSValidateSecretScan-v4a-TestHarnessFix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-EMSValidateSecretScanFalsePositiveFix-v4.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-EMSValidateSecretScanMaintenanceSourceFix-v5.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-EMSValidateSecretScanMaintenanceSourceFix-v6.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-EMSValidateSecretScanSelfMatchFix-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-EMSValidateSecretScanSelfMatchFix-v3.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-EMSValidateSecretScanSelfMatchFix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Finalize-Wave2B.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B1-EvidenceDiscovery.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B1-EvidenceQualification.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B1-Inheritance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B2-HigherScopeCollectorArchitecture.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B21-HSDocumentControl.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B21a-HSDocumentControl.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B22-HSEvidenceIntegrityRelease.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B23-HSContinuousCompliance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B23a-CTRL075-EnvelopeKeyHotfix-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B23a-CTRL075-EnvelopeKeyHotfix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B23a-CTRL075-Hotfix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B23a-CTRL075-StatusSemanticRepair.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B23a-CTRL075Refinement.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B24-HSManagementReview.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B25-HSAIGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B25a-AIGovernanceQualification.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B25b-AIGovernanceGapRemediation.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B25c-AIGovernanceOperatingRegisters.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B25c-ShowScriptHotfix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B26-HSSecurityDataGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B26a-SDGOperatingRegisters.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2B26b-SDGFamilyCloseout.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2BAuthoritativePopulationHotfix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2BAuthoritativePopulationRerunHotfix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2BBranchCloseoutPatch.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2BCloseoutCertification.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2BCloseoutSemanticReconciliationHotfix-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2BCloseoutSemanticReconciliationHotfix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2BPostMergeRelease.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2C1-CTRL072.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2C1a-DependencyExecutionHotfix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2C1a-DocumentGeneration.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2C1b-CTRL072.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2C1c-CTRL072.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2CBootstrapFix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Install-Wave2CInitialization.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-EMSValidateSecretScanFalsePositives-v4.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-EMSValidateSecretScanMaintenanceSource-v5.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-EMSValidateSecretScanMaintenanceSource-v6.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-EMSValidateSecretScanSelfMatch-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-EMSValidateSecretScanSelfMatch-v3.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-EMSValidateSecretScanSelfMatch.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-Wave2B1-InheritanceBaselinePath-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-Wave2B1-InheritanceBaselinePath.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-Wave2C1a-GeneratorRuntime.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-Wave2C4-AlreadyPromotedResume.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-Wave2C4-OrchestratorQualificationGate.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Patch-Wave2C4-ResumeLastExitCode.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Prepare-Wave2CPostCloseoutPR.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Prepare-Wave2CPostCloseoutRelease.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Promote-Wave2C1c-CTRL072.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Promote-Wave2C2b-AIGovernance.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Promote-Wave2C3a-DataGovernance.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Publish-Wave2BPostMergeRelease.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Qualify-Wave2C1-CTRL072.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Qualify-Wave2C2AIGovernance.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Qualify-Wave2C3DataGovernance.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Qualify-Wave2C4AnnualReview.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Reconcile-Wave2C1b-CTRL072.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Reconcile-Wave2CCloseoutInheritanceStatus.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Rerun-Wave2C2b-Inheritance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Resume-Wave2C4-Closeout.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Review-Wave2C2b-AIGovernance.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Review-Wave2C3a-DataGovernance.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/ReviewPromote-Wave2C4AnnualReview.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2B1-Inheritance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C1-CTRL072.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C1a-DocumentGeneration-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C1a-DocumentGeneration.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C1b-CTRL072.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C1c-CTRL072.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C2-AIGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C2a-AIGovernanceEvidenceCapture.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C2b-AIGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C3-DataGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C3a-DataGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Run-Wave2C4-AnnualReviewCloseout.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2B1-BaselineConfig.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C1-CTRL072.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C1a-DocumentGeneration-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C1a-DocumentGeneration.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C1b-CTRL072.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C1c-CTRL072.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C2-AIGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C2a-AIGovernanceEvidenceCapture.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C2b-AIGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C2b-Inheritance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C3-DataGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C3a-DataGovernance.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2C4-AnnualReviewCloseout.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Show-Wave2CPostCloseoutRelease.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Stage-EMSSecretScanCleanup-v7.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-EMSValidateSecretScanFalsePositives-v4.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-EMSValidateSecretScanFalsePositives-v4a.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-EMSValidateSecretScanRepository-v5.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-EMSValidateSecretScanRepository-v6.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-EMSValidateSecretScanSelfMatchFix-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-EMSValidateSecretScanSelfMatchFix-v3.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-EMSValidateSecretScanSelfMatchFix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-Wave2B1-BaselineDiscoveryFix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-Wave2B1-InheritanceBaselinePath-v2.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-Wave2B1-Pass45ParamFix.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-Wave2C1a-Runtime.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-Wave2C4-AlreadyPromotedState.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-Wave2C4-OrchestratorQualificationGate.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-Wave2C4-ResumeLastExitCode.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Test-Wave2CCloseoutInheritanceStatusReconciliation.ps1",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Update-Wave2C1b-QualifiedQueue.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-ControlledDocumentOutputs.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2C1-CTRL072.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2C1b-CTRL072.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2C1c-CTRL072.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2C2AIGovernance.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2C2a-AIGovernanceRegisters.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2C2b-AIGovernance.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2C3DataGovernanceRegisters.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2C3a-DataGovernance.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2C4AnnualReview.py",
+      "allowed": true
+    },
+    {
+      "path": "scripts/Validate-Wave2CPostCloseoutScope.py",
+      "allowed": true
+    }
+  ],
+  "errors": []
+}

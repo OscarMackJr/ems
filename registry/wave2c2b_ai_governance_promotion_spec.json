@@ -1,0 +1,32 @@
+{
+  "wave": "2C.2b",
+  "controls": [
+    {
+      "control_id": "EMS-CTRL-049",
+      "control_name": "Approved AI Platforms"
+    },
+    {
+      "control_id": "EMS-CTRL-050",
+      "control_name": "Prompt Data Classification"
+    },
+    {
+      "control_id": "EMS-CTRL-053",
+      "control_name": "AI Security Review"
+    }
+  ],
+  "qualification_source": "generated/wave2c/ai-governance/qualification.json",
+  "assertion_source": "generated/wave2c/ai-governance/assertion_evidence.json",
+  "register_validation_source": "generated/wave2c/ai-governance/register_validation.json",
+  "register_root": "registers/wave2c/ai-governance",
+  "queue": "generated/wave2c/remediation_queue.csv",
+  "authoritative_evidence_root": "evidence/organization",
+  "expected_pre_open_count": 7,
+  "expected_post_open_count": 4,
+  "remaining_open_controls": [
+    "EMS-CTRL-063",
+    "EMS-CTRL-065",
+    "EMS-CTRL-066",
+    "EMS-CTRL-080"
+  ],
+  "promotion_policy": "EXPLICIT_ONLY"
+}

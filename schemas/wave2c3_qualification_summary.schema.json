@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "control_count",
+    "promotion_eligible_count",
+    "gap_count",
+    "promotion_performed"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2C.3"
+    },
+    "control_count": {
+      "const": 3
+    },
+    "promotion_performed": {
+      "const": false
+    }
+  }
+}

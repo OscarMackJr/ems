@@ -1,0 +1,2 @@
+review_id,platform_or_use_case,review_date,reviewer,finding_or_risk,severity,owner,disposition,evidence_reference
+"AI-SEC-001","ChatGPT Enterprise / software engineering","2026-08-13T00:35:03.3322078Z","Security","Risk of sensitive data disclosure through prompts.","MEDIUM","Head of Software Development","MITIGATED","ORG-AI-SEC-001"

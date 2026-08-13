@@ -1,0 +1,25 @@
+{
+  "wave": "2C.4",
+  "control": {
+    "control_id": "EMS-CTRL-080",
+    "control_name": "Annual EMS Review",
+    "scope": "EMS",
+    "register": "annual_ems_review_register.csv",
+    "required_assertions": [
+      "annual_review_recorded",
+      "review_date_recorded",
+      "participants_recorded",
+      "findings_or_observations_recorded",
+      "decisions_recorded",
+      "actions_and_owners_recorded",
+      "evidence_reference_retained"
+    ]
+  },
+  "queue": "generated/wave2c/remediation_queue.csv",
+  "register_root": "registers/wave2c/ems-review",
+  "authoritative_evidence": "evidence/ems/EMS-CTRL-080.yaml",
+  "expected_pre_open_count": 1,
+  "expected_post_open_count": 0,
+  "promotion_policy": "EXPLICIT_ONLY",
+  "automatic_promotion": false
+}

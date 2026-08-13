@@ -1,11 +1,14 @@
-evidence_id: ORGANIZATION-EMS-CTRL-065-PENDING
 control_id: EMS-CTRL-065
+control_name: Data Retention Compliance
 scope: ORGANIZATION
-authority_id: ENGINEERING-LEADERSHIP
-status: NOT_EVALUATED
-evidence_date: '2026-08-12'
-expires_on: null
-evidence_summary: Higher-scope evidence has not yet been supplied.
-evidence_references: []
-notes: Seeded by Wave 2B.1. Replace with controlled evidence before inheritance can
-  resolve.
+status: PASS
+evidence_class: OPERATING_EVIDENCE
+sufficiency: SUFFICIENT
+promotion_status: PROMOTED
+remediation_state: CLOSED
+promotion_wave: 2C.3a
+promoted_at_utc: 2026-08-13T01:03:27.087905+00:00
+qualification_source: C:\temp\standars\ems\generated\wave2c\data-governance\qualification.json
+assertion_source: C:\temp\standars\ems\generated\wave2c\data-governance\assertion_evidence.json
+register_validation_source: C:\temp\standars\ems\generated\wave2c\data-governance\register_validation.json
+promotion_performed: true

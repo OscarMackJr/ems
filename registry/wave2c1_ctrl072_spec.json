@@ -1,0 +1,19 @@
+{
+  "wave": "2C.1",
+  "control_id": "EMS-CTRL-072",
+  "control_name": "PDF/DOCX Generation Validation",
+  "scope": "EMS",
+  "promotion_policy": "FAIL_CLOSED",
+  "required_formats": [
+    "DOCX",
+    "PDF"
+  ],
+  "required_assertions": [
+    "controlled_sources_discovered",
+    "docx_output_detected",
+    "pdf_output_detected",
+    "output_files_nonempty",
+    "generation_provenance_retained",
+    "output_validation_retained"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "wave": "2C.3a",
+  "controls": [
+    {
+      "control_id": "EMS-CTRL-063",
+      "control_name": "Data Classification"
+    },
+    {
+      "control_id": "EMS-CTRL-065",
+      "control_name": "Data Retention Compliance"
+    },
+    {
+      "control_id": "EMS-CTRL-066",
+      "control_name": "Production Data Protection"
+    }
+  ],
+  "qualification_source": "generated/wave2c/data-governance/qualification.json",
+  "assertion_source": "generated/wave2c/data-governance/assertion_evidence.json",
+  "register_validation_source": "generated/wave2c/data-governance/register_validation.json",
+  "register_root": "registers/wave2c/data-governance",
+  "queue": "generated/wave2c/remediation_queue.csv",
+  "authoritative_evidence_root": "evidence/organization",
+  "expected_assertion_count": 15,
+  "expected_pre_open_count": 4,
+  "expected_post_open_count": 1,
+  "remaining_open_controls": [
+    "EMS-CTRL-080"
+  ],
+  "promotion_policy": "EXPLICIT_ONLY"
+}

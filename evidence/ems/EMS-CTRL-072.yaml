@@ -1,11 +1,18 @@
-evidence_id: EMS-EMS-CTRL-072-PENDING
 control_id: EMS-CTRL-072
+control_name: PDF/DOCX Generation Validation
 scope: EMS
-authority_id: EMS-GOVERNANCE
-status: NOT_EVALUATED
-evidence_date: '2026-08-12'
-expires_on: null
-evidence_summary: Higher-scope evidence has not yet been supplied.
-evidence_references: []
-notes: Seeded by Wave 2B.1. Replace with controlled evidence before inheritance can
-  resolve.
+status: PASS
+evidence_class: OPERATING_EVIDENCE
+sufficiency: SUFFICIENT
+promotion_status: PROMOTED
+remediation_state: CLOSED
+promotion_wave: 2C.1c
+promoted_at_utc: 2026-08-13T00:23:52.394519+00:00
+source_evidence: C:\temp\standars\ems\generated\wave2c\ctrl072-reconciliation\ctrl072_reconciliation_evidence.json
+generation_manifest: C:\temp\standars\ems\generated\wave2c\ctrl072-generation\generation_manifest.json
+output_validation: C:\temp\standars\ems\generated\wave2c\ctrl072-generation\output_validation.json
+provenance: C:\temp\standars\ems\generated\wave2c\ctrl072-generation\provenance.csv
+source_count: 6
+docx_count: 6
+pdf_count: 6
+promotion_performed: true

@@ -1,0 +1,2 @@
+record_id,data_scope_or_category,retention_period,retention_authority,owner,execution_or_disposition,execution_date,evidence_reference
+"DATA-RET-001","EMS compliance evidence and engineering records","7 years","Engineering Management / Security / Legal","Head of Software Development","Records retained under controlled repository and release retention process.","2026-08-13T00:53:31.9529482Z","ORG-DATA-RET-001"

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "control_id",
+    "status",
+    "sufficiency",
+    "promotion_eligible",
+    "promotion_performed",
+    "assertions",
+    "evidence_summary"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2C.1b"
+    },
+    "control_id": {
+      "const": "EMS-CTRL-072"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "WARNING",
+        "FAIL"
+      ]
+    },
+    "sufficiency": {
+      "enum": [
+        "SUFFICIENT",
+        "INSUFFICIENT"
+      ]
+    },
+    "promotion_eligible": {
+      "type": "boolean"
+    },
+    "promotion_performed": {
+      "const": false
+    },
+    "assertions": {
+      "type": "object"
+    },
+    "evidence_summary": {
+      "type": "object"
+    }
+  }
+}

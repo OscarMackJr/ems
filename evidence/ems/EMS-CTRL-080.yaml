@@ -1,11 +1,16 @@
-evidence_id: EMS-EMS-CTRL-080-PENDING
 control_id: EMS-CTRL-080
+control_name: Annual EMS Review
 scope: EMS
-authority_id: EMS-GOVERNANCE
-status: NOT_EVALUATED
-evidence_date: '2026-08-12'
-expires_on: null
-evidence_summary: Higher-scope evidence has not yet been supplied.
-evidence_references: []
-notes: Seeded by Wave 2B.1. Replace with controlled evidence before inheritance can
-  resolve.
+status: PASS
+evidence_class: OPERATING_EVIDENCE
+sufficiency: SUFFICIENT
+promotion_status: PROMOTED
+remediation_state: CLOSED
+promotion_wave: 2C.4
+promoted_at_utc: 2026-08-13T01:09:17.853178+00:00
+qualification_source: C:\temp\standars\ems\generated\wave2c\annual-review\qualification.json
+assertion_source: C:\temp\standars\ems\generated\wave2c\annual-review\assertion_evidence.json
+register_validation_source: C:\temp\standars\ems\generated\wave2c\annual-review\register_validation.json
+register_source: C:\temp\standars\ems\registers\wave2c\ems-review\annual_ems_review_register.csv
+register_sha256: 5b0684a8d64f6b4f5f3f9d0cf1ed5d9e3c56a1b20fbcd4b44d6900b60642c741
+promotion_performed: true

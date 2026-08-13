@@ -1,0 +1,22 @@
+{
+  "wave": "2C",
+  "deliverable": "POST_CLOSEOUT_BRANCH_CERTIFICATION_RELEASE_PREPARATION",
+  "expected_branch": "feature/wave2c-remediation",
+  "closeout_certification": "generated/wave2c/annual-review-closeout/wave2c_closeout_certification.json",
+  "reconciliation_record": "generated/wave2c/annual-review-closeout/inheritance_status_reconciliation.json",
+  "remediation_queue": "generated/wave2c/remediation_queue.csv",
+  "allowed_roots": [
+    ".github/workflows/",
+    "registry/",
+    "schemas/",
+    "evidence/",
+    "registers/",
+    "scripts/",
+    "tests/",
+    "release/wave2c/",
+    "generated/wave2c/"
+  ],
+  "release_root": "release/wave2c/post-closeout",
+  "release_name": "ems-wave2c-post-closeout",
+  "control_results_mutation_allowed": false
+}
