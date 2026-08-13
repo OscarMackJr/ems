@@ -1,0 +1,14 @@
+{
+  "wave": "2D",
+  "initialized_at_utc": "2026-08-13T03:26:19.3449432Z",
+  "status": "PASS",
+  "branch": "feature/wave2d-initialization",
+  "baseline_tag": "ems-v0.6.0-wave2c",
+  "baseline_commit_sha": "98b0b75fe2c5eea4b61530ce98bdf29742e8f2d4",
+  "baseline_state": "AUTHORITATIVE",
+  "scope_count": 0,
+  "population_count": 0,
+  "carry_forward_performed": false,
+  "wave2c_mutation_detected": false,
+  "initialization_state": "INITIALIZED"
+}
