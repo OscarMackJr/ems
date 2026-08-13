@@ -1,0 +1,14 @@
+{
+  "wave": "2D",
+  "generated_at_utc": "2026-08-13T12:59:20.661742+00:00",
+  "status": "PASS",
+  "control_count": 80,
+  "target_count": 7,
+  "matrix_row_count": 560,
+  "expected_matrix_row_count": 560,
+  "coverage_complete": true,
+  "default_applicability_state": "PENDING_APPLICABILITY",
+  "pending_applicability_count": 560,
+  "evaluation_performed": false,
+  "promotion_performed": false
+}

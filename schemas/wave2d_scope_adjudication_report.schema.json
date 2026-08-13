@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "status",
+    "control_decision_count",
+    "target_decision_count",
+    "review_required_count",
+    "undecided_count",
+    "evaluation_performed",
+    "promotion_performed"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2D"
+    },
+    "evaluation_performed": {
+      "const": false
+    },
+    "promotion_performed": {
+      "const": false
+    }
+  }
+}

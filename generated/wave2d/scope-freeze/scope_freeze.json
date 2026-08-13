@@ -1,0 +1,11 @@
+{
+  "wave": "2D",
+  "frozen_at_utc": "2026-08-13T12:59:20.546145+00:00",
+  "status": "PASS",
+  "control_count": 80,
+  "scope_sha256": "24e1fc3299e907232f8e9d61509b008854b8b5ac6a440ecbfa6c8e9eab9cc505",
+  "control_decisions_sha256": "908d151fa34e3d5a0484fd99922ee574858ce808f1aa06b26b43aa641d65021f",
+  "adjudication_report_sha256": "e5cd578bd54732c9a03f94b8b29e101cc9baf894c3bfacc180442536095f44b6",
+  "evaluation_performed": false,
+  "promotion_performed": false
+}

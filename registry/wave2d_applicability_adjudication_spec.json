@@ -1,0 +1,30 @@
+{
+  "wave": "2D",
+  "branch": "feature/wave2d-scope-population",
+  "matrix_file": "generated/wave2d/evaluation-matrix/evaluation_matrix.csv",
+  "matrix_summary": "generated/wave2d/evaluation-matrix/evaluation_matrix_summary.json",
+  "matrix_validation": "generated/wave2d/evaluation-matrix/evaluation_matrix_validation.json",
+  "candidate_controls": "generated/wave2d/scope-definition/candidate_controls.csv",
+  "candidate_targets": "generated/wave2d/scope-definition/candidate_targets.csv",
+  "repository_registry": "registry/repository_registry.yaml",
+  "repository_overrides": "registry/repository_overrides.yaml",
+  "rules_output": "registry/wave2d/applicability_rules.json",
+  "decisions_output": "registry/wave2d/applicability_decisions.csv",
+  "adjudicated_matrix": "generated/wave2d/evaluation-matrix/evaluation_matrix_adjudicated.csv",
+  "adjudication_summary": "generated/wave2d/evaluation-matrix/applicability_adjudication_summary.json",
+  "adjudication_validation": "generated/wave2d/evaluation-matrix/applicability_adjudication_validation.json",
+  "allowed_states": [
+    "APPLICABLE",
+    "NOT_APPLICABLE",
+    "REVIEW_REQUIRED"
+  ],
+  "policies": {
+    "preserve_explicit_human_decisions": true,
+    "default_repository_controls": "APPLICABLE",
+    "organization_controls_on_product_repos": "NOT_APPLICABLE",
+    "organization_controls_on_ems_repo": "APPLICABLE",
+    "unknown_context": "REVIEW_REQUIRED",
+    "evaluation_performed": false,
+    "promotion_performed": false
+  }
+}

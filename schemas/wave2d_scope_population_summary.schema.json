@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "status",
+    "candidate_control_count",
+    "candidate_target_count",
+    "included_control_count",
+    "included_target_count",
+    "evaluation_performed",
+    "promotion_performed",
+    "implicit_carry_forward_performed"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2D"
+    },
+    "evaluation_performed": {
+      "const": false
+    },
+    "promotion_performed": {
+      "const": false
+    },
+    "implicit_carry_forward_performed": {
+      "const": false
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "wave": "2D",
+  "branch": "feature/wave2d-scope-population",
+  "adjudication_report": "generated/wave2d/scope-definition/adjudication_report.json",
+  "scope_file": "registry/wave2d/scope.json",
+  "population_file": "registry/wave2d/population.json",
+  "control_decisions": "registry/wave2d/control_scope_decisions.csv",
+  "target_decisions": "registry/wave2d/evaluation_target_decisions.csv",
+  "freeze_root": "generated/wave2d/scope-freeze",
+  "scope_freeze": "generated/wave2d/scope-freeze/scope_freeze.json",
+  "population_freeze": "generated/wave2d/scope-freeze/population_freeze.json",
+  "matrix_file": "generated/wave2d/evaluation-matrix/evaluation_matrix.csv",
+  "matrix_summary": "generated/wave2d/evaluation-matrix/evaluation_matrix_summary.json",
+  "matrix_validation": "generated/wave2d/evaluation-matrix/evaluation_matrix_validation.json",
+  "expected_control_count": 80,
+  "expected_target_count": 7,
+  "expected_matrix_rows": 560,
+  "applicability_states": [
+    "PENDING_APPLICABILITY",
+    "APPLICABLE",
+    "NOT_APPLICABLE",
+    "REVIEW_REQUIRED"
+  ],
+  "default_applicability_state": "PENDING_APPLICABILITY",
+  "evaluation_performed": false,
+  "promotion_performed": false
+}

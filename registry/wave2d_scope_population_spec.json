@@ -1,0 +1,19 @@
+{
+  "wave": "2D",
+  "branch": "feature/wave2d-scope-population",
+  "base_branch": "main",
+  "baseline_tag": "ems-v0.6.0-wave2c",
+  "control_catalog": "registry/control_catalog.yaml",
+  "repository_registry": "registry/repository_registry.yaml",
+  "control_decisions": "registry/wave2d/control_scope_decisions.csv",
+  "target_decisions": "registry/wave2d/evaluation_target_decisions.csv",
+  "candidate_controls": "generated/wave2d/scope-definition/candidate_controls.csv",
+  "candidate_targets": "generated/wave2d/scope-definition/candidate_targets.csv",
+  "scope_output": "registry/wave2d/scope.json",
+  "population_output": "registry/wave2d/population.json",
+  "summary_output": "generated/wave2d/scope-definition/scope_population_summary.json",
+  "automatic_inclusion": false,
+  "automatic_evaluation": false,
+  "automatic_promotion": false,
+  "implicit_carry_forward": false
+}

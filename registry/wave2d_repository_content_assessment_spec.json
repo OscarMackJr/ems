@@ -1,0 +1,11 @@
+{
+  "wave": "2D",
+  "branch": "feature/wave2d-scope-population",
+  "review_queue": "registry/wave2d/applicability_review_queue.csv",
+  "assessment_output": "generated/wave2d/repository-content-assessment/repository_content_applicability_assessment.csv",
+  "assessment_summary": "generated/wave2d/repository-content-assessment/repository_content_applicability_summary.json",
+  "assisted_review_output": "registry/wave2d/applicability_review_decisions.csv",
+  "human_source": "HUMAN_REPOSITORY_EVIDENCE_REVIEW",
+  "evaluation_performed": false,
+  "promotion_performed": false
+}

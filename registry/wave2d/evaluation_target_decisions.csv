@@ -1,0 +1,8 @@
+target_id,repository_name,decision,rationale,decision_owner,adjudication_source
+REPO-001,bluto,INCLUDE,Included because the repository is registered as a current EMS evaluation target.,Engineering Management,PRESERVED_EXPLICIT_DECISION
+REPO-002,fiskroad,INCLUDE,Included because the repository is registered as a current EMS evaluation target.,Engineering Management,PRESERVED_EXPLICIT_DECISION
+REPO-003,hometown,INCLUDE,Included because the repository is registered as a current EMS evaluation target.,Engineering Management,PRESERVED_EXPLICIT_DECISION
+REPO-004,nono,INCLUDE,Included because the repository is registered as a current EMS evaluation target.,Engineering Management,PRESERVED_EXPLICIT_DECISION
+REPO-005,olive,INCLUDE,Included because the repository is registered as a current EMS evaluation target.,Engineering Management,PRESERVED_EXPLICIT_DECISION
+REPO-006,popeye,INCLUDE,Included because the repository is registered as a current EMS evaluation target.,Engineering Management,PRESERVED_EXPLICIT_DECISION
+REPO-EMS,ems,INCLUDE,Included because the repository is registered as a current EMS evaluation target.,Engineering Management,PRESERVED_EXPLICIT_DECISION

@@ -1,0 +1,19 @@
+{
+  "wave": "2D",
+  "branch": "feature/wave2d-scope-population",
+  "source_decisions": "registry/wave2d/applicability_decisions.csv",
+  "review_queue": "registry/wave2d/applicability_review_queue.csv",
+  "review_template": "registry/wave2d/applicability_review_template.csv",
+  "review_import": "registry/wave2d/applicability_review_decisions.csv",
+  "adjudicated_matrix": "generated/wave2d/evaluation-matrix/evaluation_matrix_adjudicated.csv",
+  "adjudication_summary": "generated/wave2d/evaluation-matrix/applicability_adjudication_summary.json",
+  "final_review_record": "generated/wave2d/evaluation-matrix/applicability_human_review_record.json",
+  "expected_review_count": 60,
+  "allowed_human_decisions": [
+    "APPLICABLE",
+    "NOT_APPLICABLE"
+  ],
+  "human_source_prefix": "HUMAN_",
+  "evaluation_performed": false,
+  "promotion_performed": false
+}

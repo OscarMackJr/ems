@@ -1,0 +1,81 @@
+control_id,control_name,decision,rationale,decision_owner,adjudication_source,catalog_scope
+EMS-CTRL-001,Engineering Governance Policy,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-002,Controlled Document Management,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-003,Third-party dependency governance,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-004,Secrets and identity protection,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS
+EMS-CTRL-005,Repository Classification,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-006,Recovery readiness,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-007,AI-assisted development governance,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-008,Controlled documentation and evidence,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-009,Branch Protection Required,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-010,Pull Request Review,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-011,CODEOWNERS Enforcement,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-012,Signed Commits,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-013,Protected Release Tags,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-014,Mandatory Issue Linkage,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-015,Repository Template Compliance,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-016,Evidence integrity and retention,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-017,Secure Coding Standard,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-018,Secret Scanning,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-019,Dependency Vulnerability Scanning,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-020,License Compliance,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-021,SBOM Generation,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-022,Security Advisory Monitoring,INCLUDE,Included by Wave 2D policy for repository-applicable PLATFORM control.,Engineering Management,POLICY_REPOSITORY_SCOPE,PLATFORM
+EMS-CTRL-023,Vulnerability Remediation Targets,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-024,Security Exception Approval,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-025,Unit Test Minimum,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-026,Integration Testing,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-027,Regression Testing,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-028,Contract/API Testing,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-029,Performance Testing,INCLUDE,Included by Wave 2D policy for repository-applicable SERVICE control.,Engineering Management,POLICY_REPOSITORY_SCOPE,SERVICE
+EMS-CTRL-030,Disaster Recovery Testing,INCLUDE,Included by Wave 2D policy for repository-applicable SERVICE control.,Engineering Management,POLICY_REPOSITORY_SCOPE,SERVICE
+EMS-CTRL-031,Test Evidence Retention,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-032,Test Environment Isolation,INCLUDE,Included by Wave 2D policy for repository-applicable PLATFORM control.,Engineering Management,POLICY_REPOSITORY_SCOPE,PLATFORM
+EMS-CTRL-033,Reproducible Builds,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-034,Release Manifest Generation,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-035,SHA-256 Integrity Verification,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-036,Release Signing,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-037,Build Artifact Retention,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-038,Version Number Governance,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-039,Release Approval Workflow,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-040,Rollback Procedure,INCLUDE,Included by Wave 2D policy for repository-applicable SERVICE control.,Engineering Management,POLICY_REPOSITORY_SCOPE,SERVICE
+EMS-CTRL-041,Infrastructure as Code Required,INCLUDE,Included by Wave 2D policy for repository-applicable PLATFORM control.,Engineering Management,POLICY_REPOSITORY_SCOPE,PLATFORM
+EMS-CTRL-042,IaC Security Scanning,INCLUDE,Included by Wave 2D policy for repository-applicable PLATFORM control.,Engineering Management,POLICY_REPOSITORY_SCOPE,PLATFORM
+EMS-CTRL-043,Least Privilege IAM,INCLUDE,Included by Wave 2D policy for repository-applicable PLATFORM control.,Engineering Management,POLICY_REPOSITORY_SCOPE,PLATFORM
+EMS-CTRL-044,Secrets Management,INCLUDE,Included by Wave 2D policy for repository-applicable PLATFORM control.,Engineering Management,POLICY_REPOSITORY_SCOPE,PLATFORM
+EMS-CTRL-045,Cloud Resource Tagging,INCLUDE,Included by Wave 2D policy for repository-applicable PLATFORM control.,Engineering Management,POLICY_REPOSITORY_SCOPE,PLATFORM
+EMS-CTRL-046,Backup Verification,INCLUDE,Included by Wave 2D policy for repository-applicable SERVICE control.,Engineering Management,POLICY_REPOSITORY_SCOPE,SERVICE
+EMS-CTRL-047,Restore Validation,INCLUDE,Included by Wave 2D policy for repository-applicable SERVICE control.,Engineering Management,POLICY_REPOSITORY_SCOPE,SERVICE
+EMS-CTRL-048,Environment Separation,INCLUDE,Included by Wave 2D policy for repository-applicable PLATFORM control.,Engineering Management,POLICY_REPOSITORY_SCOPE,PLATFORM
+EMS-CTRL-049,Approved AI Platforms,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-050,Prompt Data Classification,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-051,Human Review of AI Code,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-052,AI Attribution,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-053,AI Security Review,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-054,AI Model Risk Review,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-055,Policy Before Execution,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-056,Agent Identity Verification,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-057,Audit Envelope Generation,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-058,Fail-Closed Authorization,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-059,Execution Isolation Validation,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-060,Zero Trust Integration Testing,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-061,Database Migration Review,INCLUDE,Included by Wave 2D policy for repository-applicable APPLICATION control.,Engineering Management,POLICY_REPOSITORY_SCOPE,APPLICATION
+EMS-CTRL-062,Schema Version Control,INCLUDE,Included by Wave 2D policy for repository-applicable APPLICATION control.,Engineering Management,POLICY_REPOSITORY_SCOPE,APPLICATION
+EMS-CTRL-063,Data Classification,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-064,Database Backup Validation,INCLUDE,Included by Wave 2D policy for repository-applicable SERVICE control.,Engineering Management,POLICY_REPOSITORY_SCOPE,SERVICE
+EMS-CTRL-065,Data Retention Compliance,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-066,Production Data Protection,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-067,Controlled Document Metadata,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS
+EMS-CTRL-068,Cross-Reference Validation,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS
+EMS-CTRL-069,Requirements Traceability,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS
+EMS-CTRL-070,Revision History,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS
+EMS-CTRL-071,Executive Release Validation,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS
+EMS-CTRL-072,PDF/DOCX Generation Validation,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS
+EMS-CTRL-073,Engineering KPI Review,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-074,Quarterly Management Review,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-075,Continuous Compliance Scan,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS
+EMS-CTRL-076,Corrective Action Tracking,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS
+EMS-CTRL-077,Technical Debt Register,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-078,Lessons Learned Review,INCLUDE,Included by Wave 2D policy for ORGANIZATION-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,ORGANIZATION
+EMS-CTRL-079,Repository Health Review,INCLUDE,Included by Wave 2D policy for repository-applicable REPOSITORY control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,REPOSITORY
+EMS-CTRL-080,Annual EMS Review,INCLUDE,Included by Wave 2D policy for EMS-scope control.,Engineering Management,PRESERVED_EXPLICIT_DECISION,EMS

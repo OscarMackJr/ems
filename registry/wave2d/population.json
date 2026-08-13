@@ -1,8 +1,62 @@
 {
   "wave": "2D",
-  "population_count": 0,
-  "items": [],
-  "source_wave": "2C",
-  "carry_forward_performed": false,
+  "defined_at_utc": "2026-08-13T12:56:45.765263+00:00",
+  "population_count": 7,
+  "targets": [
+    {
+      "target_id": "REPO-001",
+      "repository_name": "bluto",
+      "decision": "INCLUDE",
+      "rationale": "Included because the repository is registered as a current EMS evaluation target.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "target_id": "REPO-002",
+      "repository_name": "fiskroad",
+      "decision": "INCLUDE",
+      "rationale": "Included because the repository is registered as a current EMS evaluation target.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "target_id": "REPO-003",
+      "repository_name": "hometown",
+      "decision": "INCLUDE",
+      "rationale": "Included because the repository is registered as a current EMS evaluation target.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "target_id": "REPO-004",
+      "repository_name": "nono",
+      "decision": "INCLUDE",
+      "rationale": "Included because the repository is registered as a current EMS evaluation target.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "target_id": "REPO-005",
+      "repository_name": "olive",
+      "decision": "INCLUDE",
+      "rationale": "Included because the repository is registered as a current EMS evaluation target.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "target_id": "REPO-006",
+      "repository_name": "popeye",
+      "decision": "INCLUDE",
+      "rationale": "Included because the repository is registered as a current EMS evaluation target.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "target_id": "REPO-EMS",
+      "repository_name": "ems",
+      "decision": "INCLUDE",
+      "rationale": "Included because the repository is registered as a current EMS evaluation target.",
+      "decision_owner": "Engineering Management"
+    }
+  ],
+  "excluded_target_count": 0,
+  "review_required_count": 0,
+  "undecided_target_count": 0,
+  "evaluation_performed": false,
+  "implicit_carry_forward_performed": false,
   "status": "PASS"
 }
