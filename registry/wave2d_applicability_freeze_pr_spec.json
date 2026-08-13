@@ -1,0 +1,20 @@
+{
+  "wave": "2D",
+  "branch": "feature/wave2d-scope-population",
+  "base_branch": "main",
+  "repo": "OscarMackJr/ems",
+  "expected_matrix_rows": 560,
+  "expected_applicable_count": 410,
+  "expected_not_applicable_count": 150,
+  "expected_review_required_count": 0,
+  "expected_pending_count": 0,
+  "adjudicated_matrix": "generated/wave2d/evaluation-matrix/evaluation_matrix_adjudicated.csv",
+  "applicability_summary": "generated/wave2d/evaluation-matrix/applicability_adjudication_summary.json",
+  "human_review_record": "generated/wave2d/evaluation-matrix/applicability_human_review_record.json",
+  "scope_freeze": "generated/wave2d/scope-freeze/scope_freeze.json",
+  "population_freeze": "generated/wave2d/scope-freeze/population_freeze.json",
+  "freeze_output": "generated/wave2d/applicability-freeze/applicability_freeze.json",
+  "freeze_validation": "generated/wave2d/applicability-freeze/applicability_freeze_validation.json",
+  "evaluation_performed": false,
+  "promotion_performed": false
+}

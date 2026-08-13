@@ -1,0 +1,180 @@
+{
+  "wave": "2D",
+  "status": "PASS",
+  "rules": [
+    {
+      "rule_id": "ORG_ONLY",
+      "description": "Organization/EMS controls apply to the EMS repository and are not evaluated independently on product repositories."
+    },
+    {
+      "rule_id": "AI_ENABLED",
+      "description": "AI-specific controls apply when repository classification indicates ai_enabled=true; otherwise NOT_APPLICABLE."
+    },
+    {
+      "rule_id": "PRODUCTION",
+      "description": "Production-data/recovery/release controls apply when production=true; otherwise REVIEW_REQUIRED unless the control is clearly repository-general."
+    },
+    {
+      "rule_id": "IAC",
+      "description": "IaC/cloud controls apply when Terraform/IaC/cloud indicators are present; otherwise REVIEW_REQUIRED."
+    },
+    {
+      "rule_id": "DATABASE",
+      "description": "Database-specific controls apply when database technologies or migration/schema indicators are present; otherwise REVIEW_REQUIRED."
+    },
+    {
+      "rule_id": "DEFAULT_REPOSITORY",
+      "description": "General repository engineering controls are APPLICABLE to registered product repositories."
+    }
+  ],
+  "repository_attribute_count": 7,
+  "repository_attributes": {
+    "REPO-001": {
+      "github": "OscarMackJr/bluto",
+      "owner": "Software Development",
+      "tier": "Tier2",
+      "service_criticality": "Low",
+      "production": false,
+      "internet_exposed": false,
+      "contains_customer_data": false,
+      "ai_enabled": true,
+      "technologies": [
+        "C#"
+      ],
+      "data_classification": [
+        "Internal"
+      ],
+      "visibility": "PUBLIC",
+      "default_branch": "implementation/bootstrap",
+      "archived": false,
+      "fork": false,
+      "status": "Classified",
+      "repository_name": "bluto"
+    },
+    "REPO-002": {
+      "github": "OscarMackJr/fiskroad",
+      "owner": "Software Development",
+      "tier": "Tier1",
+      "service_criticality": "Low",
+      "production": false,
+      "internet_exposed": false,
+      "contains_customer_data": false,
+      "ai_enabled": true,
+      "technologies": [
+        "Shell"
+      ],
+      "data_classification": [
+        "Internal"
+      ],
+      "visibility": "PRIVATE",
+      "default_branch": "main",
+      "archived": false,
+      "fork": false,
+      "status": "Classified",
+      "repository_name": "fiskroad"
+    },
+    "REPO-003": {
+      "github": "OscarMackJr/hometown",
+      "owner": "Software Development",
+      "tier": "Tier2",
+      "service_criticality": "High",
+      "production": true,
+      "internet_exposed": true,
+      "contains_customer_data": true,
+      "ai_enabled": false,
+      "technologies": [
+        "JavaScript"
+      ],
+      "data_classification": [
+        "Confidential"
+      ],
+      "visibility": "PUBLIC",
+      "default_branch": "main",
+      "archived": false,
+      "fork": false,
+      "status": "Classified",
+      "repository_name": "hometown"
+    },
+    "REPO-004": {
+      "github": "OscarMackJr/nono",
+      "owner": "Software Development",
+      "tier": "Tier2",
+      "service_criticality": "Medium",
+      "production": false,
+      "internet_exposed": true,
+      "contains_customer_data": false,
+      "ai_enabled": true,
+      "technologies": [
+        "Rust"
+      ],
+      "data_classification": [
+        "Internal"
+      ],
+      "visibility": "PUBLIC",
+      "default_branch": "main",
+      "archived": false,
+      "fork": true,
+      "status": "Classified",
+      "repository_name": "nono"
+    },
+    "REPO-005": {
+      "github": "OscarMackJr/olive",
+      "owner": "Software Development",
+      "tier": "Tier2",
+      "service_criticality": "High",
+      "production": true,
+      "internet_exposed": true,
+      "contains_customer_data": true,
+      "ai_enabled": false,
+      "technologies": [
+        "C#"
+      ],
+      "data_classification": [
+        "Confidential"
+      ],
+      "visibility": "PUBLIC",
+      "default_branch": "main",
+      "archived": false,
+      "fork": false,
+      "status": "Classified",
+      "repository_name": "olive"
+    },
+    "REPO-006": {
+      "github": "OscarMackJr/popeye",
+      "owner": "Software Development",
+      "tier": "Tier2",
+      "service_criticality": "High",
+      "production": true,
+      "internet_exposed": true,
+      "contains_customer_data": true,
+      "ai_enabled": false,
+      "technologies": [
+        "HCL"
+      ],
+      "data_classification": [
+        "Confidential"
+      ],
+      "visibility": "PUBLIC",
+      "default_branch": "main",
+      "archived": false,
+      "fork": false,
+      "status": "Classified",
+      "repository_name": "popeye"
+    },
+    "REPO-EMS": {
+      "github": "OscarMackJr/ems",
+      "default_branch": "main",
+      "owner": "Software Development",
+      "tier": "Tier1",
+      "service_criticality": "High",
+      "production": false,
+      "internet_exposed": false,
+      "contains_customer_data": false,
+      "ai_enabled": true,
+      "data_classification": [
+        "Internal"
+      ],
+      "repository_name": "ems"
+    }
+  }
+}

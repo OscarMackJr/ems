@@ -1,9 +1,572 @@
 {
   "wave": "2D",
-  "baseline_tag": "ems-v0.6.0-wave2c",
-  "baseline_commit_sha": "98b0b75fe2c5eea4b61530ce98bdf29742e8f2d4",
-  "scope_count": 0,
-  "controls": [],
-  "population_policy": "NO_IMPLICIT_CARRY_FORWARD",
+  "defined_at_utc": "2026-08-13T12:56:45.764248+00:00",
+  "scope_count": 80,
+  "controls": [
+    {
+      "control_id": "EMS-CTRL-001",
+      "control_name": "Engineering Governance Policy",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-002",
+      "control_name": "Controlled Document Management",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-003",
+      "control_name": "Third-party dependency governance",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-004",
+      "control_name": "Secrets and identity protection",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-005",
+      "control_name": "Repository Classification",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-006",
+      "control_name": "Recovery readiness",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-007",
+      "control_name": "AI-assisted development governance",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-008",
+      "control_name": "Controlled documentation and evidence",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-009",
+      "control_name": "Branch Protection Required",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-010",
+      "control_name": "Pull Request Review",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-011",
+      "control_name": "CODEOWNERS Enforcement",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-012",
+      "control_name": "Signed Commits",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-013",
+      "control_name": "Protected Release Tags",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-014",
+      "control_name": "Mandatory Issue Linkage",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-015",
+      "control_name": "Repository Template Compliance",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-016",
+      "control_name": "Evidence integrity and retention",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-017",
+      "control_name": "Secure Coding Standard",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-018",
+      "control_name": "Secret Scanning",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-019",
+      "control_name": "Dependency Vulnerability Scanning",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-020",
+      "control_name": "License Compliance",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-021",
+      "control_name": "SBOM Generation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-022",
+      "control_name": "Security Advisory Monitoring",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable PLATFORM control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-023",
+      "control_name": "Vulnerability Remediation Targets",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-024",
+      "control_name": "Security Exception Approval",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-025",
+      "control_name": "Unit Test Minimum",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-026",
+      "control_name": "Integration Testing",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-027",
+      "control_name": "Regression Testing",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-028",
+      "control_name": "Contract/API Testing",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-029",
+      "control_name": "Performance Testing",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable SERVICE control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-030",
+      "control_name": "Disaster Recovery Testing",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable SERVICE control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-031",
+      "control_name": "Test Evidence Retention",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-032",
+      "control_name": "Test Environment Isolation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable PLATFORM control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-033",
+      "control_name": "Reproducible Builds",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-034",
+      "control_name": "Release Manifest Generation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-035",
+      "control_name": "SHA-256 Integrity Verification",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-036",
+      "control_name": "Release Signing",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-037",
+      "control_name": "Build Artifact Retention",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-038",
+      "control_name": "Version Number Governance",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-039",
+      "control_name": "Release Approval Workflow",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-040",
+      "control_name": "Rollback Procedure",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable SERVICE control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-041",
+      "control_name": "Infrastructure as Code Required",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable PLATFORM control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-042",
+      "control_name": "IaC Security Scanning",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable PLATFORM control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-043",
+      "control_name": "Least Privilege IAM",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable PLATFORM control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-044",
+      "control_name": "Secrets Management",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable PLATFORM control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-045",
+      "control_name": "Cloud Resource Tagging",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable PLATFORM control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-046",
+      "control_name": "Backup Verification",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable SERVICE control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-047",
+      "control_name": "Restore Validation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable SERVICE control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-048",
+      "control_name": "Environment Separation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable PLATFORM control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-049",
+      "control_name": "Approved AI Platforms",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-050",
+      "control_name": "Prompt Data Classification",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-051",
+      "control_name": "Human Review of AI Code",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-052",
+      "control_name": "AI Attribution",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-053",
+      "control_name": "AI Security Review",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-054",
+      "control_name": "AI Model Risk Review",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-055",
+      "control_name": "Policy Before Execution",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-056",
+      "control_name": "Agent Identity Verification",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-057",
+      "control_name": "Audit Envelope Generation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-058",
+      "control_name": "Fail-Closed Authorization",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-059",
+      "control_name": "Execution Isolation Validation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-060",
+      "control_name": "Zero Trust Integration Testing",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-061",
+      "control_name": "Database Migration Review",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable APPLICATION control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-062",
+      "control_name": "Schema Version Control",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable APPLICATION control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-063",
+      "control_name": "Data Classification",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-064",
+      "control_name": "Database Backup Validation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable SERVICE control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-065",
+      "control_name": "Data Retention Compliance",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-066",
+      "control_name": "Production Data Protection",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-067",
+      "control_name": "Controlled Document Metadata",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-068",
+      "control_name": "Cross-Reference Validation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-069",
+      "control_name": "Requirements Traceability",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-070",
+      "control_name": "Revision History",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-071",
+      "control_name": "Executive Release Validation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-072",
+      "control_name": "PDF/DOCX Generation Validation",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-073",
+      "control_name": "Engineering KPI Review",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-074",
+      "control_name": "Quarterly Management Review",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-075",
+      "control_name": "Continuous Compliance Scan",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-076",
+      "control_name": "Corrective Action Tracking",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-077",
+      "control_name": "Technical Debt Register",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-078",
+      "control_name": "Lessons Learned Review",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for ORGANIZATION-scope control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-079",
+      "control_name": "Repository Health Review",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for repository-applicable REPOSITORY control.",
+      "decision_owner": "Engineering Management"
+    },
+    {
+      "control_id": "EMS-CTRL-080",
+      "control_name": "Annual EMS Review",
+      "decision": "INCLUDE",
+      "rationale": "Included by Wave 2D policy for EMS-scope control.",
+      "decision_owner": "Engineering Management"
+    }
+  ],
+  "excluded_control_count": 0,
+  "review_required_count": 0,
+  "undecided_control_count": 0,
+  "implicit_carry_forward_performed": false,
   "status": "PASS"
 }

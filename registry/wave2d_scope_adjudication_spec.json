@@ -1,0 +1,44 @@
+{
+  "wave": "2D",
+  "branch": "feature/wave2d-scope-population",
+  "control_decisions": "registry/wave2d/control_scope_decisions.csv",
+  "target_decisions": "registry/wave2d/evaluation_target_decisions.csv",
+  "candidate_controls": "generated/wave2d/scope-definition/candidate_controls.csv",
+  "candidate_targets": "generated/wave2d/scope-definition/candidate_targets.csv",
+  "scope_output": "registry/wave2d/scope.json",
+  "population_output": "registry/wave2d/population.json",
+  "summary_output": "generated/wave2d/scope-definition/scope_population_summary.json",
+  "adjudication_report": "generated/wave2d/scope-definition/adjudication_report.json",
+  "control_policy": {
+    "organization_scopes": [
+      "ORGANIZATION",
+      "EMS"
+    ],
+   "repository_scopes": [
+     "REPOSITORY",
+     "ENGINEERING",
+     "DEVOPS",
+     "SECURITY",
+     "TESTING",
+     "DATA",
+     "AI",
+     "PLATFORM",
+     "SERVICE",
+     "APPLICATION"
+   ],
+    "default_repository_decision": "INCLUDE",
+    "default_org_decision": "INCLUDE",
+    "unknown_scope_decision": "REVIEW_REQUIRED"
+  },
+  "target_policy": {
+    "include_registered_repositories": true,
+    "ems_repository_name": "ems",
+    "default_decision": "INCLUDE"
+  },
+  "finalization": {
+    "require_zero_undecided": true,
+    "require_zero_review_required": true,
+    "evaluation_performed": false,
+    "promotion_performed": false
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "status",
+    "reviewed_row_count",
+    "remaining_review_required_count",
+    "applicable_count",
+    "not_applicable_count",
+    "matrix_row_count",
+    "evaluation_performed",
+    "promotion_performed"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2D"
+    },
+    "status": {
+      "const": "PASS"
+    },
+    "remaining_review_required_count": {
+      "const": 0
+    },
+    "matrix_row_count": {
+      "const": 560
+    },
+    "evaluation_performed": {
+      "const": false
+    },
+    "promotion_performed": {
+      "const": false
+    }
+  }
+}
