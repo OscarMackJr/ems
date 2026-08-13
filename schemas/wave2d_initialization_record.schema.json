@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "status",
+    "branch",
+    "baseline_tag",
+    "baseline_commit_sha",
+    "baseline_state",
+    "scope_count",
+    "population_count",
+    "wave2c_mutation_detected",
+    "initialization_state"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2D"
+    },
+    "status": {
+      "const": "PASS"
+    },
+    "scope_count": {
+      "const": 0
+    },
+    "population_count": {
+      "const": 0
+    },
+    "wave2c_mutation_detected": {
+      "const": false
+    },
+    "initialization_state": {
+      "const": "INITIALIZED"
+    }
+  }
+}

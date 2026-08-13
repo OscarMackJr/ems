@@ -1,0 +1,15 @@
+{
+  "wave": "2D",
+  "branch": "feature/wave2d-initialization",
+  "base_branch": "main",
+  "baseline_tag": "ems-v0.6.0-wave2c",
+  "baseline_registration": "registry/release_baselines/wave2c_baseline_registration.json",
+  "baseline_state_required": "AUTHORITATIVE",
+  "wave2c_protected_roots": [
+    "generated/wave2c/",
+    "evidence/organization/",
+    "evidence/ems/",
+    "registers/wave2c/",
+    "release/wave2c/"
+  ]
+}

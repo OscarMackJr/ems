@@ -1,0 +1,9 @@
+{
+  "wave": "2D",
+  "baseline_tag": "ems-v0.6.0-wave2c",
+  "baseline_commit_sha": "98b0b75fe2c5eea4b61530ce98bdf29742e8f2d4",
+  "scope_count": 0,
+  "controls": [],
+  "population_policy": "NO_IMPLICIT_CARRY_FORWARD",
+  "status": "PASS"
+}
