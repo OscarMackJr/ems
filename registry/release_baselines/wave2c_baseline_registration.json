@@ -1,0 +1,19 @@
+{
+  "wave": "2C",
+  "release_tag": "ems-v0.6.0-wave2c",
+  "status": "PASS",
+  "registered_at_utc": "2026-08-13T02:31:32.758334+00:00",
+  "branch": "main",
+  "main_commit_sha": "98b0b75fe2c5eea4b61530ce98bdf29742e8f2d4",
+  "tag_commit_sha": "98b0b75fe2c5eea4b61530ce98bdf29742e8f2d4",
+  "release_zip": "C:\\temp\\standars\\ems\\release\\wave2c\\post-merge\\ems-v0.6.0-wave2c.zip",
+  "release_zip_sha256": "7ca6d195f5f05ef44eb020691dd63fda39e11bc5130a56d28627cf42e7f6cb8e",
+  "release_manifest": "C:\\temp\\standars\\ems\\release\\wave2c\\post-merge\\wave2c_post_merge_manifest.json",
+  "release_manifest_sha256": "224382d68512ef40d20a62c8fa26e60a899c79afae5c15b1be1353b4beb70a9b",
+  "post_merge_certification_sha256": "89c9dd1459b9ec4d12940d8f6553ff75e0376d48ad856c7271ca564739b9d559",
+  "release_summary_sha256": "9052a4a31750298d70c3cbb772cd614b7f45c42810b0d935410df44ba0067e56",
+  "baseline_state": "AUTHORITATIVE",
+  "next_wave": "2D",
+  "next_wave_baseline_tag": "ems-v0.6.0-wave2c",
+  "control_results_changed": false
+}

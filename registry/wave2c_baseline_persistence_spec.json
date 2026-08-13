@@ -1,0 +1,21 @@
+{
+  "wave": "2C",
+  "branch": "chore/wave2c-baseline-registration",
+  "base_branch": "main",
+  "repo": "OscarMackJr/ems",
+  "durable_paths": [
+    "registry/release_baselines/wave2c_baseline_registration.json",
+    "registry/wave2c_post_release_archive_spec.json",
+    "schemas/wave2c_baseline_registration.schema.json"
+  ],
+  "transient_paths": [
+    "scripts/Archive-Wave2CRelease.ps1",
+    "scripts/Register-Wave2CBaseline.py",
+    "scripts/Run-Wave2CPostReleaseBaselineRegistration.ps1",
+    "scripts/Show-Wave2CPostReleaseBaseline.ps1",
+    "release/wave2c/post-merge"
+  ],
+  "external_archive": "C:/temp/standars/ems-local-archive/releases/ems-v0.6.0-wave2c",
+  "release_tag": "ems-v0.6.0-wave2c",
+  "expected_main_commit": "98b0b75fe2c5eea4b61530ce98bdf29742e8f2d4"
+}
