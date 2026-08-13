@@ -1,0 +1,44 @@
+{
+  "wave": "2C.3",
+  "scope": "ORGANIZATION",
+  "controls": [
+    {
+      "control_id": "EMS-CTRL-063",
+      "control_name": "Data Classification",
+      "register": "data_classification_register.csv",
+      "required_assertions": [
+        "classification_recorded",
+        "classification_level_recorded",
+        "data_owner_or_steward_recorded",
+        "system_or_dataset_scope_recorded",
+        "review_history_retained"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-065",
+      "control_name": "Data Retention Compliance",
+      "register": "data_retention_register.csv",
+      "required_assertions": [
+        "retention_schedule_recorded",
+        "retention_period_recorded",
+        "data_scope_or_category_recorded",
+        "owner_or_authority_recorded",
+        "retention_execution_or_disposition_evidence_retained"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-066",
+      "control_name": "Production Data Protection",
+      "register": "production_data_protection_register.csv",
+      "required_assertions": [
+        "production_data_protection_recorded",
+        "sensitive_or_production_data_scope_recorded",
+        "protection_control_or_handling_recorded",
+        "owner_or_responsible_party_recorded",
+        "protection_validation_or_review_evidence_retained"
+      ]
+    }
+  ],
+  "promotion_policy": "EXPLICIT_REVIEW_REQUIRED",
+  "automatic_promotion": false
+}

@@ -1,0 +1,30 @@
+{
+  "wave": "2C.1b",
+  "control_id": "EMS-CTRL-072",
+  "control_name": "PDF/DOCX Generation Validation",
+  "scope": "EMS",
+  "source_artifacts": {
+    "generation_manifest": "generated/wave2c/ctrl072-generation/generation_manifest.json",
+    "output_validation": "generated/wave2c/ctrl072-generation/output_validation.json",
+    "provenance": "generated/wave2c/ctrl072-generation/provenance.csv",
+    "output_root": "release/wave2c/controlled-documents"
+  },
+  "qualification_policy": "FAIL_CLOSED",
+  "promotion_policy": "MANUAL_ONLY",
+  "required_conditions": [
+    "generation_manifest_pass",
+    "output_validation_pass",
+    "source_count_equals_record_count",
+    "exact_docx_count_matches_source_count",
+    "exact_pdf_count_matches_source_count",
+    "all_source_hashes_present",
+    "all_docx_hashes_present",
+    "all_pdf_hashes_present",
+    "all_generator_identities_present",
+    "all_generation_timestamps_present",
+    "all_manifest_paths_exist",
+    "all_current_hashes_match_manifest",
+    "provenance_rows_match_manifest_records",
+    "promotion_performed_false"
+  ]
+}

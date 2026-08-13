@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "promotion_performed",
+    "promoted_controls",
+    "pre_open_count",
+    "post_open_count",
+    "remaining_open_controls",
+    "evidence_files"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2C.2b"
+    },
+    "promotion_performed": {
+      "const": true
+    },
+    "pre_open_count": {
+      "const": 7
+    },
+    "post_open_count": {
+      "const": 4
+    }
+  }
+}

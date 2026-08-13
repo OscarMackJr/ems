@@ -1,0 +1,23 @@
+{
+  "wave": "2C",
+  "status": "PASS",
+  "certified_at_utc": "2026-08-13T01:44:06.843439+00:00",
+  "branch": "feature/wave2c-remediation",
+  "head_sha": "dd64f4b84fe1b1b87369af6d0927405d170a9446",
+  "closeout_status": "PASS",
+  "wave2c_state": "CLOSED",
+  "open_remediation_count": 0,
+  "inheritance_validation": "PASS",
+  "closeout_certification_sha256": "ef40d38b1a87c47abb4162ed68d93759c7930f35e30c466a262007aa43c6cbce",
+  "reconciliation_record_sha256": "e68176804eed2f62e7bfc1107d8bab13469371bcbaf9d2c8814fefc6f98b2f89",
+  "remediation_queue_sha256": "770818f356c2b22bc15710a5dbbac077c3ae1e4a59ebb7998362ba034dacd9bc",
+  "working_tree_changed_path_count": 5,
+  "working_tree_changed_paths": [
+    "elease/wave2c/post-closeout/branch_certification.json",
+    "release/wave2c/post-closeout/ems-wave2c-post-closeout-artifacts.zip",
+    "release/wave2c/post-closeout/release_package_summary.json",
+    "release/wave2c/post-closeout/scope_validation.json",
+    "release/wave2c/post-closeout/wave2c_frozen_artifact_manifest.json"
+  ],
+  "control_results_changed": false
+}

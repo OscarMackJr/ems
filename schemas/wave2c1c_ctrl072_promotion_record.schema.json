@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "wave",
+    "control_id",
+    "promotion_performed",
+    "source_status",
+    "source_sufficiency",
+    "source_promotion_eligible",
+    "pre_open_count",
+    "post_open_count",
+    "remaining_open_controls",
+    "authoritative_evidence"
+  ],
+  "properties": {
+    "wave": {
+      "const": "2C.1c"
+    },
+    "control_id": {
+      "const": "EMS-CTRL-072"
+    },
+    "promotion_performed": {
+      "const": true
+    },
+    "pre_open_count": {
+      "const": 8
+    },
+    "post_open_count": {
+      "const": 7
+    }
+  }
+}

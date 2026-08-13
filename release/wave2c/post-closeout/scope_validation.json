@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "changed_paths": [
+    {
+      "path": "release/wave2c/post-closeout/branch_certification.json",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/ems-wave2c-post-closeout-artifacts.zip",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/release_package_summary.json",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/scope_validation.json",
+      "allowed": true
+    },
+    {
+      "path": "release/wave2c/post-closeout/wave2c_frozen_artifact_manifest.json",
+      "allowed": true
+    }
+  ],
+  "errors": []
+}

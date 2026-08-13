@@ -1,0 +1,34 @@
+{
+  "wave": "2C.1a",
+  "control_id": "EMS-CTRL-072",
+  "control_name": "PDF/DOCX Generation Validation",
+  "source_policy": {
+    "allowed_roots": [
+      "docs",
+      "controlled",
+      "source",
+      "streams"
+    ],
+    "allowed_extensions": [
+      ".md",
+      ".txt"
+    ],
+    "require_at_least_one_source": true
+  },
+  "output_root": "release/wave2c/controlled-documents",
+  "promotion_policy": "FAIL_CLOSED",
+  "required_outputs_per_source": [
+    "DOCX",
+    "PDF"
+  ],
+  "required_provenance_fields": [
+    "source_path",
+    "source_sha256",
+    "docx_path",
+    "docx_sha256",
+    "pdf_path",
+    "pdf_sha256",
+    "generator",
+    "generated_at_utc"
+  ]
+}

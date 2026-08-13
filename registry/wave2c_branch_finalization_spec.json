@@ -1,0 +1,30 @@
+{
+  "wave": "2C",
+  "expected_branch": "feature/wave2c-remediation",
+  "repo": "OscarMackJr/ems",
+  "base_branch": "main",
+  "release_root": "release/wave2c/post-closeout",
+  "required_release_artifacts": [
+    "branch_certification.json",
+    "scope_validation.json",
+    "wave2c_frozen_artifact_manifest.json",
+    "release_package_summary.json"
+  ],
+  "required_closeout_state": {
+    "status": "PASS",
+    "wave2c_state": "CLOSED",
+    "open_remediation_count": 0,
+    "inheritance_validation": "PASS"
+  },
+  "allowed_roots": [
+    ".github/workflows/",
+    "registry/",
+    "schemas/",
+    "evidence/",
+    "registers/",
+    "scripts/",
+    "tests/",
+    "release/wave2c/",
+    "generated/wave2c/"
+  ]
+}

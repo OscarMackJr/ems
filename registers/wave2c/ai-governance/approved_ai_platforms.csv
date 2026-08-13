@@ -1,0 +1,2 @@
+platform_name,business_use,owner,approval_authority,approval_status,approved_at,unapproved_handling,evidence_reference
+"ChatGPT Enterprise","Engineering assistance","Head of Software Development","CTO/CSO","APPROVED","2026-08-13T00:34:25.7448973Z","Unapproved AI services are blocked or require documented exception approval.","ORG-AI-PLATFORM-001"

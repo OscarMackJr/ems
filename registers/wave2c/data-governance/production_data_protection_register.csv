@@ -1,0 +1,2 @@
+record_id,system_or_dataset,data_scope,protection_control_or_handling,owner,validation_date,validation_result,evidence_reference
+"PROD-DATA-001","Production application and integration data","Production and sensitive customer-related data","Access is restricted to authorized personnel; production data is protected through access controls, controlled environments, and approved handling practices.","Engineering / Security","2026-08-13T00:53:48.1669685Z","Protection controls reviewed and operating as required.","ORG-PROD-DATA-001"

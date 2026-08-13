@@ -1,0 +1,43 @@
+{
+  "wave": "2C",
+  "frozen_at_utc": "2026-08-13T01:44:07.537622+00:00",
+  "artifact_count": 7,
+  "control_results_changed": false,
+  "artifacts": [
+    {
+      "path": "generated/wave2c/annual-review-closeout/wave2c_closeout_certification.json",
+      "size_bytes": 652,
+      "sha256": "ef40d38b1a87c47abb4162ed68d93759c7930f35e30c466a262007aa43c6cbce"
+    },
+    {
+      "path": "generated/wave2c/annual-review-closeout/inheritance_status_reconciliation.json",
+      "size_bytes": 768,
+      "sha256": "e68176804eed2f62e7bfc1107d8bab13469371bcbaf9d2c8814fefc6f98b2f89"
+    },
+    {
+      "path": "generated/wave2c/annual-review-closeout/promotion_record.json",
+      "size_bytes": 478,
+      "sha256": "851f0d06189fb84bf9cfb125349fa15826522fcbd15499d3b0d7f64e5f1fe706"
+    },
+    {
+      "path": "generated/wave2c/annual-review-closeout/review_record.json",
+      "size_bytes": 361,
+      "sha256": "c2e1c27e6cf1c978cc4cdd22621e285d93f3281dce64bfd06a808b8b84bcb020"
+    },
+    {
+      "path": "generated/wave2c/remediation_queue.csv",
+      "size_bytes": 1648,
+      "sha256": "770818f356c2b22bc15710a5dbbac077c3ae1e4a59ebb7998362ba034dacd9bc"
+    },
+    {
+      "path": "generated/wave2/inheritance/inheritance_impact_report.json",
+      "size_bytes": 24623,
+      "sha256": "14f630c2fadbc4f5d13ed5727d1e27f0f8294d77898088482136f828d110ea40"
+    },
+    {
+      "path": "generated/wave2/inheritance/higher_scope_results.json",
+      "size_bytes": 13298,
+      "sha256": "d8da2db6ee1151bcfae99b8d4f803299b58c614c38be987986a27fb9f364dc40"
+    }
+  ]
+}

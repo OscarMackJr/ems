@@ -29,28 +29,16 @@ try{
     Write-Host ""
     git status --short
 
-    $stagedStatus = @(git diff --cached --name-status)
+    $staged = @(git diff --cached --name-only)
 
-    $badTransient = @()
-
-    foreach($entry in $stagedStatus){
-        if([string]::IsNullOrWhiteSpace($entry)){ continue }
-
-        $parts = $entry -split "`t"
-        $status = $parts[0]
-        $path = $parts[-1]
-
-        if($path -match '^scripts/(Patch|Test|Install)-EMSValidateSecretScan'){
-            # Deletion is the desired cleanup outcome. Any add/modify/rename/copy
-            # means transient maintenance tooling would remain in the baseline.
-            if($status -notmatch '^D'){
-                $badTransient += "$status`t$path"
-            }
+    $transientStillAdded = @(
+        $staged | Where-Object {
+            $_ -match '^scripts/(Patch|Test|Install)-EMSValidateSecretScan'
         }
-    }
+    )
 
-    if($badTransient.Count -gt 0){
-        throw "Transient secret-scan maintenance scripts remain staged as non-deletions: $($badTransient -join ', ')"
+    if($transientStillAdded.Count -gt 0){
+        throw "Transient secret-scan maintenance scripts are still staged: $($transientStillAdded -join ', ')"
     }
 
     Write-Host ""
@@ -59,4 +47,3 @@ try{
 finally{
     Pop-Location
 }
-
