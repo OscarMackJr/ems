@@ -1,0 +1,25 @@
+[
+  {
+    "contract_version": "1.0",
+    "wave": "2D",
+    "evidence_id": "PILOT-EMS-CTRL-018-REPO-001::secret-scanning",
+    "request_id": "PILOT-EMS-CTRL-018-REPO-001",
+    "control_id": "EMS-CTRL-018",
+    "target_id": "REPO-001",
+    "evidence_type": "GITHUB_SECRET_SCANNING",
+    "source": "github:OscarMackJr/bluto",
+    "collected_at_utc": "2026-08-14T01:17:33.343766+00:00",
+    "sha256": "97882c499f2038ebaa450a768ef10d6f20b873b67e2793ca48c1c7967b4c17ad",
+    "observation": "{\"api_status\": \"SUCCESS\", \"api_success\": true, \"error\": \"\", \"exit_code\": 0, \"push_protection_status\": \"enabled\", \"raw_summary\": {\"security_and_analysis_present\": true}, \"secret_scanning_status\": \"enabled\"}",
+    "provenance": {
+      "collector": "hayes-verify",
+      "collector_version": "0.1.0",
+      "repository_path_or_url": "C:\\work\\bluto\\Enterprise_Starter_Kit_v2.0_Baselined",
+      "repository_commit_sha": "a3447862288b6ca30b75e32e9052130cedefc98c",
+      "collected_at_utc": "2026-08-14T01:17:33.343766+00:00",
+      "command_or_method": "repository inspection",
+      "tool_versions": {}
+    },
+    "sensitive": false
+  }
+]
