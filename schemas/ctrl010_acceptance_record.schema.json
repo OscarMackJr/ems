@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "record_version",
+    "control_id",
+    "target_id",
+    "acceptance_decision",
+    "acceptance_state",
+    "decision_owner",
+    "decision_source",
+    "decision_rationale",
+    "promotion_authorized"
+  ],
+  "properties": {
+    "record_version": {
+      "const": "1.0"
+    },
+    "control_id": {
+      "const": "EMS-CTRL-010"
+    },
+    "target_id": {
+      "const": "REPO-001"
+    },
+    "acceptance_decision": {
+      "enum": [
+        "ACCEPT",
+        "REJECT"
+      ]
+    },
+    "acceptance_state": {
+      "enum": [
+        "ACCEPTED",
+        "REJECTED"
+      ]
+    },
+    "decision_source": {
+      "type": "string",
+      "pattern": "^HUMAN_"
+    },
+    "promotion_authorized": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": true
+}

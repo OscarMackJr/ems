@@ -1,0 +1,25 @@
+[
+  {
+    "contract_version": "1.0",
+    "wave": "2D",
+    "evidence_id": "PILOT-EMS-CTRL-010-REPO-001::pr-review",
+    "request_id": "PILOT-EMS-CTRL-010-REPO-001",
+    "control_id": "EMS-CTRL-010",
+    "target_id": "REPO-001",
+    "evidence_type": "GITHUB_PR_REVIEW_REQUIREMENT",
+    "source": "github:OscarMackJr/bluto:implementation/bootstrap",
+    "collected_at_utc": "2026-08-13T22:28:05.311345+00:00",
+    "sha256": "21cfbabf94df890f0d8cf51a8f9b8a397f8fbc11667131c7553f28d84f1aea8e",
+    "observation": "{\"api_status\": \"SUCCESS\", \"api_success\": true, \"default_branch\": \"implementation/bootstrap\", \"default_branch_discovery_success\": true, \"dismiss_stale_reviews\": false, \"encoded_branch\": \"implementation%2Fbootstrap\", \"error\": \"\", \"evaluated_branch\": \"implementation/bootstrap\", \"exit_code\": 0, \"raw_summary\": {\"keys\": [\"dismiss_stale_reviews\", \"require_code_owner_reviews\", \"require_last_push_approval\", \"required_approving_review_count\", \"url\"]}, \"require_code_owner_reviews\": true, \"required_approving_review_count\": 1, \"required_pull_request_reviews_present\": true}",
+    "provenance": {
+      "collector": "hayes-verify",
+      "collector_version": "0.1.0",
+      "repository_path_or_url": "C:\\work\\bluto\\Enterprise_Starter_Kit_v2.0_Baselined",
+      "repository_commit_sha": "a3447862288b6ca30b75e32e9052130cedefc98c",
+      "collected_at_utc": "2026-08-13T22:28:05.311345+00:00",
+      "command_or_method": "repository inspection",
+      "tool_versions": {}
+    },
+    "sensitive": false
+  }
+]
