@@ -1,0 +1,17 @@
+{
+  "wave": "2D",
+  "control_id": "EMS-CTRL-010",
+  "target_id": "REPO-001",
+  "hayes_return_envelope_relative_path": "generated\\pilot-live-certification\\EMS-CTRL-010\\REPO-001\\ems_return_envelope.json",
+  "hayes_live_certification_relative_path": "generated\\pilot-live-certification\\EMS-CTRL-010\\REPO-001\\live_evaluation_certification.json",
+  "hayes_evidence_relative_path": "generated\\pilot-evaluator\\EMS-CTRL-010\\REPO-001\\evidence.json",
+  "hayes_result_relative_path": "generated\\pilot-evaluator\\EMS-CTRL-010\\REPO-001\\result.json",
+  "ems_applicability_matrix_candidates": [
+    "generated\\wave2d\\evaluation-matrix\\evaluation_matrix_adjudicated.csv",
+    "generated\\wave2d\\evaluation-matrix\\evaluation_matrix.csv"
+  ],
+  "acceptance_output": "generated\\wave2d\\pilot-acceptance\\EMS-CTRL-010\\REPO-001\\acceptance_record.json",
+  "promotion_output": "generated\\wave2d\\pilot-acceptance\\EMS-CTRL-010\\REPO-001\\promotion_record.json",
+  "promoted_evidence_output": "evidence\\wave2d\\EMS-CTRL-010\\REPO-001\\evidence.json",
+  "validation_output": "generated\\wave2d\\pilot-acceptance\\EMS-CTRL-010\\REPO-001\\acceptance_validation.json"
+}

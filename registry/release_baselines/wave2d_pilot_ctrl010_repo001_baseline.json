@@ -1,0 +1,22 @@
+{
+  "baseline_version": "1.0",
+  "registered_at_utc": "2026-08-14T00:51:41.232231+00:00",
+  "wave": "2D",
+  "control_id": "EMS-CTRL-010",
+  "target_id": "REPO-001",
+  "request_id": "PILOT-EMS-CTRL-010-REPO-001",
+  "status": "PASS",
+  "baseline_state": "AUTHORITATIVE",
+  "acceptance_state": "ACCEPTED",
+  "promotion_state": "PROMOTED",
+  "result_state": "PASS",
+  "applicability_decision": "APPLICABLE",
+  "hashes": {
+    "acceptance_record_sha256": "a95de814c717af131aba416c75f2feeb405109554de0cd4fca9f109b7a5d52de",
+    "promotion_record_sha256": "f13d667d3a0be80d0b89624a94184a37eeaf6e84b56a7e266e4f94ef8df2b471",
+    "promotion_validation_sha256": "576b015a0c673d26658d8c71aae47d28fa044bc5a8c5e15f40e9ee3eb835ec7e",
+    "authoritative_evidence_sha256": "a0fb6f556e2ebe20ff8fd0967850f0367c1c6a8c2e897a08e06799e7705e8ab5",
+    "applicability_source_sha256": "60c784eff99dd82e16b94c043f0fcc7402399977c99c614af4a1ffaa830f17df"
+  },
+  "errors": []
+}
