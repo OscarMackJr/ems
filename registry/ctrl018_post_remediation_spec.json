@@ -1,0 +1,15 @@
+{
+  "wave": "2D",
+  "control_id": "EMS-CTRL-018",
+  "target_id": "REPO-001",
+  "pre_baseline_registration": "registry/release_baselines/wave2d_pilot_ctrl018_repo001_baseline.json",
+  "pre_baseline_expected_sha256": "96140b544f9f7b0537f27291556aac94fca3edd5266de10522fb1277d4fc3074",
+  "post_hayes_result": "generated/remediation/EMS-CTRL-018/REPO-001/result.json",
+  "post_hayes_evidence": "generated/remediation/EMS-CTRL-018/REPO-001/evidence.json",
+  "post_hayes_transition_certification": "generated/remediation/EMS-CTRL-018/REPO-001/transition_certification.json",
+  "acceptance_output": "generated/wave2d/remediation/EMS-CTRL-018/REPO-001/post_acceptance_record.json",
+  "promotion_output": "generated/wave2d/remediation/EMS-CTRL-018/REPO-001/post_promotion_record.json",
+  "promoted_evidence_output": "evidence/wave2d/EMS-CTRL-018/REPO-001/post_remediation_evidence.json",
+  "post_baseline_registration": "registry/release_baselines/wave2d_pilot_ctrl018_repo001_post_remediation_baseline.json",
+  "transition_record": "registry/release_baselines/wave2d_pilot_ctrl018_repo001_fail_to_pass_transition.json"
+}

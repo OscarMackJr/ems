@@ -1,0 +1,17 @@
+{
+  "record_version": "1.0",
+  "recorded_at_utc": "2026-08-14T01:38:45.187838+00:00",
+  "wave": "2D",
+  "control_id": "EMS-CTRL-018",
+  "target_id": "REPO-001",
+  "acceptance_state": "ACCEPTED",
+  "decision_owner": "Oscar Mack",
+  "decision_source": "HUMAN_EMS_CTRL018_POST_REMEDIATION_ACCEPTANCE",
+  "decision_rationale": "Accepted after EMS independently verified the authoritative pre-remediation CTRL-018 FAIL baseline, Hayes Verify post-remediation PASS result, successful GitHub API evidence showing secret scanning and push protection enabled, referenced SHA-256 hashes, and the certified FAIL-to-PASS transition for EMS-CTRL-018 / REPO-001.",
+  "result_state": "PASS",
+  "pre_remediation_baseline_sha256": "96140b544f9f7b0537f27291556aac94fca3edd5266de10522fb1277d4fc3074",
+  "post_result_sha256": "ebea35b3c0c7ba85c7752c09c75932b102fbcc76aa4d0210bc4b91bf456ce66e",
+  "post_evidence_sha256": "a91547ba2de82ebf8cf1e0c561f24711c82245a59de1630b8fa57524e62b50db",
+  "hayes_transition_certification_sha256": "25fb9fb21f48a6de0da74323152c1bb034e0864f6fa35933938c9c6da75461b9",
+  "errors": []
+}

@@ -1,0 +1,12 @@
+{
+  "record_version": "1.0",
+  "promoted_at_utc": "2026-08-14T01:38:45.196350+00:00",
+  "wave": "2D",
+  "control_id": "EMS-CTRL-018",
+  "target_id": "REPO-001",
+  "promotion_state": "PROMOTED",
+  "authoritative_evidence_path": "evidence/wave2d/EMS-CTRL-018/REPO-001/post_remediation_evidence.json",
+  "authoritative_evidence_sha256": "a91547ba2de82ebf8cf1e0c561f24711c82245a59de1630b8fa57524e62b50db",
+  "source_evidence_sha256": "a91547ba2de82ebf8cf1e0c561f24711c82245a59de1630b8fa57524e62b50db",
+  "acceptance_record_sha256": "f59de74e1faf8b31ee175a4e20eb028f06dc942963068bcf895f68e57eeecedf"
+}

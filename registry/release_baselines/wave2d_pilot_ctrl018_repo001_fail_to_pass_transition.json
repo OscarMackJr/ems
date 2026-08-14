@@ -1,0 +1,14 @@
+{
+  "transition_version": "1.0",
+  "registered_at_utc": "2026-08-14T01:38:45.240034+00:00",
+  "wave": "2D",
+  "control_id": "EMS-CTRL-018",
+  "target_id": "REPO-001",
+  "status": "PASS",
+  "transition": "FAIL_TO_PASS",
+  "pre_remediation_baseline": "registry/release_baselines/wave2d_pilot_ctrl018_repo001_baseline.json",
+  "pre_remediation_baseline_sha256": "96140b544f9f7b0537f27291556aac94fca3edd5266de10522fb1277d4fc3074",
+  "post_remediation_baseline": "registry/release_baselines/wave2d_pilot_ctrl018_repo001_post_remediation_baseline.json",
+  "post_remediation_baseline_sha256": "095f739f1d9409a8a691e3eb186c3a64dd0658040b72c84b236ba26f59c41715",
+  "hayes_transition_certification_sha256": "25fb9fb21f48a6de0da74323152c1bb034e0864f6fa35933938c9c6da75461b9"
+}
