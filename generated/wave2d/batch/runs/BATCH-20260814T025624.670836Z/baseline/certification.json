@@ -1,0 +1,14 @@
+{
+  "component": "EMS",
+  "phase": "Wave 2D Run-Scoped Batch Baseline Certification",
+  "certified_at_utc": "2026-08-14T03:20:27.943463+00:00",
+  "status": "PASS",
+  "batch_id": "BATCH-20260814T025624.670836Z",
+  "baseline_state": "AUTHORITATIVE",
+  "promoted_count": 4,
+  "pass_count": 3,
+  "fail_count": 1,
+  "baseline_registration_sha256": "e1b4b25cda82a311761b1aba8827b7a952c155687dbf2b90b6f9130c60422de8",
+  "manifest_sha256": "29d9be3a7188443bfae608bf9946d73194accbcd9bb89d7b0a1286b70b022c62",
+  "errors": []
+}

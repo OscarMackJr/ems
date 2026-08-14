@@ -1,0 +1,25 @@
+[
+  {
+    "contract_version": "1.0",
+    "wave": "2D",
+    "evidence_id": "BATCH-EMS-CTRL-009-REPO-001::branch-protection",
+    "request_id": "BATCH-EMS-CTRL-009-REPO-001",
+    "control_id": "EMS-CTRL-009",
+    "target_id": "REPO-001",
+    "evidence_type": "GITHUB_BRANCH_PROTECTION",
+    "source": "github:OscarMackJr/bluto:implementation/bootstrap",
+    "collected_at_utc": "2026-08-14T02:56:27.398885+00:00",
+    "sha256": "18a613370993d07b140c44a7a8b051441c2bf12919d78604bb8c41efbc36408f",
+    "observation": "{\"api_status\": \"SUCCESS\", \"api_success\": true, \"default_branch\": \"implementation/bootstrap\", \"default_branch_discovery_success\": true, \"encoded_branch\": \"implementation%2Fbootstrap\", \"enforce_admins_present\": true, \"error\": \"\", \"evaluated_branch\": \"implementation/bootstrap\", \"exit_code\": 0, \"protected\": true, \"raw_summary\": {\"keys\": [\"allow_deletions\", \"allow_force_pushes\", \"allow_fork_syncing\", \"block_creations\", \"enforce_admins\", \"lock_branch\", \"required_conversation_resolution\", \"required_linear_history\", \"required_pull_request_reviews\", \"required_signatures\", \"url\"]}, \"required_pull_request_reviews_present\": true, \"required_status_checks_present\": false, \"restrictions_present\": false}",
+    "provenance": {
+      "collector": "hayes-verify",
+      "collector_version": "0.1.0",
+      "repository_path_or_url": "C:\\work\\bluto\\Enterprise_Starter_Kit_v2.0_Baselined",
+      "repository_commit_sha": "a3447862288b6ca30b75e32e9052130cedefc98c",
+      "collected_at_utc": "2026-08-14T02:56:27.398885+00:00",
+      "command_or_method": "repository inspection",
+      "tool_versions": {}
+    },
+    "sensitive": false
+  }
+]

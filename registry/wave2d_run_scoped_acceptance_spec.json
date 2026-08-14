@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "wave": "2D",
+  "batch_id": "BATCH-20260814T025624.670836Z",
+  "hayes_latest_run": "C:\\temp\\standars\\hayes-verify\\generated\\wave2d\\batch\\latest_run.json",
+  "ems_run_root": "generated\\wave2d\\batch\\runs\\BATCH-20260814T025624.670836Z",
+  "qualification_queue": "generated\\wave2d\\batch\\runs\\BATCH-20260814T025624.670836Z\\acceptance\\qualification_queue.jsonl",
+  "human_review_queue": "generated\\wave2d\\batch\\runs\\BATCH-20260814T025624.670836Z\\acceptance\\human_review_queue.jsonl",
+  "human_review_completed": "generated\\wave2d\\batch\\runs\\BATCH-20260814T025624.670836Z\\acceptance\\human_review_completed.jsonl",
+  "acceptance_decisions": "generated\\wave2d\\batch\\runs\\BATCH-20260814T025624.670836Z\\acceptance\\acceptance_decisions.jsonl",
+  "promotion_root": "generated\\wave2d\\batch\\runs\\BATCH-20260814T025624.670836Z\\promotion",
+  "authoritative_evidence_root": "evidence\\wave2d\\batch\\BATCH-20260814T025624.670836Z",
+  "manifest": "generated\\wave2d\\batch\\runs\\BATCH-20260814T025624.670836Z\\baseline\\manifest.json",
+  "certification": "generated\\wave2d\\batch\\runs\\BATCH-20260814T025624.670836Z\\baseline\\certification.json",
+  "baseline_registration": "registry\\release_baselines\\wave2d_batch_BATCH-20260814T025624.670836Z.json"
+}

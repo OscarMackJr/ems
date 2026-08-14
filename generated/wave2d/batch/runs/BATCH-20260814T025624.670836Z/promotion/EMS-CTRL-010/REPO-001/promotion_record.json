@@ -1,0 +1,16 @@
+{
+  "record_version": "1.0",
+  "batch_id": "BATCH-20260814T025624.670836Z",
+  "wave": "2D",
+  "control_id": "EMS-CTRL-010",
+  "target_id": "REPO-001",
+  "result_state": "PASS",
+  "acceptance_state": "ACCEPTED",
+  "promotion_state": "PROMOTED",
+  "promoted_at_utc": "2026-08-14T03:20:27.730616+00:00",
+  "authoritative_evidence_path": "evidence/wave2d/batch/BATCH-20260814T025624.670836Z/EMS-CTRL-010/REPO-001/evidence.json",
+  "authoritative_evidence_sha256": "82520e70bbc2193ec7e93150c365387cd2b133d744ebb8186a540f305e724601",
+  "result_sha256": "4102942f873dc08dcbac5c304cb90ed69d9a965e6aeb21bb7a6f018aba01ef7c",
+  "decision_owner": "Oscar Mack",
+  "acceptance_mode": "BATCH_AUTO_QUALIFIED_HUMAN_APPROVED"
+}
