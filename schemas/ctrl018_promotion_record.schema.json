@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "record_version",
+    "control_id",
+    "target_id",
+    "promotion_state",
+    "authoritative_evidence_sha256",
+    "source_evidence_sha256",
+    "acceptance_record_sha256"
+  ],
+  "properties": {
+    "record_version": {
+      "const": "1.0"
+    },
+    "control_id": {
+      "const": "EMS-CTRL-018"
+    },
+    "target_id": {
+      "const": "REPO-001"
+    },
+    "promotion_state": {
+      "const": "PROMOTED"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,41 @@
+{
+  "record_version": "1.0",
+  "recorded_at_utc": "2026-08-14T01:09:17.162338+00:00",
+  "wave": "2D",
+  "control_id": "EMS-CTRL-018",
+  "target_id": "REPO-001",
+  "request_id": "PILOT-EMS-CTRL-018-REPO-001",
+  "acceptance_decision": "ACCEPT",
+  "acceptance_state": "ACCEPTED",
+  "decision_owner": "Oscar Mack",
+  "decision_source": "HUMAN_EMS_CTRL018_PILOT_ACCEPTANCE",
+  "decision_rationale": "Accepted as an authoritative FAIL after EMS independently validated the Hayes Verify CTRL-018 return envelope, referenced SHA-256 hashes, authoritative Wave 2D applicability decision, successful GitHub API evidence collection, sufficient evidence state, and the finding that secret scanning is disabled for EMS-CTRL-018 / REPO-001.",
+  "input_hashes": {
+    "evidence_sha256": "3271e2fef9720095cb56fcbce40c2a1bc4011965c2f1162808e44c88f2f45e3e",
+    "result_sha256": "55cf6141971b04a09782245b75aad0437471fb8b6dc409f03de84248e015e3b3",
+    "certification_sha256": "344118b84d620296b3166804dcafd26d077a7538faed8dc2b3cfbd81320600c1"
+  },
+  "applicability_authority": {
+    "system": "EMS",
+    "decision": "APPLICABLE",
+    "source": "C:\\temp\\standars\\ems\\generated\\wave2d\\evaluation-matrix\\evaluation_matrix_adjudicated.csv",
+    "source_sha256": "60c784eff99dd82e16b94c043f0fcc7402399977c99c614af4a1ffaa830f17df",
+    "inspected_sources": [
+      {
+        "source": "C:\\temp\\standars\\ems\\generated\\wave2d\\evaluation-matrix\\evaluation_matrix_adjudicated.csv",
+        "decision": "APPLICABLE",
+        "source_sha256": "60c784eff99dd82e16b94c043f0fcc7402399977c99c614af4a1ffaa830f17df"
+      }
+    ]
+  },
+  "hayes_verify_result": {
+    "evaluation_state": "COMPLETE",
+    "evidence_state": "SUFFICIENT",
+    "result_state": "FAIL",
+    "acceptance_state": "PENDING_EMS_ACCEPTANCE",
+    "promotion_state": "NOT_PROMOTED",
+    "evaluated_branch": null
+  },
+  "promotion_authorized": true,
+  "promotion_state": "QUALIFIED_NOT_PROMOTED"
+}
