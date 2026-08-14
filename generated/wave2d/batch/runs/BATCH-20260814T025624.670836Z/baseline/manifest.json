@@ -1,0 +1,57 @@
+{
+  "manifest_version": "1.0",
+  "batch_id": "BATCH-20260814T025624.670836Z",
+  "wave": "2D",
+  "generated_at_utc": "2026-08-14T03:20:27.934349+00:00",
+  "status": "PASS",
+  "promoted_count": 4,
+  "pass_count": 3,
+  "fail_count": 1,
+  "items": [
+    {
+      "batch_id": "BATCH-20260814T025624.670836Z",
+      "control_id": "EMS-CTRL-009",
+      "target_id": "REPO-001",
+      "result_state": "PASS",
+      "promotion_record": "generated/wave2d/batch/runs/BATCH-20260814T025624.670836Z/promotion/EMS-CTRL-009/REPO-001/promotion_record.json",
+      "promotion_record_sha256": "2ba87faa003b7639d7b9e97a627b70e93849e88455ce6ed1e4d23f4bfe40e039",
+      "evidence_path": "evidence/wave2d/batch/BATCH-20260814T025624.670836Z/EMS-CTRL-009/REPO-001/evidence.json",
+      "evidence_sha256": "351a437f0ee32d7cee4e7f43b98b76c4c0d2167c7f9afa98b4bf6dc13f7fd118",
+      "result_sha256": "f668ff47c16da983221b406e85848e0035df64250cb4c080ee1591e3f91c953c"
+    },
+    {
+      "batch_id": "BATCH-20260814T025624.670836Z",
+      "control_id": "EMS-CTRL-010",
+      "target_id": "REPO-001",
+      "result_state": "PASS",
+      "promotion_record": "generated/wave2d/batch/runs/BATCH-20260814T025624.670836Z/promotion/EMS-CTRL-010/REPO-001/promotion_record.json",
+      "promotion_record_sha256": "b5bc4d29b4998b4d8906b76132bcc0c1376ceb4d7aa3e87a1490d6bbc092d6e3",
+      "evidence_path": "evidence/wave2d/batch/BATCH-20260814T025624.670836Z/EMS-CTRL-010/REPO-001/evidence.json",
+      "evidence_sha256": "82520e70bbc2193ec7e93150c365387cd2b133d744ebb8186a540f305e724601",
+      "result_sha256": "4102942f873dc08dcbac5c304cb90ed69d9a965e6aeb21bb7a6f018aba01ef7c"
+    },
+    {
+      "batch_id": "BATCH-20260814T025624.670836Z",
+      "control_id": "EMS-CTRL-018",
+      "target_id": "REPO-001",
+      "result_state": "PASS",
+      "promotion_record": "generated/wave2d/batch/runs/BATCH-20260814T025624.670836Z/promotion/EMS-CTRL-018/REPO-001/promotion_record.json",
+      "promotion_record_sha256": "8b3dd2c3686794e18bc7ac4ddac82b4d6f73d0095fcf1c5413bcaf78d5fb47fa",
+      "evidence_path": "evidence/wave2d/batch/BATCH-20260814T025624.670836Z/EMS-CTRL-018/REPO-001/evidence.json",
+      "evidence_sha256": "af3e59e832601e50fa5de0273478c12f27d75ef8a9edbeed967b5653637935c5",
+      "result_sha256": "d034e4fdd8719785d448758116182a17bf20b2f3c1185e0bc54f10ee1bf70036"
+    },
+    {
+      "batch_id": "BATCH-20260814T025624.670836Z",
+      "control_id": "EMS-CTRL-018",
+      "target_id": "REPO-EMS",
+      "result_state": "FAIL",
+      "promotion_record": "generated/wave2d/batch/runs/BATCH-20260814T025624.670836Z/promotion/EMS-CTRL-018/REPO-EMS/promotion_record.json",
+      "promotion_record_sha256": "8bfdcd58f8b46545a8d47ea77de5763ec7e66376a5b2b1995344d9bcf11142f6",
+      "evidence_path": "evidence/wave2d/batch/BATCH-20260814T025624.670836Z/EMS-CTRL-018/REPO-EMS/evidence.json",
+      "evidence_sha256": "444339407d17a5bd1f1d0ec4c764023679f57eba176cd86ba800914237b505ef",
+      "result_sha256": "a2de44cf847ca863974caa81143d76bdc62c2fc577f5c92dd70bc84074d755aa"
+    }
+  ],
+  "errors": []
+}

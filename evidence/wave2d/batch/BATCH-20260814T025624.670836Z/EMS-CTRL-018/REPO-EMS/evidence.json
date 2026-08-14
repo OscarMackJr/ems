@@ -1,0 +1,25 @@
+[
+  {
+    "contract_version": "1.0",
+    "wave": "2D",
+    "evidence_id": "BATCH-EMS-CTRL-018-REPO-EMS::secret-scanning",
+    "request_id": "BATCH-EMS-CTRL-018-REPO-EMS",
+    "control_id": "EMS-CTRL-018",
+    "target_id": "REPO-EMS",
+    "evidence_type": "GITHUB_SECRET_SCANNING",
+    "source": "github:OscarMackJr/ems",
+    "collected_at_utc": "2026-08-14T02:57:03.911093+00:00",
+    "sha256": "4a9ee176e701f10774c989d0ff07c574802c59338113e372209715b6cefc09f3",
+    "observation": "{\"api_status\": \"SUCCESS\", \"api_success\": true, \"error\": \"\", \"exit_code\": 0, \"push_protection_status\": \"disabled\", \"raw_summary\": {\"security_and_analysis_present\": true}, \"secret_scanning_status\": \"disabled\"}",
+    "provenance": {
+      "collector": "hayes-verify",
+      "collector_version": "0.1.0",
+      "repository_path_or_url": "C:\\temp\\standars\\ems",
+      "repository_commit_sha": "fa7b9b756b09c3b3189cccadb432a78062fbe217",
+      "collected_at_utc": "2026-08-14T02:57:03.911093+00:00",
+      "command_or_method": "repository inspection",
+      "tool_versions": {}
+    },
+    "sensitive": false
+  }
+]
