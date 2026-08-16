@@ -38,6 +38,11 @@ def main() -> None:
         errors.append("blocked-retention state was weakened")
     if authority["roles"]["storage_authority"] != "CSO":
         errors.append("storage authority is not CSO")
+    transition = authority.get("evidence_retention_state_transition", {})
+    if transition.get("from") != "STAGED_LOCAL" or transition.get("to") != "CSO_APPROVED_STORAGE" or transition.get("transition_authorized") is not False:
+        errors.append("retention state transition is invalid")
+    if "never rewrites or deletes" not in authority.get("supersession_history_retention", {}).get("successor_behavior", ""):
+        errors.append("supersession retention behavior is incomplete")
     if authority["roles"]["evidence_producer"] == authority["roles"]["storage_authority"]:
         errors.append("evidence producer equals storage authority")
     if tracked_raw_sha256(root, p2_cert.relative_to(root)) != "7b4b9c6694b6620e68c0466616b2cacfab8e1f7a03298286e188a82ac055b8e1":

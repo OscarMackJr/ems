@@ -35,5 +35,31 @@
     "destination_exists_or_creation_approved": "UNVERIFIED",
     "hold_deletion_semantics": "OPEN",
     "retention_write_authorized": false
+  },
+  "evidence_retention_state_transition": {
+    "from": "STAGED_LOCAL",
+    "to": "CSO_APPROVED_STORAGE",
+    "transition_authority": "CSO",
+    "required_preconditions": [
+      "all package artifacts have matching SHA-256 values",
+      "authorized write access and approved operational mechanism are confirmed",
+      "destination exists or its creation is approved",
+      "hold and deletion authority are recorded",
+      "immutable or versioned storage layout is used"
+    ],
+    "required_transition_evidence": [
+      "retained object logical path",
+      "source and retained SHA-256 equality",
+      "retention timestamp",
+      "CSO authorization reference"
+    ],
+    "current_state": "STAGED_LOCAL",
+    "transition_authorized": false
+  },
+  "supersession_history_retention": {
+    "scope": "onboarding certifications, supersession records, immutable machine results, and append-only human-review supplements",
+    "retention_period": "3 years; longer legal or management hold overrides deletion",
+    "successor_behavior": "a successor supplements the prior record and never rewrites or deletes the prior record during the retention period",
+    "storage_requirement": "all retained lineage records must use the CSO-approved retention authority once the transition is authorized"
   }
 }
