@@ -1,0 +1,35 @@
+{
+  "gaps": [
+    {
+      "description": "CSO-approved external storage authorization/access and destination remain unavailable; no physical evidence was copied.",
+      "gap_id": "ERG-001",
+      "state": "OPERATING_PREREQUISITE"
+    },
+    {
+      "description": "Retention-policy authority and hold/deletion authority must be assigned.",
+      "gap_id": "ERG-002",
+      "state": "GOVERNANCE_DECISION_REQUIRED"
+    },
+    {
+      "description": "No approved cryptographic signing or immutable identity mechanism for human review decisions.",
+      "gap_id": "ERG-003",
+      "state": "GOVERNANCE_DECISION_REQUIRED"
+    },
+    {
+      "description": "EMS PRs #11, #12 and #13 remain draft/open and unmerged.",
+      "gap_id": "ERG-004",
+      "state": "RELEASE_PREREQUISITE"
+    },
+    {
+      "description": "Hayes PR #11 remains draft/open and unmerged.",
+      "gap_id": "ERG-005",
+      "state": "RELEASE_PREREQUISITE"
+    },
+    {
+      "description": "Hometown production/pilot execution remains unauthorized.",
+      "gap_id": "ERG-006",
+      "state": "INTENTIONAL_NOT_AUTHORIZED"
+    }
+  ],
+  "generated_at_utc": "2026-08-16T18:00:33Z"
+}

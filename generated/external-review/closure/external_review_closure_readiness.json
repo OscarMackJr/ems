@@ -1,0 +1,12 @@
+{
+  "compliance_attestation": false,
+  "errors": [],
+  "external_evidence_retained": false,
+  "finding_disposition": "COMPLETE",
+  "generated_at_utc": "2026-08-16T18:00:33Z",
+  "hometown_authorization": false,
+  "production_authorization": false,
+  "remediation_verification": "PASS",
+  "review_closure_pr_ready": true,
+  "reviewed_baseline": "READY"
+}

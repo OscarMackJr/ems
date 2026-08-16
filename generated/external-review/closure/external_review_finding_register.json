@@ -1,0 +1,46 @@
+{
+  "finding_count": 5,
+  "findings": [
+    {
+      "disposition": "ADDRESSED_TO_CURRENT_AUTHORITY",
+      "finding_id": "ERF-001",
+      "open_dependency": "CSO authorization, destination access, retention-policy and hold/deletion authority remain operational/governance prerequisites.",
+      "source": "human-supplied GitHub review draft: EMS PR #12",
+      "title": "Synthetic evidence storage transition and payload ambiguity",
+      "verification": "P3 establishes STAGED_LOCAL -> CSO_APPROVED_STORAGE; no unapproved Egnyte payload schema was invented."
+    },
+    {
+      "disposition": "REMEDIATED",
+      "finding_id": "ERF-002",
+      "implementation_commit": "86ee7b2a6f01c0bd815c0bcc1f19f6d6d3e0947f",
+      "source": "human-supplied GitHub review draft: Hayes PR #11",
+      "title": "Unknown or malformed evaluator results must fail closed",
+      "verification": "onboarding_orchestrator validates known dispositions and result contract before WS7; focused malformed/unknown tests pass."
+    },
+    {
+      "disposition": "REMEDIATED",
+      "finding_id": "ERF-003",
+      "implementation_commit": "a1c98b1fc62c33060d0f26882fab329ac16de4ea",
+      "source": "human-supplied GitHub review draft: Hayes PR #11",
+      "title": "REPO-003 pilot circuit breaker",
+      "verification": "REPO-003 false pilot or production authorization aborts before subsequent workstream initialization."
+    },
+    {
+      "disposition": "GOVERNANCE_DECISION_REQUIRED",
+      "finding_id": "ERF-004",
+      "open_dependency": "EMS governance must approve a signing/immutable-identity mechanism before implementation.",
+      "source": "human-supplied GitHub review draft: Hayes PR #11",
+      "title": "Human decision non-repudiation and supersession",
+      "verification": "Published authority preserves immutable machine results and attributable reviewer decisions; cryptographic signing is not currently approved authority."
+    },
+    {
+      "disposition": "REMEDIATED",
+      "finding_id": "ERF-005",
+      "implementation_commit": "9d7b30468b2fcef601f9f3fccbdf27cbdf6d074d",
+      "source": "human-supplied GitHub review draft: EMS PRs #11/#13",
+      "title": "Retention authority and certification supersession history",
+      "verification": "P3 specifies three-year supersession history plus holds and prohibits successor deletion or rewrite of predecessor evidence."
+    }
+  ],
+  "generated_at_utc": "2026-08-16T18:00:33Z"
+}

@@ -1,0 +1,18 @@
+{
+  "finding_to_authority": {
+    "ERF-001": "P3 retention manifest/state transition",
+    "ERF-002": "Hayes onboarding_orchestrator result validation",
+    "ERF-003": "Hayes assert_non_production_pilot_boundary",
+    "ERF-004": "EMS onboarding human review authority",
+    "ERF-005": "P3 retention manifest supersession history"
+  },
+  "generated_at_utc": "2026-08-16T18:00:33Z",
+  "p2_traceability": {
+    "path": "generated/external-review/p2/external_review_cross_repo_traceability.json",
+    "sha256": "0a1f9f0ad47411e80f27194f93c1821066af32c937fddfe2cda4367c0d167a96"
+  },
+  "p3_retention_manifest": {
+    "path": "generated/external-review/p3/external_evidence_retention_manifest.json",
+    "sha256": "ecd7329e4c1df3bd463d447b600f383f7d855ff35e89f214c38ea8e98cca7dd6"
+  }
+}

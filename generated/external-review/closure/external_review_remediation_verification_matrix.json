@@ -1,0 +1,41 @@
+{
+  "ems_p3_verification": {
+    "pytest": "3 passed",
+    "ruff": "PASS",
+    "validator": "PASS"
+  },
+  "findings": [
+    {
+      "disposition": "ADDRESSED_TO_CURRENT_AUTHORITY",
+      "finding_id": "ERF-001",
+      "verified": true
+    },
+    {
+      "disposition": "REMEDIATED",
+      "finding_id": "ERF-002",
+      "verified": true
+    },
+    {
+      "disposition": "REMEDIATED",
+      "finding_id": "ERF-003",
+      "verified": true
+    },
+    {
+      "disposition": "GOVERNANCE_DECISION_REQUIRED",
+      "finding_id": "ERF-004",
+      "verified": false
+    },
+    {
+      "disposition": "REMEDIATED",
+      "finding_id": "ERF-005",
+      "verified": true
+    }
+  ],
+  "generated_at_utc": "2026-08-16T18:00:33Z",
+  "hayes_verification": {
+    "focused_pytest": "13 passed",
+    "full_pytest": "171 passed",
+    "github_ci": "SUCCESS",
+    "ruff": "PASS"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "artifact_hashes": {
+    "EXTERNAL_REVIEW_GITHUB_DISPOSITION_DRAFTS.md": "22e36ba6eed40ee57135e5ca56e42b48f7c0245c966fe32786433926b95e92c6",
+    "EXTERNAL_REVIEW_REMEDIATION_REPORT.md": "b02a55bc4517edfc60e895e2e2bdc9d5959e8b0a35ff554e7cf6da6e63790808",
+    "EXTERNAL_REVIEW_REVIEWED_BASELINE.md": "8c87d05a0a6018c2b51f5188c0e467fa9f078a1bac264bd06f7d4da5333f756c",
+    "external_review_closure_input_inventory.json": "960ea02f02bc86f7be5f863ffb6887484e727f3e50911fb756792b1c11ad5b7c",
+    "external_review_closure_readiness.json": "30b5e964f2dc4852db9737a5db6b9cd942a95e6f2505280d5adbada30395755b",
+    "external_review_finding_register.json": "c953f4eea47d3d597ed0c008eedc63d0b29fb7103e97832e863f722c0805e5c7",
+    "external_review_github_comment_state.json": "ce21cf08232a13a65177f715197e24f32d35891ba012173d3887ef71f82e21c6",
+    "external_review_post_remediation_open_gap_register.json": "9f6881e3cbb5d714e629bd34d858fd6a3f97b3c0a2def0d1e700c8cdbf681bc3",
+    "external_review_post_remediation_traceability.json": "2105f9db79f90629a331c5dec1c6e8fbbe0812fb0c7e35f28d7d20f30492f222",
+    "external_review_post_remediation_version_hash_map.json": "8eb57fabd0dcfc47612e1629f52ddc216123a7927e5efa837490c667a793e6ae",
+    "external_review_remediation_verification_matrix.json": "b4a1b8a337d87d6a17209934e24f1f98b35232caa246b11e967418881fe38d29"
+  },
+  "certification_scope": [
+    "remediation verification",
+    "integrity",
+    "traceability",
+    "evidence completeness",
+    "reviewed baseline readiness"
+  ],
+  "certified_at_utc": "2026-08-16T18:00:33Z",
+  "component": "EMS",
+  "errors": [],
+  "finding_count": 5,
+  "finding_dispositions": {
+    "ADDRESSED_TO_CURRENT_AUTHORITY": 1,
+    "GOVERNANCE_DECISION_REQUIRED": 1,
+    "REMEDIATED": 3
+  },
+  "historical_wave2d_freeze": {
+    "path": "registry/wave2d/applicability_decisions.csv",
+    "sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35"
+  },
+  "input_inventory": {
+    "path": "generated/external-review/closure/external_review_closure_input_inventory.json",
+    "sha256": "960ea02f02bc86f7be5f863ffb6887484e727f3e50911fb756792b1c11ad5b7c"
+  },
+  "not_a_compliance_attestation": true,
+  "not_external_evidence_retention_attestation": true,
+  "not_hometown_authorization": true,
+  "not_production_authorization": true,
+  "phase": "External Review Remediation Verification and Reviewed Baseline Closure",
+  "status": "PASS"
+}
