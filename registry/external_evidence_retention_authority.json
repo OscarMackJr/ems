@@ -1,0 +1,65 @@
+{
+  "authority_id": "EXTERNAL-EVIDENCE-RETENTION-AUTHORITY-V1",
+  "authority_scope": "EXTERNAL_REVIEW_SYNTHETIC_EVIDENCE_RETENTION_ONLY",
+  "governance_reconciliation": "TERMINOLOGY_CLARIFICATION",
+  "clarification": "The former retention_owner value Software Development identifies the evidence-producing and business-owning function. It does not identify the storage authority for Egnyte / TWG/TechAudits.",
+  "roles": {
+    "evidence_producer": "Software Development",
+    "evidence_business_owner": "Software Development",
+    "retention_policy_authority": "OPEN",
+    "storage_platform": "Egnyte",
+    "storage_logical_authority": "TWG/TechAudits",
+    "storage_authority": "CSO",
+    "storage_administrator": "OPEN",
+    "retention_hold_authority": "OPEN",
+    "deletion_authority": "OPEN"
+  },
+  "retention": {
+    "period": "3 years",
+    "longer_hold_overrides_deletion": true,
+    "write_authorization_required": true,
+    "current_operational_access_state": "BLOCKED / INACCESSIBLE",
+    "non_authoritative_operational_mapping": "Z:\\\\Shared\\\\TWG\\\\TechAudits"
+  },
+  "negative_invariants": {
+    "EVIDENCE_PRODUCER_NE_STORAGE_AUTHORITY": "PASS",
+    "SOFTWARE_DEVELOPMENT_NE_CSO": "PASS",
+    "LOCAL_DRIVE_MAPPING_NE_RETENTION_AUTHORITY": "PASS",
+    "GITHUB_NE_FINAL_EVIDENCE_RETENTION_STORE": "PASS",
+    "RETENTION_WRITE_REQUIRES_AUTHORIZATION": true,
+    "CSO_CONTROLLED_LOCATION_NE_ENGINEERING_SELF_AUTHORIZATION": "PASS"
+  },
+  "write_gate": {
+    "approved_logical_location": "Egnyte / TWG/TechAudits",
+    "operator_write_access": "UNVERIFIED",
+    "destination_exists_or_creation_approved": "UNVERIFIED",
+    "hold_deletion_semantics": "OPEN",
+    "retention_write_authorized": false
+  },
+  "evidence_retention_state_transition": {
+    "from": "STAGED_LOCAL",
+    "to": "CSO_APPROVED_STORAGE",
+    "transition_authority": "CSO",
+    "required_preconditions": [
+      "all package artifacts have matching SHA-256 values",
+      "authorized write access and approved operational mechanism are confirmed",
+      "destination exists or its creation is approved",
+      "hold and deletion authority are recorded",
+      "immutable or versioned storage layout is used"
+    ],
+    "required_transition_evidence": [
+      "retained object logical path",
+      "source and retained SHA-256 equality",
+      "retention timestamp",
+      "CSO authorization reference"
+    ],
+    "current_state": "STAGED_LOCAL",
+    "transition_authorized": false
+  },
+  "supersession_history_retention": {
+    "scope": "onboarding certifications, supersession records, immutable machine results, and append-only human-review supplements",
+    "retention_period": "3 years; longer legal or management hold overrides deletion",
+    "successor_behavior": "a successor supplements the prior record and never rewrites or deletes the prior record during the retention period",
+    "storage_requirement": "all retained lineage records must use the CSO-approved retention authority once the transition is authorized"
+  }
+}

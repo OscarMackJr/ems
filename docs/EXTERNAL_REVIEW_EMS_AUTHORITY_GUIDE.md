@@ -4,6 +4,6 @@ This publication makes EMS onboarding and hometown real-pilot governance reviewa
 
 Hometown is controlled identity REPO-003. The pilot authority is non-production only. Pilot execution is not authorized and production is not authorized.
 
-External execution evidence is intentionally not copied into Git. Published source hashes bind to the P0 preservation inventory; immutable execution evidence remains externally retained and hash-referenced. Egnyte logical authority is TWG/TechAudits, but its current Windows operational mapping is inaccessible. This publication does not resolve that retention gap.
+External execution evidence is intentionally not copied into Git. Published source hashes bind to the P0 preservation inventory; immutable execution evidence remains externally retained and hash-referenced. Egnyte logical authority is TWG/TechAudits, controlled by CSO. Software Development is the evidence producer and business owner, not the storage authority. Its current Windows operational mapping is inaccessible. This publication does not resolve that retention gap.
 
 Historical Wave 2D applicability freeze remains distinct from current onboarding applicability and is unchanged.

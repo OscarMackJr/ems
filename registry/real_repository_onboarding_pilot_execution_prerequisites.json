@@ -53,7 +53,7 @@
       "authority": "Retention Authority",
       "status": "BLOCKED",
       "required_evidence": "controlled store designation",
-      "closure_criteria": "location and owner recorded",
+      "closure_criteria": "logical location, separated evidence/business owner, and storage authority recorded; authorized operational access and hold/deletion semantics verified",
       "blocks_execution": true,
       "closure_authority": "Egnyte / TWG / TechAudits is approved controlled retention authority",
       "validation_timestamp": "2026-08-16T12:25:51Z",
@@ -62,8 +62,14 @@
       "retention_operational_mapping": "Z:\\Shared\\TWG\\TechAudits",
       "retention_period": "3 years",
       "longer_hold_overrides_deletion": true,
-      "retention_owner": "Software Development",
-      "block_reason": "Configured operational mapping Z:\\Shared\\TWG\\TechAudits does not exist or is inaccessible in the pilot operator environment; no substitute location selected."
+      "block_reason": "Configured operational mapping Z:\\Shared\\TWG\\TechAudits does not exist or is inaccessible in the pilot operator environment; no substitute location selected.",
+      "evidence_producer": "Software Development",
+      "evidence_business_owner": "Software Development",
+      "storage_authority": "CSO",
+      "retention_policy_authority": "OPEN",
+      "retention_hold_authority": "OPEN",
+      "deletion_authority": "OPEN",
+      "retention_authority_reference": "registry/external_evidence_retention_authority.json"
     },
     {
       "id": "EXECUTION_MAPPING_AUTHORIZATION",

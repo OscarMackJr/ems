@@ -1,0 +1,25 @@
+{
+  "component": "EMS External Review P3",
+  "p3_status": "PACKAGE_READY_WRITE_BLOCKED_BY_AUTHORITY",
+  "reviewer_reconstruction_ready": "YES",
+  "final_external_review_baseline_ready": "NO",
+  "retention_role_model": "RECONCILED",
+  "external_evidence_package": "52 / 52 VERIFIED / HASH-BOUND",
+  "external_evidence_retained": "NO",
+  "cso_action_required": "YES",
+  "hometown_pilot_execution_authorized": false,
+  "production_authorized": false,
+  "hometown_evaluator_executions": 0,
+  "references": {
+    "retention_manifest": "generated/external-review/p3/external_evidence_retention_manifest.json",
+    "retention_manifest_sha256": "d096b3919d7eefb0c5687d6912120724cd0dfba0f8f37ae29d2ef4fb0c5b58db",
+    "retention_blocker": "generated/external-review/p3/external_evidence_retention_blocker.json",
+    "retention_blocker_sha256": "353d5b659619f08867e1999a11e959bf565f45ef16326b762510859145396b79",
+    "retention_authority": "registry/external_evidence_retention_authority.json",
+    "retention_authority_sha256": "e283bba038bb338776c68ce462e0e0ee1610f0d0d14959797322f3b4d7b78da7",
+    "p2_certification_sha256": "7b4b9c6694b6620e68c0466616b2cacfab8e1f7a03298286e188a82ac055b8e1",
+    "p2_evidence_index_sha256": "81985ce1e821b098f696962468d30185434daa2a4267fc6feaabc824901585f9",
+    "historical_freeze_sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35"
+  },
+  "errors": []
+}
