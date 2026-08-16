@@ -1,0 +1,77 @@
+{
+  "component": "EMS",
+  "capability": "New Repository Onboarding MVP",
+  "authority_scope": "CLASSIFICATION_AUTHORITY",
+  "authority_status": "CONTROLLED_PUBLISHED",
+  "approved_rule_records": [
+    {
+      "requirement_id": "ONB-REQ-01-002",
+      "decision_id": "ONB-002-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Controlled snapshot records owner, tier, criticality, production, internet exposure, customer data, AI enabled, and data classification; human confirms criticality, production, customer data, AI, and data classification; discovery only proposes with provenance.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-002-01",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    },
+    {
+      "requirement_id": "ONB-REQ-02-002",
+      "decision_id": "ONB-002-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "UNKNOWN is explicit with source/timestamp; it never becomes false or NOT_APPLICABLE; a dependent policy condition yields APPLICABILITY_UNRESOLVED and HUMAN_REVIEW.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-002-02",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    },
+    {
+      "requirement_id": "ONB-REQ-03-002",
+      "decision_id": "ONB-002-03",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Owner, canonical coordinates, lifecycle, production, customer data, data classification, criticality, and policy-condition attributes are BLOCKING_UNKNOWN; tier/internet exposure/AI are conditionally blocking when policy-dependent.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-002-03",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    },
+    {
+      "requirement_id": "ONB-REQ-04-002",
+      "decision_id": "ONB-002-04",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Bind immutable classification snapshot hash; applicability/evidence-authority changes require a new run and never rewrite prior snapshots.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-002-04",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    }
+  ],
+  "source_decision_register": "generated/governance-proposals/new_repository_onboarding_mvp_decision_register.json"
+}

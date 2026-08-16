@@ -1,0 +1,60 @@
+{
+  "component": "EMS",
+  "capability": "New Repository Onboarding MVP",
+  "authority_scope": "EXECUTION_COMPOSITION_AUTHORITY",
+  "authority_status": "CONTROLLED_PUBLISHED",
+  "approved_rule_records": [
+    {
+      "requirement_id": "ONB-REQ-01-005",
+      "decision_id": "ONB-005-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Uncommitted execution-local mapping is keyed by controlled repository_id and never supplies identity, classification, or applicability authority.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-005-01",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    },
+    {
+      "requirement_id": "ONB-REQ-02-005",
+      "decision_id": "ONB-005-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Require path, Git repository, canonical remote match, default branch/reference, commit SHA, and dirty status; missing/mismatch blocks execution.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-005-02",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    },
+    {
+      "requirement_id": "ONB-REQ-03-005",
+      "decision_id": "ONB-005-03",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Clean checkout is required; dirty checkout requires time-bounded exception and non-baseline label.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-005-03",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    }
+  ],
+  "source_decision_register": "generated/governance-proposals/new_repository_onboarding_mvp_decision_register.json"
+}

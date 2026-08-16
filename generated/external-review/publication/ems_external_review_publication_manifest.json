@@ -1,0 +1,454 @@
+{
+  "publication_id": "EMS-EXTERNAL-REVIEW-AUTHORITY-P1A",
+  "generated_at_utc": "2026-08-16T13:46:09Z",
+  "p0_certification_sha256": "afaf4290dc80836b2ddeddcdb6d8b305184748d1cddaf258972fa5837f805d1c",
+  "ems_baseline_commit": "53234bbb9546ad37a691b67a2b509951512a79fc",
+  "branch": "feature/external-review-ems-authority-publication",
+  "artifact_count": 55,
+  "published_artifacts": [
+    {
+      "path": "registry/new_repository_onboarding_assessment_plan_authority.json",
+      "p0_raw_sha256": "3742bdc22cad74cb60d98afa91a8b917898cca1bf37823405fa33bc2c766ae09",
+      "publication_raw_sha256": "3742bdc22cad74cb60d98afa91a8b917898cca1bf37823405fa33bc2c766ae09",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_bundle_certification_authority.json",
+      "p0_raw_sha256": "6d0b3d990833dbea7d45dc42626dc27c379d5f83c54a697256e05fb91066e1c8",
+      "publication_raw_sha256": "6d0b3d990833dbea7d45dc42626dc27c379d5f83c54a697256e05fb91066e1c8",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_classification_authority.json",
+      "p0_raw_sha256": "044149664a8085668095ca9f837ce3275201f76dca231484c668458f17ba69ac",
+      "publication_raw_sha256": "044149664a8085668095ca9f837ce3275201f76dca231484c668458f17ba69ac",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_effective_applicability.json",
+      "p0_raw_sha256": "ecba0b93ae46017bfef3849ade93e9d3f8fd0d6285de496f82f51ca9768c1aa9",
+      "publication_raw_sha256": "ecba0b93ae46017bfef3849ade93e9d3f8fd0d6285de496f82f51ca9768c1aa9",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_evidence_authority.json",
+      "p0_raw_sha256": "7d743d9933456ba8dddf35a92e69101a33c4097a507ecab462b1297dc325b9f6",
+      "publication_raw_sha256": "7d743d9933456ba8dddf35a92e69101a33c4097a507ecab462b1297dc325b9f6",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_execution_composition_authority.json",
+      "p0_raw_sha256": "e69240e6d62031a8a5d0c6376b1ec0c7920af4331871933cb47baf7ec57c1ff8",
+      "publication_raw_sha256": "e69240e6d62031a8a5d0c6376b1ec0c7920af4331871933cb47baf7ec57c1ff8",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_human_review_authority.json",
+      "p0_raw_sha256": "db65ae96996c1fa5561584f943b951ed105be55d0ed4b4fd666475db93b4d976",
+      "publication_raw_sha256": "db65ae96996c1fa5561584f943b951ed105be55d0ed4b4fd666475db93b4d976",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_identity_authority.json",
+      "p0_raw_sha256": "c44d4a3e2b667eeb995aebb45284c6331e826b0af384e3153609354b336c3ac9",
+      "publication_raw_sha256": "c44d4a3e2b667eeb995aebb45284c6331e826b0af384e3153609354b336c3ac9",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_outcome_authority.json",
+      "p0_raw_sha256": "b80656872aa1555aacdf16e1a2fcd34725a80fcbcb705137b5d4320badb62037",
+      "publication_raw_sha256": "b80656872aa1555aacdf16e1a2fcd34725a80fcbcb705137b5d4320badb62037",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_publication_certification.json",
+      "p0_raw_sha256": "44c82d83e9a46cab7e8d837b5b1a50dc564e1bdac932cb0c32ebeca65aa1495d",
+      "publication_raw_sha256": "44c82d83e9a46cab7e8d837b5b1a50dc564e1bdac932cb0c32ebeca65aa1495d",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_publication_history.json",
+      "p0_raw_sha256": "e45dbd519c8321a81ae652644b6dc6a7a9f1930008f3e7dcddeebec971107def",
+      "publication_raw_sha256": "e45dbd519c8321a81ae652644b6dc6a7a9f1930008f3e7dcddeebec971107def",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_reassessment_retention_authority.json",
+      "p0_raw_sha256": "e87e2b8c71db952edbad62c55abdd6e12f4eb46b6d1543f92356936e6630ed0f",
+      "publication_raw_sha256": "e87e2b8c71db952edbad62c55abdd6e12f4eb46b6d1543f92356936e6630ed0f",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_requirements.json",
+      "p0_raw_sha256": "265e1afc351ef7be3ad5c6c6ccd83764d947e25a0afe2dfbab2773eebb57cbbc",
+      "publication_raw_sha256": "265e1afc351ef7be3ad5c6c6ccd83764d947e25a0afe2dfbab2773eebb57cbbc",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_support_semantics.json",
+      "p0_raw_sha256": "f0198cb88217bf02c02e1f581b099e44a07e03d065581986423dff30cb561803",
+      "publication_raw_sha256": "f0198cb88217bf02c02e1f581b099e44a07e03d065581986423dff30cb561803",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/new_repository_onboarding_traceability.json",
+      "p0_raw_sha256": "8de966c060eb3a41c9106b0ef379d4dee3e8a21b3ae07dd416ba09a0f0169656",
+      "publication_raw_sha256": "8de966c060eb3a41c9106b0ef379d4dee3e8a21b3ae07dd416ba09a0f0169656",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/real_repository_onboarding_pilot_authority.json",
+      "p0_raw_sha256": "595502dca4db906981867cc4c2dc417d49a072b3fd916599e9b14f86441687e5",
+      "publication_raw_sha256": "595502dca4db906981867cc4c2dc417d49a072b3fd916599e9b14f86441687e5",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/real_repository_onboarding_pilot_execution_prerequisites.json",
+      "p0_raw_sha256": "4e01de8f6a4b7891dfc7855c7f81cda11c4ec7fdbb5e65181eb4e6e260124c8d",
+      "publication_raw_sha256": "4e01de8f6a4b7891dfc7855c7f81cda11c4ec7fdbb5e65181eb4e6e260124c8d",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/real_repository_onboarding_pilot_publication_certification.json",
+      "p0_raw_sha256": "7117352de42d69c3a8ccd377f383b6a253ff8715812ad5b9d9799e02020c7bd9",
+      "publication_raw_sha256": "7117352de42d69c3a8ccd377f383b6a253ff8715812ad5b9d9799e02020c7bd9",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/real_repository_onboarding_pilot_publication_history.json",
+      "p0_raw_sha256": "529cae2e2776fbb571552a7eee51df5803981b6247c6f47f0e39bab94d0caeae",
+      "publication_raw_sha256": "529cae2e2776fbb571552a7eee51df5803981b6247c6f47f0e39bab94d0caeae",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "registry/real_repository_onboarding_pilot_traceability.json",
+      "p0_raw_sha256": "7e5f345d539eec15d57b606057cfa794300ad91e5900b33113863869d1a8c363",
+      "publication_raw_sha256": "7e5f345d539eec15d57b606057cfa794300ad91e5900b33113863869d1a8c363",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "schemas/new_repository_onboarding_requirements.schema.json",
+      "p0_raw_sha256": "c4e0bd19400bbdcd05252845b1f75be6de60fed7aa87e8ef5c174f569c360105",
+      "publication_raw_sha256": "c4e0bd19400bbdcd05252845b1f75be6de60fed7aa87e8ef5c174f569c360105",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "schemas/real_repository_onboarding_pilot_authority.schema.json",
+      "p0_raw_sha256": "61b7615ebdb2d31b44aed73870adc71ed724fdb09f2f991f5caeebf9e2482187",
+      "publication_raw_sha256": "61b7615ebdb2d31b44aed73870adc71ed724fdb09f2f991f5caeebf9e2482187",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "docs/NEW_REPOSITORY_ONBOARDING_CONTROLLED_REQUIREMENTS.md",
+      "p0_raw_sha256": "b0a697e0809ab5f89f15d6e750c94e262519d4e135168177d77f096a032b263c",
+      "publication_raw_sha256": "b0a697e0809ab5f89f15d6e750c94e262519d4e135168177d77f096a032b263c",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "docs/REAL_REPOSITORY_ONBOARDING_PILOT_AUTHORITY.md",
+      "p0_raw_sha256": "a9eac99bdfce464aecb5fccfb11cdcbfee819cb63be4446ca3a5d9fc1dd12588",
+      "publication_raw_sha256": "a9eac99bdfce464aecb5fccfb11cdcbfee819cb63be4446ca3a5d9fc1dd12588",
+      "artifact_class": "CONTROLLED_SOURCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/hometown_pilot_execution_prerequisite_authority_matrix.json",
+      "p0_raw_sha256": "5793c11e3b482083b791691e28d07087185ffcf0884c5464769967f86df9570e",
+      "publication_raw_sha256": "5793c11e3b482083b791691e28d07087185ffcf0884c5464769967f86df9570e",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/hometown_pilot_execution_prerequisite_closure.json",
+      "p0_raw_sha256": "6e46e26926e8ab36689faab84cc3863dd31c63a9f45629e3e173affdb3cb58bd",
+      "publication_raw_sha256": "6e46e26926e8ab36689faab84cc3863dd31c63a9f45629e3e173affdb3cb58bd",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/HOMETOWN_PILOT_EXECUTION_PREREQUISITE_CLOSURE.md",
+      "p0_raw_sha256": "e3a0fcad3975f48a70320432bb4da7386f3c6c9905ee9f43ad513d3277eaccf3",
+      "publication_raw_sha256": "e3a0fcad3975f48a70320432bb4da7386f3c6c9905ee9f43ad513d3277eaccf3",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/HOMETOWN_PILOT_EXECUTION_PREREQUISITE_HUMAN_INPUT.md",
+      "p0_raw_sha256": "d13c09d54677563c75de6778a562e964a6ae44d85d11ae3094639942b3c3584e",
+      "publication_raw_sha256": "d13c09d54677563c75de6778a562e964a6ae44d85d11ae3094639942b3c3584e",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/HOMETOWN_PILOT_EXECUTION_PREREQUISITE_MINIMAL_HUMAN_CONFIRMATION.md",
+      "p0_raw_sha256": "512c02552c1b7f21a325912a637a385e4bcf9916323c17a7783f19d0cdb01a1b",
+      "publication_raw_sha256": "512c02552c1b7f21a325912a637a385e4bcf9916323c17a7783f19d0cdb01a1b",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/hometown_pilot_execution_readiness.json",
+      "p0_raw_sha256": "d308518183e4e8b560202ac601a6d45d9c81fd01fa424247526ea89bf6cb02cd",
+      "publication_raw_sha256": "d308518183e4e8b560202ac601a6d45d9c81fd01fa424247526ea89bf6cb02cd",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/hometown_pilot_retention_location_validation.json",
+      "p0_raw_sha256": "de5d12f7b139dd715af163ac6c5118ebc310b7f86eaac96607b2a348f1069bf5",
+      "publication_raw_sha256": "de5d12f7b139dd715af163ac6c5118ebc310b7f86eaac96607b2a348f1069bf5",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/hometown_real_repository_pilot_hayes_authority_handoff.json",
+      "p0_raw_sha256": "505a824048c9ee81be4f71c975e7891bf22da04ffaf5d199ce74a32ac4fb1f58",
+      "publication_raw_sha256": "505a824048c9ee81be4f71c975e7891bf22da04ffaf5d199ce74a32ac4fb1f58",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/hometown_real_repository_pilot_identity_preflight.json",
+      "p0_raw_sha256": "a3bcdaf4fef743b63d90a539fc9f40f3898c93443d7bfaf4331d1432811a91f6",
+      "publication_raw_sha256": "a3bcdaf4fef743b63d90a539fc9f40f3898c93443d7bfaf4331d1432811a91f6",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/HOMETOWN_REAL_REPOSITORY_PILOT_IDENTITY_PREFLIGHT.md",
+      "p0_raw_sha256": "d10044ec411f3b039447171e84cc3c30433594f26a5a66072b6190d397b61039",
+      "publication_raw_sha256": "d10044ec411f3b039447171e84cc3c30433594f26a5a66072b6190d397b61039",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "hometown pilot",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/NEW_REPOSITORY_ONBOARDING_MVP_APPROVAL_TEMPLATE.md",
+      "p0_raw_sha256": "db4a450496f59cd54ce9d6ea1c092bca6fbb1bf98ebb34cbe32cd651ceaddc89",
+      "publication_raw_sha256": "db4a450496f59cd54ce9d6ea1c092bca6fbb1bf98ebb34cbe32cd651ceaddc89",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/new_repository_onboarding_mvp_architecture_decisions.json",
+      "p0_raw_sha256": "e6f2a8558a9b6049e17c8fd4721471188cd7006f3f3f960c641734f9c11a1867",
+      "publication_raw_sha256": "e6f2a8558a9b6049e17c8fd4721471188cd7006f3f3f960c641734f9c11a1867",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/new_repository_onboarding_mvp_change_impact.json",
+      "p0_raw_sha256": "7a15a309a4d14ca0665662ca7ea78b077b7565cea54228bd15663ebc58d8a6b3",
+      "publication_raw_sha256": "7a15a309a4d14ca0665662ca7ea78b077b7565cea54228bd15663ebc58d8a6b3",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/new_repository_onboarding_mvp_decision_closure_certification.json",
+      "p0_raw_sha256": "488fb90f81800b3ddc4924ff671a62d7fe0c1b1841638f511712cb59c17751a3",
+      "publication_raw_sha256": "488fb90f81800b3ddc4924ff671a62d7fe0c1b1841638f511712cb59c17751a3",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/new_repository_onboarding_mvp_decision_order.json",
+      "p0_raw_sha256": "0737ade5b3b2f96aaa47929fea11b40d9070d31cd5a23553501c21b8521aee12",
+      "publication_raw_sha256": "0737ade5b3b2f96aaa47929fea11b40d9070d31cd5a23553501c21b8521aee12",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/new_repository_onboarding_mvp_decision_register.json",
+      "p0_raw_sha256": "026b326412403307bf42bf25270a345f3113f1712d76108355e64f8faf2afa63",
+      "publication_raw_sha256": "026b326412403307bf42bf25270a345f3113f1712d76108355e64f8faf2afa63",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/NEW_REPOSITORY_ONBOARDING_MVP_GOVERNANCE_EXIT_CRITERIA.md",
+      "p0_raw_sha256": "d5aa541ab0b036f3f4234ae27ff06e124380eb7f9731db91564a4ad4d506a362",
+      "publication_raw_sha256": "d5aa541ab0b036f3f4234ae27ff06e124380eb7f9731db91564a4ad4d506a362",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/new_repository_onboarding_mvp_hayes_authority_handoff.json",
+      "p0_raw_sha256": "e93d1fcd27d104addb138515f1e71629f53f4d9ba09506ee03dc9fca360f838a",
+      "publication_raw_sha256": "e93d1fcd27d104addb138515f1e71629f53f4d9ba09506ee03dc9fca360f838a",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/NEW_REPOSITORY_ONBOARDING_MVP_HUMAN_DECISION_WORKSHEET.md",
+      "p0_raw_sha256": "54e94c3226b8e99fff8b450a95bf379ba4bce507a42f7085410bbfbb26697d36",
+      "publication_raw_sha256": "54e94c3226b8e99fff8b450a95bf379ba4bce507a42f7085410bbfbb26697d36",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/new_repository_onboarding_mvp_remediation.json",
+      "p0_raw_sha256": "debf36910583c535588a1b9862bd38a69279834f152410355f4a541e3e1f90b4",
+      "publication_raw_sha256": "debf36910583c535588a1b9862bd38a69279834f152410355f4a541e3e1f90b4",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/new_repository_onboarding_mvp_remediation.md",
+      "p0_raw_sha256": "87f5d47d152755690c415e74d65448d7dbfc37b449bf93a5bc00c294e98698fa",
+      "publication_raw_sha256": "87f5d47d152755690c415e74d65448d7dbfc37b449bf93a5bc00c294e98698fa",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/new_repository_onboarding_mvp_semantic_validation.json",
+      "p0_raw_sha256": "b80cb9f25e11fc73d300db29447b5fb61ca9e7b7cabb81e7aed0325e7d328daf",
+      "publication_raw_sha256": "b80cb9f25e11fc73d300db29447b5fb61ca9e7b7cabb81e7aed0325e7d328daf",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/REAL_REPOSITORY_ONBOARDING_PILOT_APPROVAL_TEMPLATE.md",
+      "p0_raw_sha256": "5222e684df7bab9152ecb65541e1b9dae361095ab39fff506bca98185ae552c1",
+      "publication_raw_sha256": "5222e684df7bab9152ecb65541e1b9dae361095ab39fff506bca98185ae552c1",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/real_repository_onboarding_pilot_change_impact.json",
+      "p0_raw_sha256": "2f004ed9355b181d206de25f02e2d2415cf64542fbf4fe3c82da24370f33bc48",
+      "publication_raw_sha256": "2f004ed9355b181d206de25f02e2d2415cf64542fbf4fe3c82da24370f33bc48",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/real_repository_onboarding_pilot_decision_closure_certification.json",
+      "p0_raw_sha256": "95824060e4f3110622feb356d6a04f035716ad7cd49d1a20b81399e28efec06c",
+      "publication_raw_sha256": "95824060e4f3110622feb356d6a04f035716ad7cd49d1a20b81399e28efec06c",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/real_repository_onboarding_pilot_decision_order.json",
+      "p0_raw_sha256": "bb469c0d263713a53386204930cbe35b8e57abb46e4559beba7aacb7bdbec9c5",
+      "publication_raw_sha256": "bb469c0d263713a53386204930cbe35b8e57abb46e4559beba7aacb7bdbec9c5",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/real_repository_onboarding_pilot_decision_register.json",
+      "p0_raw_sha256": "6e681e583b0a4b019adb6849ef086d030860ac988f037bdd9509c97f8300bdc9",
+      "publication_raw_sha256": "6e681e583b0a4b019adb6849ef086d030860ac988f037bdd9509c97f8300bdc9",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/REAL_REPOSITORY_ONBOARDING_PILOT_GOVERNANCE_EXIT_CRITERIA.md",
+      "p0_raw_sha256": "ba3a6dac9257fadc836f1fbf8ffe204f391bbcebde5eb8ec20784afa205bcc72",
+      "publication_raw_sha256": "ba3a6dac9257fadc836f1fbf8ffe204f391bbcebde5eb8ec20784afa205bcc72",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/REAL_REPOSITORY_ONBOARDING_PILOT_HUMAN_DECISION_WORKSHEET.md",
+      "p0_raw_sha256": "6b5e312774a0ec017199ff5a4afddd00e2da2987d61691660a4fb119529ea772",
+      "publication_raw_sha256": "6b5e312774a0ec017199ff5a4afddd00e2da2987d61691660a4fb119529ea772",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/REAL_REPOSITORY_ONBOARDING_PILOT_OPERATING_PROCEDURE_DRAFT.md",
+      "p0_raw_sha256": "fc082e8cb94b9e2aba549c613e06af6bf5f9cdead6bdddb8b5d17ad972997de3",
+      "publication_raw_sha256": "fc082e8cb94b9e2aba549c613e06af6bf5f9cdead6bdddb8b5d17ad972997de3",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    },
+    {
+      "path": "generated/governance-proposals/real_repository_onboarding_pilot_semantic_validation.json",
+      "p0_raw_sha256": "fc4eb93b0faf32c4eabdefcac1bbeb7e4e9dee5a8c4e63538b1e57bfe17accba",
+      "publication_raw_sha256": "fc4eb93b0faf32c4eabdefcac1bbeb7e4e9dee5a8c4e63538b1e57bfe17accba",
+      "artifact_class": "GOVERNANCE_DECISION_EVIDENCE",
+      "review_topic": "onboarding",
+      "authority_role": "EMS external-review controlled authority"
+    }
+  ],
+  "excluded_external_evidence": "Execution bundles remain external and hash-referenced only.",
+  "known_open_retention_gap": "Egnyte logical authority TWG/TechAudits; Z operational mapping inaccessible.",
+  "pilot_execution_authorized": false,
+  "production_authorized": false
+}

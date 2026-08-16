@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "component",
+    "capability",
+    "decision_count",
+    "requirements"
+  ],
+  "properties": {
+    "component": {
+      "const": "EMS"
+    },
+    "capability": {
+      "const": "New Repository Onboarding MVP"
+    },
+    "decision_count": {
+      "const": 24
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 24,
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "required": [
+          "requirement_id",
+          "decision_id",
+          "selected_candidate_id",
+          "normative_value",
+          "approval_provenance"
+        ],
+        "properties": {
+          "decision_id": {
+            "pattern": "^ONB-[0-9]{3}-[0-9]{2}$"
+          },
+          "normative_value": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

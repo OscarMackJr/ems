@@ -1,0 +1,43 @@
+{
+  "component": "EMS",
+  "capability": "New Repository Onboarding MVP",
+  "authority_scope": "HUMAN_REVIEW_AUTHORITY",
+  "authority_status": "CONTROLLED_PUBLISHED",
+  "approved_rule_records": [
+    {
+      "requirement_id": "ONB-REQ-01-008",
+      "decision_id": "ONB-008-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Immutable item records run/repository/control/assertion, reason, evidence gap, authority, reviewer authority, action, exception, status and provenance; statuses OPEN, IN_REVIEW, RESOLVED, EXCEPTION_APPROVED, SUPERSEDED.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-008-01",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    },
+    {
+      "requirement_id": "ONB-REQ-02-008",
+      "decision_id": "ONB-008-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Closure requires attributable reviewer decision, evidence, rationale, timestamp, and exception/remediation reference; it supplements, never mutates, machine results.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-008-02",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    }
+  ],
+  "source_decision_register": "generated/governance-proposals/new_repository_onboarding_mvp_decision_register.json"
+}

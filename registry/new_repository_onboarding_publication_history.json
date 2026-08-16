@@ -1,0 +1,28 @@
+{
+  "component": "EMS",
+  "capability": "New Repository Onboarding MVP",
+  "published_at_utc": "2026-08-15T16:55:14Z",
+  "publication_type": "initial controlled authority publication",
+  "decision_register_sha256": "026b326412403307bf42bf25270a345f3113f1712d76108355e64f8faf2afa63",
+  "closure_sha256": "488fb90f81800b3ddc4924ff671a62d7fe0c1b1841638f511712cb59c17751a3",
+  "historical_freeze_path": "registry/wave2d/applicability_decisions.csv",
+  "historical_freeze_sha256_before": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+  "historical_freeze_preserved": true,
+  "controlled_artifacts": [
+    "registry/new_repository_onboarding_identity_authority.json",
+    "registry/new_repository_onboarding_classification_authority.json",
+    "registry/new_repository_onboarding_effective_applicability.json",
+    "registry/new_repository_onboarding_assessment_plan_authority.json",
+    "registry/new_repository_onboarding_execution_composition_authority.json",
+    "registry/new_repository_onboarding_support_semantics.json",
+    "registry/new_repository_onboarding_evidence_authority.json",
+    "registry/new_repository_onboarding_human_review_authority.json",
+    "registry/new_repository_onboarding_outcome_authority.json",
+    "registry/new_repository_onboarding_bundle_certification_authority.json",
+    "registry/new_repository_onboarding_reassessment_retention_authority.json",
+    "registry/new_repository_onboarding_requirements.json",
+    "registry/new_repository_onboarding_traceability.json",
+    "schemas/new_repository_onboarding_requirements.schema.json",
+    "docs/NEW_REPOSITORY_ONBOARDING_CONTROLLED_REQUIREMENTS.md"
+  ]
+}

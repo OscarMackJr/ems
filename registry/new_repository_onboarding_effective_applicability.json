@@ -1,0 +1,60 @@
+{
+  "component": "EMS",
+  "capability": "New Repository Onboarding MVP",
+  "authority_scope": "EFFECTIVE_APPLICABILITY",
+  "authority_status": "CONTROLLED_PUBLISHED",
+  "approved_rule_records": [
+    {
+      "requirement_id": "ONB-REQ-01-003",
+      "decision_id": "ONB-003-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "New-target authority computes APPLICABLE, NOT_APPLICABLE, or APPLICABILITY_UNRESOLVED from current policy hash, immutable classification snapshot, and condition evidence; it never edits historical freezes.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-003-01",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    },
+    {
+      "requirement_id": "ONB-REQ-02-003",
+      "decision_id": "ONB-003-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Immutable snapshot stores repository_id, control_id, policy hash, classification hash, condition evidence references/hashes, result/rationale, exception, authority identity, and timestamp.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-003-02",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    },
+    {
+      "requirement_id": "ONB-REQ-03-003",
+      "decision_id": "ONB-003-03",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Snapshot freezes with the assessment plan; policy, classification, evidence, or exception changes require a new run rather than mutation.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-003-03",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    }
+  ],
+  "source_decision_register": "generated/governance-proposals/new_repository_onboarding_mvp_decision_register.json"
+}

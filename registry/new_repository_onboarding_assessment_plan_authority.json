@@ -1,0 +1,43 @@
+{
+  "component": "EMS",
+  "capability": "New Repository Onboarding MVP",
+  "authority_scope": "ASSESSMENT_PLAN_AUTHORITY",
+  "authority_status": "CONTROLLED_PUBLISHED",
+  "approved_rule_records": [
+    {
+      "requirement_id": "ONB-REQ-01-004",
+      "decision_id": "ONB-004-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Freeze before request generation after binding identity, classification hash, EMS/Hayes hashes, applicability, evidence contract, targets, support states, and review requirements.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-004-01",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    },
+    {
+      "requirement_id": "ONB-REQ-02-004",
+      "decision_id": "ONB-004-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "normative_value": "Attach late evidence as immutable supplement only; material evidence that changes scope/request/result requires a new run.",
+      "approval_provenance": {
+        "source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "timestamp": "2026-08-15T16:44:36Z",
+        "traceability": {
+          "decision_id": "ONB-004-02",
+          "selected_candidate_id": "CANDIDATE-A",
+          "candidate_value_exact_match": true,
+          "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+          "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+        }
+      }
+    }
+  ],
+  "source_decision_register": "generated/governance-proposals/new_repository_onboarding_mvp_decision_register.json"
+}

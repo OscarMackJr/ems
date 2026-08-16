@@ -1,0 +1,36 @@
+{
+  "artifact_type": "Proposed ADR subjects only; no ADR created",
+  "subjects": [
+    {
+      "subject": "Current effective applicability versus historical freeze",
+      "decisions": [
+        "ONB-003-01",
+        "ONB-003-02",
+        "ONB-003-03"
+      ]
+    },
+    {
+      "subject": "Repository ID allocation and lifecycle continuity",
+      "decisions": [
+        "ONB-001-01",
+        "ONB-001-02"
+      ]
+    },
+    {
+      "subject": "Immutable assessment plan and evidence bundle",
+      "decisions": [
+        "ONB-004-01",
+        "ONB-009-01",
+        "ONB-009-02"
+      ]
+    },
+    {
+      "subject": "Local execution composition bound to controlled identity",
+      "decisions": [
+        "ONB-005-01",
+        "ONB-005-02",
+        "ONB-005-03"
+      ]
+    }
+  ]
+}

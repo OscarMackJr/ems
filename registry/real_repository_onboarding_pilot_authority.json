@@ -1,0 +1,247 @@
+{
+  "pilot_id": "HOMETOWN-REAL-REPOSITORY-PILOT-V1",
+  "repository_id": "REPO-003",
+  "repository_name": "hometown",
+  "canonical_repository": {
+    "host": "github.com",
+    "owner": "OscarMackJr",
+    "repository": "hometown"
+  },
+  "pilot_state": "GOVERNED_OPERATING_MODEL_PUBLISHED",
+  "authorization_scope": "REAL_REPOSITORY_NON_PRODUCTION_PILOT_ONLY",
+  "non_production": true,
+  "production_authorized": false,
+  "execution_authorized": false,
+  "governance_decision_register_sha256": "6e681e583b0a4b019adb6849ef086d030860ac988f037bdd9509c97f8300bdc9",
+  "governance_closure_certification_sha256": "95824060e4f3110622feb356d6a04f035716ad7cd49d1a20b81399e28efec06c",
+  "historical_freeze_sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+  "classification": {
+    "authority_process": "HUMAN_CONFIRMATION_REQUIRED",
+    "current_values": {
+      "production": "UNKNOWN",
+      "internet_exposed": "UNKNOWN",
+      "contains_customer_data": "UNKNOWN",
+      "ai_enabled": "UNKNOWN",
+      "owner": "UNKNOWN",
+      "tier": "UNKNOWN",
+      "service_criticality": "UNKNOWN",
+      "data_classification": "UNKNOWN"
+    },
+    "unknown_is_not_false": true
+  },
+  "execution_access": {
+    "identity_must_match": "REPO-003",
+    "canonical_git_identity": "github.com/OscarMackJr/hometown",
+    "local_path": "LOCAL_EXECUTION_ONLY",
+    "remote_ref_and_commit_verification_required": true,
+    "dirty_checkout_prohibited": true,
+    "automatic_checkout_reset_clean_pull_prohibited": true
+  },
+  "evidence_authority": {
+    "REPOSITORY": {
+      "state": "APPROVED_PROCESS_NOT_YET_ACTIVATED",
+      "repository_substitution_permitted": true,
+      "fallback": "HUMAN_REVIEW",
+      "provenance_required": true,
+      "retention_required": "THREE_YEARS_OR_LONGER_HOLD"
+    },
+    "GITHUB": {
+      "state": "APPROVED_PROCESS_NOT_YET_ACTIVATED",
+      "repository_substitution_permitted": false,
+      "fallback": "HUMAN_REVIEW",
+      "provenance_required": true,
+      "retention_required": "THREE_YEARS_OR_LONGER_HOLD"
+    },
+    "CI_CD": {
+      "state": "APPROVED_PROCESS_NOT_YET_ACTIVATED",
+      "repository_substitution_permitted": false,
+      "fallback": "HUMAN_REVIEW",
+      "provenance_required": true,
+      "retention_required": "THREE_YEARS_OR_LONGER_HOLD"
+    },
+    "SERVICE": {
+      "state": "APPROVED_PROCESS_NOT_YET_ACTIVATED",
+      "repository_substitution_permitted": false,
+      "fallback": "HUMAN_REVIEW",
+      "provenance_required": true,
+      "retention_required": "THREE_YEARS_OR_LONGER_HOLD"
+    },
+    "ORGANIZATION": {
+      "state": "APPROVED_PROCESS_NOT_YET_ACTIVATED",
+      "repository_substitution_permitted": false,
+      "fallback": "HUMAN_REVIEW",
+      "provenance_required": true,
+      "retention_required": "THREE_YEARS_OR_LONGER_HOLD"
+    },
+    "HUMAN": {
+      "state": "APPROVED_PROCESS_NOT_YET_ACTIVATED",
+      "repository_substitution_permitted": false,
+      "fallback": "HUMAN_REVIEW",
+      "provenance_required": true,
+      "retention_required": "THREE_YEARS_OR_LONGER_HOLD"
+    }
+  },
+  "credential_boundary": {
+    "least_privilege": true,
+    "read_only_where_possible": true,
+    "credential_persistence_in_evidence": false,
+    "rotation_or_revocation_after_pilot": true
+  },
+  "human_review": {
+    "operational_review_owner": "UNASSIGNED",
+    "machine_results_immutable": true,
+    "review_append_only": true,
+    "blocks_execution": true
+  },
+  "retention": {
+    "duration_years": 3,
+    "longer_hold_overrides_deletion": true,
+    "location_status": "OPEN_EXECUTION_PREREQUISITE"
+  },
+  "success_criteria": {
+    "all_controls_pass_required": false,
+    "permitted_assessment_states": [
+      "COMPLETE",
+      "COMPLETE_WITH_FINDINGS",
+      "PARTIAL",
+      "BLOCKED"
+    ],
+    "compliance_attestation": false
+  },
+  "fail_closed_stop_criteria": [
+    "identity mismatch",
+    "classification incomplete",
+    "authority hash mismatch",
+    "registry mismatch",
+    "checkout mismatch or prohibited dirty state",
+    "unauthorized credential need",
+    "evidence conflict or unavailable authority",
+    "contract/evaluator failure",
+    "immutable lineage/source hash break",
+    "secret/local path leakage",
+    "attempted production mutation"
+  ],
+  "execution_prerequisite_reference": "registry/real_repository_onboarding_pilot_execution_prerequisites.json",
+  "decision_transcription": [
+    {
+      "decision_id": "ROP-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Exactly one repository explicitly named by the human governance owner and documented in the approval response."
+    },
+    {
+      "decision_id": "ROP-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Designated EMS governance authority with named approval record."
+    },
+    {
+      "decision_id": "ROP-03",
+      "selected_candidate_id": "HUMAN_DIRECTED_EXISTING_ID",
+      "selected_value": "USE_EXISTING_CONTROLLED_ID; repository_id = REPO-003; do not allocate a new repository ID."
+    },
+    {
+      "decision_id": "ROP-04",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Canonical host, owner, repository name, URL, lifecycle state, default branch, pilot flag, and accountable owner."
+    },
+    {
+      "decision_id": "ROP-05",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named accountable business/service owner and EMS classification authority jointly confirm values."
+    },
+    {
+      "decision_id": "ROP-06",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Record human-confirmed production, internet exposure, customer data, AI use, owner, tier, criticality, and data classification; unconfirmed values remain UNKNOWN."
+    },
+    {
+      "decision_id": "ROP-07",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named operator receives a read-only local execution mapping recorded separately from controlled identity."
+    },
+    {
+      "decision_id": "ROP-08",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Verified canonical remote, approved default branch or explicit ref, captured commit SHA, and clean worktree."
+    },
+    {
+      "decision_id": "ROP-09",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved repository checkout and API evidence with provenance captured."
+    },
+    {
+      "decision_id": "ROP-10",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved CI/CD execution records bound to repository and revision."
+    },
+    {
+      "decision_id": "ROP-11",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved service-evidence source; repository evidence remains supporting only."
+    },
+    {
+      "decision_id": "ROP-12",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved organization-evidence source; repository evidence remains supporting only."
+    },
+    {
+      "decision_id": "ROP-13",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named least-privilege read-only credentials, no evidence-bundle persistence, revocation after pilot, and incident stop path."
+    },
+    {
+      "decision_id": "ROP-14",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named primary reviewer plus named backup/escalation role; decisions are attributable and append-only."
+    },
+    {
+      "decision_id": "ROP-15",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named EMS governance authority approves time-bounded exceptions with rationale and remediation."
+    },
+    {
+      "decision_id": "ROP-16",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named approved controlled evidence repository with integrity protection and access owner."
+    },
+    {
+      "decision_id": "ROP-17",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Retain pilot evidence for three years; legal, regulatory, contractual, audit, and investigation holds override deletion."
+    },
+    {
+      "decision_id": "ROP-18",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "All stated chain/integrity criteria execute; supported controls execute, unsupported/unresolved controls remain visible, without requiring all controls PASS."
+    },
+    {
+      "decision_id": "ROP-19",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Stop on identity/classification/hash/registry/checkout/credential/evidence/contract/semantic/immutability/local-path/production-mutation failures."
+    },
+    {
+      "decision_id": "ROP-20",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Use WS10 reassessment decision; local execution configuration alone is non-material and no compliance result is inferred."
+    },
+    {
+      "decision_id": "ROP-21",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named EMS governance authority, repository owner, human-review owner, and evidence-retention owner."
+    },
+    {
+      "decision_id": "ROP-22",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Synthetic/real-pilot evidence is controlled pilot evidence, non-production authorization evidence, and never production evidence."
+    },
+    {
+      "decision_id": "ROP-23",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Real repository but non-production authorization only; no production readiness, production authorization, organization-wide deployment, or blanket compliance certification."
+    },
+    {
+      "decision_id": "ROP-24",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Approve the controlled pilot procedure after all prerequisite approvals and no unresolved dependencies."
+    }
+  ]
+}

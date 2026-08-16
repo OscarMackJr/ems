@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "pilot_id",
+    "repository_id",
+    "repository_name",
+    "canonical_repository",
+    "non_production",
+    "production_authorized",
+    "execution_authorized",
+    "decision_transcription"
+  ],
+  "properties": {
+    "repository_id": {
+      "const": "REPO-003"
+    },
+    "repository_name": {
+      "const": "hometown"
+    },
+    "non_production": {
+      "const": true
+    },
+    "production_authorized": {
+      "const": false
+    },
+    "execution_authorized": {
+      "const": false
+    },
+    "decision_transcription": {
+      "type": "array",
+      "minItems": 24,
+      "maxItems": 24
+    }
+  },
+  "additionalProperties": true
+}

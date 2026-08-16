@@ -1,0 +1,24 @@
+{
+  "artifact_type": "HOMETOWN_PILOT_RETENTION_LOCATION_VALIDATION",
+  "validated_at_utc": "2026-08-16T12:25:51Z",
+  "repository": "hometown",
+  "repository_id": "REPO-003",
+  "retention_platform": "Egnyte",
+  "retention_logical_location": "TWG/TechAudits",
+  "retention_operational_mapping": "Z:\\Shared\\TWG\\TechAudits",
+  "retention_period": "3 years",
+  "longer_hold_overrides_deletion": true,
+  "retention_owner": "Software Development",
+  "validation": {
+    "configured_path_exists": false,
+    "configured_path_accessible": false,
+    "persistent_test_artifact_created": false,
+    "temporary_workspace": false,
+    "pilot_operator": "TWGGLOBAL\\OMack"
+  },
+  "result": "BLOCKED",
+  "reason": "Configured operational mapping Z:\\Shared\\TWG\\TechAudits does not exist or is inaccessible in the pilot operator environment; no substitute location selected.",
+  "substitute_location_used": false,
+  "pilot_execution_authorized": false,
+  "production_authorized": false
+}
