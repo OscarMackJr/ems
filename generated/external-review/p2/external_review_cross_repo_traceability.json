@@ -1,0 +1,403 @@
+{
+  "component": "P2 External Review",
+  "generated_at_utc": "2026-08-16T15:44:59.497220Z",
+  "review_branches": {
+    "ems": {
+      "repository": "OscarMackJr/ems",
+      "baseline_sha": "53234bbb9546ad37a691b67a2b509951512a79fc",
+      "branch": "feature/external-review-ems-authority-publication",
+      "head": "8be1c89e071209f5b5110d75a96d5aeffdebf5a9",
+      "draft_pr": 11,
+      "publication_certification_sha256": "01ac832e2d8785150271b54fd79f7ca42f28c83541bf40108d27fb2d72001276",
+      "publication_manifest_sha256": "f0f512052609ef7c3731bd0532fa1e5338769aa73d7b9e3bd2a3cbe67b0d7253",
+      "ci_state": "PASS"
+    },
+    "hayes": {
+      "repository": "OscarMackJr/hayes-verify",
+      "baseline_sha": "cbe7bb4734efea226df1009fc82a005e67fcfdcd",
+      "branch": "feature/external-review-hayes-onboarding-publication",
+      "head": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "draft_pr": 11,
+      "publication_certification_sha256": "43b4e1def577d7604ca4b049ab676db85a5c6a8d1c3469b1a9e79db1e985f2a2",
+      "publication_manifest_sha256": "7f64fd1808218a41ba4da5aa5c3d3f2a91ef415df4517c9b83a509025909c96c",
+      "ci_state": "PASS"
+    }
+  },
+  "authority_layers": [
+    {
+      "layer": "LAYER_1_EMS_GOVERNANCE_POLICY_AUTHORITY",
+      "examples": [
+        "control catalog",
+        "onboarding requirements",
+        "classification",
+        "applicability",
+        "evidence",
+        "pilot authority"
+      ]
+    },
+    {
+      "layer": "LAYER_2_HAYES_IMPLEMENTATION",
+      "examples": [
+        "WS1\u2013WS10 modules",
+        "schemas",
+        "tests",
+        "orchestrator",
+        "contract reuse"
+      ]
+    },
+    {
+      "layer": "LAYER_3_EXECUTION_EVIDENCE",
+      "examples": [
+        "synthetic runs",
+        "results",
+        "review queues",
+        "summaries",
+        "evidence manifests",
+        "certifications"
+      ]
+    },
+    {
+      "layer": "LAYER_4_REAL_PILOT_CURRENT_OPERATING_STATE",
+      "examples": [
+        "REPO-003 hometown",
+        "prerequisites",
+        "retention blocker",
+        "execution unauthorized"
+      ]
+    }
+  ],
+  "negative_invariants": {
+    "POLICY_AUTHORITY_NE_IMPLEMENTATION": "PASS",
+    "IMPLEMENTATION_NE_EXECUTION_EVIDENCE": "PASS",
+    "EXECUTION_EVIDENCE_NE_COMPLIANCE_AUTHORITY": "PASS"
+  },
+  "records": [
+    {
+      "traceability_id": "P2-WS1",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS1",
+      "purpose": "Repository identity",
+      "ems_authority_artifact": "registry/new_repository_onboarding_identity_authority.json",
+      "ems_authority_sha256": "c44d4a3e2b667eeb995aebb45284c6331e826b0af384e3153609354b336c3ac9",
+      "hayes_module": "src/hayes_verify/onboarding_identity.py",
+      "hayes_schema": [
+        {
+          "path": "schemas/repository_snapshot.schema.json",
+          "sha256": "e9d5c8841ccbef7a12033e841e88fe2a923c814596bc2df44b1b143cce5cd632"
+        }
+      ],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_identity.py",
+          "sha256": "a54b945ff0b93f7ad419d8a34796a2a538bc672043f80028bf6036eb4cf0b9bb"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "7dbdbf2c1ebd67523996d9376cc85110a5608b8a1ae05736a95160b54259f22e",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-WS2",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS2",
+      "purpose": "Classification snapshot",
+      "ems_authority_artifact": "registry/new_repository_onboarding_classification_authority.json",
+      "ems_authority_sha256": "044149664a8085668095ca9f837ce3275201f76dca231484c668458f17ba69ac",
+      "hayes_module": "src/hayes_verify/onboarding_classification.py",
+      "hayes_schema": [
+        {
+          "path": "schemas/classification_snapshot.schema.json",
+          "sha256": "7e93027dbe7d9938319ab14cc8a8271d5be85e5855c47017fd274862ae2cae29"
+        }
+      ],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_classification.py",
+          "sha256": "1e625add469cbd7f83d1ae2a4820c5af6c46afb56732de94010f314e9144ef51"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "46113774e00741acf7cb27a3a837203c14361ce275dec866c4e184693edd402c",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-WS3",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS3",
+      "purpose": "Effective applicability",
+      "ems_authority_artifact": "registry/new_repository_onboarding_effective_applicability.json",
+      "ems_authority_sha256": "ecba0b93ae46017bfef3849ade93e9d3f8fd0d6285de496f82f51ca9768c1aa9",
+      "hayes_module": "src/hayes_verify/onboarding_applicability.py",
+      "hayes_schema": [
+        {
+          "path": "schemas/effective_applicability_snapshot.schema.json",
+          "sha256": "01c328e9ada04f65db24fa59bd9bd6737c6c132ad0616e76f41633f78d114314"
+        }
+      ],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_applicability.py",
+          "sha256": "fd2dd4162c88bd015fca6320fd94a366de13a1d2dadaf8d10fe8afbb6e4c42e4"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "11ec30abae9366e649cea1b05bb71ee3e8add903c0302ea6962b7e68a11e20dc",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-WS4",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS4",
+      "purpose": "Frozen assessment plan",
+      "ems_authority_artifact": "registry/new_repository_onboarding_assessment_plan_authority.json",
+      "ems_authority_sha256": "3742bdc22cad74cb60d98afa91a8b917898cca1bf37823405fa33bc2c766ae09",
+      "hayes_module": "src/hayes_verify/onboarding_plan.py",
+      "hayes_schema": [
+        {
+          "path": "schemas/assessment_plan.schema.json",
+          "sha256": "58aa563d3b37a1b5fb911dee31231027b3228c01fabe8aff89af5e03d4c6e5f2"
+        }
+      ],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_plan.py",
+          "sha256": "6808a00ec82216087d777af0ddba7a9a77ac93b0f47f9af4e691881c2db8b20f"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "95c1901337489e5e62c619d13efab55be8e17edcc9e33c35bbdaf48506d383a0",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-WS5",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS5",
+      "purpose": "Evidence and request composition",
+      "ems_authority_artifact": "registry/new_repository_onboarding_execution_composition_authority.json",
+      "ems_authority_sha256": "e69240e6d62031a8a5d0c6376b1ec0c7920af4331871933cb47baf7ec57c1ff8",
+      "hayes_module": "src/hayes_verify/onboarding_execution.py",
+      "hayes_schema": [
+        {
+          "path": "schemas/evidence_resolution.schema.json",
+          "sha256": "b8701ba0680be4a166663c900d6182323e2097b3afa0d54eac880b61ed7c6477"
+        },
+        {
+          "path": "schemas/request_composition_manifest.schema.json",
+          "sha256": "d3e302edbf5f7ee5a0f6b63459f24454a600d117adfe57b53c5824a9ba58b27d"
+        }
+      ],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_execution.py",
+          "sha256": "4be3888daf4642530bcd7a219b180d18c1b4cb3467fc2c8518a323861977da5b"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "0f7963ab377e473db38d94e6f31b476ce38efa59dfa0fb5150520949ecc9b397",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-WS6",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS6",
+      "purpose": "Checkout verification",
+      "ems_authority_artifact": "registry/new_repository_onboarding_requirements.json",
+      "ems_authority_sha256": "265e1afc351ef7be3ad5c6c6ccd83764d947e25a0afe2dfbab2773eebb57cbbc",
+      "hayes_module": "src/hayes_verify/onboarding_checkout.py",
+      "hayes_schema": [
+        {
+          "path": "schemas/checkout_verification.schema.json",
+          "sha256": "93090e43dd1f5e7d4eb79e7600932b15befbea65636e3fdc156a1ddd86f68f7b"
+        },
+        {
+          "path": "schemas/execution_readiness_manifest.schema.json",
+          "sha256": "a1efb1bdcd5df061cd46bdf2880178f6be24bd8f011eab9dda5fd8db338c76b0"
+        }
+      ],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_checkout.py",
+          "sha256": "57a1effbc82bd953d7e9b8ea641a6b87f47903815c0f3ea03a85ab9b26b6960e"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "cee572b68569612ae46e402d097183053f06de6459d3edad78cddd2fe44f67db",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-WS7",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS7",
+      "purpose": "Human review queue/history",
+      "ems_authority_artifact": "registry/new_repository_onboarding_human_review_authority.json",
+      "ems_authority_sha256": "db65ae96996c1fa5561584f943b951ed105be55d0ed4b4fd666475db93b4d976",
+      "hayes_module": "src/hayes_verify/onboarding_review.py",
+      "hayes_schema": [],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_review.py",
+          "sha256": "9a3bb9d205e1f6a59c7dde53674c495f56865e26f4affee18b7ebe38c1d40e27"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "1e2d66fe2b975140580314ff8b22cb2084e6fde593d0cbd0c710e7150b13a5d2",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-WS8",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS8",
+      "purpose": "Assessment outcome/completeness",
+      "ems_authority_artifact": "registry/new_repository_onboarding_outcome_authority.json",
+      "ems_authority_sha256": "b80656872aa1555aacdf16e1a2fcd34725a80fcbcb705137b5d4320badb62037",
+      "hayes_module": "src/hayes_verify/onboarding_summary.py",
+      "hayes_schema": [],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_summary.py",
+          "sha256": "f67b9777c65f5fc729c1d243883b9179d32a67d69d39adcfa1c8b3440321eb0d"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "1eb50e56d7337e6a0be28772bf9f353521046ea847c4472e357b1857df2d1f82",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-WS9",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS9",
+      "purpose": "Evidence bundle/certification",
+      "ems_authority_artifact": "registry/new_repository_onboarding_bundle_certification_authority.json",
+      "ems_authority_sha256": "6d0b3d990833dbea7d45dc42626dc27c379d5f83c54a697256e05fb91066e1c8",
+      "hayes_module": "src/hayes_verify/onboarding_bundle.py",
+      "hayes_schema": [],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_bundle.py",
+          "sha256": "e61a453faee50a7e04f8008567d417b76bed78276f66af3cc5291a93879ea3b4"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "8635321f83662037a9837f890b0e28cc568fd6565e59d2db4911af937a30231d",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-WS10",
+      "review_topic": "new_repository_onboarding",
+      "workstream": "WS10",
+      "purpose": "Reassessment/change detection",
+      "ems_authority_artifact": "registry/new_repository_onboarding_reassessment_retention_authority.json",
+      "ems_authority_sha256": "e87e2b8c71db952edbad62c55abdd6e12f4eb46b6d1543f92356936e6630ed0f",
+      "hayes_module": "src/hayes_verify/onboarding_reassessment.py",
+      "hayes_schema": [],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_reassessment.py",
+          "sha256": "8f8c3f7ed85c161dd7aeee0392b3f6cda6b6824040bbcfb1ffb847f770ce2fb7"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "30b8784fd6cbb4bfa71188dae5acb50f6983c1347b704829b91719d86d08f94d",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ],
+      "current_state": "CURRENT_REVIEW_BRANCH",
+      "review_notes": "EMS governs semantics; Hayes implements contract behavior; external synthetic evidence is hash-indexed only."
+    },
+    {
+      "traceability_id": "P2-ORCHESTRATOR",
+      "review_topic": "new_repository_onboarding",
+      "ems_authority_artifact": "registry/new_repository_onboarding_requirements.json",
+      "ems_authority_sha256": "265e1afc351ef7be3ad5c6c6ccd83764d947e25a0afe2dfbab2773eebb57cbbc",
+      "hayes_module": "src/hayes_verify/onboarding_orchestrator.py",
+      "hayes_schema": [
+        {
+          "path": "schemas/onboarding_orchestration_manifest.schema.json",
+          "sha256": "52387fa0667942267b9b6ccdb7853fd7c7bfe9ede1a41e0a4d1703b22b72caec"
+        }
+      ],
+      "hayes_tests": [
+        {
+          "path": "tests/test_onboarding_orchestrator.py",
+          "sha256": "863185005759b98e37382abe59b36316f9d7771d17f07e564fe42ba767881e05"
+        }
+      ],
+      "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "hayes_publication_artifact_sha256": "8b5af3fbef34625a1e97e409ad931e4eee81357a38dbd4befa80a2b3895c5b65",
+      "authority_resolution_model": {
+        "api": "AuthoritySource(root, source_identity, source_class)",
+        "root": "execution-local; not persisted",
+        "persisted_provenance": [
+          "source_identity",
+          "source_class",
+          "requirements_sha256",
+          "certification_sha256"
+        ],
+        "boundary": "Hayes consumes EMS authority; it does not define EMS policy."
+      },
+      "current_state": "CURRENT_P0_V3_PORTABILITY_CORRECTION",
+      "review_notes": "Replaced hard-coded Windows authority location after GitHub Linux CI detected machine coupling.",
+      "execution_evidence_ids": [
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_INTEGRATION",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_ORCHESTRATED",
+        "P2-EVIDENCE-SYNTHETIC_ONBOARDING_PILOT_20260816T024500Z"
+      ]
+    }
+  ]
+}

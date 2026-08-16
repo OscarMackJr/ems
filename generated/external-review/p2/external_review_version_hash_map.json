@@ -1,0 +1,84 @@
+{
+  "component": "P2 External Review",
+  "algorithm": "SHA-256",
+  "entries": [
+    {
+      "artifact": "EMS baseline",
+      "sha256": "53234bbb9546ad37a691b67a2b509951512a79fc",
+      "scope": "EMS review baseline commit",
+      "state": "CURRENT_REVIEW_BASELINE"
+    },
+    {
+      "artifact": "EMS review head",
+      "sha256": "8be1c89e071209f5b5110d75a96d5aeffdebf5a9",
+      "scope": "EMS draft PR #11",
+      "state": "CURRENT_REVIEW_HEAD"
+    },
+    {
+      "artifact": "EMS publication certification",
+      "sha256": "01ac832e2d8785150271b54fd79f7ca42f28c83541bf40108d27fb2d72001276",
+      "scope": "EMS P1A review authority",
+      "state": "CURRENT_REVIEW_CERTIFICATION"
+    },
+    {
+      "artifact": "Hayes baseline",
+      "sha256": "cbe7bb4734efea226df1009fc82a005e67fcfdcd",
+      "scope": "Hayes review baseline commit",
+      "state": "CURRENT_REVIEW_BASELINE"
+    },
+    {
+      "artifact": "Hayes review head",
+      "sha256": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+      "scope": "Hayes draft PR #11",
+      "state": "CURRENT_REVIEW_HEAD"
+    },
+    {
+      "artifact": "Hayes publication manifest",
+      "sha256": "7f64fd1808218a41ba4da5aa5c3d3f2a91ef415df4517c9b83a509025909c96c",
+      "scope": "Hayes P1B manifest",
+      "state": "CURRENT_REVIEW_MANIFEST"
+    },
+    {
+      "artifact": "Hayes publication certification V2",
+      "sha256": "43b4e1def577d7604ca4b049ab676db85a5c6a8d1c3469b1a9e79db1e985f2a2",
+      "scope": "Hayes P1B portability successor certification",
+      "state": "CURRENT_REVIEW_CERTIFICATION"
+    },
+    {
+      "artifact": "P0 V1",
+      "sha256": "afaf4290dc80836b2ddeddcdb6d8b305184748d1cddaf258972fa5837f805d1c",
+      "scope": "P0 preservation",
+      "state": "HISTORICAL_PRESERVED"
+    },
+    {
+      "artifact": "Schema amendment",
+      "sha256": "8a2bb465d462f7633f91f11214fa078b8d253ee11d3fa12f77164e3705bec26a",
+      "scope": "P0 dependency amendment",
+      "state": "HISTORICAL_PRESERVED"
+    },
+    {
+      "artifact": "P0 V2",
+      "sha256": "eafcf6ec9382177a7140564fc2b42a8547ac9cc2adab668a6707ab4f415536bc",
+      "scope": "P0 re-certification",
+      "state": "HISTORICAL_PRESERVED"
+    },
+    {
+      "artifact": "Portability amendment",
+      "sha256": "de341aae932073b053b7de017091ccf0d2df81ca17a8a46200a900e14c043031",
+      "scope": "P0 portable resolver correction",
+      "state": "CURRENT_CORRECTION_INPUT"
+    },
+    {
+      "artifact": "P0 V3",
+      "sha256": "80db9388c31f9695903fccd35c0da7938f78b6b2c818640c673b692763200d45",
+      "scope": "P0 corrected preservation certification",
+      "state": "CURRENT_PRESERVATION_CERTIFICATION"
+    },
+    {
+      "artifact": "Wave 2D historical freeze",
+      "sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+      "scope": "historical applicability freeze",
+      "state": "HISTORICAL_IMMUTABLE"
+    }
+  ]
+}
