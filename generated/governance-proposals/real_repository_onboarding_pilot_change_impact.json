@@ -1,0 +1,16 @@
+{
+  "controls_affected": [],
+  "likely_controlled_artifacts": [
+    "repository identity registry",
+    "classification record",
+    "pilot authorization",
+    "execution-access record",
+    "evidence-access record",
+    "review ownership",
+    "retention record",
+    "pilot procedure",
+    "pilot certification",
+    "traceability/history"
+  ],
+  "no_changes_made": true
+}

@@ -1,0 +1,1036 @@
+{
+  "proposal": "Real Repository Onboarding Pilot Governance",
+  "decision_count": 24,
+  "decisions": [
+    {
+      "decision_id": "ROP-01",
+      "domain": "Pilot repository selection",
+      "question": "Which one repository is authorized for the first real pilot?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Exactly one repository explicitly named by the human governance owner and documented in the approval response."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Do not authorize a real-repository pilot."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Exactly one repository explicitly named by the human governance owner and documented in the approval response.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Exactly one repository explicitly named by the human governance owner and documented in the approval response.",
+        "human_directed_selection": false,
+        "selected_repository": "hometown",
+        "selection_basis": "HUMAN_APPROVAL explicit selection"
+      }
+    },
+    {
+      "decision_id": "ROP-02",
+      "domain": "Pilot authorization authority",
+      "question": "Who may authorize this one non-production real-repository pilot?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Designated EMS governance authority with named approval record."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No authorization; pilot remains blocked."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-01"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Designated EMS governance authority with named approval record.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Designated EMS governance authority with named approval record.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-03",
+      "domain": "Controlled repository ID allocation",
+      "question": "Who allocates the immutable REPO-sequence ID and when?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "EMS Governance allocates the next unique REPO-sequence only after ROP-01 and ROP-02 approval."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No allocation; pilot remains blocked."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-01",
+        "ROP-02"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "HUMAN_DIRECTED_EXISTING_ID",
+      "selected_value": "USE_EXISTING_CONTROLLED_ID; repository_id = REPO-003; do not allocate a new repository ID.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-03",
+        "selected_candidate_id": "HUMAN_DIRECTED_EXISTING_ID",
+        "exact_candidate_value": null,
+        "human_directed_selection": true,
+        "repository_id": "REPO-003",
+        "authoritative_source": "registry/repository_registry.yaml",
+        "selection_basis": "HUMAN_APPROVAL explicit existing identity disposition"
+      }
+    },
+    {
+      "decision_id": "ROP-04",
+      "domain": "Repository registration metadata",
+      "question": "What must be recorded before ID allocation?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Canonical host, owner, repository name, URL, lifecycle state, default branch, pilot flag, and accountable owner."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No registration; pilot remains blocked."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-03"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Canonical host, owner, repository name, URL, lifecycle state, default branch, pilot flag, and accountable owner.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-04",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Canonical host, owner, repository name, URL, lifecycle state, default branch, pilot flag, and accountable owner.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-05",
+      "domain": "Classification confirmation authority",
+      "question": "Who confirms material repository classification?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Named accountable business/service owner and EMS classification authority jointly confirm values."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Values remain UNKNOWN and conditional controls route to HUMAN_REVIEW."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-04"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named accountable business/service owner and EMS classification authority jointly confirm values.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-05",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Named accountable business/service owner and EMS classification authority jointly confirm values.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-06",
+      "domain": "Classification attribute values",
+      "question": "How are material attributes recorded?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Record human-confirmed production, internet exposure, customer data, AI use, owner, tier, criticality, and data classification; unconfirmed values remain UNKNOWN."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Record all material values UNKNOWN and do not authorize conditional execution."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-05"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Record human-confirmed production, internet exposure, customer data, AI use, owner, tier, criticality, and data classification; unconfirmed values remain UNKNOWN.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-06",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Record human-confirmed production, internet exposure, customer data, AI use, owner, tier, criticality, and data classification; unconfirmed values remain UNKNOWN.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-07",
+      "domain": "Local execution mapping approval",
+      "question": "How is real checkout access approved?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Named operator receives a read-only local execution mapping recorded separately from controlled identity."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No local mapping; pilot execution blocked."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-03"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named operator receives a read-only local execution mapping recorded separately from controlled identity.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-07",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Named operator receives a read-only local execution mapping recorded separately from controlled identity.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-08",
+      "domain": "Checkout/reference approval",
+      "question": "What checkout state is permitted?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Verified canonical remote, approved default branch or explicit ref, captured commit SHA, and clean worktree."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No checkout approval; pilot blocked."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-07"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Verified canonical remote, approved default branch or explicit ref, captured commit SHA, and clean worktree.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-08",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Verified canonical remote, approved default branch or explicit ref, captured commit SHA, and clean worktree.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-09",
+      "domain": "Repository evidence access",
+      "question": "Which repository evidence access is allowed?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Read-only approved repository checkout and API evidence with provenance captured."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No repository evidence access; repository evidence routes to HUMAN_REVIEW."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-07"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved repository checkout and API evidence with provenance captured.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-09",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Read-only approved repository checkout and API evidence with provenance captured.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-10",
+      "domain": "CI/CD evidence access",
+      "question": "Which CI/CD evidence access is allowed?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Read-only approved CI/CD execution records bound to repository and revision."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No CI/CD evidence access; affected controls route to HUMAN_REVIEW."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-02"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved CI/CD execution records bound to repository and revision.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-10",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Read-only approved CI/CD execution records bound to repository and revision.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-11",
+      "domain": "Service evidence access",
+      "question": "Which service evidence access is allowed?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Read-only approved service-evidence source; repository evidence remains supporting only."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No service evidence access; service controls route to HUMAN_REVIEW."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-02"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved service-evidence source; repository evidence remains supporting only.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-11",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Read-only approved service-evidence source; repository evidence remains supporting only.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-12",
+      "domain": "Organization evidence access",
+      "question": "Which organization evidence access is allowed?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Read-only approved organization-evidence source; repository evidence remains supporting only."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No organization evidence access; organization controls route to HUMAN_REVIEW."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-02"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved organization-evidence source; repository evidence remains supporting only.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-12",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Read-only approved organization-evidence source; repository evidence remains supporting only.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-13",
+      "domain": "Credential/security boundary",
+      "question": "What credential posture applies?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Named least-privilege read-only credentials, no evidence-bundle persistence, revocation after pilot, and incident stop path."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No credentials; sources requiring them remain unavailable."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-09",
+        "ROP-10",
+        "ROP-11",
+        "ROP-12"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named least-privilege read-only credentials, no evidence-bundle persistence, revocation after pilot, and incident stop path.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-13",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Named least-privilege read-only credentials, no evidence-bundle persistence, revocation after pilot, and incident stop path.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-14",
+      "domain": "Human-review owner",
+      "question": "Who owns WS7 review?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Named primary reviewer plus named backup/escalation role; decisions are attributable and append-only."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No reviewer; unresolved review items remain OPEN and pilot cannot close."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-02"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named primary reviewer plus named backup/escalation role; decisions are attributable and append-only.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-14",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Named primary reviewer plus named backup/escalation role; decisions are attributable and append-only.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-15",
+      "domain": "Exception escalation authority",
+      "question": "Who approves pilot exceptions?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Named EMS governance authority approves time-bounded exceptions with rationale and remediation."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No exception authority; exceptions stop the pilot."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-02"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named EMS governance authority approves time-bounded exceptions with rationale and remediation.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-15",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Named EMS governance authority approves time-bounded exceptions with rationale and remediation.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-16",
+      "domain": "Evidence-retention location",
+      "question": "Where is pilot evidence retained?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Named approved controlled evidence repository with integrity protection and access owner."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No approved location; pilot cannot close."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-02"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named approved controlled evidence repository with integrity protection and access owner.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-16",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Named approved controlled evidence repository with integrity protection and access owner.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-17",
+      "domain": "Retention and holds",
+      "question": "What retention rule applies?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Retain pilot evidence for three years; legal, regulatory, contractual, audit, and investigation holds override deletion."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No retention approval; pilot cannot close."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-16"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Retain pilot evidence for three years; legal, regulatory, contractual, audit, and investigation holds override deletion.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-17",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Retain pilot evidence for three years; legal, regulatory, contractual, audit, and investigation holds override deletion.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-18",
+      "domain": "Pilot success criteria",
+      "question": "What proves pilot execution success?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "All stated chain/integrity criteria execute; supported controls execute, unsupported/unresolved controls remain visible, without requiring all controls PASS."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Do not set success criteria; pilot not authorized."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-03",
+        "ROP-06",
+        "ROP-08",
+        "ROP-14",
+        "ROP-16"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "All stated chain/integrity criteria execute; supported controls execute, unsupported/unresolved controls remain visible, without requiring all controls PASS.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-18",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "All stated chain/integrity criteria execute; supported controls execute, unsupported/unresolved controls remain visible, without requiring all controls PASS.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-19",
+      "domain": "Pilot stop criteria",
+      "question": "When must the pilot stop fail-closed?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Stop on identity/classification/hash/registry/checkout/credential/evidence/contract/semantic/immutability/local-path/production-mutation failures."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No stop criteria; pilot not authorized."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-18"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Stop on identity/classification/hash/registry/checkout/credential/evidence/contract/semantic/immutability/local-path/production-mutation failures.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-19",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Stop on identity/classification/hash/registry/checkout/credential/evidence/contract/semantic/immutability/local-path/production-mutation failures.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-20",
+      "domain": "Reassessment/change handling",
+      "question": "How are material changes handled?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Use WS10 reassessment decision; local execution configuration alone is non-material and no compliance result is inferred."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No change handling; pilot cannot close."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-18"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Use WS10 reassessment decision; local execution configuration alone is non-material and no compliance result is inferred.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-20",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Use WS10 reassessment decision; local execution configuration alone is non-material and no compliance result is inferred.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-21",
+      "domain": "Pilot report recipients",
+      "question": "Who receives the closeout report?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Named EMS governance authority, repository owner, human-review owner, and evidence-retention owner."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No recipients; pilot cannot close."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-14",
+        "ROP-16"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named EMS governance authority, repository owner, human-review owner, and evidence-retention owner.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-21",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Named EMS governance authority, repository owner, human-review owner, and evidence-retention owner.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-22",
+      "domain": "Pilot evidence classification",
+      "question": "How is pilot evidence classified?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Synthetic/real-pilot evidence is controlled pilot evidence, non-production authorization evidence, and never production evidence."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No classification; pilot not authorized."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-02"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Synthetic/real-pilot evidence is controlled pilot evidence, non-production authorization evidence, and never production evidence.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-22",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Synthetic/real-pilot evidence is controlled pilot evidence, non-production authorization evidence, and never production evidence.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-23",
+      "domain": "Explicit non-production boundary",
+      "question": "What authorization boundary applies?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Real repository but non-production authorization only; no production readiness, production authorization, organization-wide deployment, or blanket compliance certification."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No boundary approval; pilot not authorized."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-02"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Real repository but non-production authorization only; no production readiness, production authorization, organization-wide deployment, or blanket compliance certification.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-23",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Real repository but non-production authorization only; no production readiness, production authorization, organization-wide deployment, or blanket compliance certification.",
+        "human_directed_selection": false
+      }
+    },
+    {
+      "decision_id": "ROP-24",
+      "domain": "Pilot operating procedure",
+      "question": "Which procedure authorizes execution?",
+      "candidate_options": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Approve the controlled pilot procedure after all prerequisite approvals and no unresolved dependencies."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "No procedure approval; pilot remains blocked."
+        }
+      ],
+      "recommended_candidate": "CANDIDATE-A",
+      "recommendation_rationale": "Preserves a controlled, least-privilege, fail-closed non-production pilot boundary.",
+      "dependencies": [
+        "ROP-18",
+        "ROP-19",
+        "ROP-20",
+        "ROP-21",
+        "ROP-22",
+        "ROP-23"
+      ],
+      "risk": "Unauthorized real access, evidence-boundary breach, or ungoverned pilot execution if unresolved.",
+      "controlled_artifacts_affected": [
+        "repository identity registry",
+        "pilot authorization record",
+        "evidence access record",
+        "pilot procedure",
+        "traceability/history"
+      ],
+      "status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Approve the controlled pilot procedure after all prerequisite approvals and no unresolved dependencies.",
+      "approval_state": "APPROVED",
+      "approval_source": "HUMAN_APPROVAL: hometown real-repository pilot governance closure",
+      "approval_timestamp": "2026-08-16T03:05:29.799770Z",
+      "recommendation_at_approval": "CANDIDATE-A",
+      "dependency_status": "RESOLVED",
+      "decision_traceability": {
+        "decision_id": "ROP-24",
+        "selected_candidate_id": "CANDIDATE-A",
+        "exact_candidate_value": "Approve the controlled pilot procedure after all prerequisite approvals and no unresolved dependencies.",
+        "human_directed_selection": false
+      }
+    }
+  ],
+  "approval_state": "PENDING_HUMAN_SELECTION",
+  "non_production_boundary": true,
+  "closure_state": "GOVERNANCE_DECISIONS_CLOSED",
+  "pilot_repository": "hometown",
+  "controlled_repository_id": "REPO-003"
+}

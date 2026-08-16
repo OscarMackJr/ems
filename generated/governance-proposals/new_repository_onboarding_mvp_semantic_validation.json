@@ -1,0 +1,320 @@
+{
+  "artifact_type": "Semantic closure validation",
+  "validated_at_utc": "2026-08-15T16:47:54Z",
+  "status": "PASS",
+  "counts": {
+    "total_decisions": 24,
+    "approved_decisions": 24,
+    "concrete_selected_values": 24,
+    "non_concrete_values": 0,
+    "root_decisions": 1,
+    "dependent_decisions": 23,
+    "unresolved_dependencies": 0,
+    "semantic_validation_errors": 0,
+    "approval_traceability_errors": 0,
+    "recommendation_changes": 0
+  },
+  "model_checks": {
+    "identity": true,
+    "unknown": true,
+    "effective_applicability": true,
+    "plan": true,
+    "execution": true,
+    "support": true,
+    "evidence": true,
+    "review": true,
+    "bundle": true,
+    "retention": true
+  },
+  "decision_checks": [
+    {
+      "decision_id": "ONB-001-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-001-02",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-001-03",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-001-04",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-002-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-002-02",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-002-03",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-002-04",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-003-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-003-02",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-003-03",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-004-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-004-02",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-005-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-005-02",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-005-03",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-006-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-006-02",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-007-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-008-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-008-02",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-009-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-009-02",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    },
+    {
+      "decision_id": "ONB-010-01",
+      "checks": {
+        "approved": true,
+        "candidate_exists": true,
+        "exact_candidate_value": true,
+        "concrete": true,
+        "dependencies_resolved": true,
+        "approval_provenance": true,
+        "recommendation_unchanged": true
+      }
+    }
+  ],
+  "errors": []
+}

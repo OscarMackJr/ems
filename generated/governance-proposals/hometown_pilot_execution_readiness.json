@@ -1,0 +1,16 @@
+{
+  "repository": "hometown",
+  "repository_id": "REPO-003",
+  "execution_prerequisites_complete": false,
+  "ready_for_separate_execution_authorization_gate": false,
+  "pilot_execution_authorized": false,
+  "production_authorized": false,
+  "blocking_summary": {
+    "total": 6,
+    "closed": 2,
+    "open": 3,
+    "blocked": 1
+  },
+  "source": "hometown_pilot_execution_prerequisite_closure.json",
+  "generated_at_utc": "2026-08-16T12:25:51Z"
+}

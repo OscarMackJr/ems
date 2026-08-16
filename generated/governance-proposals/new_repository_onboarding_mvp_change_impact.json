@@ -1,0 +1,28 @@
+{
+  "existing_controlled_authority_to_update": [
+    "registry/repository_registry.yaml",
+    "registry/repository_overrides.yaml",
+    "registry/policy_applicability.yaml",
+    "registry/adjudication_rules.json",
+    "registry/evidence_authority_registry.yaml",
+    "registry/evidence_source_policy.json",
+    "registry/wave1_evidence_strategies.yaml",
+    "registry/collector_acceptance.json",
+    "docs/REPOSITORY_CLASSIFICATION_GUIDE.md"
+  ],
+  "new_controlled_authority_required": [
+    "repository identity/lifecycle",
+    "classification snapshot",
+    "new-target effective applicability",
+    "assessment plan/evidence bundle",
+    "human review/outcome",
+    "certification/retention/reassessment"
+  ],
+  "hayes_implementation_artifacts_later_required": [
+    "onboarding adapter",
+    "applicability consumer",
+    "local override consumer",
+    "review queue and evidence bundle generator"
+  ],
+  "historical_freeze_rule": "Historical Wave 2D freeze artifacts remain immutable; effective applicability is separate."
+}

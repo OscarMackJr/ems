@@ -1,0 +1,95 @@
+{
+  "pilot_id": "HOMETOWN-REAL-REPOSITORY-PILOT-V1",
+  "execution_authorized": false,
+  "all_blocking_prerequisites_closed": false,
+  "prerequisites": [
+    {
+      "id": "CLASSIFICATION_CONFIRMATION",
+      "description": "Current human confirmation of all material hometown classification fields.",
+      "authority": "Classification Authority",
+      "status": "OPEN",
+      "required_evidence": "attributable human confirmation",
+      "closure_criteria": "all eight values current and confirmed",
+      "blocks_execution": true
+    },
+    {
+      "id": "NAMED_REVIEW_OWNER",
+      "description": "Named operational human-review owner and backup.",
+      "authority": "Human Review Authority",
+      "status": "OPEN",
+      "required_evidence": "attributable owner assignment",
+      "closure_criteria": "primary and backup recorded",
+      "blocks_execution": true
+    },
+    {
+      "id": "EVIDENCE_ACCESS_ACTIVATION",
+      "description": "Approved operational evidence access for required sources.",
+      "authority": "Evidence Authority",
+      "status": "CLOSED",
+      "required_evidence": "approved read-only access/provenance",
+      "closure_criteria": "required source access activated",
+      "blocks_execution": true,
+      "closure_authority": "registry/real_repository_onboarding_pilot_authority.json evidence_authority",
+      "closure_evidence": "All six source classes have controlled HUMAN_REVIEW fallback, provenance, and three-year retention requirements.",
+      "closure_actor_or_authority": "Published Real Repository Onboarding Pilot Authority",
+      "closure_timestamp": "2026-08-16T11:43:13Z"
+    },
+    {
+      "id": "CREDENTIAL_BOUNDARY_ACTIVATION",
+      "description": "Least-privilege credential boundary activation where access requires credentials.",
+      "authority": "Credential Security Authority",
+      "status": "CLOSED",
+      "required_evidence": "approved non-persisted credential mechanism",
+      "closure_criteria": "access is safely established or not needed",
+      "blocks_execution": true,
+      "closure_authority": "registry/real_repository_onboarding_pilot_authority.json credential_boundary and evidence_authority",
+      "closure_evidence": "Least privilege, read-only where possible, no evidence persistence, revocation/rotation, and controlled HUMAN_REVIEW fallback are published.",
+      "closure_actor_or_authority": "Published Real Repository Onboarding Pilot Authority",
+      "closure_timestamp": "2026-08-16T11:43:13Z"
+    },
+    {
+      "id": "RETENTION_LOCATION",
+      "description": "Approved evidence-retention location/process.",
+      "authority": "Retention Authority",
+      "status": "BLOCKED",
+      "required_evidence": "controlled store designation",
+      "closure_criteria": "location and owner recorded",
+      "blocks_execution": true,
+      "closure_authority": "Egnyte / TWG / TechAudits is approved controlled retention authority",
+      "validation_timestamp": "2026-08-16T12:25:51Z",
+      "retention_platform": "Egnyte",
+      "retention_logical_location": "TWG/TechAudits",
+      "retention_operational_mapping": "Z:\\Shared\\TWG\\TechAudits",
+      "retention_period": "3 years",
+      "longer_hold_overrides_deletion": true,
+      "retention_owner": "Software Development",
+      "block_reason": "Configured operational mapping Z:\\Shared\\TWG\\TechAudits does not exist or is inaccessible in the pilot operator environment; no substitute location selected."
+    },
+    {
+      "id": "EXECUTION_MAPPING_AUTHORIZATION",
+      "description": "Approved local execution mapping and checkout/reference policy.",
+      "authority": "Execution Access Authority",
+      "status": "OPEN",
+      "required_evidence": "operator/mapping approval",
+      "closure_criteria": "read-only mapping approved",
+      "blocks_execution": true
+    }
+  ],
+  "closure_history": [
+    {
+      "recorded_at_utc": "2026-08-16T11:43:13Z",
+      "action": "AUTHORITY_RECOVERY_CLOSURE",
+      "closed_prerequisites": [
+        "EVIDENCE_ACCESS_ACTIVATION",
+        "CREDENTIAL_BOUNDARY_ACTIVATION"
+      ],
+      "unchanged_open_prerequisites": [
+        "CLASSIFICATION_CONFIRMATION",
+        "NAMED_REVIEW_OWNER",
+        "RETENTION_LOCATION",
+        "EXECUTION_MAPPING_AUTHORIZATION"
+      ],
+      "basis": "Existing published pilot authority; no new governance decision or execution authorization."
+    }
+  ]
+}

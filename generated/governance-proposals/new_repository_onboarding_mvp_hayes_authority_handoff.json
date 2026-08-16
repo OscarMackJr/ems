@@ -1,0 +1,51 @@
+{
+  "component": "EMS",
+  "capability": "New Repository Onboarding MVP",
+  "publication_state": "NEW_REPOSITORY_ONBOARDING_CONTROLLED_REQUIREMENTS_PUBLISHED",
+  "hayes_authority_preflight_authorized": true,
+  "hayes_implementation_authorized": false,
+  "controlled_authorities": {
+    "registry/new_repository_onboarding_identity_authority.json": "c44d4a3e2b667eeb995aebb45284c6331e826b0af384e3153609354b336c3ac9",
+    "registry/new_repository_onboarding_classification_authority.json": "044149664a8085668095ca9f837ce3275201f76dca231484c668458f17ba69ac",
+    "registry/new_repository_onboarding_effective_applicability.json": "ecba0b93ae46017bfef3849ade93e9d3f8fd0d6285de496f82f51ca9768c1aa9",
+    "registry/new_repository_onboarding_assessment_plan_authority.json": "3742bdc22cad74cb60d98afa91a8b917898cca1bf37823405fa33bc2c766ae09",
+    "registry/new_repository_onboarding_execution_composition_authority.json": "e69240e6d62031a8a5d0c6376b1ec0c7920af4331871933cb47baf7ec57c1ff8",
+    "registry/new_repository_onboarding_support_semantics.json": "f0198cb88217bf02c02e1f581b099e44a07e03d065581986423dff30cb561803",
+    "registry/new_repository_onboarding_evidence_authority.json": "7d743d9933456ba8dddf35a92e69101a33c4097a507ecab462b1297dc325b9f6",
+    "registry/new_repository_onboarding_human_review_authority.json": "db65ae96996c1fa5561584f943b951ed105be55d0ed4b4fd666475db93b4d976",
+    "registry/new_repository_onboarding_outcome_authority.json": "b80656872aa1555aacdf16e1a2fcd34725a80fcbcb705137b5d4320badb62037",
+    "registry/new_repository_onboarding_bundle_certification_authority.json": "6d0b3d990833dbea7d45dc42626dc27c379d5f83c54a697256e05fb91066e1c8",
+    "registry/new_repository_onboarding_reassessment_retention_authority.json": "e87e2b8c71db952edbad62c55abdd6e12f4eb46b6d1543f92356936e6630ed0f",
+    "registry/new_repository_onboarding_requirements.json": "265e1afc351ef7be3ad5c6c6ccd83764d947e25a0afe2dfbab2773eebb57cbbc",
+    "registry/new_repository_onboarding_traceability.json": "8de966c060eb3a41c9106b0ef379d4dee3e8a21b3ae07dd416ba09a0f0169656",
+    "registry/new_repository_onboarding_publication_history.json": "e45dbd519c8321a81ae652644b6dc6a7a9f1930008f3e7dcddeebec971107def",
+    "schemas/new_repository_onboarding_requirements.schema.json": "c4e0bd19400bbdcd05252845b1f75be6de60fed7aa87e8ef5c174f569c360105"
+  },
+  "publication_certification_path": "registry/new_repository_onboarding_publication_certification.json",
+  "publication_certification_sha256": "44c82d83e9a46cab7e8d837b5b1a50dc564e1bdac932cb0c32ebeca65aa1495d",
+  "decision_traceability_summary": {
+    "expected": 24,
+    "published": 24,
+    "non_null": 24,
+    "missing": 0,
+    "orphaned": 0
+  },
+  "negative_invariants": {
+    "UNKNOWN_NEVER_FALSE_OR_NOT_APPLICABLE": true,
+    "HISTORICAL_FREEZE_IMMUTABLE": true,
+    "NEW_TARGET_NO_HISTORICAL_INSERTION": true,
+    "LOCAL_PATH_NOT_IDENTITY": true,
+    "WRONG_CHECKOUT_FAILS_SAFELY": true,
+    "NOT_IMPLEMENTED_NOT_PASS_OR_FAIL": true,
+    "UNRESOLVED_NOT_NA": true,
+    "REPOSITORY_CANNOT_OVERRIDE_SERVICE_ORGANIZATION": true,
+    "REVIEW_NON_MUTATING": true,
+    "CERTIFICATION_NOT_BLANKET_COMPLIANCE": true,
+    "REASSESSMENT_PRESERVES_PRIOR_RUN": true
+  },
+  "historical_freeze_integrity": {
+    "path": "registry/wave2d/applicability_decisions.csv",
+    "sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+    "preserved": true
+  }
+}

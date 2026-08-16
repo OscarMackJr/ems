@@ -1,0 +1,132 @@
+{
+  "expected_decisions": 24,
+  "traced_decisions": 24,
+  "concrete_decisions": 24,
+  "missing_decisions": [],
+  "orphaned_decisions": [],
+  "repository_identity": "REPO-003 -> github.com/OscarMackJr/hometown",
+  "non_production_scope": true,
+  "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+  "decisions": [
+    {
+      "decision_id": "ROP-01",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Exactly one repository explicitly named by the human governance owner and documented in the approval response."
+    },
+    {
+      "decision_id": "ROP-02",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Designated EMS governance authority with named approval record."
+    },
+    {
+      "decision_id": "ROP-03",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "USE_EXISTING_CONTROLLED_ID; repository_id = REPO-003; do not allocate a new repository ID."
+    },
+    {
+      "decision_id": "ROP-04",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Canonical host, owner, repository name, URL, lifecycle state, default branch, pilot flag, and accountable owner."
+    },
+    {
+      "decision_id": "ROP-05",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Named accountable business/service owner and EMS classification authority jointly confirm values."
+    },
+    {
+      "decision_id": "ROP-06",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Record human-confirmed production, internet exposure, customer data, AI use, owner, tier, criticality, and data classification; unconfirmed values remain UNKNOWN."
+    },
+    {
+      "decision_id": "ROP-07",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Named operator receives a read-only local execution mapping recorded separately from controlled identity."
+    },
+    {
+      "decision_id": "ROP-08",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Verified canonical remote, approved default branch or explicit ref, captured commit SHA, and clean worktree."
+    },
+    {
+      "decision_id": "ROP-09",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Read-only approved repository checkout and API evidence with provenance captured."
+    },
+    {
+      "decision_id": "ROP-10",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Read-only approved CI/CD execution records bound to repository and revision."
+    },
+    {
+      "decision_id": "ROP-11",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Read-only approved service-evidence source; repository evidence remains supporting only."
+    },
+    {
+      "decision_id": "ROP-12",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Read-only approved organization-evidence source; repository evidence remains supporting only."
+    },
+    {
+      "decision_id": "ROP-13",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Named least-privilege read-only credentials, no evidence-bundle persistence, revocation after pilot, and incident stop path."
+    },
+    {
+      "decision_id": "ROP-14",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Named primary reviewer plus named backup/escalation role; decisions are attributable and append-only."
+    },
+    {
+      "decision_id": "ROP-15",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Named EMS governance authority approves time-bounded exceptions with rationale and remediation."
+    },
+    {
+      "decision_id": "ROP-16",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Named approved controlled evidence repository with integrity protection and access owner."
+    },
+    {
+      "decision_id": "ROP-17",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Retain pilot evidence for three years; legal, regulatory, contractual, audit, and investigation holds override deletion."
+    },
+    {
+      "decision_id": "ROP-18",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "All stated chain/integrity criteria execute; supported controls execute, unsupported/unresolved controls remain visible, without requiring all controls PASS."
+    },
+    {
+      "decision_id": "ROP-19",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Stop on identity/classification/hash/registry/checkout/credential/evidence/contract/semantic/immutability/local-path/production-mutation failures."
+    },
+    {
+      "decision_id": "ROP-20",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Use WS10 reassessment decision; local execution configuration alone is non-material and no compliance result is inferred."
+    },
+    {
+      "decision_id": "ROP-21",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Named EMS governance authority, repository owner, human-review owner, and evidence-retention owner."
+    },
+    {
+      "decision_id": "ROP-22",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Synthetic/real-pilot evidence is controlled pilot evidence, non-production authorization evidence, and never production evidence."
+    },
+    {
+      "decision_id": "ROP-23",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Real repository but non-production authorization only; no production readiness, production authorization, organization-wide deployment, or blanket compliance certification."
+    },
+    {
+      "decision_id": "ROP-24",
+      "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+      "selected_value": "Approve the controlled pilot procedure after all prerequisite approvals and no unresolved dependencies."
+    }
+  ]
+}

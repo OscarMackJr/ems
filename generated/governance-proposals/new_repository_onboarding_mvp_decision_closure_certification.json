@@ -1,0 +1,41 @@
+{
+  "component": "EMS",
+  "capability": "New Repository Onboarding MVP",
+  "status": "GOVERNANCE_DECISIONS_CLOSED",
+  "certified_at_utc": "2026-08-15T16:47:54Z",
+  "decision_count": 24,
+  "approved_count": 24,
+  "concrete_count": 24,
+  "non_concrete_count": 0,
+  "unresolved_dependency_count": 0,
+  "semantic_validation_error_count": 0,
+  "decision_register_sha256": "026b326412403307bf42bf25270a345f3113f1712d76108355e64f8faf2afa63",
+  "semantic_validation_sha256": "b80cb9f25e11fc73d300db29447b5fb61ca9e7b7cabb81e7aed0325e7d328daf",
+  "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+  "governance_domains": [
+    "A_REPOSITORY_IDENTITY",
+    "B_CLASSIFICATION",
+    "C_EFFECTIVE_APPLICABILITY",
+    "D_ASSESSMENT_PLAN",
+    "E_LOCAL_EXECUTION",
+    "F_SUPPORT_SEMANTICS",
+    "G_EVIDENCE_RESOLUTION",
+    "H_HUMAN_REVIEW",
+    "I_EVIDENCE_BUNDLE",
+    "K_RETENTION_REASSESSMENT"
+  ],
+  "approved_model_summary": {
+    "identity": "Immutable sequential REPO-<sequence> allocation with lifecycle continuity.",
+    "classification": "Human-confirmed material classification; UNKNOWN is never false.",
+    "applicability": "Current effective applicability is separate from immutable historical freezes.",
+    "plan": "Pre-execution frozen plan and immutable evidence bundle.",
+    "execution": "Local paths are uncommitted execution-only configuration.",
+    "support": "Assessment completeness remains distinct from compliance.",
+    "evidence_review": "Source authority, provenance, and immutable human review apply.",
+    "retention": "Three years unless longer hold; reassess with a new immutable run."
+  },
+  "architecture_decisions_identified": "new_repository_onboarding_mvp_architecture_decisions.json",
+  "controlled_artifacts_likely_affected": "new_repository_onboarding_mvp_change_impact.json",
+  "implementation_authorization": "NO",
+  "statement": "GOVERNANCE_DECISIONS_CLOSED DOES NOT AUTHORIZE HAYES IMPLEMENTATION. It only authorizes controlled EMS publication preparation."
+}

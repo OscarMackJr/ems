@@ -1,0 +1,233 @@
+{
+  "acyclic": true,
+  "selection_order": [
+    {
+      "decision_id": "ROP-01",
+      "domain": "Pilot repository selection",
+      "depends_on": [],
+      "dependency_depth": 0,
+      "selection_order": 1
+    },
+    {
+      "decision_id": "ROP-02",
+      "domain": "Pilot authorization authority",
+      "depends_on": [
+        "ROP-01"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 2
+    },
+    {
+      "decision_id": "ROP-03",
+      "domain": "Controlled repository ID allocation",
+      "depends_on": [
+        "ROP-01",
+        "ROP-02"
+      ],
+      "dependency_depth": 2,
+      "selection_order": 3
+    },
+    {
+      "decision_id": "ROP-04",
+      "domain": "Repository registration metadata",
+      "depends_on": [
+        "ROP-03"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 4
+    },
+    {
+      "decision_id": "ROP-05",
+      "domain": "Classification confirmation authority",
+      "depends_on": [
+        "ROP-04"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 5
+    },
+    {
+      "decision_id": "ROP-06",
+      "domain": "Classification attribute values",
+      "depends_on": [
+        "ROP-05"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 6
+    },
+    {
+      "decision_id": "ROP-07",
+      "domain": "Local execution mapping approval",
+      "depends_on": [
+        "ROP-03"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 7
+    },
+    {
+      "decision_id": "ROP-08",
+      "domain": "Checkout/reference approval",
+      "depends_on": [
+        "ROP-07"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 8
+    },
+    {
+      "decision_id": "ROP-09",
+      "domain": "Repository evidence access",
+      "depends_on": [
+        "ROP-07"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 9
+    },
+    {
+      "decision_id": "ROP-10",
+      "domain": "CI/CD evidence access",
+      "depends_on": [
+        "ROP-02"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 10
+    },
+    {
+      "decision_id": "ROP-11",
+      "domain": "Service evidence access",
+      "depends_on": [
+        "ROP-02"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 11
+    },
+    {
+      "decision_id": "ROP-12",
+      "domain": "Organization evidence access",
+      "depends_on": [
+        "ROP-02"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 12
+    },
+    {
+      "decision_id": "ROP-13",
+      "domain": "Credential/security boundary",
+      "depends_on": [
+        "ROP-09",
+        "ROP-10",
+        "ROP-11",
+        "ROP-12"
+      ],
+      "dependency_depth": 4,
+      "selection_order": 13
+    },
+    {
+      "decision_id": "ROP-14",
+      "domain": "Human-review owner",
+      "depends_on": [
+        "ROP-02"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 14
+    },
+    {
+      "decision_id": "ROP-15",
+      "domain": "Exception escalation authority",
+      "depends_on": [
+        "ROP-02"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 15
+    },
+    {
+      "decision_id": "ROP-16",
+      "domain": "Evidence-retention location",
+      "depends_on": [
+        "ROP-02"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 16
+    },
+    {
+      "decision_id": "ROP-17",
+      "domain": "Retention and holds",
+      "depends_on": [
+        "ROP-16"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 17
+    },
+    {
+      "decision_id": "ROP-18",
+      "domain": "Pilot success criteria",
+      "depends_on": [
+        "ROP-03",
+        "ROP-06",
+        "ROP-08",
+        "ROP-14",
+        "ROP-16"
+      ],
+      "dependency_depth": 5,
+      "selection_order": 18
+    },
+    {
+      "decision_id": "ROP-19",
+      "domain": "Pilot stop criteria",
+      "depends_on": [
+        "ROP-18"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 19
+    },
+    {
+      "decision_id": "ROP-20",
+      "domain": "Reassessment/change handling",
+      "depends_on": [
+        "ROP-18"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 20
+    },
+    {
+      "decision_id": "ROP-21",
+      "domain": "Pilot report recipients",
+      "depends_on": [
+        "ROP-14",
+        "ROP-16"
+      ],
+      "dependency_depth": 2,
+      "selection_order": 21
+    },
+    {
+      "decision_id": "ROP-22",
+      "domain": "Pilot evidence classification",
+      "depends_on": [
+        "ROP-02"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 22
+    },
+    {
+      "decision_id": "ROP-23",
+      "domain": "Explicit non-production boundary",
+      "depends_on": [
+        "ROP-02"
+      ],
+      "dependency_depth": 1,
+      "selection_order": 23
+    },
+    {
+      "decision_id": "ROP-24",
+      "domain": "Pilot operating procedure",
+      "depends_on": [
+        "ROP-18",
+        "ROP-19",
+        "ROP-20",
+        "ROP-21",
+        "ROP-22",
+        "ROP-23"
+      ],
+      "dependency_depth": 6,
+      "selection_order": 24
+    }
+  ]
+}

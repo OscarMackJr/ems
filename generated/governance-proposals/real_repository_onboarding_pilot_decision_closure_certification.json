@@ -1,0 +1,140 @@
+{
+  "component": "EMS",
+  "phase": "Real Repository Onboarding Pilot Governance Decision Closure",
+  "closure_state": "GOVERNANCE_DECISIONS_CLOSED",
+  "certified_at_utc": "2026-08-16T03:05:29.799770Z",
+  "pilot_repository": "hometown",
+  "repository_id": "REPO-003",
+  "total_decisions": 24,
+  "approved_decisions": 24,
+  "unresolved_decisions": 0,
+  "selected_decisions": [
+    {
+      "decision_id": "ROP-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Exactly one repository explicitly named by the human governance owner and documented in the approval response."
+    },
+    {
+      "decision_id": "ROP-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Designated EMS governance authority with named approval record."
+    },
+    {
+      "decision_id": "ROP-03",
+      "selected_candidate_id": "HUMAN_DIRECTED_EXISTING_ID",
+      "selected_value": "USE_EXISTING_CONTROLLED_ID; repository_id = REPO-003; do not allocate a new repository ID."
+    },
+    {
+      "decision_id": "ROP-04",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Canonical host, owner, repository name, URL, lifecycle state, default branch, pilot flag, and accountable owner."
+    },
+    {
+      "decision_id": "ROP-05",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named accountable business/service owner and EMS classification authority jointly confirm values."
+    },
+    {
+      "decision_id": "ROP-06",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Record human-confirmed production, internet exposure, customer data, AI use, owner, tier, criticality, and data classification; unconfirmed values remain UNKNOWN."
+    },
+    {
+      "decision_id": "ROP-07",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named operator receives a read-only local execution mapping recorded separately from controlled identity."
+    },
+    {
+      "decision_id": "ROP-08",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Verified canonical remote, approved default branch or explicit ref, captured commit SHA, and clean worktree."
+    },
+    {
+      "decision_id": "ROP-09",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved repository checkout and API evidence with provenance captured."
+    },
+    {
+      "decision_id": "ROP-10",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved CI/CD execution records bound to repository and revision."
+    },
+    {
+      "decision_id": "ROP-11",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved service-evidence source; repository evidence remains supporting only."
+    },
+    {
+      "decision_id": "ROP-12",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Read-only approved organization-evidence source; repository evidence remains supporting only."
+    },
+    {
+      "decision_id": "ROP-13",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named least-privilege read-only credentials, no evidence-bundle persistence, revocation after pilot, and incident stop path."
+    },
+    {
+      "decision_id": "ROP-14",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named primary reviewer plus named backup/escalation role; decisions are attributable and append-only."
+    },
+    {
+      "decision_id": "ROP-15",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named EMS governance authority approves time-bounded exceptions with rationale and remediation."
+    },
+    {
+      "decision_id": "ROP-16",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named approved controlled evidence repository with integrity protection and access owner."
+    },
+    {
+      "decision_id": "ROP-17",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Retain pilot evidence for three years; legal, regulatory, contractual, audit, and investigation holds override deletion."
+    },
+    {
+      "decision_id": "ROP-18",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "All stated chain/integrity criteria execute; supported controls execute, unsupported/unresolved controls remain visible, without requiring all controls PASS."
+    },
+    {
+      "decision_id": "ROP-19",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Stop on identity/classification/hash/registry/checkout/credential/evidence/contract/semantic/immutability/local-path/production-mutation failures."
+    },
+    {
+      "decision_id": "ROP-20",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Use WS10 reassessment decision; local execution configuration alone is non-material and no compliance result is inferred."
+    },
+    {
+      "decision_id": "ROP-21",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Named EMS governance authority, repository owner, human-review owner, and evidence-retention owner."
+    },
+    {
+      "decision_id": "ROP-22",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Synthetic/real-pilot evidence is controlled pilot evidence, non-production authorization evidence, and never production evidence."
+    },
+    {
+      "decision_id": "ROP-23",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Real repository but non-production authorization only; no production readiness, production authorization, organization-wide deployment, or blanket compliance certification."
+    },
+    {
+      "decision_id": "ROP-24",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Approve the controlled pilot procedure after all prerequisite approvals and no unresolved dependencies."
+    }
+  ],
+  "decision_register_sha256": "6e681e583b0a4b019adb6849ef086d030860ac988f037bdd9509c97f8300bdc9",
+  "semantic_validation_sha256": "fc4eb93b0faf32c4eabdefcac1bbeb7e4e9dee5a8c4e63538b1e57bfe17accba",
+  "historical_freeze_sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+  "approval_provenance": "HUMAN_APPROVAL: hometown selection; REPO-003 reuse; exact recommended selections for remaining decisions",
+  "execution_authorized": false,
+  "production_authorized": false,
+  "errors": []
+}

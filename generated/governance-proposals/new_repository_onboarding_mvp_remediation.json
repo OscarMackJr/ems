@@ -1,0 +1,41 @@
+{
+  "artifact_type": "Governance remediation",
+  "state": "READY_FOR_HUMAN_DECISION_SELECTION",
+  "assessment_conclusion": "GOVERNANCE / ARCHITECTURE BLOCKED",
+  "controlled_authority_reviewed": [
+    "registry/repository_registry.yaml",
+    "registry/repository_overrides.yaml",
+    "docs/REPOSITORY_CLASSIFICATION_GUIDE.md",
+    "registry/policy_applicability.yaml",
+    "registry/adjudication_rules.json",
+    "registry/evidence_authority_registry.yaml",
+    "registry/evidence_source_policy.json",
+    "registry/wave2d/applicability_decisions.csv",
+    "registry/wave2d/test_quality_effective_applicability.yaml",
+    "registry/control_catalog.yaml",
+    "registry/control_scope_registry.yaml",
+    "registry/wave1_evidence_strategies.yaml",
+    "registry/collector_acceptance.json"
+  ],
+  "decision_count": 24,
+  "genuine_gaps": [
+    "No controlled new-target identity allocation/lifecycle authority.",
+    "No authoritative UNKNOWN and classification snapshot workflow.",
+    "No current applicability authority for targets absent from immutable historical freezes.",
+    "No immutable onboarding plan, review queue, evidence bundle, certification, or reassessment contract.",
+    "No controlled local-execution identity-binding contract."
+  ],
+  "domains": {
+    "A_REPOSITORY_IDENTITY": 4,
+    "B_CLASSIFICATION": 4,
+    "C_EFFECTIVE_APPLICABILITY": 3,
+    "D_ASSESSMENT_PLAN": 2,
+    "E_LOCAL_EXECUTION": 3,
+    "F_SUPPORT_SEMANTICS": 2,
+    "G_EVIDENCE_RESOLUTION": 1,
+    "H_HUMAN_REVIEW": 2,
+    "I_EVIDENCE_BUNDLE": 2,
+    "K_RETENTION_REASSESSMENT": 1
+  },
+  "proposal_only": true
+}

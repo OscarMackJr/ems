@@ -1,0 +1,101 @@
+{
+  "preflight_status": "PASS",
+  "candidate_repository": "hometown",
+  "controlled_references": [
+    {
+      "path": "registry/repository_registry.yaml",
+      "reference": "REPO-003 -> hometown -> OscarMackJr/hometown",
+      "classification": "AUTHORITATIVE_CONTROLLED_IDENTITY"
+    },
+    {
+      "path": "registry/repository_overrides.yaml",
+      "reference": "OscarMackJr/hometown classification metadata",
+      "classification": "CLASSIFICATION_RECORD"
+    },
+    {
+      "path": "registry/wave2d/applicability_rules.json",
+      "reference": "REPO-003 -> OscarMackJr/hometown",
+      "classification": "HISTORICAL_WAVE2D_REFERENCE"
+    },
+    {
+      "path": "registry/wave2d/population.json",
+      "reference": "REPO-003 -> hometown evaluation target",
+      "classification": "HISTORICAL_WAVE2D_REFERENCE"
+    },
+    {
+      "path": "generated/wave2d/repository-content-assessment/repository_map.json",
+      "reference": "hometown local path mapping",
+      "classification": "EXECUTION_MAPPING"
+    }
+  ],
+  "authoritative_identity_conclusion": "AUTHORITATIVE_MATCH",
+  "repo_003_authority": "AUTHORITATIVE_MATCH",
+  "controlled_identity": {
+    "repository_id": "REPO-003",
+    "host": "github.com",
+    "owner_or_org": "OscarMackJr",
+    "repository_name": "hometown",
+    "default_branch": "main",
+    "source": "registry/repository_registry.yaml"
+  },
+  "github_verification": {
+    "result": "VERIFIED",
+    "full_name": "OscarMackJr/hometown",
+    "host": "github.com",
+    "default_branch": "main",
+    "visibility": "PUBLIC",
+    "remote_urls": [
+      "https://github.com/OscarMackJr/hometown.git"
+    ]
+  },
+  "local_checkout": {
+    "exists": true,
+    "classification": "LOCAL_EXECUTION_ONLY",
+    "readiness": "VERIFIED_FOR_PILOT_MAPPING",
+    "normalized_remote_match": true,
+    "active_branch": "main",
+    "head_sha": "ede6d752abe898659bf6965f221affdae5ce2c70",
+    "dirty_state": "CLEAN",
+    "absolute_path_excluded_from_controlled_identity": true
+  },
+  "new_repo_id_allocation_required": "NO",
+  "rop_01_hometown_selection_ready": "YES",
+  "rop_03_identity_status": "EXISTING_CONTROLLED_ID",
+  "existing_classification_records": "YES",
+  "human_confirmation_required": "YES",
+  "access_inventory": {
+    "REPOSITORY": "TECHNICALLY_AVAILABLE",
+    "GITHUB_METADATA": "TECHNICALLY_AVAILABLE",
+    "CI_CD": "REQUIRES_APPROVAL",
+    "SERVICE": "REQUIRES_APPROVAL",
+    "ORGANIZATION": "REQUIRES_APPROVAL",
+    "HUMAN": "REQUIRES_APPROVAL"
+  },
+  "historical_freeze": {
+    "path": "registry/wave2d/applicability_decisions.csv",
+    "sha256_before": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+    "sha256_after": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+    "unchanged": true
+  },
+  "negative_invariants": {
+    "HAYES_ALLOCATES_REPO_ID": "PASS",
+    "PREFLIGHT_ALLOCATES_REPO_ID": "PASS",
+    "HISTORICAL_REPO_LABEL_NE_AUTOMATIC_CONTROLLED_IDENTITY": "PASS",
+    "LOCAL_PATH_NE_CONTROLLED_REPOSITORY_IDENTITY": "PASS",
+    "LOCAL_DIRECTORY_NAME_NE_CONTROLLED_REPOSITORY_IDENTITY": "PASS",
+    "GITHUB_NAME_NE_EMS_IDENTITY_AUTHORITY": "PASS",
+    "REPOSITORY_RENAME_NE_NEW_REPO_ID": "PASS",
+    "UNKNOWN_CLASSIFICATION_NE_FALSE": "PASS",
+    "DIRTY_WORKTREE_NE_COMPLIANCE_FAIL": "PASS",
+    "REMOTE_MISMATCH_NE_COMPLIANCE_FAIL": "PASS",
+    "IDENTITY_PREFLIGHT_NE_PILOT_AUTHORIZATION": "PASS",
+    "IDENTITY_PREFLIGHT_NE_COMPLIANCE_ASSESSMENT": "PASS"
+  },
+  "blockers": [
+    "ROP-01 through ROP-24 remain pending human approval",
+    "material classification requires current human confirmation",
+    "evidence/credential/review/retention access remains unapproved",
+    "identity preflight is not pilot authorization"
+  ],
+  "recommended_next_step": "Human governance owner records ROP approvals, using REPO-003 as the existing controlled identity if hometown is selected."
+}

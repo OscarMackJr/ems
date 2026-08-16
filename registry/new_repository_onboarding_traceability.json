@@ -1,0 +1,347 @@
+{
+  "component": "EMS",
+  "capability": "New Repository Onboarding MVP",
+  "expected_decisions": 24,
+  "published_decisions": 24,
+  "non_null_decision_values": 24,
+  "missing_decisions": 0,
+  "orphaned_decisions": 0,
+  "traceability": [
+    {
+      "decision_id": "ONB-001-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "EMS Governance allocates the next unused immutable REPO-<sequence> identifier after approved registration.",
+      "controlled_destination": "registry/new_repository_onboarding_identity_authority.json",
+      "requirement_id": "ONB-REQ-01-001",
+      "approval_provenance": {
+        "decision_id": "ONB-001-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "ROOT_SELECTED_DIRECTLY"
+      }
+    },
+    {
+      "decision_id": "ONB-001-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "repository_id is immutable; canonical host/owner/name is unique; rename, transfer, archive, delete, and replacement are immutable lifecycle events linked to original identity.",
+      "controlled_destination": "registry/new_repository_onboarding_identity_authority.json",
+      "requirement_id": "ONB-REQ-02-001",
+      "approval_provenance": {
+        "decision_id": "ONB-001-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-001-03",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Automation may propose registration, but an accountable EMS repository authority must confirm identity and minimum metadata before controlled targeting.",
+      "controlled_destination": "registry/new_repository_onboarding_identity_authority.json",
+      "requirement_id": "ONB-REQ-03-001",
+      "approval_provenance": {
+        "decision_id": "ONB-001-03",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-001-04",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Require repository_id, canonical host/owner/name, accountable owner, default branch, lifecycle status, registration approver/timestamp, and classification snapshot reference.",
+      "controlled_destination": "registry/new_repository_onboarding_identity_authority.json",
+      "requirement_id": "ONB-REQ-04-001",
+      "approval_provenance": {
+        "decision_id": "ONB-001-04",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-002-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Controlled snapshot records owner, tier, criticality, production, internet exposure, customer data, AI enabled, and data classification; human confirms criticality, production, customer data, AI, and data classification; discovery only proposes with provenance.",
+      "controlled_destination": "registry/new_repository_onboarding_classification_authority.json",
+      "requirement_id": "ONB-REQ-01-002",
+      "approval_provenance": {
+        "decision_id": "ONB-002-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-002-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "UNKNOWN is explicit with source/timestamp; it never becomes false or NOT_APPLICABLE; a dependent policy condition yields APPLICABILITY_UNRESOLVED and HUMAN_REVIEW.",
+      "controlled_destination": "registry/new_repository_onboarding_classification_authority.json",
+      "requirement_id": "ONB-REQ-02-002",
+      "approval_provenance": {
+        "decision_id": "ONB-002-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-002-03",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Owner, canonical coordinates, lifecycle, production, customer data, data classification, criticality, and policy-condition attributes are BLOCKING_UNKNOWN; tier/internet exposure/AI are conditionally blocking when policy-dependent.",
+      "controlled_destination": "registry/new_repository_onboarding_classification_authority.json",
+      "requirement_id": "ONB-REQ-03-002",
+      "approval_provenance": {
+        "decision_id": "ONB-002-03",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-002-04",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Bind immutable classification snapshot hash; applicability/evidence-authority changes require a new run and never rewrite prior snapshots.",
+      "controlled_destination": "registry/new_repository_onboarding_classification_authority.json",
+      "requirement_id": "ONB-REQ-04-002",
+      "approval_provenance": {
+        "decision_id": "ONB-002-04",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-003-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "New-target authority computes APPLICABLE, NOT_APPLICABLE, or APPLICABILITY_UNRESOLVED from current policy hash, immutable classification snapshot, and condition evidence; it never edits historical freezes.",
+      "controlled_destination": "registry/new_repository_onboarding_effective_applicability.json",
+      "requirement_id": "ONB-REQ-01-003",
+      "approval_provenance": {
+        "decision_id": "ONB-003-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-003-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Immutable snapshot stores repository_id, control_id, policy hash, classification hash, condition evidence references/hashes, result/rationale, exception, authority identity, and timestamp.",
+      "controlled_destination": "registry/new_repository_onboarding_effective_applicability.json",
+      "requirement_id": "ONB-REQ-02-003",
+      "approval_provenance": {
+        "decision_id": "ONB-003-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-003-03",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Snapshot freezes with the assessment plan; policy, classification, evidence, or exception changes require a new run rather than mutation.",
+      "controlled_destination": "registry/new_repository_onboarding_effective_applicability.json",
+      "requirement_id": "ONB-REQ-03-003",
+      "approval_provenance": {
+        "decision_id": "ONB-003-03",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-004-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Freeze before request generation after binding identity, classification hash, EMS/Hayes hashes, applicability, evidence contract, targets, support states, and review requirements.",
+      "controlled_destination": "registry/new_repository_onboarding_assessment_plan_authority.json",
+      "requirement_id": "ONB-REQ-01-004",
+      "approval_provenance": {
+        "decision_id": "ONB-004-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-004-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Attach late evidence as immutable supplement only; material evidence that changes scope/request/result requires a new run.",
+      "controlled_destination": "registry/new_repository_onboarding_assessment_plan_authority.json",
+      "requirement_id": "ONB-REQ-02-004",
+      "approval_provenance": {
+        "decision_id": "ONB-004-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-005-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Uncommitted execution-local mapping is keyed by controlled repository_id and never supplies identity, classification, or applicability authority.",
+      "controlled_destination": "registry/new_repository_onboarding_execution_composition_authority.json",
+      "requirement_id": "ONB-REQ-01-005",
+      "approval_provenance": {
+        "decision_id": "ONB-005-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-005-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Require path, Git repository, canonical remote match, default branch/reference, commit SHA, and dirty status; missing/mismatch blocks execution.",
+      "controlled_destination": "registry/new_repository_onboarding_execution_composition_authority.json",
+      "requirement_id": "ONB-REQ-02-005",
+      "approval_provenance": {
+        "decision_id": "ONB-005-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-005-03",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Clean checkout is required; dirty checkout requires time-bounded exception and non-baseline label.",
+      "controlled_destination": "registry/new_repository_onboarding_execution_composition_authority.json",
+      "requirement_id": "ONB-REQ-03-005",
+      "approval_provenance": {
+        "decision_id": "ONB-005-03",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-006-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "SUPPORTED_AUTOMATED/HYBRID/HUMAN_EVIDENCE_REQUIRED execute contract; NOT_IMPLEMENTED blocks completeness but is neither FAIL nor NOT_APPLICABLE; APPLICABILITY_UNRESOLVED blocks completeness and cannot PASS.",
+      "controlled_destination": "registry/new_repository_onboarding_support_semantics.json",
+      "requirement_id": "ONB-REQ-01-006",
+      "approval_provenance": {
+        "decision_id": "ONB-006-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-007-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Record source class, authoritative system, collection time, integrity hash/immutable ID, freshness, and provenance; unavailable authority routes to contract HUMAN_REVIEW/INSUFFICIENT; repository evidence never overrides service/organization authority.",
+      "controlled_destination": "registry/new_repository_onboarding_evidence_authority.json",
+      "requirement_id": "ONB-REQ-01-007",
+      "approval_provenance": {
+        "decision_id": "ONB-007-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-008-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Immutable item records run/repository/control/assertion, reason, evidence gap, authority, reviewer authority, action, exception, status and provenance; statuses OPEN, IN_REVIEW, RESOLVED, EXCEPTION_APPROVED, SUPERSEDED.",
+      "controlled_destination": "registry/new_repository_onboarding_human_review_authority.json",
+      "requirement_id": "ONB-REQ-01-008",
+      "approval_provenance": {
+        "decision_id": "ONB-008-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-008-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Closure requires attributable reviewer decision, evidence, rationale, timestamp, and exception/remediation reference; it supplements, never mutates, machine results.",
+      "controlled_destination": "registry/new_repository_onboarding_human_review_authority.json",
+      "requirement_id": "ONB-REQ-02-008",
+      "approval_provenance": {
+        "decision_id": "ONB-008-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-006-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "COMPLETE needs resolved applicability and terminal outcome/NA for every applicable supported assertion with no blocking review; COMPLETE_WITH_FINDINGS permits FAIL/WARNING; PARTIAL covers unsupported/review/insufficient/unresolved; BLOCKED covers identity/plan/execution failure.",
+      "controlled_destination": "registry/new_repository_onboarding_outcome_authority.json",
+      "requirement_id": "ONB-REQ-02-006",
+      "approval_provenance": {
+        "decision_id": "ONB-006-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-009-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Under generated/onboarding/runs/<RUN-ID>/ retain repository/classification/applicability snapshots, plan, requests/results, review queue, evidence manifest, summary, auditor report, certification; label inputs authoritative snapshots, outputs generated evidence, reports derived, paths local-only.",
+      "controlled_destination": "registry/new_repository_onboarding_bundle_certification_authority.json",
+      "requirement_id": "ONB-REQ-01-009",
+      "approval_provenance": {
+        "decision_id": "ONB-009-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-009-02",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Certification proves run integrity, identity binding, authority hashes, completeness state, and bundle manifest; it does not assert compliance beyond underlying results.",
+      "controlled_destination": "registry/new_repository_onboarding_bundle_certification_authority.json",
+      "requirement_id": "ONB-REQ-02-009",
+      "approval_provenance": {
+        "decision_id": "ONB-009-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-010-01",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Retain immutable bundles 3 years unless longer hold; new run for classification/lifecycle/branch/policy/registry/support/evidence/exception/material change; replay reproduces frozen run and review supplements without rewriting.",
+      "controlled_destination": "registry/new_repository_onboarding_reassessment_retention_authority.json",
+      "requirement_id": "ONB-REQ-01-010",
+      "approval_provenance": {
+        "decision_id": "ONB-010-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    }
+  ]
+}

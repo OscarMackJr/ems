@@ -1,0 +1,1087 @@
+{
+  "artifact_type": "Governance decision register",
+  "generated_at_utc": "2026-08-15T16:29:25Z",
+  "controlled_authority_reviewed": [
+    "registry/repository_registry.yaml",
+    "registry/repository_overrides.yaml",
+    "docs/REPOSITORY_CLASSIFICATION_GUIDE.md",
+    "registry/policy_applicability.yaml",
+    "registry/adjudication_rules.json",
+    "registry/evidence_authority_registry.yaml",
+    "registry/evidence_source_policy.json",
+    "registry/wave2d/applicability_decisions.csv",
+    "registry/wave2d/test_quality_effective_applicability.yaml",
+    "registry/control_catalog.yaml",
+    "registry/control_scope_registry.yaml",
+    "registry/wave1_evidence_strategies.yaml",
+    "registry/collector_acceptance.json"
+  ],
+  "decision_count": 24,
+  "decisions": [
+    {
+      "decision_id": "ONB-001-01",
+      "domain": "A_REPOSITORY_IDENTITY",
+      "question": "Who allocates the first controlled repository ID?",
+      "authority_source": "repository_registry.yaml records IDs but defines no allocator.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "EMS Governance allocates the next unused immutable REPO-<sequence> identifier after approved registration."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "A deterministic host-owner-name identifier is assigned automatically."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [],
+      "risk_if_unresolved": "ID collision or unaccountable identity.",
+      "controlled_artifacts_likely_affected": [
+        "repository_registry.yaml",
+        "identity schema"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "EMS Governance allocates the next unused immutable REPO-<sequence> identifier after approved registration.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "EMS Governance allocates the next unused immutable REPO-<sequence> identifier after approved registration.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-001-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "ROOT_SELECTED_DIRECTLY"
+      }
+    },
+    {
+      "decision_id": "ONB-001-02",
+      "domain": "A_REPOSITORY_IDENTITY",
+      "question": "How are uniqueness and lifecycle continuity enforced?",
+      "authority_source": "registry records id/name/github without lifecycle rules.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "repository_id is immutable; canonical host/owner/name is unique; rename, transfer, archive, delete, and replacement are immutable lifecycle events linked to original identity."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Canonical host/owner/name is immutable and every rename creates a new repository_id."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-001-01"
+      ],
+      "risk_if_unresolved": "Historical evidence becomes orphaned.",
+      "controlled_artifacts_likely_affected": [
+        "repository registry",
+        "lifecycle schema"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "repository_id is immutable; canonical host/owner/name is unique; rename, transfer, archive, delete, and replacement are immutable lifecycle events linked to original identity.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "repository_id is immutable; canonical host/owner/name is unique; rename, transfer, archive, delete, and replacement are immutable lifecycle events linked to original identity.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-001-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-001-03",
+      "domain": "A_REPOSITORY_IDENTITY",
+      "question": "What approval is required before controlled targeting?",
+      "authority_source": "Classification guide requires human classification for material attributes.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Automation may propose registration, but an accountable EMS repository authority must confirm identity and minimum metadata before controlled targeting."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Automation registers immediately and seeks later confirmation."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-001-01",
+        "ONB-001-04"
+      ],
+      "risk_if_unresolved": "Unconfirmed discovery becomes authority.",
+      "controlled_artifacts_likely_affected": [
+        "registration procedure"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Automation may propose registration, but an accountable EMS repository authority must confirm identity and minimum metadata before controlled targeting.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Automation may propose registration, but an accountable EMS repository authority must confirm identity and minimum metadata before controlled targeting.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-001-03",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-001-04",
+      "domain": "A_REPOSITORY_IDENTITY",
+      "question": "What minimum registration metadata is required?",
+      "authority_source": "Current registry fields are descriptive, not a minimum contract.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Require repository_id, canonical host/owner/name, accountable owner, default branch, lifecycle status, registration approver/timestamp, and classification snapshot reference."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Require repository_id, canonical host/owner/name, and default branch only."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-001-01"
+      ],
+      "risk_if_unresolved": "Target cannot be attributed or bound to classification.",
+      "controlled_artifacts_likely_affected": [
+        "identity schema",
+        "repository_registry.yaml"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Require repository_id, canonical host/owner/name, accountable owner, default branch, lifecycle status, registration approver/timestamp, and classification snapshot reference.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Require repository_id, canonical host/owner/name, accountable owner, default branch, lifecycle status, registration approver/timestamp, and classification snapshot reference.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-001-04",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-002-01",
+      "domain": "B_CLASSIFICATION",
+      "question": "What classification model is authoritative?",
+      "authority_source": "Classification guide requires human classification for criticality, customer data, production, and AI.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Controlled snapshot records owner, tier, criticality, production, internet exposure, customer data, AI enabled, and data classification; human confirms criticality, production, customer data, AI, and data classification; discovery only proposes with provenance."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "All attributes may be inferred from repository/GitHub metadata."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-001-04"
+      ],
+      "risk_if_unresolved": "Sensitive applicability relies on unverified metadata.",
+      "controlled_artifacts_likely_affected": [
+        "classification authority",
+        "repository_overrides.yaml"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Controlled snapshot records owner, tier, criticality, production, internet exposure, customer data, AI enabled, and data classification; human confirms criticality, production, customer data, AI, and data classification; discovery only proposes with provenance.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Controlled snapshot records owner, tier, criticality, production, internet exposure, customer data, AI enabled, and data classification; human confirms criticality, production, customer data, AI, and data classification; discovery only proposes with provenance.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-002-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-002-02",
+      "domain": "B_CLASSIFICATION",
+      "question": "How is UNKNOWN classified?",
+      "authority_source": "Existing assessment invariant says UNKNOWN != false.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "UNKNOWN is explicit with source/timestamp; it never becomes false or NOT_APPLICABLE; a dependent policy condition yields APPLICABILITY_UNRESOLVED and HUMAN_REVIEW."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "UNKNOWN is treated as false pending later review."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-002-01"
+      ],
+      "risk_if_unresolved": "Controls silently skipped.",
+      "controlled_artifacts_likely_affected": [
+        "classification/applicability/adjudication authority"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "UNKNOWN is explicit with source/timestamp; it never becomes false or NOT_APPLICABLE; a dependent policy condition yields APPLICABILITY_UNRESOLVED and HUMAN_REVIEW.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "UNKNOWN is explicit with source/timestamp; it never becomes false or NOT_APPLICABLE; a dependent policy condition yields APPLICABILITY_UNRESOLVED and HUMAN_REVIEW.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-002-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-002-03",
+      "domain": "B_CLASSIFICATION",
+      "question": "Which UNKNOWN values block onboarding?",
+      "authority_source": "No controlled UNKNOWN blocking model exists.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Owner, canonical coordinates, lifecycle, production, customer data, data classification, criticality, and policy-condition attributes are BLOCKING_UNKNOWN; tier/internet exposure/AI are conditionally blocking when policy-dependent."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Only canonical coordinates and owner are blocking."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-002-02"
+      ],
+      "risk_if_unresolved": "Material uncertainty is hidden.",
+      "controlled_artifacts_likely_affected": [
+        "classification authority",
+        "effective applicability authority"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Owner, canonical coordinates, lifecycle, production, customer data, data classification, criticality, and policy-condition attributes are BLOCKING_UNKNOWN; tier/internet exposure/AI are conditionally blocking when policy-dependent.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Owner, canonical coordinates, lifecycle, production, customer data, data classification, criticality, and policy-condition attributes are BLOCKING_UNKNOWN; tier/internet exposure/AI are conditionally blocking when policy-dependent.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-002-03",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-002-04",
+      "domain": "B_CLASSIFICATION",
+      "question": "How do classification changes affect past assessment?",
+      "authority_source": "Existing effective-applicability authorities preserve historical provenance.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Bind immutable classification snapshot hash; applicability/evidence-authority changes require a new run and never rewrite prior snapshots."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Replace past classifications with current values."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-002-01"
+      ],
+      "risk_if_unresolved": "Outcomes become non-reproducible.",
+      "controlled_artifacts_likely_affected": [
+        "snapshot schema",
+        "revision history"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Bind immutable classification snapshot hash; applicability/evidence-authority changes require a new run and never rewrite prior snapshots.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Bind immutable classification snapshot hash; applicability/evidence-authority changes require a new run and never rewrite prior snapshots.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-002-04",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-003-01",
+      "domain": "C_EFFECTIVE_APPLICABILITY",
+      "question": "How is applicability computed for repositories absent from historical freezes?",
+      "authority_source": "Historical wave2d freezes are immutable; family effective applicability uses separate derived authority.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "New-target authority computes APPLICABLE, NOT_APPLICABLE, or APPLICABILITY_UNRESOLVED from current policy hash, immutable classification snapshot, and condition evidence; it never edits historical freezes."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Append new target rows to the historical freeze."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-002-02",
+        "ONB-002-03"
+      ],
+      "risk_if_unresolved": "Historical evidence altered or unresolved applicability collapsed.",
+      "controlled_artifacts_likely_affected": [
+        "new-target applicability authority",
+        "policy_applicability.yaml"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "New-target authority computes APPLICABLE, NOT_APPLICABLE, or APPLICABILITY_UNRESOLVED from current policy hash, immutable classification snapshot, and condition evidence; it never edits historical freezes.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "New-target authority computes APPLICABLE, NOT_APPLICABLE, or APPLICABILITY_UNRESOLVED from current policy hash, immutable classification snapshot, and condition evidence; it never edits historical freezes.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-003-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-003-02",
+      "domain": "C_EFFECTIVE_APPLICABILITY",
+      "question": "What provenance does each applicability decision retain?",
+      "authority_source": "Existing family authorities have source and missing-evidence patterns only.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Immutable snapshot stores repository_id, control_id, policy hash, classification hash, condition evidence references/hashes, result/rationale, exception, authority identity, and timestamp."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Store only control_id and result."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-003-01"
+      ],
+      "risk_if_unresolved": "Decision cannot be audited or replayed.",
+      "controlled_artifacts_likely_affected": [
+        "applicability schema",
+        "traceability"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Immutable snapshot stores repository_id, control_id, policy hash, classification hash, condition evidence references/hashes, result/rationale, exception, authority identity, and timestamp.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Immutable snapshot stores repository_id, control_id, policy hash, classification hash, condition evidence references/hashes, result/rationale, exception, authority identity, and timestamp.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-003-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-003-03",
+      "domain": "C_EFFECTIVE_APPLICABILITY",
+      "question": "When is applicability immutable?",
+      "authority_source": "No onboarding snapshot lifecycle exists.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Snapshot freezes with the assessment plan; policy, classification, evidence, or exception changes require a new run rather than mutation."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Recalculate prior applicability in place."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-003-01",
+        "ONB-003-02",
+        "ONB-002-04"
+      ],
+      "risk_if_unresolved": "Historical run scope drifts.",
+      "controlled_artifacts_likely_affected": [
+        "assessment-plan authority"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Snapshot freezes with the assessment plan; policy, classification, evidence, or exception changes require a new run rather than mutation.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Snapshot freezes with the assessment plan; policy, classification, evidence, or exception changes require a new run rather than mutation.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-003-03",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-004-01",
+      "domain": "D_ASSESSMENT_PLAN",
+      "question": "When does an assessment plan freeze?",
+      "authority_source": "Wave2D has immutable run concepts but no onboarding plan contract.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Freeze before request generation after binding identity, classification hash, EMS/Hayes hashes, applicability, evidence contract, targets, support states, and review requirements."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Allow changes during execution when evidence arrives."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-003-03"
+      ],
+      "risk_if_unresolved": "Run lacks stable authority boundary.",
+      "controlled_artifacts_likely_affected": [
+        "assessment-plan schema",
+        "batch identity"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Freeze before request generation after binding identity, classification hash, EMS/Hayes hashes, applicability, evidence contract, targets, support states, and review requirements.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Freeze before request generation after binding identity, classification hash, EMS/Hayes hashes, applicability, evidence contract, targets, support states, and review requirements.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-004-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-004-02",
+      "domain": "D_ASSESSMENT_PLAN",
+      "question": "How is evidence found after freeze handled?",
+      "authority_source": "Evidence source policy distinguishes operating from definitional/generated evidence.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Attach late evidence as immutable supplement only; material evidence that changes scope/request/result requires a new run."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Modify frozen plan and results in place."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-004-01"
+      ],
+      "risk_if_unresolved": "Post-hoc rewriting of results.",
+      "controlled_artifacts_likely_affected": [
+        "evidence bundle",
+        "assessment-plan procedure"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Attach late evidence as immutable supplement only; material evidence that changes scope/request/result requires a new run.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Attach late evidence as immutable supplement only; material evidence that changes scope/request/result requires a new run.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-004-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-005-01",
+      "domain": "E_LOCAL_EXECUTION",
+      "question": "What is the local-path boundary?",
+      "authority_source": "Assessment invariant: local paths are execution-only; registry is identity authority.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Uncommitted execution-local mapping is keyed by controlled repository_id and never supplies identity, classification, or applicability authority."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Store local paths in controlled repository registry."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-001-02"
+      ],
+      "risk_if_unresolved": "Machine paths become authority.",
+      "controlled_artifacts_likely_affected": [
+        "local override schema",
+        "execution procedure"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Uncommitted execution-local mapping is keyed by controlled repository_id and never supplies identity, classification, or applicability authority.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Uncommitted execution-local mapping is keyed by controlled repository_id and never supplies identity, classification, or applicability authority.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-005-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-005-02",
+      "domain": "E_LOCAL_EXECUTION",
+      "question": "What checkout validation is required?",
+      "authority_source": "No controlled checkout-binding rule exists.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Require path, Git repository, canonical remote match, default branch/reference, commit SHA, and dirty status; missing/mismatch blocks execution."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Require an existing local path only."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-005-01",
+        "ONB-001-02"
+      ],
+      "risk_if_unresolved": "Wrong checkout is assessed.",
+      "controlled_artifacts_likely_affected": [
+        "execution plan",
+        "local override schema"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Require path, Git repository, canonical remote match, default branch/reference, commit SHA, and dirty status; missing/mismatch blocks execution.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Require path, Git repository, canonical remote match, default branch/reference, commit SHA, and dirty status; missing/mismatch blocks execution.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-005-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-005-03",
+      "domain": "E_LOCAL_EXECUTION",
+      "question": "Can dirty worktrees be assessed?",
+      "authority_source": "No onboarding dirty-checkout rule exists.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Clean checkout is required; dirty checkout requires time-bounded exception and non-baseline label."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Dirty checkout is allowed when SHA is captured."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-005-02"
+      ],
+      "risk_if_unresolved": "Uncommitted content is treated as baseline evidence.",
+      "controlled_artifacts_likely_affected": [
+        "exception authority",
+        "execution procedure"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Clean checkout is required; dirty checkout requires time-bounded exception and non-baseline label.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Clean checkout is required; dirty checkout requires time-bounded exception and non-baseline label.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-005-03",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-006-01",
+      "domain": "F_SUPPORT_SEMANTICS",
+      "question": "How do support states affect completeness?",
+      "authority_source": "Hayes registry is implementation authority; NOT_IMPLEMENTED != FAIL and HUMAN_REVIEW != FAIL.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "SUPPORTED_AUTOMATED/HYBRID/HUMAN_EVIDENCE_REQUIRED execute contract; NOT_IMPLEMENTED blocks completeness but is neither FAIL nor NOT_APPLICABLE; APPLICABILITY_UNRESOLVED blocks completeness and cannot PASS."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Treat NOT_IMPLEMENTED and unresolved applicability as FAIL."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-003-01"
+      ],
+      "risk_if_unresolved": "Coverage confused with compliance.",
+      "controlled_artifacts_likely_affected": [
+        "assessment outcome authority",
+        "Hayes handoff"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "SUPPORTED_AUTOMATED/HYBRID/HUMAN_EVIDENCE_REQUIRED execute contract; NOT_IMPLEMENTED blocks completeness but is neither FAIL nor NOT_APPLICABLE; APPLICABILITY_UNRESOLVED blocks completeness and cannot PASS.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "SUPPORTED_AUTOMATED/HYBRID/HUMAN_EVIDENCE_REQUIRED execute contract; NOT_IMPLEMENTED blocks completeness but is neither FAIL nor NOT_APPLICABLE; APPLICABILITY_UNRESOLVED blocks completeness and cannot PASS.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-006-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-006-02",
+      "domain": "F_SUPPORT_SEMANTICS",
+      "question": "What aggregate outcomes are controlled?",
+      "authority_source": "No onboarding aggregate outcome authority exists.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "COMPLETE needs resolved applicability and terminal outcome/NA for every applicable supported assertion with no blocking review; COMPLETE_WITH_FINDINGS permits FAIL/WARNING; PARTIAL covers unsupported/review/insufficient/unresolved; BLOCKED covers identity/plan/execution failure."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Overall PASS when no automated FAIL exists."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-006-01",
+        "ONB-004-01"
+      ],
+      "risk_if_unresolved": "Partial result misrepresented as compliant.",
+      "controlled_artifacts_likely_affected": [
+        "assessment outcome authority",
+        "auditor report"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "COMPLETE needs resolved applicability and terminal outcome/NA for every applicable supported assertion with no blocking review; COMPLETE_WITH_FINDINGS permits FAIL/WARNING; PARTIAL covers unsupported/review/insufficient/unresolved; BLOCKED covers identity/plan/execution failure.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "COMPLETE needs resolved applicability and terminal outcome/NA for every applicable supported assertion with no blocking review; COMPLETE_WITH_FINDINGS permits FAIL/WARNING; PARTIAL covers unsupported/review/insufficient/unresolved; BLOCKED covers identity/plan/execution failure.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-006-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-007-01",
+      "domain": "G_EVIDENCE_RESOLUTION",
+      "question": "What evidence-resolution rule applies?",
+      "authority_source": "Evidence policy classifies source classes; family authorities define source boundaries.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Record source class, authoritative system, collection time, integrity hash/immutable ID, freshness, and provenance; unavailable authority routes to contract HUMAN_REVIEW/INSUFFICIENT; repository evidence never overrides service/organization authority."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Repository evidence substitutes for unavailable service/organization evidence."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-004-01"
+      ],
+      "risk_if_unresolved": "Authority boundaries violated.",
+      "controlled_artifacts_likely_affected": [
+        "evidence authority",
+        "bundle schema",
+        "adjudication"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Record source class, authoritative system, collection time, integrity hash/immutable ID, freshness, and provenance; unavailable authority routes to contract HUMAN_REVIEW/INSUFFICIENT; repository evidence never overrides service/organization authority.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Record source class, authoritative system, collection time, integrity hash/immutable ID, freshness, and provenance; unavailable authority routes to contract HUMAN_REVIEW/INSUFFICIENT; repository evidence never overrides service/organization authority.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-007-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-008-01",
+      "domain": "H_HUMAN_REVIEW",
+      "question": "What is the human-review queue contract?",
+      "authority_source": "Adjudication has HUMAN_REVIEW but no onboarding lifecycle.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Immutable item records run/repository/control/assertion, reason, evidence gap, authority, reviewer authority, action, exception, status and provenance; statuses OPEN, IN_REVIEW, RESOLVED, EXCEPTION_APPROVED, SUPERSEDED."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Unstructured reviewer note without status/provenance."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-004-01",
+        "ONB-007-01"
+      ],
+      "risk_if_unresolved": "Manual decisions cannot be traced.",
+      "controlled_artifacts_likely_affected": [
+        "review queue schema",
+        "adjudication"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Immutable item records run/repository/control/assertion, reason, evidence gap, authority, reviewer authority, action, exception, status and provenance; statuses OPEN, IN_REVIEW, RESOLVED, EXCEPTION_APPROVED, SUPERSEDED.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Immutable item records run/repository/control/assertion, reason, evidence gap, authority, reviewer authority, action, exception, status and provenance; statuses OPEN, IN_REVIEW, RESOLVED, EXCEPTION_APPROVED, SUPERSEDED.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-008-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-008-02",
+      "domain": "H_HUMAN_REVIEW",
+      "question": "What closes a review item?",
+      "authority_source": "No controlled onboarding closure rule.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Closure requires attributable reviewer decision, evidence, rationale, timestamp, and exception/remediation reference; it supplements, never mutates, machine results."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Viewing the item closes it."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-008-01"
+      ],
+      "risk_if_unresolved": "Risk disappears without decision.",
+      "controlled_artifacts_likely_affected": [
+        "review queue",
+        "certification"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Closure requires attributable reviewer decision, evidence, rationale, timestamp, and exception/remediation reference; it supplements, never mutates, machine results.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Closure requires attributable reviewer decision, evidence, rationale, timestamp, and exception/remediation reference; it supplements, never mutates, machine results.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-008-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-009-01",
+      "domain": "I_EVIDENCE_BUNDLE",
+      "question": "What immutable bundle is required?",
+      "authority_source": "Batch manifests/certifications exist but no onboarding bundle contract.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Under generated/onboarding/runs/<RUN-ID>/ retain repository/classification/applicability snapshots, plan, requests/results, review queue, evidence manifest, summary, auditor report, certification; label inputs authoritative snapshots, outputs generated evidence, reports derived, paths local-only."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Retain summary and report only."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-004-01",
+        "ONB-007-01",
+        "ONB-008-01"
+      ],
+      "risk_if_unresolved": "Assessment cannot be audited or replayed.",
+      "controlled_artifacts_likely_affected": [
+        "bundle/certification schema",
+        "retention"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Under generated/onboarding/runs/<RUN-ID>/ retain repository/classification/applicability snapshots, plan, requests/results, review queue, evidence manifest, summary, auditor report, certification; label inputs authoritative snapshots, outputs generated evidence, reports derived, paths local-only.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Under generated/onboarding/runs/<RUN-ID>/ retain repository/classification/applicability snapshots, plan, requests/results, review queue, evidence manifest, summary, auditor report, certification; label inputs authoritative snapshots, outputs generated evidence, reports derived, paths local-only.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-009-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-009-02",
+      "domain": "I_EVIDENCE_BUNDLE",
+      "question": "What does certification prove?",
+      "authority_source": "Evidence policy says derived report cannot independently prove operating effectiveness.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Certification proves run integrity, identity binding, authority hashes, completeness state, and bundle manifest; it does not assert compliance beyond underlying results."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Certification asserts compliance if no automated FAIL exists."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-006-02",
+        "ONB-009-01"
+      ],
+      "risk_if_unresolved": "Certification overstates compliance.",
+      "controlled_artifacts_likely_affected": [
+        "certification schema",
+        "auditor report"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Certification proves run integrity, identity binding, authority hashes, completeness state, and bundle manifest; it does not assert compliance beyond underlying results.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Certification proves run integrity, identity binding, authority hashes, completeness state, and bundle manifest; it does not assert compliance beyond underlying results.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-009-02",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    },
+    {
+      "decision_id": "ONB-010-01",
+      "domain": "K_RETENTION_REASSESSMENT",
+      "question": "What retention and reassessment model applies?",
+      "authority_source": "No onboarding retention/reassessment authority; several existing evidence controls use 3-year retention.",
+      "candidate_values": [
+        {
+          "candidate_id": "CANDIDATE-A",
+          "value": "Retain immutable bundles 3 years unless longer hold; new run for classification/lifecycle/branch/policy/registry/support/evidence/exception/material change; replay reproduces frozen run and review supplements without rewriting."
+        },
+        {
+          "candidate_id": "CANDIDATE-B",
+          "value": "Retain one year and recompute old results in place."
+        }
+      ],
+      "recommended_candidate_id": "CANDIDATE-A",
+      "recommendation_rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review.",
+      "dependencies": [
+        "ONB-009-01",
+        "ONB-009-02"
+      ],
+      "risk_if_unresolved": "Evidence deleted early or history rewritten.",
+      "controlled_artifacts_likely_affected": [
+        "retention/reassessment procedure",
+        "revision history"
+      ],
+      "status": "APPROVED",
+      "decision_status": "APPROVED",
+      "selected_candidate_id": "CANDIDATE-A",
+      "selected_value": "Retain immutable bundles 3 years unless longer hold; new run for classification/lifecycle/branch/policy/registry/support/evidence/exception/material change; replay reproduces frozen run and review supplements without rewriting.",
+      "approval_timestamp": "2026-08-15T16:44:36Z",
+      "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+      "recommendation_at_approval": {
+        "candidate_id": "CANDIDATE-A",
+        "value": "Retain immutable bundles 3 years unless longer hold; new run for classification/lifecycle/branch/policy/registry/support/evidence/exception/material change; replay reproduces frozen run and review supplements without rewriting.",
+        "rationale": "Candidate A preserves immutable evidence, explicit authority, and fail-safe human review."
+      },
+      "approval_traceability": {
+        "decision_id": "ONB-010-01",
+        "selected_candidate_id": "CANDIDATE-A",
+        "candidate_value_exact_match": true,
+        "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES",
+        "dependency_resolution": "DEPENDENT_SELECTED_AFTER_APPROVED_DEPENDENCIES"
+      }
+    }
+  ],
+  "human_approval_recorded_at_utc": "2026-08-15T16:44:36Z",
+  "approval_source": "HUMAN_APPROVAL: APPROVE ALL RECOMMENDED CANDIDATES"
+}

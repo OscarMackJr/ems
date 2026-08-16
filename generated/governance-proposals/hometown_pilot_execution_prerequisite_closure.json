@@ -1,0 +1,247 @@
+{
+  "status": "PARTIALLY_CLOSED_HUMAN_INPUT_REQUIRED",
+  "repository": "hometown",
+  "repository_id": "REPO-003",
+  "created_at_utc": "2026-08-16T12:25:51Z",
+  "classification_confirmation": {
+    "status": "OPEN",
+    "attributes": [
+      {
+        "attribute": "production",
+        "existing_controlled_value": true,
+        "existing_authority": "registry/repository_registry.yaml",
+        "existing_provenance": "controlled registry record; no current attributable human-confirmation record supplied for this pilot",
+        "current_confirmation_status": "OPEN",
+        "allowed_value_domain": "boolean",
+        "human_selected_value": null,
+        "human_approver": null,
+        "confirmation_timestamp": null
+      },
+      {
+        "attribute": "internet_exposed",
+        "existing_controlled_value": true,
+        "existing_authority": "registry/repository_registry.yaml",
+        "existing_provenance": "controlled registry record; no current attributable human-confirmation record supplied for this pilot",
+        "current_confirmation_status": "OPEN",
+        "allowed_value_domain": "boolean",
+        "human_selected_value": null,
+        "human_approver": null,
+        "confirmation_timestamp": null
+      },
+      {
+        "attribute": "contains_customer_data",
+        "existing_controlled_value": true,
+        "existing_authority": "registry/repository_registry.yaml",
+        "existing_provenance": "controlled registry record; no current attributable human-confirmation record supplied for this pilot",
+        "current_confirmation_status": "OPEN",
+        "allowed_value_domain": "boolean",
+        "human_selected_value": null,
+        "human_approver": null,
+        "confirmation_timestamp": null
+      },
+      {
+        "attribute": "ai_enabled",
+        "existing_controlled_value": false,
+        "existing_authority": "registry/repository_registry.yaml",
+        "existing_provenance": "controlled registry record; no current attributable human-confirmation record supplied for this pilot",
+        "current_confirmation_status": "OPEN",
+        "allowed_value_domain": "boolean",
+        "human_selected_value": null,
+        "human_approver": null,
+        "confirmation_timestamp": null
+      },
+      {
+        "attribute": "owner",
+        "existing_controlled_value": "Software Development",
+        "existing_authority": "registry/repository_registry.yaml",
+        "existing_provenance": "controlled registry record; no current attributable human-confirmation record supplied for this pilot",
+        "current_confirmation_status": "OPEN",
+        "allowed_value_domain": "controlled text/list value",
+        "human_selected_value": null,
+        "human_approver": null,
+        "confirmation_timestamp": null
+      },
+      {
+        "attribute": "tier",
+        "existing_controlled_value": "Tier2",
+        "existing_authority": "registry/repository_registry.yaml",
+        "existing_provenance": "controlled registry record; no current attributable human-confirmation record supplied for this pilot",
+        "current_confirmation_status": "OPEN",
+        "allowed_value_domain": "Tier classification",
+        "human_selected_value": null,
+        "human_approver": null,
+        "confirmation_timestamp": null
+      },
+      {
+        "attribute": "service_criticality",
+        "existing_controlled_value": "High",
+        "existing_authority": "registry/repository_registry.yaml",
+        "existing_provenance": "controlled registry record; no current attributable human-confirmation record supplied for this pilot",
+        "current_confirmation_status": "OPEN",
+        "allowed_value_domain": "controlled text/list value",
+        "human_selected_value": null,
+        "human_approver": null,
+        "confirmation_timestamp": null
+      },
+      {
+        "attribute": "data_classification",
+        "existing_controlled_value": [
+          "Confidential"
+        ],
+        "existing_authority": "registry/repository_registry.yaml",
+        "existing_provenance": "controlled registry record; no current attributable human-confirmation record supplied for this pilot",
+        "current_confirmation_status": "OPEN",
+        "allowed_value_domain": "controlled text/list value",
+        "human_selected_value": null,
+        "human_approver": null,
+        "confirmation_timestamp": null
+      }
+    ]
+  },
+  "review_owner": {
+    "status": "OPEN",
+    "named_owner": null
+  },
+  "evidence_access": {
+    "status": "CLOSED",
+    "source_state": "HUMAN_REVIEW_FALLBACK_FOR_ALL_REQUIRED_SOURCES",
+    "closure_basis": "All six source classes have controlled HUMAN_REVIEW fallback, provenance, and three-year retention requirements."
+  },
+  "credential_boundary": {
+    "status": "CLOSED",
+    "credential_classes_required": [],
+    "secret_values_recorded": false,
+    "closure_basis": "Least privilege, read-only where possible, no evidence persistence, revocation/rotation, and controlled HUMAN_REVIEW fallback are published."
+  },
+  "retention_location": {
+    "status": "BLOCKED",
+    "retention_platform": "Egnyte",
+    "retention_logical_location": "TWG/TechAudits",
+    "retention_operational_mapping": "Z:\\Shared\\TWG\\TechAudits",
+    "retention_period": "3 years",
+    "duration_years": 3,
+    "longer_hold_overrides_deletion": true,
+    "retention_owner": "Software Development",
+    "operational_mapping_validation": {
+      "path_exists": false,
+      "path_accessible": false,
+      "pilot_operator": "TWGGLOBAL\\OMack",
+      "temporary_workspace": false
+    },
+    "block_reason": "Configured operational mapping Z:\\Shared\\TWG\\TechAudits does not exist or is inaccessible in the pilot operator environment; no substitute location selected."
+  },
+  "execution_mapping": {
+    "status": "OPEN",
+    "local_path_classification": "LOCAL_EXECUTION_ONLY",
+    "current_git_verification": "VERIFIED",
+    "remote": "github.com/OscarMackJr/hometown",
+    "branch": "main",
+    "head_sha": "ede6d752abe898659bf6965f221affdae5ce2c70",
+    "dirty_state": "CLEAN",
+    "mapping_authorization_recorded": false
+  },
+  "prerequisites": [
+    {
+      "prerequisite_id": "CLASSIFICATION_CONFIRMATION",
+      "prior_status": "OPEN",
+      "current_status": "OPEN",
+      "closure_authority": "Human classification authority",
+      "closure_evidence": null,
+      "closure_actor": null,
+      "closure_timestamp": null,
+      "blocks_execution": true,
+      "notes": "Current attributable human confirmation is absent for all eight material fields.",
+      "required_closure_evidence": "human-selected eight values with attribution/timestamp"
+    },
+    {
+      "prerequisite_id": "NAMED_REVIEW_OWNER",
+      "prior_status": "OPEN",
+      "current_status": "OPEN",
+      "closure_authority": "Human review authority",
+      "closure_evidence": null,
+      "closure_actor": null,
+      "closure_timestamp": null,
+      "blocks_execution": true,
+      "notes": "No named operational review owner or backup was supplied.",
+      "required_closure_evidence": "owner identity, role, authority, effective timestamp"
+    },
+    {
+      "prerequisite_id": "EVIDENCE_ACCESS_ACTIVATION",
+      "prior_status": "OPEN",
+      "current_status": "CLOSED",
+      "closure_authority": "registry/real_repository_onboarding_pilot_authority.json evidence_authority",
+      "closure_evidence": "All six source classes have controlled HUMAN_REVIEW fallback, provenance, and three-year retention requirements.",
+      "closure_actor": "Published Real Repository Onboarding Pilot Authority",
+      "closure_timestamp": "2026-08-16T11:43:13Z",
+      "blocks_execution": true,
+      "notes": "Closed from existing published authority; no pilot execution authorized.",
+      "required_closure_evidence": "approved usable access or approved HUMAN_REVIEW fallback per required source"
+    },
+    {
+      "prerequisite_id": "CREDENTIAL_BOUNDARY_ACTIVATION",
+      "prior_status": "OPEN",
+      "current_status": "CLOSED",
+      "closure_authority": "registry/real_repository_onboarding_pilot_authority.json credential_boundary and evidence_authority",
+      "closure_evidence": "Least privilege, read-only where possible, no evidence persistence, revocation/rotation, and controlled HUMAN_REVIEW fallback are published.",
+      "closure_actor": "Published Real Repository Onboarding Pilot Authority",
+      "closure_timestamp": "2026-08-16T11:43:13Z",
+      "blocks_execution": true,
+      "notes": "Closed from existing published authority; no pilot execution authorized.",
+      "required_closure_evidence": "least-privilege mechanism or explicit credential-not-required record"
+    },
+    {
+      "prerequisite_id": "RETENTION_LOCATION",
+      "prior_status": "OPEN",
+      "current_status": "BLOCKED",
+      "closure_authority": "Egnyte / TWG / TechAudits controlled retention authority",
+      "closure_evidence": null,
+      "closure_actor": null,
+      "closure_timestamp": null,
+      "blocks_execution": true,
+      "notes": "Configured operational mapping Z:\\Shared\\TWG\\TechAudits does not exist or is inaccessible in the pilot operator environment; no substitute location selected.",
+      "required_closure_evidence": "storage authority, logical location, hold/integrity/access/deletion details"
+    },
+    {
+      "prerequisite_id": "EXECUTION_MAPPING_AUTHORIZATION",
+      "prior_status": "OPEN",
+      "current_status": "OPEN",
+      "closure_authority": "Execution access authority",
+      "closure_evidence": null,
+      "closure_actor": null,
+      "closure_timestamp": null,
+      "blocks_execution": true,
+      "notes": "Checkout technically verifies, but no attributable mapping/operator authorization was supplied.",
+      "required_closure_evidence": "approved operator, LOCAL_EXECUTION_ONLY mapping, ref/dirty policy"
+    }
+  ],
+  "blocking_total": 6,
+  "blocking_closed": 2,
+  "blocking_open": 3,
+  "blocking_blocked": 1,
+  "execution_prerequisites_complete": false,
+  "ready_for_separate_execution_authorization_gate": false,
+  "pilot_execution_authorized": false,
+  "production_authorized": false,
+  "negative_invariants": {
+    "PREREQUISITE_CLOSURE_NE_PILOT_EXECUTION": "PASS",
+    "PILOT_EXECUTION_AUTHORIZED_FALSE": "PASS",
+    "PRODUCTION_AUTHORIZED_FALSE": "PASS",
+    "HOMETOWN_EQ_REPO_003": "PASS",
+    "NEW_REPO_ID_ALLOCATED_FALSE": "PASS",
+    "UNKNOWN_NE_FALSE": "PASS",
+    "EXISTING_CLASSIFICATION_NE_CURRENT_HUMAN_CONFIRMATION": "PASS",
+    "GITHUB_OWNER_NE_REVIEW_OWNER": "PASS",
+    "LOCAL_PATH_NE_CONTROLLED_IDENTITY": "PASS",
+    "LOCAL_PATH_NE_RETENTION_AUTHORITY": "PASS",
+    "TECHNICALLY_AVAILABLE_NE_APPROVED_ACCESS": "PASS",
+    "APPROVED_PROCESS_NE_ACTIVATED_ACCESS": "PASS",
+    "CREDENTIAL_MODEL_NE_SECRET_VALUE": "PASS",
+    "REPOSITORY_EVIDENCE_NE_SERVICE_AUTHORITY": "PASS",
+    "REPOSITORY_EVIDENCE_NE_ORGANIZATION_AUTHORITY": "PASS",
+    "REVIEW_RESOLUTION_NE_MACHINE_RESULT_MUTATION": "PASS",
+    "PREREQUISITES_COMPLETE_NE_COMPLIANCE_PASS": "PASS",
+    "PILOT_READY_NE_PRODUCTION_READY": "PASS"
+  },
+  "historical_freeze_sha256_before": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+  "historical_freeze_sha256_after": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35"
+}

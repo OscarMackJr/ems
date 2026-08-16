@@ -1,0 +1,16 @@
+{
+  "publication_version": "1.0",
+  "published_at_utc": "2026-08-16T03:10:10.214989Z",
+  "repository": "hometown",
+  "repository_id": "REPO-003",
+  "decision_register_sha256": "6e681e583b0a4b019adb6849ef086d030860ac988f037bdd9509c97f8300bdc9",
+  "closure_certification_sha256": "95824060e4f3110622feb356d6a04f035716ad7cd49d1a20b81399e28efec06c",
+  "historical_freeze_sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+  "controlled_artifacts_created": [
+    "registry/real_repository_onboarding_pilot_authority.json",
+    "registry/real_repository_onboarding_pilot_execution_prerequisites.json",
+    "registry/real_repository_onboarding_pilot_traceability.json"
+  ],
+  "execution_authorized": false,
+  "production_authorized": false
+}

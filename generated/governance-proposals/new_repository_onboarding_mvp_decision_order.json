@@ -1,0 +1,281 @@
+{
+  "artifact_type": "Acyclic human-selection dependency order",
+  "generated_at_utc": "2026-08-15T16:29:25Z",
+  "root_decision_count": 1,
+  "dependent_decision_count": 23,
+  "decisions": [
+    {
+      "decision_id": "ONB-001-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "A_REPOSITORY_IDENTITY",
+      "dependency_depth": 0,
+      "depends_on": [],
+      "selection_order": 1,
+      "selection_class": "ROOT"
+    },
+    {
+      "decision_id": "ONB-001-02",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "A_REPOSITORY_IDENTITY",
+      "dependency_depth": 1,
+      "depends_on": [
+        "ONB-001-01"
+      ],
+      "selection_order": 2,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-001-04",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "A_REPOSITORY_IDENTITY",
+      "dependency_depth": 1,
+      "depends_on": [
+        "ONB-001-01"
+      ],
+      "selection_order": 3,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-001-03",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "A_REPOSITORY_IDENTITY",
+      "dependency_depth": 2,
+      "depends_on": [
+        "ONB-001-01",
+        "ONB-001-04"
+      ],
+      "selection_order": 4,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-002-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "B_CLASSIFICATION",
+      "dependency_depth": 2,
+      "depends_on": [
+        "ONB-001-04"
+      ],
+      "selection_order": 5,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-005-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "E_LOCAL_EXECUTION",
+      "dependency_depth": 2,
+      "depends_on": [
+        "ONB-001-02"
+      ],
+      "selection_order": 6,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-002-02",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "B_CLASSIFICATION",
+      "dependency_depth": 3,
+      "depends_on": [
+        "ONB-002-01"
+      ],
+      "selection_order": 7,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-002-04",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "B_CLASSIFICATION",
+      "dependency_depth": 3,
+      "depends_on": [
+        "ONB-002-01"
+      ],
+      "selection_order": 8,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-005-02",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "E_LOCAL_EXECUTION",
+      "dependency_depth": 3,
+      "depends_on": [
+        "ONB-005-01",
+        "ONB-001-02"
+      ],
+      "selection_order": 9,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-002-03",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "B_CLASSIFICATION",
+      "dependency_depth": 4,
+      "depends_on": [
+        "ONB-002-02"
+      ],
+      "selection_order": 10,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-005-03",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "E_LOCAL_EXECUTION",
+      "dependency_depth": 4,
+      "depends_on": [
+        "ONB-005-02"
+      ],
+      "selection_order": 11,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-003-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "C_EFFECTIVE_APPLICABILITY",
+      "dependency_depth": 5,
+      "depends_on": [
+        "ONB-002-02",
+        "ONB-002-03"
+      ],
+      "selection_order": 12,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-003-02",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "C_EFFECTIVE_APPLICABILITY",
+      "dependency_depth": 6,
+      "depends_on": [
+        "ONB-003-01"
+      ],
+      "selection_order": 13,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-006-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "F_SUPPORT_SEMANTICS",
+      "dependency_depth": 6,
+      "depends_on": [
+        "ONB-003-01"
+      ],
+      "selection_order": 14,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-003-03",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "C_EFFECTIVE_APPLICABILITY",
+      "dependency_depth": 7,
+      "depends_on": [
+        "ONB-003-01",
+        "ONB-003-02",
+        "ONB-002-04"
+      ],
+      "selection_order": 15,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-004-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "D_ASSESSMENT_PLAN",
+      "dependency_depth": 8,
+      "depends_on": [
+        "ONB-003-03"
+      ],
+      "selection_order": 16,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-004-02",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "D_ASSESSMENT_PLAN",
+      "dependency_depth": 9,
+      "depends_on": [
+        "ONB-004-01"
+      ],
+      "selection_order": 17,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-006-02",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "F_SUPPORT_SEMANTICS",
+      "dependency_depth": 9,
+      "depends_on": [
+        "ONB-006-01",
+        "ONB-004-01"
+      ],
+      "selection_order": 18,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-007-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "G_EVIDENCE_RESOLUTION",
+      "dependency_depth": 9,
+      "depends_on": [
+        "ONB-004-01"
+      ],
+      "selection_order": 19,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-008-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "H_HUMAN_REVIEW",
+      "dependency_depth": 10,
+      "depends_on": [
+        "ONB-004-01",
+        "ONB-007-01"
+      ],
+      "selection_order": 20,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-008-02",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "H_HUMAN_REVIEW",
+      "dependency_depth": 11,
+      "depends_on": [
+        "ONB-008-01"
+      ],
+      "selection_order": 21,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-009-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "I_EVIDENCE_BUNDLE",
+      "dependency_depth": 11,
+      "depends_on": [
+        "ONB-004-01",
+        "ONB-007-01",
+        "ONB-008-01"
+      ],
+      "selection_order": 22,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-009-02",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "I_EVIDENCE_BUNDLE",
+      "dependency_depth": 12,
+      "depends_on": [
+        "ONB-006-02",
+        "ONB-009-01"
+      ],
+      "selection_order": 23,
+      "selection_class": "DEPENDENT"
+    },
+    {
+      "decision_id": "ONB-010-01",
+      "control_id": "ONBOARDING_MVP",
+      "domain": "K_RETENTION_REASSESSMENT",
+      "dependency_depth": 13,
+      "depends_on": [
+        "ONB-009-01",
+        "ONB-009-02"
+      ],
+      "selection_order": 24,
+      "selection_class": "DEPENDENT"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "total_decisions": 24,
+  "approved_decisions": 24,
+  "unresolved_decisions": 0,
+  "classification_authority_approved": true,
+  "hometown_material_classification_values_recorded": false,
+  "hometown_material_classification_values_required_before_execution": true,
+  "semantic_checks": {
+    "hometown_equals_repo_003": true,
+    "hayes_allocates_repository_id_false": true,
+    "new_repository_id_allocated_false": true,
+    "unknown_not_false": true,
+    "local_path_not_controlled_identity": true,
+    "repository_rename_not_new_id": true,
+    "repository_evidence_not_service_authority": true,
+    "repository_evidence_not_organization_authority": true,
+    "credentials_least_privilege_not_persisted": true,
+    "human_review_not_machine_mutation": true,
+    "three_year_retention_or_longer_hold": true,
+    "pilot_success_not_all_controls_pass": true,
+    "not_implemented_not_fail": true,
+    "partial_not_fail": true,
+    "blocked_not_fail": true,
+    "pilot_certification_not_compliance_attestation": true,
+    "real_pilot_not_production_authorization": true,
+    "pilot_success_not_production_readiness": true,
+    "historical_freeze_immutable": true
+  },
+  "errors": [],
+  "historical_freeze_sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35"
+}

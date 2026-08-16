@@ -1,0 +1,31 @@
+{
+  "repository": "hometown",
+  "repository_id": "REPO-003",
+  "canonical_git_identity": "github.com/OscarMackJr/hometown",
+  "authority_path": "registry/real_repository_onboarding_pilot_authority.json",
+  "authority_sha256": "595502dca4db906981867cc4c2dc417d49a072b3fd916599e9b14f86441687e5",
+  "traceability_path": "registry/real_repository_onboarding_pilot_traceability.json",
+  "traceability_sha256": "7e5f345d539eec15d57b606057cfa794300ad91e5900b33113863869d1a8c363",
+  "publication_certification_path": "registry/real_repository_onboarding_pilot_publication_certification.json",
+  "publication_certification_sha256": "7117352de42d69c3a8ccd377f383b6a253ff8715812ad5b9d9799e02020c7bd9",
+  "execution_prerequisites_path": "registry/real_repository_onboarding_pilot_execution_prerequisites.json",
+  "pilot_execution_authorized": false,
+  "production_authorized": false,
+  "classification_values_requiring_human_confirmation": [
+    "production",
+    "internet_exposed",
+    "contains_customer_data",
+    "ai_enabled",
+    "owner",
+    "tier",
+    "service_criticality",
+    "data_classification"
+  ],
+  "operational_review_owner": "UNASSIGNED",
+  "activation_requirements": [
+    "evidence access",
+    "credential boundary",
+    "retention location",
+    "execution mapping"
+  ]
+}
