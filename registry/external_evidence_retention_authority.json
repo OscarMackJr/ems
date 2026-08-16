@@ -1,0 +1,39 @@
+{
+  "authority_id": "EXTERNAL-EVIDENCE-RETENTION-AUTHORITY-V1",
+  "authority_scope": "EXTERNAL_REVIEW_SYNTHETIC_EVIDENCE_RETENTION_ONLY",
+  "governance_reconciliation": "TERMINOLOGY_CLARIFICATION",
+  "clarification": "The former retention_owner value Software Development identifies the evidence-producing and business-owning function. It does not identify the storage authority for Egnyte / TWG/TechAudits.",
+  "roles": {
+    "evidence_producer": "Software Development",
+    "evidence_business_owner": "Software Development",
+    "retention_policy_authority": "OPEN",
+    "storage_platform": "Egnyte",
+    "storage_logical_authority": "TWG/TechAudits",
+    "storage_authority": "CSO",
+    "storage_administrator": "OPEN",
+    "retention_hold_authority": "OPEN",
+    "deletion_authority": "OPEN"
+  },
+  "retention": {
+    "period": "3 years",
+    "longer_hold_overrides_deletion": true,
+    "write_authorization_required": true,
+    "current_operational_access_state": "BLOCKED / INACCESSIBLE",
+    "non_authoritative_operational_mapping": "Z:\\\\Shared\\\\TWG\\\\TechAudits"
+  },
+  "negative_invariants": {
+    "EVIDENCE_PRODUCER_NE_STORAGE_AUTHORITY": "PASS",
+    "SOFTWARE_DEVELOPMENT_NE_CSO": "PASS",
+    "LOCAL_DRIVE_MAPPING_NE_RETENTION_AUTHORITY": "PASS",
+    "GITHUB_NE_FINAL_EVIDENCE_RETENTION_STORE": "PASS",
+    "RETENTION_WRITE_REQUIRES_AUTHORIZATION": true,
+    "CSO_CONTROLLED_LOCATION_NE_ENGINEERING_SELF_AUTHORIZATION": "PASS"
+  },
+  "write_gate": {
+    "approved_logical_location": "Egnyte / TWG/TechAudits",
+    "operator_write_access": "UNVERIFIED",
+    "destination_exists_or_creation_approved": "UNVERIFIED",
+    "hold_deletion_semantics": "OPEN",
+    "retention_write_authorized": false
+  }
+}

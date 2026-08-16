@@ -1,0 +1,16 @@
+{
+  "component": "EMS External Review P3",
+  "status": "BLOCKED",
+  "certification_scope": "EXTERNAL_EVIDENCE_RETENTION_ONLY",
+  "external_evidence_package_ready": true,
+  "external_evidence_retained": false,
+  "retention_write_authorized": false,
+  "artifact_count": 52,
+  "manifest_path": "generated/external-review/p3/external_evidence_retention_manifest.json",
+  "manifest_sha256": "d096b3919d7eefb0c5687d6912120724cd0dfba0f8f37ae29d2ef4fb0c5b58db",
+  "approved_logical_authority": "Egnyte / TWG/TechAudits",
+  "storage_authority": "CSO",
+  "operational_access_state": "BLOCKED / INACCESSIBLE",
+  "unresolved_action": "CSO must confirm authorized write access and an approved operational access mechanism for Egnyte / TWG/TechAudits; hold/deletion authority must also be recorded.",
+  "errors": []
+}
