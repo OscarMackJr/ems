@@ -1,0 +1,22 @@
+{
+  "component": "P2 External Review",
+  "reviewer_reconstruction_ready": "YES",
+  "questions": {
+    "A": "EMS P1A authority artifacts are mapped by SHA to every WS record.",
+    "B": "Each WS record maps to a Hayes module and publication SHA.",
+    "C": "Each WS record maps schemas and tests.",
+    "D": "Synthetic evidence index binds runs to Hayes review head and P0 hashes.",
+    "E": "Supersession map records Linux CI hard-coded-path discovery and portable correction.",
+    "F": "P0 V1/V2/V3 and amendment hashes are complete.",
+    "G": "External evidence index states raw execution evidence is external/hash-referenced only.",
+    "H": "Published pilot prerequisites explain Hometown is blocked and execution unauthorized.",
+    "I": "Open-gap register lists remaining review/operating gates."
+  },
+  "missing_linkage": [],
+  "validation_inputs": [
+    "EMS review branch/PR",
+    "Hayes review branch/PR",
+    "P2 package",
+    "external evidence index and P0 hashes"
+  ]
+}

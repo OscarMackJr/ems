@@ -1,0 +1,194 @@
+{
+  "component": "P2 External Review",
+  "generated_at_utc": "2026-08-16T15:44:59.497220Z",
+  "records": [
+    {
+      "workstream": "WS1",
+      "purpose": "Repository identity",
+      "ems_governing_authority": "registry/new_repository_onboarding_identity_authority.json",
+      "hayes_module": "src/hayes_verify/onboarding_identity.py",
+      "schemas": [
+        "schemas/repository_snapshot.schema.json"
+      ],
+      "tests": [
+        "tests/test_onboarding_identity.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    },
+    {
+      "workstream": "WS2",
+      "purpose": "Classification snapshot",
+      "ems_governing_authority": "registry/new_repository_onboarding_classification_authority.json",
+      "hayes_module": "src/hayes_verify/onboarding_classification.py",
+      "schemas": [
+        "schemas/classification_snapshot.schema.json"
+      ],
+      "tests": [
+        "tests/test_onboarding_classification.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    },
+    {
+      "workstream": "WS3",
+      "purpose": "Effective applicability",
+      "ems_governing_authority": "registry/new_repository_onboarding_effective_applicability.json",
+      "hayes_module": "src/hayes_verify/onboarding_applicability.py",
+      "schemas": [
+        "schemas/effective_applicability_snapshot.schema.json"
+      ],
+      "tests": [
+        "tests/test_onboarding_applicability.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    },
+    {
+      "workstream": "WS4",
+      "purpose": "Frozen assessment plan",
+      "ems_governing_authority": "registry/new_repository_onboarding_assessment_plan_authority.json",
+      "hayes_module": "src/hayes_verify/onboarding_plan.py",
+      "schemas": [
+        "schemas/assessment_plan.schema.json"
+      ],
+      "tests": [
+        "tests/test_onboarding_plan.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    },
+    {
+      "workstream": "WS5",
+      "purpose": "Evidence and request composition",
+      "ems_governing_authority": "registry/new_repository_onboarding_execution_composition_authority.json",
+      "hayes_module": "src/hayes_verify/onboarding_execution.py",
+      "schemas": [
+        "schemas/evidence_resolution.schema.json",
+        "schemas/request_composition_manifest.schema.json"
+      ],
+      "tests": [
+        "tests/test_onboarding_execution.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    },
+    {
+      "workstream": "WS6",
+      "purpose": "Checkout verification",
+      "ems_governing_authority": "registry/new_repository_onboarding_requirements.json",
+      "hayes_module": "src/hayes_verify/onboarding_checkout.py",
+      "schemas": [
+        "schemas/checkout_verification.schema.json",
+        "schemas/execution_readiness_manifest.schema.json"
+      ],
+      "tests": [
+        "tests/test_onboarding_checkout.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    },
+    {
+      "workstream": "WS7",
+      "purpose": "Human review queue/history",
+      "ems_governing_authority": "registry/new_repository_onboarding_human_review_authority.json",
+      "hayes_module": "src/hayes_verify/onboarding_review.py",
+      "schemas": [],
+      "tests": [
+        "tests/test_onboarding_review.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    },
+    {
+      "workstream": "WS8",
+      "purpose": "Assessment outcome/completeness",
+      "ems_governing_authority": "registry/new_repository_onboarding_outcome_authority.json",
+      "hayes_module": "src/hayes_verify/onboarding_summary.py",
+      "schemas": [],
+      "tests": [
+        "tests/test_onboarding_summary.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    },
+    {
+      "workstream": "WS9",
+      "purpose": "Evidence bundle/certification",
+      "ems_governing_authority": "registry/new_repository_onboarding_bundle_certification_authority.json",
+      "hayes_module": "src/hayes_verify/onboarding_bundle.py",
+      "schemas": [],
+      "tests": [
+        "tests/test_onboarding_bundle.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    },
+    {
+      "workstream": "WS10",
+      "purpose": "Reassessment/change detection",
+      "ems_governing_authority": "registry/new_repository_onboarding_reassessment_retention_authority.json",
+      "hayes_module": "src/hayes_verify/onboarding_reassessment.py",
+      "schemas": [],
+      "tests": [
+        "tests/test_onboarding_reassessment.py"
+      ],
+      "publication_status": "DRAFT_REVIEW_BRANCH",
+      "external_evidence": "HASH_INDEXED_EXTERNAL_SYNTHETIC_EVIDENCE",
+      "known_limitation": "No compliance or production attestation; raw external evidence not published.",
+      "review_conclusion": "MAPPED"
+    }
+  ],
+  "orchestrator": {
+    "traceability_id": "P2-ORCHESTRATOR",
+    "review_topic": "new_repository_onboarding",
+    "ems_authority_artifact": "registry/new_repository_onboarding_requirements.json",
+    "ems_authority_sha256": "265e1afc351ef7be3ad5c6c6ccd83764d947e25a0afe2dfbab2773eebb57cbbc",
+    "hayes_module": "src/hayes_verify/onboarding_orchestrator.py",
+    "hayes_schema": [
+      {
+        "path": "schemas/onboarding_orchestration_manifest.schema.json",
+        "sha256": "52387fa0667942267b9b6ccdb7853fd7c7bfe9ede1a41e0a4d1703b22b72caec"
+      }
+    ],
+    "hayes_tests": [
+      {
+        "path": "tests/test_onboarding_orchestrator.py",
+        "sha256": "863185005759b98e37382abe59b36316f9d7771d17f07e564fe42ba767881e05"
+      }
+    ],
+    "hayes_publication_commit": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+    "hayes_publication_artifact_sha256": "8b5af3fbef34625a1e97e409ad931e4eee81357a38dbd4befa80a2b3895c5b65",
+    "authority_resolution_model": {
+      "api": "AuthoritySource(root, source_identity, source_class)",
+      "root": "execution-local; not persisted",
+      "persisted_provenance": [
+        "source_identity",
+        "source_class",
+        "requirements_sha256",
+        "certification_sha256"
+      ],
+      "boundary": "Hayes consumes EMS authority; it does not define EMS policy."
+    },
+    "current_state": "CURRENT_P0_V3_PORTABILITY_CORRECTION",
+    "review_notes": "Replaced hard-coded Windows authority location after GitHub Linux CI detected machine coupling."
+  }
+}

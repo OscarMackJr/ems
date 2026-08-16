@@ -1,0 +1,80 @@
+{
+  "component": "P2 External Review",
+  "generated_at_utc": "2026-08-16T15:44:59.497220Z",
+  "gaps": [
+    {
+      "gap_id": "P2-GAP-01",
+      "title": "External evidence retention operational access",
+      "state": "OPEN/BLOCKED",
+      "category": "OPERATING_BLOCKER",
+      "authority": "Published retention authority: Egnyte / TWG / TechAudits",
+      "details": {
+        "logical_authority": "TWG/TechAudits",
+        "operational_mapping": "Z:\\Shared\\TWG\\TechAudits",
+        "published_retention_owner": "Software Development",
+        "source_boundary_note": "Prompt calls this CSO-controlled, but published EMS prerequisite names Software Development as retention owner; no P2 policy inference is made."
+      }
+    },
+    {
+      "gap_id": "P2-GAP-02",
+      "title": "EMS review PR not merged",
+      "state": "OPEN",
+      "category": "REVIEW_BLOCKER",
+      "authority": "EMS reviewers",
+      "details": {
+        "pr": 11
+      }
+    },
+    {
+      "gap_id": "P2-GAP-03",
+      "title": "Hayes review PR not merged",
+      "state": "OPEN",
+      "category": "REVIEW_BLOCKER",
+      "authority": "Hayes reviewers",
+      "details": {
+        "pr": 11
+      }
+    },
+    {
+      "gap_id": "P2-GAP-04",
+      "title": "External evidence package not retained in approved store",
+      "state": "OPEN",
+      "category": "RELEASE_BLOCKER",
+      "authority": "Retention Authority",
+      "details": {}
+    },
+    {
+      "gap_id": "P2-GAP-05",
+      "title": "Final external-review baseline certification not issued",
+      "state": "OPEN",
+      "category": "REVIEW_BLOCKER",
+      "authority": "External review governance",
+      "details": {}
+    },
+    {
+      "gap_id": "P2-GAP-06",
+      "title": "Hometown pilot execution intentionally not authorized",
+      "state": "INTENTIONAL",
+      "category": "INTENTIONAL_CONTROL_STATE",
+      "authority": "Published pilot authority",
+      "details": {
+        "repository": "hometown",
+        "controlled_id": "REPO-003",
+        "execution_authorized": false,
+        "production_authorized": false
+      }
+    },
+    {
+      "gap_id": "P2-GAP-07",
+      "title": "Retention authority-owner wording requires governance reconciliation",
+      "state": "OPEN",
+      "category": "REVIEW_BLOCKER",
+      "authority": "EMS governance",
+      "details": {
+        "published_value": "Software Development",
+        "requested_boundary": "CSO-controlled",
+        "reason": "P2 cannot replace or reinterpret published authority."
+      }
+    }
+  ]
+}
