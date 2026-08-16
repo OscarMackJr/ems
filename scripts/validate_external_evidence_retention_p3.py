@@ -4,11 +4,17 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def tracked_raw_sha256(root: Path, relative: Path) -> str:
+    result = subprocess.run(["git", "-C", str(root), "show", f"HEAD:{relative.as_posix()}"], check=True, stdout=subprocess.PIPE)
+    return hashlib.sha256(result.stdout).hexdigest()
 
 
 def main() -> None:
@@ -34,9 +40,9 @@ def main() -> None:
         errors.append("storage authority is not CSO")
     if authority["roles"]["evidence_producer"] == authority["roles"]["storage_authority"]:
         errors.append("evidence producer equals storage authority")
-    if digest(p2_cert) != "7b4b9c6694b6620e68c0466616b2cacfab8e1f7a03298286e188a82ac055b8e1":
+    if tracked_raw_sha256(root, p2_cert.relative_to(root)) != "7b4b9c6694b6620e68c0466616b2cacfab8e1f7a03298286e188a82ac055b8e1":
         errors.append("P2 certification SHA mismatch")
-    if digest(p2_index) != "81985ce1e821b098f696962468d30185434daa2a4267fc6feaabc824901585f9":
+    if tracked_raw_sha256(root, p2_index.relative_to(root)) != "81985ce1e821b098f696962468d30185434daa2a4267fc6feaabc824901585f9":
         errors.append("P2 evidence index SHA mismatch")
     if digest(freeze) != "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35":
         errors.append("historical Wave 2D freeze SHA mismatch")
@@ -59,8 +65,8 @@ def main() -> None:
             "retention_blocker_sha256": digest(blocker_path),
             "retention_authority": str(authority_path.relative_to(root)).replace("\\", "/"),
             "retention_authority_sha256": digest(authority_path),
-            "p2_certification_sha256": digest(p2_cert),
-            "p2_evidence_index_sha256": digest(p2_index),
+            "p2_certification_sha256": tracked_raw_sha256(root, p2_cert.relative_to(root)),
+            "p2_evidence_index_sha256": tracked_raw_sha256(root, p2_index.relative_to(root)),
             "historical_freeze_sha256": digest(freeze),
         },
         "errors": errors,

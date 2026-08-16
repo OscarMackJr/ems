@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 EXPECTED_COUNT = 52
@@ -20,6 +21,11 @@ def sha256(path: Path) -> str:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def tracked_raw_sha256(root: Path, relative: Path) -> str:
+    result = subprocess.run(["git", "-C", str(root), "show", f"HEAD:{relative.as_posix()}"], check=True, stdout=subprocess.PIPE)
+    return hashlib.sha256(result.stdout).hexdigest()
 
 
 def main() -> None:
@@ -72,7 +78,7 @@ def main() -> None:
         "phase": "External Evidence Retention Finalization",
         "manifest_state": "STAGING_ONLY_PACKAGE_READY" if not errors else "VALIDATION_FAILED",
         "source_p2_evidence_index": "generated/external-review/p2/external_review_external_evidence_index.json",
-        "source_p2_evidence_index_sha256": sha256(p2),
+        "source_p2_evidence_index_sha256": tracked_raw_sha256(root, p2.relative_to(root)),
         "external_evidence_artifact_count": len(artifacts),
         "final_retention_authority": "Egnyte / TWG/TechAudits",
         "operational_mapping": "NOT_AUTHORITATIVE; BLOCKED / INACCESSIBLE",
