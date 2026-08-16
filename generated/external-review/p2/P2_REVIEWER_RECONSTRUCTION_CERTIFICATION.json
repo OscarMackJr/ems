@@ -1,0 +1,90 @@
+{
+  "component": "P2 External Review",
+  "phase": "Cross-Repository Reviewer Reconstruction and Traceability",
+  "certified_at_utc": "2026-08-16T15:44:59.497220Z",
+  "status": "PASS",
+  "certification_scope": "EXTERNAL_REVIEW_RECONSTRUCTION_AND_TRACEABILITY_ONLY",
+  "ems_review_state": {
+    "repository": "OscarMackJr/ems",
+    "baseline_sha": "53234bbb9546ad37a691b67a2b509951512a79fc",
+    "branch": "feature/external-review-ems-authority-publication",
+    "head": "8be1c89e071209f5b5110d75a96d5aeffdebf5a9",
+    "draft_pr": 11,
+    "publication_certification_sha256": "01ac832e2d8785150271b54fd79f7ca42f28c83541bf40108d27fb2d72001276",
+    "publication_manifest_sha256": "f0f512052609ef7c3731bd0532fa1e5338769aa73d7b9e3bd2a3cbe67b0d7253",
+    "ci_state": "PASS"
+  },
+  "hayes_review_state": {
+    "repository": "OscarMackJr/hayes-verify",
+    "baseline_sha": "cbe7bb4734efea226df1009fc82a005e67fcfdcd",
+    "branch": "feature/external-review-hayes-onboarding-publication",
+    "head": "b3b83a8743d0e509dbc055ed394edad4ecfcf881",
+    "draft_pr": 11,
+    "publication_certification_sha256": "43b4e1def577d7604ca4b049ab676db85a5c6a8d1c3469b1a9e79db1e985f2a2",
+    "publication_manifest_sha256": "7f64fd1808218a41ba4da5aa5c3d3f2a91ef415df4517c9b83a509025909c96c",
+    "ci_state": "PASS"
+  },
+  "p0_lineage": [
+    {
+      "artifact": "P0 V1",
+      "sha256": "afaf4290dc80836b2ddeddcdb6d8b305184748d1cddaf258972fa5837f805d1c",
+      "scope": "P0 preservation",
+      "state": "HISTORICAL_PRESERVED"
+    },
+    {
+      "artifact": "Schema amendment",
+      "sha256": "8a2bb465d462f7633f91f11214fa078b8d253ee11d3fa12f77164e3705bec26a",
+      "scope": "P0 dependency amendment",
+      "state": "HISTORICAL_PRESERVED"
+    },
+    {
+      "artifact": "P0 V2",
+      "sha256": "eafcf6ec9382177a7140564fc2b42a8547ac9cc2adab668a6707ab4f415536bc",
+      "scope": "P0 re-certification",
+      "state": "HISTORICAL_PRESERVED"
+    },
+    {
+      "artifact": "Portability amendment",
+      "sha256": "de341aae932073b053b7de017091ccf0d2df81ca17a8a46200a900e14c043031",
+      "scope": "P0 portable resolver correction",
+      "state": "CURRENT_CORRECTION_INPUT"
+    },
+    {
+      "artifact": "P0 V3",
+      "sha256": "80db9388c31f9695903fccd35c0da7938f78b6b2c818640c673b692763200d45",
+      "scope": "P0 corrected preservation certification",
+      "state": "CURRENT_PRESERVATION_CERTIFICATION"
+    }
+  ],
+  "cross_repo_matrix_sha256": "312f7f5a5a4819fefdf3cca19c5755a929978a60ec5d08d02a65768a883f9a66",
+  "ws_matrix_sha256": "1c52853d970b91e290b9632a11e37ef965ab7f22951957a0adb8b3195ade5ee7",
+  "version_hash_map_sha256": "0e7aeeb5205b0d7971d4e6ee4f7f78f38241600ecbf82d7699f6d43443f1a638",
+  "external_evidence_index_sha256": "81985ce1e821b098f696962468d30185434daa2a4267fc6feaabc824901585f9",
+  "supersession_map_sha256": "eda246d4dcec9a00c1e7323f24458c38bff1ef1fe2dc4afcf83f6fb3e3318a6c",
+  "open_gap_register_sha256": "1d254842759116cbd286e665e8852b45fe188308884b318c64dafa06050617e7",
+  "reconstruction_test_sha256": "bdf0b2ea82d05c07fa9d76473fdb0d3ae51e9f3e2043d0d34e50b4fb67356248",
+  "reviewer_reconstruction_ready": "YES",
+  "not_attested": [
+    "compliance",
+    "production readiness",
+    "external evidence retention closure",
+    "hometown pilot authorization",
+    "final external-review approval"
+  ],
+  "negative_invariants": {
+    "EMS_POLICY_NE_HAYES_IMPLEMENTATION": "PASS",
+    "HAYES_IMPLEMENTATION_NE_EXECUTION_EVIDENCE": "PASS",
+    "GITHUB_SOURCE_NE_EXTERNAL_EVIDENCE_STORE": "PASS",
+    "P2_DOCUMENTATION_NE_COMPLIANCE_CERTIFICATION": "PASS",
+    "SYNTHETIC_EVIDENCE_NE_PRODUCTION_EVIDENCE": "PASS",
+    "TEST_FIXTURE_NE_EMS_CONTROLLED_AUTHORITY": "PASS",
+    "LOCAL_AUTHORITY_ROOT_NE_PERSISTED_IDENTITY": "PASS",
+    "DRAFT_PR_NE_MERGED_AUTHORITY": "PASS",
+    "PILOT_EXECUTION_AUTHORIZED": false,
+    "PRODUCTION_AUTHORIZED": false,
+    "EMS_SOURCE_SEMANTIC_CHANGES": 0,
+    "HAYES_SOURCE_SEMANTIC_CHANGES": 0,
+    "HOMETOWN_EVALUATOR_EXECUTIONS": 0
+  },
+  "errors": []
+}

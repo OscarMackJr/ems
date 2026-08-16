@@ -1,0 +1,77 @@
+{
+  "component": "P2 External Review",
+  "chain": [
+    {
+      "version": "P0 V1",
+      "sha256": "afaf4290dc80836b2ddeddcdb6d8b305184748d1cddaf258972fa5837f805d1c",
+      "state": "HISTORICAL_PRESERVED",
+      "reason": "initial local-only artifact preservation"
+    },
+    {
+      "version": "schema dependency amendment",
+      "sha256": "8a2bb465d462f7633f91f11214fa078b8d253ee11d3fa12f77164e3705bec26a",
+      "state": "HISTORICAL_PRESERVED",
+      "reason": "clean reconstruction found eight missing schemas"
+    },
+    {
+      "version": "P0 V2",
+      "sha256": "eafcf6ec9382177a7140564fc2b42a8547ac9cc2adab668a6707ab4f415536bc",
+      "state": "HISTORICAL_PRESERVED",
+      "reason": "schema dependency re-certification"
+    },
+    {
+      "version": "orchestrator portability amendment",
+      "sha256": "de341aae932073b053b7de017091ccf0d2df81ca17a8a46200a900e14c043031",
+      "state": "CURRENT_CORRECTION_INPUT",
+      "reason": "GitHub Linux CI found hard-coded Windows authority path"
+    },
+    {
+      "version": "P0 V3",
+      "sha256": "80db9388c31f9695903fccd35c0da7938f78b6b2c818640c673b692763200d45",
+      "state": "CURRENT_PRESERVATION_CERTIFICATION",
+      "reason": "portable explicit authority resolution re-certification"
+    }
+  ],
+  "artifacts": [
+    {
+      "artifact": "src/hayes_verify/onboarding_orchestrator.py",
+      "prior_sha256": "7dba87be025d1c2e8700eaf280dfdbd1126c18c1803502567e44391e38ce33bb",
+      "new_sha256": "8b5af3fbef34625a1e97e409ad931e4eee81357a38dbd4befa80a2b3895c5b65",
+      "reason": "portable explicit authority resolution",
+      "amendment": "P0-ORCHESTRATOR-PORTABILITY-AMENDMENT-20260816",
+      "current_authority_version": "P0 V3"
+    },
+    {
+      "artifact": "tests/test_onboarding_orchestrator.py",
+      "prior_sha256": "39e667051088dcd0c92c5c42634b570a336d995c095237ce89f4116382b55a3e",
+      "new_sha256": "863185005759b98e37382abe59b36316f9d7771d17f07e564fe42ba767881e05",
+      "reason": "portable explicit authority resolution",
+      "amendment": "P0-ORCHESTRATOR-PORTABILITY-AMENDMENT-20260816",
+      "current_authority_version": "P0 V3"
+    },
+    {
+      "artifact": "schemas/onboarding_orchestration_manifest.schema.json",
+      "prior_sha256": "f918ccc30703338ac34f577de2708dfae0701e6e76c8f3699bed62b91ef54064",
+      "new_sha256": "52387fa0667942267b9b6ccdb7853fd7c7bfe9ede1a41e0a4d1703b22b72caec",
+      "reason": "portable explicit authority resolution",
+      "amendment": "P0-ORCHESTRATOR-PORTABILITY-AMENDMENT-20260816",
+      "current_authority_version": "P0 V3"
+    },
+    {
+      "artifact": "tests/fixtures/onboarding_authority/test_quality_control_requirements.json",
+      "prior_sha256": null,
+      "new_sha256": "d4320f8306061c52ff39546094c2fd7b333b71f804fd085f80d0f56f117b649a",
+      "reason": "portable explicit authority resolution",
+      "amendment": "P0-ORCHESTRATOR-PORTABILITY-AMENDMENT-20260816",
+      "current_authority_version": "P0 V3"
+    },
+    {
+      "artifact": "tests/fixtures/onboarding_authority/test_quality_publication_certification.json",
+      "prior_sha256": null,
+      "new_sha256": "9c3a2eab37f320a90133bed87f57b262ed051f198ac1c99ab38700a2165d93f0",
+      "reason": "portable explicit authority resolution",
+      "amendment": "P0-ORCHESTRATOR-PORTABILITY-AMENDMENT-20260816",
+      "current_authority_version": "P0 V3"
+    }
+  ]
+}
