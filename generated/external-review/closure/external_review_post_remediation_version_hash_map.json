@@ -1,0 +1,44 @@
+{
+  "generated_at_utc": "2026-08-16T18:00:33Z",
+  "hayes_remediation_commits": [
+    "88fd724e3d535e8dbe4e2fe81788555ddbcc4b2f",
+    "a1c98b1fc62c33060d0f26882fab329ac16de4ea",
+    "86ee7b2a6f01c0bd815c0bcc1f19f6d6d3e0947f"
+  ],
+  "historical_wave2d_freeze": {
+    "path": "registry/wave2d/applicability_decisions.csv",
+    "sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35"
+  },
+  "p2": {
+    "certification": {
+      "path": "generated/external-review/p2/P2_REVIEWER_RECONSTRUCTION_CERTIFICATION.json",
+      "sha256": "53356d16d65103ac08322e431405c779a5270f81051afd9967b4e501c5a0ead1"
+    },
+    "traceability": {
+      "path": "generated/external-review/p2/external_review_cross_repo_traceability.json",
+      "sha256": "0a1f9f0ad47411e80f27194f93c1821066af32c937fddfe2cda4367c0d167a96"
+    },
+    "version_hash_map": {
+      "path": "generated/external-review/p2/external_review_version_hash_map.json",
+      "sha256": "e2461a2124db0906ddc547580dc9c0dbccdef17e41e02e368afcf6f93f2e83de"
+    },
+    "ws_matrix": {
+      "path": "generated/external-review/p2/external_review_ws1_ws10_matrix.json",
+      "sha256": "47c145d40de1b28d3bd4ff6dd1f3cc9fe46ba4af2d761850b2cd9acf38abfac4"
+    }
+  },
+  "p3": {
+    "readiness": {
+      "path": "generated/external-review/p3/external_review_retention_readiness_assessment.json",
+      "sha256": "a95412e06937a56436737acd66f128bc29c892f82485d22449d8c9445cb70bcb"
+    },
+    "retention_blocker": {
+      "path": "generated/external-review/p3/external_evidence_retention_blocker.json",
+      "sha256": "5604311cb3d071a690cf3aab12fc17babd3dcedd7630a5274f709609ff817dce"
+    },
+    "retention_manifest": {
+      "path": "generated/external-review/p3/external_evidence_retention_manifest.json",
+      "sha256": "ecd7329e4c1df3bd463d447b600f383f7d855ff35e89f214c38ea8e98cca7dd6"
+    }
+  }
+}
