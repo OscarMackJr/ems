@@ -1,0 +1,26 @@
+{
+  "component": "EMS",
+  "phase": "EMS_EXTERNAL_REVIEW_AUTHORITY_PUBLICATION_ONLY",
+  "certified_at_utc": "2026-08-16T13:47:07Z",
+  "status": "PASS",
+  "p0_certification_sha256": "afaf4290dc80836b2ddeddcdb6d8b305184748d1cddaf258972fa5837f805d1c",
+  "ems_baseline_sha": "53234bbb9546ad37a691b67a2b509951512a79fc",
+  "publication_commit_sha": "420acb8804c6f2c949d55c08c84b2a86e9903ed3",
+  "publication_manifest_sha256": "f0f512052609ef7c3731bd0532fa1e5338769aa73d7b9e3bd2a3cbe67b0d7253",
+  "historical_freeze_sha256": "79adb6c003e9a61e2fd36131b1a37d3387973f72d206102985a78a3271bc5b35",
+  "external_retention_gap_count": 1,
+  "published_artifact_count": 55,
+  "excluded_external_evidence_count": 52,
+  "validation": {
+    "pytest": "3 passed",
+    "json": "PASS",
+    "freeze": "PASS"
+  },
+  "not_attested": [
+    "Hayes implementation publication",
+    "external evidence retention completeness",
+    "hometown execution authorization",
+    "production readiness",
+    "compliance"
+  ]
+}
