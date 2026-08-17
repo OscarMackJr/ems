@@ -1,0 +1,1058 @@
+{
+  "aa2_decision_traceability": "8_OF_8",
+  "control_traceability": "80_OF_80",
+  "control_traceability_records": [
+    {
+      "control_id": "EMS-CTRL-001",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-002",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-003",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-004",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-005",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-006",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-007",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-008",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-009",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-010",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-011",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-012",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-013",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-014",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-015",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-016",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-017",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-018",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-019",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-020",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-021",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-022",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-023",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-024",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-025",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-026",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-027",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-028",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-029",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-030",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-031",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-032",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-033",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-034",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-035",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-036",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-037",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-038",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-039",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-040",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-041",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-042",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-043",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-044",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-045",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-046",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-047",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-048",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-049",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-050",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-051",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-052",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-053",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-054",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-055",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-056",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-057",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-058",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-059",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-060",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-061",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-062",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-063",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-064",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-065",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-066",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-067",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-068",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-069",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-070",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-071",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-072",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-073",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-074",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-075",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-076",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-077",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-078",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-079",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    },
+    {
+      "control_id": "EMS-CTRL-080",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ]
+    }
+  ],
+  "created_at": "2026-08-17T15:22:45.447981+00:00",
+  "decision_ids": [
+    "AA1-GOV-001",
+    "AA1-GOV-002",
+    "AA1-GOV-003",
+    "AA1-GOV-004",
+    "AA1-GOV-005",
+    "AA1-GOV-006",
+    "AA1-GOV-007",
+    "AA1-GOV-008"
+  ],
+  "traceability_type": "AA2_TO_AA3_ARCHIVE_APPLICABILITY_TRACEABILITY"
+}

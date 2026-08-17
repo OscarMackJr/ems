@@ -1,0 +1,32 @@
+{
+  "APPLICABILITY_AUTHORITY_PUBLISHED": true,
+  "RP1B_A_READY": true,
+  "RP1C_AUTHORITY_READY": false,
+  "aa2_approval_sha256": "de170ebcf60aabe593b3e9766c11170c3c597730ef0f342028c8f844614f745c",
+  "aa2_closure_sha256": "ed589d76febe255665fd11697a9c0b9f8c7f036487e26b6f765ef8046c55887b",
+  "aa2_decision_traceability": "8_OF_8",
+  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0",
+  "authority_sha256": "782bcc74fd72e632d9eea83d7ec887b3b899588ad5bb2c42740ea250af1f88a4",
+  "certification_type": "EMS_AA3_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION",
+  "certification_version": "1.0",
+  "control_population": 80,
+  "control_traceability": "80_OF_80",
+  "created_at": "2026-08-17T15:22:45.447981+00:00",
+  "duplicate_controls": 0,
+  "missing_controls": 0,
+  "negative_invariants": "PASS",
+  "offline_deterministic_authority": true,
+  "prohibitions": {
+    "evaluator_executions": 0,
+    "hayes_modifications": 0,
+    "hometown_executions": 0,
+    "production_executions": 0,
+    "repository_id_allocations": 0,
+    "retention_writes": 0,
+    "wave2d_freeze_changed": false
+  },
+  "schema_sha256": "891d6b0bb14b0849d4d6a322f1894c70e0f9ad2556e5b8a319ccefe537608bf5",
+  "semantic_conflicts": 0,
+  "unique_control_count": 80,
+  "unmapped_controls": 0
+}

@@ -1,0 +1,45 @@
+{
+  "aa2_closure_sha256": "ed589d76febe255665fd11697a9c0b9f8c7f036487e26b6f765ef8046c55887b",
+  "artifacts": [
+    {
+      "relative_path": "scripts/publish_archive_assessment_applicability_authority.py",
+      "sha256": "59fef8c4eab250f519dbdfd100832d8a870cc9acad82a22213b2c765d8f83792"
+    },
+    {
+      "relative_path": "registry/archive_assessment_applicability_authority.json",
+      "sha256": "782bcc74fd72e632d9eea83d7ec887b3b899588ad5bb2c42740ea250af1f88a4"
+    },
+    {
+      "relative_path": "schemas/archive_assessment_applicability_authority.schema.json",
+      "sha256": "891d6b0bb14b0849d4d6a322f1894c70e0f9ad2556e5b8a319ccefe537608bf5"
+    },
+    {
+      "relative_path": "generated/archive-assessment/ems-aa3/archive_assessment_applicability_authority_matrix.json",
+      "sha256": "6c9179f5c25524ab3e4be53715b5ec3e0543e6349afa67a6b8e2a36f0445992c"
+    },
+    {
+      "relative_path": "generated/archive-assessment/ems-aa3/aa2_to_aa3_decision_traceability.json",
+      "sha256": "57d8c7e4e80509398c7eba90426a51b5e90e8caf50b5c8f68d1a347fc81a339c"
+    },
+    {
+      "relative_path": "generated/archive-assessment/ems-aa3/archive_assessment_applicability_semantic_validation.json",
+      "sha256": "a3a4fb4088d39274d59965847c1d96f2d4b5f48d5d4b2ed572ec09e65568c112"
+    },
+    {
+      "relative_path": "generated/archive-assessment/ems-aa3/archive_assessment_applicability_negative_invariant_validation.json",
+      "sha256": "787267eb12db765c9daf0dc6a457e4c0cfef36a372f771b5a0d2973ef0497f6d"
+    },
+    {
+      "relative_path": "generated/archive-assessment/ems-aa3/EMS_AA3_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION.json",
+      "sha256": "fb99cae8708bae6e4e24a2ccfeca997102f190e648bd373f23c2ffb7f99cf7c6"
+    },
+    {
+      "relative_path": "generated/archive-assessment/ems-aa3/EMS_AA3_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION.md",
+      "sha256": "c0e16fe6c91e789a089bc724fcf1050b2e23cb75682e50dca2647d7c882a6774"
+    }
+  ],
+  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0",
+  "created_at": "2026-08-17T15:22:45.447981+00:00",
+  "manifest_type": "EMS_AA3_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_MANIFEST",
+  "self_entry_exclusion_reason": "A SHA-256 manifest cannot include a hash of itself without recursion."
+}

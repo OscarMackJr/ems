@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "UNKNOWN preserved as APPLICABILITY_UNRESOLVED",
+    "NOT_APPLICABLE requires explicit controlled rule",
+    "repository evidence boundary preserved",
+    "historical attestation prohibited"
+  ],
+  "offline_deterministic_authority": true,
+  "result": "PASS",
+  "semantic_conflict_count": 0
+}

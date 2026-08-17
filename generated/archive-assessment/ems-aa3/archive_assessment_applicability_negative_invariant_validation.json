@@ -1,0 +1,53 @@
+{
+  "negative_invariant_tests": [
+    {
+      "mutation": "remove_control",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "duplicate_control",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "unknown_control",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "unknown_to_false",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "implicit_not_applicable",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "missing_evidence_to_not_applicable",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "archive_proves_live_authority",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "historical_attestation",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "remove_aa2_provenance",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "unapproved_governance_decision",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "absolute_local_path",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "unfreezable_dependency",
+      "result": "REJECTED_FAIL_CLOSED"
+    }
+  ],
+  "result": "PASS"
+}

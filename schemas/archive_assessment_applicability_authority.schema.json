@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "approved_governance_decision_ids": {
+      "items": {
+        "pattern": "^AA1-GOV-00[1-8]$",
+        "type": "string"
+      },
+      "maxItems": 8,
+      "minItems": 8,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "assessment_semantics": {
+      "const": "CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT"
+    },
+    "controls": {
+      "items": {
+        "properties": {
+          "archive_population_membership": {
+            "const": "IN_ARCHIVE_CONTROL_POPULATION"
+          },
+          "assessment_semantics": {
+            "const": "CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT"
+          },
+          "classification_unknown_treatment": {
+            "const": "APPLICABILITY_UNRESOLVED"
+          },
+          "control_id": {
+            "pattern": "^EMS-CTRL-[0-9]{3}$",
+            "type": "string"
+          },
+          "decision_ids": {
+            "maxItems": 8,
+            "minItems": 8,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "default_applicability_result": {
+            "const": "APPLICABILITY_UNRESOLVED"
+          },
+          "not_applicable_authority": {
+            "type": "null"
+          },
+          "not_applicable_rule": {
+            "type": "null"
+          },
+          "target_type": {
+            "const": "ARCHIVED_REPOSITORY_SNAPSHOT"
+          }
+        },
+        "required": [
+          "control_id",
+          "archive_population_membership",
+          "target_type",
+          "assessment_semantics",
+          "classification_prerequisites",
+          "classification_unknown_treatment",
+          "archive_evidence_capability",
+          "required_non_repository_authority",
+          "default_applicability_result",
+          "unresolved_reason",
+          "not_applicable_rule",
+          "not_applicable_authority",
+          "decision_ids"
+        ],
+        "type": "object"
+      },
+      "maxItems": 80,
+      "minItems": 80,
+      "type": "array"
+    },
+    "document_id": {
+      "const": "EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY"
+    },
+    "status": {
+      "const": "CONTROLLED"
+    },
+    "target_type": {
+      "const": "ARCHIVED_REPOSITORY_SNAPSHOT"
+    },
+    "version": {
+      "const": "1.0.0"
+    }
+  },
+  "required": [
+    "document_id",
+    "version",
+    "status",
+    "authority_id",
+    "target_type",
+    "assessment_semantics",
+    "classification_vocabulary",
+    "applicability_vocabulary",
+    "not_applicable_semantics",
+    "evidence_boundary",
+    "source_lineage",
+    "approved_governance_decision_ids",
+    "controls"
+  ],
+  "title": "EMS AA3 Archive Assessment Applicability Authority",
+  "type": "object"
+}
