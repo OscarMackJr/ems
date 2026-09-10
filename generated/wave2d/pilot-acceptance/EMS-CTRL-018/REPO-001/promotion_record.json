@@ -1,0 +1,17 @@
+{
+  "record_version": "1.0",
+  "promoted_at_utc": "2026-08-14T01:09:17.697740+00:00",
+  "wave": "2D",
+  "control_id": "EMS-CTRL-018",
+  "target_id": "REPO-001",
+  "request_id": "PILOT-EMS-CTRL-018-REPO-001",
+  "promotion_state": "PROMOTED",
+  "source_system": "Hayes Verify",
+  "authority_system": "EMS",
+  "authoritative_evidence_path": "evidence/wave2d/EMS-CTRL-018/REPO-001/evidence.json",
+  "authoritative_evidence_sha256": "3271e2fef9720095cb56fcbce40c2a1bc4011965c2f1162808e44c88f2f45e3e",
+  "source_evidence_sha256": "3271e2fef9720095cb56fcbce40c2a1bc4011965c2f1162808e44c88f2f45e3e",
+  "acceptance_record_sha256": "0d5b374d25dcf15973cb70f75588645ddd8ea668aa210222cd3f2723dbdf112d",
+  "decision_owner": "Oscar Mack",
+  "decision_source": "HUMAN_EMS_CTRL018_PILOT_ACCEPTANCE"
+}
