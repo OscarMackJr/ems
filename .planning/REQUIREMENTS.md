@@ -13,13 +13,13 @@ The eight classification fields: `production`, `internet_exposed`, `contains_cus
 
 ### Schema and States
 
-- [ ] **SCHEMA-01**: The applicability schema accepts a structured `not_applicable_rule` for a control instead of fixing it to `null`
-- [ ] **SCHEMA-02**: The schema accepts a `not_applicable_authority` that names a governance decision id
-- [ ] **SCHEMA-03**: Every control carries an explicit decision state with exactly three values: rule published, no rule will be published, not yet decided
-- [ ] **SCHEMA-04**: The schema rejects inconsistent combinations (a published rule with no authority, an undecided control with a rule, a decided control with no decision id)
-- [ ] **SCHEMA-05**: Rule conditions can reference only the eight declared classification fields and only `KNOWN_TRUE` or `KNOWN_FALSE`; anything else fails validation
+- [x] **SCHEMA-01**: The applicability schema accepts a structured `not_applicable_rule` for a control instead of fixing it to `null`
+- [x] **SCHEMA-02**: The schema accepts a `not_applicable_authority` that names a governance decision id
+- [x] **SCHEMA-03**: Every control carries an explicit decision state with exactly three values: rule published, no rule will be published, not yet decided
+- [x] **SCHEMA-04**: The schema rejects inconsistent combinations (a published rule with no authority, an undecided control with a rule, a decided control with no decision id)
+- [x] **SCHEMA-05**: Rule conditions can reference only the eight declared classification fields and only `KNOWN_TRUE` or `KNOWN_FALSE`; anything else fails validation
   - Note (CONTEXT D-07/D-08): in 2.0.0, rule conditions may name only `production`, `internet_exposed`, `contains_customer_data`, `ai_enabled`; the other four fields (`owner`, `tier`, `service_criticality`, `data_classification`) stay declared but are not usable in rules.
-- [ ] **SCHEMA-06**: The authority states rule semantics in full: how conditions combine, what result a satisfied rule yields, and that an `UNKNOWN` field never yields not-applicable
+- [x] **SCHEMA-06**: The authority states rule semantics in full: how conditions combine, what result a satisfied rule yields, and that an `UNKNOWN` field never yields not-applicable
 
 ### Blind Drafting
 
@@ -80,12 +80,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SCHEMA-01 | Phase 1 | Pending |
-| SCHEMA-02 | Phase 1 | Pending |
-| SCHEMA-03 | Phase 1 | Pending |
-| SCHEMA-04 | Phase 1 | Pending |
-| SCHEMA-05 | Phase 1 | Pending |
-| SCHEMA-06 | Phase 1 | Pending |
+| SCHEMA-01 | Phase 1 | Complete |
+| SCHEMA-02 | Phase 1 | Complete |
+| SCHEMA-03 | Phase 1 | Complete |
+| SCHEMA-04 | Phase 1 | Complete |
+| SCHEMA-05 | Phase 1 | Complete |
+| SCHEMA-06 | Phase 1 | Complete |
 | DRAFT-01 | Phase 2 | Pending |
 | DRAFT-02 | Phase 2 | Pending |
 | DRAFT-03 | Phase 2 | Pending |
