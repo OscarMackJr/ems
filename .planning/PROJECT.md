@@ -22,13 +22,13 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - ✓ Not-applicable semantics declared: requires an explicit controlled rule; unknown is not not-applicable; absence of evidence is not not-applicable — existing
 - ✓ Authority publication pattern: schema-validated registry JSON, publisher script computing SHA-256 digests, publication certification, decision traceability, pytest invariants — existing
 - ✓ Governance decision ids (`AA1-GOV-001`..`008`) cited per control as what makes the authority binding — existing
+- ✓ The v2 applicability schema permits a structured `not_applicable_rule` and a `not_applicable_authority` per control (v1 files unchanged) — Validated in Phase 1: Rule Shape and Decision States
+- ✓ The v2 authority shape expresses three distinguishable states per control: rule published, "no rule will be published" decided, and not yet decided — Validated in Phase 1: Rule Shape and Decision States
 
 ### Active
 
 <!-- Hypotheses until shipped and validated. -->
 
-- [ ] The applicability schema permits a non-null `not_applicable_rule` and `not_applicable_authority` per control (today both are fixed to `null`)
-- [ ] The authority can express three distinguishable states per control: rule published, "no rule will be published" decided, and not yet decided
 - [ ] A "no rule will be published" outcome is itself a published decision with its own decision id
 - [ ] Rule conditions are expressed only over the eight declared classification fields, each as a `KNOWN_TRUE` / `KNOWN_FALSE` fact about the target
 - [ ] Each rule is explicit and machine-readable, with no meaning left to convention
@@ -128,4 +128,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-13 after initialization*
+*Last updated: 2026-10-13 after Phase 1 (rule shape and decision states) — v2 publisher, schema and tests in place; nothing published yet*
