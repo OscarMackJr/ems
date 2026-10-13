@@ -23,10 +23,10 @@ The eight classification fields: `production`, `internet_exposed`, `contains_cus
 
 ### Blind Drafting
 
-- [ ] **DRAFT-01**: A rule-or-no-rule proposal with rationale exists for each of the 21 controls
-- [ ] **DRAFT-02**: Each proposal lists its EMS-source inputs, which are the control catalog definitions only. The drafter's reading of a control name is recorded separately as a labelled interpretation and is not an EMS source. The Phase 1 rule shape and the approved field definitions are declared once as the drafting frame. Nothing in the proposals refers to RiskMVP or Hayes evidence
+- [x] **DRAFT-01**: A rule-or-no-rule proposal with rationale exists for each of the 21 controls
+- [x] **DRAFT-02**: Each proposal lists its EMS-source inputs, which are the control catalog definitions only. The drafter's reading of a control name is recorded separately as a labelled interpretation and is not an EMS source. The Phase 1 rule shape and the approved field definitions are declared once as the drafting frame. Nothing in the proposals refers to RiskMVP or Hayes evidence
   - Note (Phase 2 CONTEXT D-26): amended 2026-10-13; the catalog entries for the 21 controls carry no description.
-- [ ] **DRAFT-03**: All 21 proposals are committed before any comparison with a target, and that commit is recorded in the decision trail
+- [x] **DRAFT-03**: All 21 proposals are committed before any comparison with a target, and that commit is recorded in the decision trail
 
 ### Governance Decisions
 
@@ -87,9 +87,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SCHEMA-04 | Phase 1 | Complete |
 | SCHEMA-05 | Phase 1 | Complete |
 | SCHEMA-06 | Phase 1 | Complete |
-| DRAFT-01 | Phase 2 | Pending |
-| DRAFT-02 | Phase 2 | Pending |
-| DRAFT-03 | Phase 2 | Pending |
+| DRAFT-01 | Phase 2 | Complete |
+| DRAFT-02 | Phase 2 | Complete |
+| DRAFT-03 | Phase 2 | Complete |
 | GOV-01 | Phase 3 | Pending |
 | GOV-02 | Phase 3 | Pending |
 | GOV-03 | Phase 3 | Pending |
