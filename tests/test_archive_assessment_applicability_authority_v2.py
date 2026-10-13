@@ -103,3 +103,54 @@ def test_version_is_2_0_0(): assert build_authority()['version'] == '2.0.0'
 def test_default_applicability_and_decision_ids_kept():
     a = build_authority()
     assert all(c['default_applicability_result'] == 'APPLICABILITY_UNRESOLVED' and len(c['decision_ids']) == 8 for c in a['controls'])
+
+def sem(a): return a['not_applicable_semantics']
+def test_missing_rule_condition_fields_fails_closed(): both_reject(lambda a: sem(a).pop('rule_condition_fields'))
+def test_rule_condition_fields_with_tier_fails_closed(): both_reject(lambda a: sem(a).__setitem__('rule_condition_fields', sem(a)['rule_condition_fields'] + ['tier']))
+def test_unknown_is_never_not_applicable_weakened_fails_closed(): both_reject(lambda a: sem(a).__setitem__('unknown_is_never_not_applicable', False))
+def test_no_short_circuit_weakened_fails_closed(): both_reject(lambda a: sem(a).__setitem__('no_short_circuit', False))
+def test_decision_state_governs_weakened_fails_closed(): both_reject(lambda a: sem(a).__setitem__('decision_state_governs_resolved_result', False))
+def test_resolution_row_removed_fails_closed(): both_reject(lambda a: sem(a)['resolution'].pop())
+def test_resolution_unknown_row_weakened_fails_closed():
+    def m(a):
+        for r in sem(a)['resolution']:
+            if r['condition'] == 'ANY_NAMED_FIELD_UNKNOWN': r['result'] = 'NOT_APPLICABLE'
+    both_reject(m)
+def test_field_definition_removed_fails_closed(): both_reject(lambda a: sem(a)['field_definitions'].pop('ai_enabled'))
+def test_field_definition_empty_fails_closed(): both_reject(lambda a: sem(a)['field_definitions'].__setitem__('production', ''))
+def test_statements_emptied_fails_closed(): invalid(lambda a: sem(a).__setitem__('statements', []))
+def test_semantics_statements_are_readable():
+    text = ' '.join(build_authority()['not_applicable_semantics']['statements'])
+    for word in ['UNKNOWN', 'NOT_APPLICABLE', 'APPLICABLE', 'APPLICABILITY_UNRESOLVED', 'all conditions']: assert word in text
+
+def test_non_rule_fields_declared_but_unusable():
+    a = build_authority()
+    for f in MODULE.NON_RULE_FIELDS:
+        assert f in a['controls'][0]['classification_prerequisites']
+        assert f in a['classification_vocabulary']['fields']
+        assert f in sem(a)['fields_not_usable_in_rules']
+        assert f not in sem(a)['rule_condition_fields']
+    assert all(isinstance(v, str) and v.strip() for v in sem(a)['field_definitions'].values())
+
+def test_committed_schema_equals_schema_function(): assert json.loads(MODULE.SCHEMA.read_text(encoding='utf-8')) == schema()
+def test_v2_builder_does_not_use_generated_dir():
+    src = SCRIPT.read_text(encoding='utf-8')
+    assert 'ems-aa2' not in src and 'generated' not in src
+
+def control(state, r, a):
+    c = copy.deepcopy(build_authority()['controls'][0]); decide(c, state, r, a); return c
+RP = control('RULE_PUBLISHED', rule(*PROD_INET), 'AA4-GOV-001')
+NR = control('NO_RULE_WILL_BE_PUBLISHED', None, 'AA4-GOV-002')
+NY = control('NOT_YET_DECIDED', None, None)
+T, F, U = 'KNOWN_TRUE', 'KNOWN_FALSE', 'UNKNOWN'
+def test_resolver_not_yet_decided_unresolved(): assert resolve_applicability(NY, {'production': F, 'internet_exposed': F}) == 'APPLICABILITY_UNRESOLVED'
+def test_resolver_no_rule_applicable_whatever_facts():
+    for facts in [{'production': T, 'internet_exposed': T, 'contains_customer_data': T, 'ai_enabled': T}, {'production': U, 'internet_exposed': U}, {}]: assert resolve_applicability(NR, facts) == 'APPLICABLE'
+def test_resolver_rule_met_is_not_applicable(): assert resolve_applicability(RP, {'production': F, 'internet_exposed': F}) == 'NOT_APPLICABLE'
+def test_resolver_rule_not_met_is_applicable(): assert resolve_applicability(RP, {'production': F, 'internet_exposed': T}) == 'APPLICABLE'
+def test_resolver_unknown_fact_unresolved(): assert resolve_applicability(RP, {'production': F, 'internet_exposed': U}) == 'APPLICABILITY_UNRESOLVED'
+def test_resolver_no_short_circuit(): assert resolve_applicability(RP, {'production': T, 'internet_exposed': U}) == 'APPLICABILITY_UNRESOLVED'
+def test_resolver_missing_fact_unresolved(): assert resolve_applicability(RP, {'production': F}) == 'APPLICABILITY_UNRESOLVED'
+def test_resolver_boolean_and_none_and_lowercase_facts_unresolved():
+    for bad in [False, None, 'true']: assert resolve_applicability(RP, {'production': F, 'internet_exposed': bad}) == 'APPLICABILITY_UNRESOLVED'
+def test_resolver_unrecognized_state_unresolved(): assert resolve_applicability(dict(RP, not_applicable_decision_state='MAYBE'), {'production': F, 'internet_exposed': F}) == 'APPLICABILITY_UNRESOLVED'
