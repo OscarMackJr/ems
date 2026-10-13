@@ -23,6 +23,33 @@ PROPOSALS = REGISTRY / 'archive_assessment_not_applicable_rule_proposals.json'
 DRAFTING_RECORD = REGISTRY / 'archive_assessment_rule_proposals_drafting_record.json'
 ANSWERS = REGISTRY / 'archive_assessment_governance_answers.json'
 ANSWERS_SCHEMA = SCHEMAS / 'archive_assessment_governance_answers.schema.json'
+DECISIONS = REGISTRY / 'archive_assessment_governance_decisions.json'
+DECISIONS_SCHEMA = SCHEMAS / 'archive_assessment_governance_decisions.schema.json'
+WORDING_APPROVAL = REGISTRY / 'archive_assessment_governance_wording_approval.json'
+DRAFTING_COMMIT = 'dc3b41c9fbb3571a191d2da5164fb73439a0637b'
+APPROVER = 'Oscar Mack'
+APPROVER_ROLES = ['EMS_GOVERNANCE_AUTHORITY', 'HAYES_VERIFY_DEVELOPER']
+DUAL_ROLE_STATEMENT = 'Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.'
+EARLIER_ASSESSMENT_STATEMENT = 'The deciding authority knew the per-control result of an earlier assessment when making these decisions. The drafts were written without that knowledge. No rule was compared with any target during this phase.'
+TYPED_BY_AUTHORITY_STATEMENT = 'The dispositions, notes and any decided rule or rationale in the answers file were typed by Oscar Mack. No AI agent chose, suggested or reworded any of them.'
+INTERPRETATION_BASIS = 'Accepted as the basis of this decision only. It is not a definition of the control.'
+HEADER_STATEMENT_REF = 'earlier_assessment_knowledge_statement'
+DECIDED_STATES = ['RULE_PUBLISHED', 'NO_RULE_WILL_BE_PUBLISHED']
+KINDS = ['PROPOSE_RULE', 'PROPOSE_NO_RULE']
+DECISIONS_STATUS = 'GOVERNANCE_DECISIONS'
+HEADER_KEYS = ['status', 'answers_typed_by_authority_statement', 'earlier_assessment_knowledge_statement', 'wording_approval', 'proposals_path', 'proposals_sha256', 'drafting_record_path', 'drafting_record_sha256', 'drafting_commit', 'answers_path', 'answers_sha256', 'answers_sha256_normalisation', 'records']
+APPROVAL_KEYS = ['approver', 'role', 'date', 'scope', 'source_path', 'statement_sha256']
+STATEMENT_KEYS = ['answers_typed_by_authority_statement', 'dual_role_statement', 'earlier_assessment_knowledge_statement']
+RECORD_KEYS = ['decision_id', 'control_id', 'disposition', 'decided_outcome', 'drafted', 'decided', 'interpretation', 'note', 'scope_note', 'approver', 'approver_roles', 'dual_role_statement', 'decided_on', 'drafting_commit', 'drafting_record_path', 'header_statement_ref', 'supersedes', 'amendment_present']
+SIDE_KEYS = ['outcome', 'rule', 'rationale']
+INTERPRETATION_KEYS = ['label', 'text', 'accepted_as_basis_of_this_decision_only', 'basis_statement']
+SCOPE_NOTE_KEYS = ['drafted_note', 'ruling']
+PROPOSALS_REL = 'registry/archive_assessment_not_applicable_rule_proposals.json'
+DRAFTING_RECORD_REL = 'registry/archive_assessment_rule_proposals_drafting_record.json'
+ANSWERS_REL = 'registry/archive_assessment_governance_answers.json'
+APPROVAL_REL = 'registry/archive_assessment_governance_wording_approval.json'
+SHA40_RE = r'^[0-9a-f]{40}$'
+SHA64_RE = r'^[0-9a-f]{64}$'
 VIEW = DOCS / 'ARCHIVE_ASSESSMENT_RULE_PROPOSALS_VIEW.md'
 CONTROL_IDS = [f'EMS-CTRL-{n:03d}' for n in (9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 30, 33, 39, 42, 52, 62, 75, 79)]
 SCOPE_NOTE_IDS = ['EMS-CTRL-022', 'EMS-CTRL-030', 'EMS-CTRL-042', 'EMS-CTRL-052', 'EMS-CTRL-062', 'EMS-CTRL-075']
@@ -149,20 +176,169 @@ def answers_schema() -> dict:
     return {'$schema': 'https://json-schema.org/draft/2020-12/schema', 'title': 'EMS Archive Assessment Governance Answers', 'type': 'object', 'additionalProperties': False, 'required': list(TOP_KEYS),
         'properties': {'status': {'const': STATUS}, 'entries': {'type': 'array', 'minItems': len(CONTROL_IDS), 'items': entry}}}
 
+def sha_text(text: str) -> str: return hashlib.sha256(text.encode('utf-8')).hexdigest()
+
+def kind_of(rule: object) -> str: return 'PROPOSE_RULE' if rule is not None else 'PROPOSE_NO_RULE'
+
+def build_decisions(proposals: dict, answers: dict, drafting_record: dict, wording_approval: dict, answers_sha256: str, drafting_record_sha256: str | None = None) -> dict:
+    validate_answers(answers, proposals, strict=True)
+    by_id = {p['control_id']: p for p in proposals['proposals']}
+    ap = wording_approval['approval']
+    records = []
+    for i, e in enumerate(answers['entries']):
+        cid = e['control_id']; p = by_id[cid]; d = e['disposition']
+        drafted = {'outcome': p['proposed_outcome'], 'rule': p['proposed_rule'], 'rationale': p['rationale']}
+        if d == 'APPROVED_AS_DRAFTED': decided = {'outcome': drafted['outcome'], 'rule': drafted['rule'], 'rationale': drafted['rationale']}
+        else: decided = {'outcome': kind_of(e['decided_rule']), 'rule': e['decided_rule'], 'rationale': e['decided_rationale']}
+        scope_note = {'drafted_note': p['shape_limitation'], 'ruling': e['scope_note_ruling']} if cid in SCOPE_NOTE_IDS else None
+        records.append({'decision_id': f'AA4-GOV-{i + 1:03d}', 'control_id': cid, 'disposition': d,
+            'decided_outcome': 'RULE_PUBLISHED' if decided['rule'] is not None else 'NO_RULE_WILL_BE_PUBLISHED',
+            'drafted': drafted, 'decided': decided,
+            'interpretation': {'label': p['interpretation']['label'], 'text': p['interpretation']['text'], 'accepted_as_basis_of_this_decision_only': True, 'basis_statement': INTERPRETATION_BASIS},
+            'note': e['note'], 'scope_note': scope_note, 'approver': APPROVER, 'approver_roles': list(APPROVER_ROLES), 'dual_role_statement': DUAL_ROLE_STATEMENT,
+            'decided_on': e['decided_on'], 'drafting_commit': drafting_record['drafting_commit'], 'drafting_record_path': DRAFTING_RECORD_REL,
+            'header_statement_ref': HEADER_STATEMENT_REF, 'supersedes': e['supersedes'], 'amendment_present': drafted != decided})
+    return {'status': DECISIONS_STATUS, 'answers_typed_by_authority_statement': TYPED_BY_AUTHORITY_STATEMENT, 'earlier_assessment_knowledge_statement': EARLIER_ASSESSMENT_STATEMENT,
+        'wording_approval': {'approver': ap['approver'], 'role': ap['role'], 'date': ap['date'], 'scope': ap['scope'], 'source_path': APPROVAL_REL, 'statement_sha256': dict(wording_approval['statement_sha256'])},
+        'proposals_path': PROPOSALS_REL, 'proposals_sha256': drafting_record['proposals_sha256'], 'drafting_record_path': DRAFTING_RECORD_REL,
+        'drafting_record_sha256': drafting_record_sha256 if drafting_record_sha256 is not None else V2.digest(DRAFTING_RECORD),
+        'drafting_commit': drafting_record['drafting_commit'], 'answers_path': ANSWERS_REL, 'answers_sha256': answers_sha256, 'answers_sha256_normalisation': 'CRLF_TO_LF', 'records': records}
+
+def validate_decisions(d: object, proposals: dict | None = None, drafting_record: dict | None = None) -> None:
+    errors: list = []
+    if not isinstance(d, dict): raise AuthorityError('decisions document must be an object')
+    proposals = proposals if proposals is not None else V2.load(PROPOSALS)
+    drafting_record = drafting_record if drafting_record is not None else V2.load(DRAFTING_RECORD)
+    by_id = {p['control_id']: p for p in proposals['proposals']}
+    if set(d) != set(HEADER_KEYS): errors.append(f'header keys must be exactly {HEADER_KEYS}')
+    if d.get('status') != DECISIONS_STATUS: errors.append('status invalid')
+    if d.get('answers_typed_by_authority_statement') != TYPED_BY_AUTHORITY_STATEMENT: errors.append('answers_typed_by_authority_statement differs from the approved text')
+    if d.get('earlier_assessment_knowledge_statement') != EARLIER_ASSESSMENT_STATEMENT: errors.append('earlier_assessment_knowledge_statement differs from the approved text')
+    wa = d.get('wording_approval')
+    if not isinstance(wa, dict) or set(wa) != set(APPROVAL_KEYS): errors.append(f'wording_approval keys must be exactly {APPROVAL_KEYS}')
+    else:
+        if wa['approver'] != APPROVER: errors.append('wording_approval approver invalid')
+        expected = {'answers_typed_by_authority_statement': sha_text(TYPED_BY_AUTHORITY_STATEMENT), 'dual_role_statement': sha_text(DUAL_ROLE_STATEMENT), 'earlier_assessment_knowledge_statement': sha_text(EARLIER_ASSESSMENT_STATEMENT)}
+        if wa['statement_sha256'] != expected: errors.append('wording_approval statement_sha256 does not match the approved statements')
+    for k, live in (('proposals_sha256', V2.digest(PROPOSALS)), ('drafting_record_sha256', V2.digest(DRAFTING_RECORD))):
+        if not isinstance(d.get(k), str) or not re.match(SHA64_RE, d[k]): errors.append(f'{k} must be 64 hex characters')
+        elif d[k] != live: errors.append(f'{k} does not match the live file')
+    if not isinstance(d.get('answers_sha256'), str) or not re.match(SHA64_RE, d['answers_sha256']): errors.append('answers_sha256 must be 64 hex characters')
+    if d.get('answers_sha256_normalisation') != 'CRLF_TO_LF': errors.append('answers_sha256_normalisation invalid')
+    if d.get('drafting_commit') != DRAFTING_COMMIT or drafting_record.get('drafting_commit') != DRAFTING_COMMIT or not re.match(SHA40_RE, str(d.get('drafting_commit'))): errors.append('drafting_commit invalid')
+    for k, v in (('proposals_path', PROPOSALS_REL), ('drafting_record_path', DRAFTING_RECORD_REL), ('answers_path', ANSWERS_REL)):
+        if d.get(k) != v: errors.append(f'{k} invalid')
+    records = d.get('records')
+    if not isinstance(records, list): raise AuthorityError('; '.join(errors + ['records must be a list']))
+    if len(records) < len(CONTROL_IDS): errors.append('records must hold at least the 21 control records')
+    if [r.get('control_id') if isinstance(r, dict) else None for r in records[:len(CONTROL_IDS)]] != CONTROL_IDS: errors.append('the first 21 records must be the 21 control ids once each in ascending order')
+    index: dict = {}
+    superseded: set = set()
+    for i, r in enumerate(records):
+        if not isinstance(r, dict) or set(r) != set(RECORD_KEYS): errors.append(f'record {i}: keys must be exactly {RECORD_KEYS}'); continue
+        rid, cid = r['decision_id'], r['control_id']
+        if not isinstance(rid, str) or not re.match(V2.AUTHORITY_ID_RE, rid): errors.append(f'record {i}: decision_id invalid'); continue
+        if rid in index: errors.append(f'{rid}: duplicate decision_id')
+        if rid != f'AA4-GOV-{i + 1:03d}': errors.append(f'{rid}: decision_id must be AA4-GOV-{i + 1:03d} by position')
+        index[rid] = (i, cid)
+        if cid not in by_id: errors.append(f'{rid}: unknown control {cid}'); continue
+        p = by_id[cid]; disp = r['disposition']
+        if disp not in DISPOSITIONS: errors.append(f'{rid}: disposition invalid'); continue
+        if r['approver'] != APPROVER: errors.append(f'{rid}: approver invalid')
+        if r['approver_roles'] != APPROVER_ROLES: errors.append(f'{rid}: approver_roles invalid')
+        if r['dual_role_statement'] != DUAL_ROLE_STATEMENT: errors.append(f'{rid}: dual_role_statement differs from the approved text')
+        if r['header_statement_ref'] != HEADER_STATEMENT_REF: errors.append(f'{rid}: header_statement_ref invalid')
+        if r['drafting_commit'] != DRAFTING_COMMIT: errors.append(f'{rid}: drafting_commit invalid')
+        if r['drafting_record_path'] != DRAFTING_RECORD_REL: errors.append(f'{rid}: drafting_record_path invalid')
+        if not nonempty(r['note']): errors.append(f'{rid}: note is required')
+        if not isinstance(r['decided_on'], str) or not re.match(DATE_RE, r['decided_on']): errors.append(f'{rid}: decided_on must be a date')
+        dr, de = r['drafted'], r['decided']
+        if not all(isinstance(x, dict) and set(x) == set(SIDE_KEYS) for x in (dr, de)): errors.append(f'{rid}: drafted and decided need exactly {SIDE_KEYS}'); continue
+        if dr != {'outcome': p['proposed_outcome'], 'rule': p['proposed_rule'], 'rationale': p['rationale']}: errors.append(f'{rid}: drafted text differs from the live proposal')
+        if de['outcome'] != kind_of(de['rule']): errors.append(f'{rid}: decided outcome does not match decided rule')
+        if r['decided_outcome'] not in DECIDED_STATES: errors.append(f'{rid}: decided_outcome must be one of {DECIDED_STATES}')
+        elif r['decided_outcome'] != ('RULE_PUBLISHED' if de['rule'] is not None else 'NO_RULE_WILL_BE_PUBLISHED'): errors.append(f'{rid}: decided_outcome does not match decided rule')
+        if de['rule'] is not None: V2.validate_rule(cid, de['rule'], errors)
+        if r['amendment_present'] is not (dr != de): errors.append(f'{rid}: amendment_present invalid')
+        if disp == 'APPROVED_AS_DRAFTED':
+            if de != dr: errors.append(f'{rid}: APPROVED_AS_DRAFTED needs decided equal to drafted')
+        else:
+            if not nonempty(de['rationale']): errors.append(f'{rid}: {disp} needs a decided rationale')
+            elif not sentences_ok(de['rationale']): errors.append(f'{rid}: decided rationale must be 2 to 4 sentences')
+            if disp == 'CHANGED':
+                if de['outcome'] != dr['outcome']: errors.append(f'{rid}: CHANGED keeps the drafted kind')
+                elif pairs(de['rule']) == pairs(dr['rule']) and norm(de['rationale'] or '') == norm(dr['rationale']): errors.append(f'{rid}: CHANGED shows no change from the draft')
+            elif de['outcome'] == dr['outcome']: errors.append(f'{rid}: REJECTED flips the drafted kind')
+        if r['interpretation'] != {'label': p['interpretation']['label'], 'text': p['interpretation']['text'], 'accepted_as_basis_of_this_decision_only': True, 'basis_statement': INTERPRETATION_BASIS}: errors.append(f'{rid}: interpretation invalid')
+        sn = r['scope_note']
+        if cid in SCOPE_NOTE_IDS:
+            if not isinstance(sn, dict) or set(sn) != set(SCOPE_NOTE_KEYS) or sn['ruling'] not in SCOPE_RULINGS or sn['drafted_note'] != p['shape_limitation']: errors.append(f'{rid}: scope_note invalid')
+        elif sn is not None: errors.append(f'{rid}: scope_note must be null')
+        sup = r['supersedes']
+        if sup is not None:
+            if sup == rid: errors.append(f'{rid}: supersedes itself')
+            elif sup not in index: errors.append(f'{rid}: supersedes an id that is not an earlier record')
+            elif index[sup][1] != cid: errors.append(f'{rid}: supersedes a record for another control')
+            else: superseded.add(sup)
+    counts: dict = {}
+    for rid, (i, cid) in index.items():
+        if rid not in superseded: counts[cid] = counts.get(cid, 0) + 1
+    for cid in CONTROL_IDS:
+        if counts.get(cid, 0) != 1: errors.append(f'{cid}: needs exactly one unsuperseded record')
+    if V2.contains_absolute(d): errors.append('absolute path used in decisions')
+    if errors: raise AuthorityError('; '.join(errors))
+
+def decisions_schema() -> dict:
+    nullable_rule = {'anyOf': [{'type': 'null'}, rule_schema()]}
+    side = {'type': 'object', 'additionalProperties': False, 'required': list(SIDE_KEYS), 'properties': {'outcome': {'enum': KINDS}, 'rule': nullable_rule, 'rationale': {'type': 'string', 'minLength': 1}}}
+    interp = {'type': 'object', 'additionalProperties': False, 'required': list(INTERPRETATION_KEYS), 'properties': {'label': {'type': 'string', 'minLength': 1}, 'text': {'type': 'string', 'minLength': 1}, 'accepted_as_basis_of_this_decision_only': {'const': True}, 'basis_statement': {'const': INTERPRETATION_BASIS}}}
+    scope = {'anyOf': [{'type': 'null'}, {'type': 'object', 'additionalProperties': False, 'required': list(SCOPE_NOTE_KEYS), 'properties': {'drafted_note': {'type': 'object', 'additionalProperties': False, 'required': ['scope', 'note'], 'properties': {'scope': {'type': 'string', 'minLength': 1}, 'note': {'type': 'string', 'minLength': 1}}}, 'ruling': {'enum': SCOPE_RULINGS}}}]}
+    record = {'type': 'object', 'additionalProperties': False, 'required': list(RECORD_KEYS), 'properties': {
+        'decision_id': {'type': 'string', 'pattern': V2.AUTHORITY_ID_RE}, 'control_id': {'enum': list(CONTROL_IDS)}, 'disposition': {'enum': list(DISPOSITIONS)},
+        'decided_outcome': {'enum': list(DECIDED_STATES)}, 'drafted': side, 'decided': side,
+        'interpretation': interp, 'note': {'type': 'string', 'minLength': 1}, 'scope_note': scope, 'approver': {'const': APPROVER},
+        'approver_roles': {'const': list(APPROVER_ROLES)}, 'dual_role_statement': {'const': DUAL_ROLE_STATEMENT},
+        'decided_on': {'type': 'string', 'pattern': DATE_RE}, 'drafting_commit': {'const': DRAFTING_COMMIT}, 'drafting_record_path': {'const': DRAFTING_RECORD_REL},
+        'header_statement_ref': {'const': HEADER_STATEMENT_REF}, 'supersedes': {'anyOf': [{'type': 'null'}, {'type': 'string', 'pattern': V2.AUTHORITY_ID_RE}]}, 'amendment_present': {'type': 'boolean'}}}
+    sha = {'type': 'string', 'pattern': SHA64_RE}
+    approval = {'type': 'object', 'additionalProperties': False, 'required': list(APPROVAL_KEYS), 'properties': {'approver': {'const': APPROVER}, 'role': {'type': 'string', 'minLength': 1}, 'date': {'type': 'string', 'pattern': DATE_RE}, 'scope': {'type': 'string', 'minLength': 1}, 'source_path': {'const': APPROVAL_REL},
+        'statement_sha256': {'type': 'object', 'additionalProperties': False, 'required': list(STATEMENT_KEYS), 'properties': {k: sha for k in STATEMENT_KEYS}}}}
+    return {'$schema': 'https://json-schema.org/draft/2020-12/schema', 'title': 'EMS Archive Assessment Governance Decisions', 'type': 'object', 'additionalProperties': False, 'required': list(HEADER_KEYS), 'properties': {
+        'status': {'const': DECISIONS_STATUS}, 'answers_typed_by_authority_statement': {'const': TYPED_BY_AUTHORITY_STATEMENT}, 'earlier_assessment_knowledge_statement': {'const': EARLIER_ASSESSMENT_STATEMENT},
+        'wording_approval': approval, 'proposals_path': {'const': PROPOSALS_REL}, 'proposals_sha256': sha, 'drafting_record_path': {'const': DRAFTING_RECORD_REL}, 'drafting_record_sha256': sha,
+        'drafting_commit': {'const': DRAFTING_COMMIT}, 'answers_path': {'const': ANSWERS_REL}, 'answers_sha256': sha, 'answers_sha256_normalisation': {'const': 'CRLF_TO_LF'},
+        'records': {'type': 'array', 'minItems': len(CONTROL_IDS), 'items': record}}}
+
+def decisions_text(value: dict) -> str: return json.dumps(value, indent=2, sort_keys=True) + '\n'
+
+def build_from_files() -> dict:
+    if not ANSWERS.exists(): raise AuthorityError('answers file is not present')
+    return build_decisions(V2.load(PROPOSALS), load_checked(ANSWERS), V2.load(DRAFTING_RECORD), V2.load(WORDING_APPROVAL), answers_digest(ANSWERS))
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--view', action='store_true'); parser.add_argument('--emit-template', action='store_true'); parser.add_argument('--emit-schema', action='store_true')
     parser.add_argument('--validate-answers', action='store_true'); parser.add_argument('--lenient', action='store_true')
+    parser.add_argument('--build', action='store_true'); parser.add_argument('--validate', action='store_true')
     args = parser.parse_args()
     if args.view:
         with open(VIEW, 'w', encoding='utf-8', newline='\n') as f: f.write(view_text(V2.load(PROPOSALS)))
     elif args.emit_template:
         if ANSWERS.exists(): raise AuthorityError('answers file already exists and is not overwritten')
         V2.dump(ANSWERS, blank_answers())
-    elif args.emit_schema: V2.dump(ANSWERS_SCHEMA, answers_schema())
+    elif args.emit_schema: V2.dump(ANSWERS_SCHEMA, answers_schema()); V2.dump(DECISIONS_SCHEMA, decisions_schema())
+    elif args.build:
+        doc = build_from_files(); validate_decisions(doc)
+        if DECISIONS.exists() and DECISIONS.read_bytes().replace(b'\r\n', b'\n') != decisions_text(doc).encode('utf-8'): raise AuthorityError('decisions file already exists with different content and is not overwritten')
+        if not DECISIONS.exists(): V2.dump(DECISIONS, doc)
+        print('PASS')
+    elif args.validate:
+        if not DECISIONS.exists(): raise AuthorityError('decisions file is not present')
+        doc = load_checked(DECISIONS); validate_decisions(doc)
+        jsonschema.Draft202012Validator(V2.load(DECISIONS_SCHEMA)).validate(doc); print('PASS')
     elif args.validate_answers:
         if not ANSWERS.exists(): raise AuthorityError('answers file is not present')
         a = load_checked(ANSWERS); validate_answers(a, V2.load(PROPOSALS), strict=not args.lenient)
         jsonschema.Draft202012Validator(V2.load(ANSWERS_SCHEMA)).validate(a); print('PASS')
-    else: parser.error('one of --view, --emit-template, --emit-schema or --validate-answers is required')
+    else: parser.error('one of --view, --emit-template, --emit-schema, --validate-answers, --build or --validate is required')
 if __name__ == '__main__': main()

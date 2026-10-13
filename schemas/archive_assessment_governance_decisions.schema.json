@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "answers_path": {
+      "const": "registry/archive_assessment_governance_answers.json"
+    },
+    "answers_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "answers_sha256_normalisation": {
+      "const": "CRLF_TO_LF"
+    },
+    "answers_typed_by_authority_statement": {
+      "const": "The dispositions, notes and any decided rule or rationale in the answers file were typed by Oscar Mack. No AI agent chose, suggested or reworded any of them."
+    },
+    "drafting_commit": {
+      "const": "dc3b41c9fbb3571a191d2da5164fb73439a0637b"
+    },
+    "drafting_record_path": {
+      "const": "registry/archive_assessment_rule_proposals_drafting_record.json"
+    },
+    "drafting_record_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "earlier_assessment_knowledge_statement": {
+      "const": "The deciding authority knew the per-control result of an earlier assessment when making these decisions. The drafts were written without that knowledge. No rule was compared with any target during this phase."
+    },
+    "proposals_path": {
+      "const": "registry/archive_assessment_not_applicable_rule_proposals.json"
+    },
+    "proposals_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "records": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "amendment_present": {
+            "type": "boolean"
+          },
+          "approver": {
+            "const": "Oscar Mack"
+          },
+          "approver_roles": {
+            "const": [
+              "EMS_GOVERNANCE_AUTHORITY",
+              "HAYES_VERIFY_DEVELOPER"
+            ]
+          },
+          "control_id": {
+            "enum": [
+              "EMS-CTRL-009",
+              "EMS-CTRL-010",
+              "EMS-CTRL-011",
+              "EMS-CTRL-012",
+              "EMS-CTRL-013",
+              "EMS-CTRL-014",
+              "EMS-CTRL-015",
+              "EMS-CTRL-017",
+              "EMS-CTRL-018",
+              "EMS-CTRL-019",
+              "EMS-CTRL-020",
+              "EMS-CTRL-021",
+              "EMS-CTRL-022",
+              "EMS-CTRL-030",
+              "EMS-CTRL-033",
+              "EMS-CTRL-039",
+              "EMS-CTRL-042",
+              "EMS-CTRL-052",
+              "EMS-CTRL-062",
+              "EMS-CTRL-075",
+              "EMS-CTRL-079"
+            ]
+          },
+          "decided": {
+            "additionalProperties": false,
+            "properties": {
+              "outcome": {
+                "enum": [
+                  "PROPOSE_RULE",
+                  "PROPOSE_NO_RULE"
+                ]
+              },
+              "rationale": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "rule": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "combination": {
+                        "const": "ALL_CONDITIONS_MUST_MATCH"
+                      },
+                      "conditions": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "field": {
+                              "enum": [
+                                "production",
+                                "internet_exposed",
+                                "contains_customer_data",
+                                "ai_enabled"
+                              ]
+                            },
+                            "state": {
+                              "enum": [
+                                "KNOWN_TRUE",
+                                "KNOWN_FALSE"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "field",
+                            "state"
+                          ],
+                          "type": "object"
+                        },
+                        "maxItems": 4,
+                        "minItems": 1,
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "combination",
+                      "conditions"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "outcome",
+              "rule",
+              "rationale"
+            ],
+            "type": "object"
+          },
+          "decided_on": {
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string"
+          },
+          "decided_outcome": {
+            "enum": [
+              "RULE_PUBLISHED",
+              "NO_RULE_WILL_BE_PUBLISHED"
+            ]
+          },
+          "decision_id": {
+            "pattern": "^AA4-GOV-[0-9]{3}$",
+            "type": "string"
+          },
+          "disposition": {
+            "enum": [
+              "APPROVED_AS_DRAFTED",
+              "CHANGED",
+              "REJECTED"
+            ]
+          },
+          "drafted": {
+            "additionalProperties": false,
+            "properties": {
+              "outcome": {
+                "enum": [
+                  "PROPOSE_RULE",
+                  "PROPOSE_NO_RULE"
+                ]
+              },
+              "rationale": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "rule": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "combination": {
+                        "const": "ALL_CONDITIONS_MUST_MATCH"
+                      },
+                      "conditions": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "field": {
+                              "enum": [
+                                "production",
+                                "internet_exposed",
+                                "contains_customer_data",
+                                "ai_enabled"
+                              ]
+                            },
+                            "state": {
+                              "enum": [
+                                "KNOWN_TRUE",
+                                "KNOWN_FALSE"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "field",
+                            "state"
+                          ],
+                          "type": "object"
+                        },
+                        "maxItems": 4,
+                        "minItems": 1,
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "combination",
+                      "conditions"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "outcome",
+              "rule",
+              "rationale"
+            ],
+            "type": "object"
+          },
+          "drafting_commit": {
+            "const": "dc3b41c9fbb3571a191d2da5164fb73439a0637b"
+          },
+          "drafting_record_path": {
+            "const": "registry/archive_assessment_rule_proposals_drafting_record.json"
+          },
+          "dual_role_statement": {
+            "const": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it."
+          },
+          "header_statement_ref": {
+            "const": "earlier_assessment_knowledge_statement"
+          },
+          "interpretation": {
+            "additionalProperties": false,
+            "properties": {
+              "accepted_as_basis_of_this_decision_only": {
+                "const": true
+              },
+              "basis_statement": {
+                "const": "Accepted as the basis of this decision only. It is not a definition of the control."
+              },
+              "label": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "text": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "text",
+              "accepted_as_basis_of_this_decision_only",
+              "basis_statement"
+            ],
+            "type": "object"
+          },
+          "note": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "scope_note": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "drafted_note": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "note": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "scope": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "scope",
+                      "note"
+                    ],
+                    "type": "object"
+                  },
+                  "ruling": {
+                    "enum": [
+                      "ACCEPTED_AS_TRUE_LIMITATION",
+                      "NOT_ACCEPTED_AS_TRUE_LIMITATION"
+                    ]
+                  }
+                },
+                "required": [
+                  "drafted_note",
+                  "ruling"
+                ],
+                "type": "object"
+              }
+            ]
+          },
+          "supersedes": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "pattern": "^AA4-GOV-[0-9]{3}$",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "decision_id",
+          "control_id",
+          "disposition",
+          "decided_outcome",
+          "drafted",
+          "decided",
+          "interpretation",
+          "note",
+          "scope_note",
+          "approver",
+          "approver_roles",
+          "dual_role_statement",
+          "decided_on",
+          "drafting_commit",
+          "drafting_record_path",
+          "header_statement_ref",
+          "supersedes",
+          "amendment_present"
+        ],
+        "type": "object"
+      },
+      "minItems": 21,
+      "type": "array"
+    },
+    "status": {
+      "const": "GOVERNANCE_DECISIONS"
+    },
+    "wording_approval": {
+      "additionalProperties": false,
+      "properties": {
+        "approver": {
+          "const": "Oscar Mack"
+        },
+        "date": {
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "type": "string"
+        },
+        "role": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_path": {
+          "const": "registry/archive_assessment_governance_wording_approval.json"
+        },
+        "statement_sha256": {
+          "additionalProperties": false,
+          "properties": {
+            "answers_typed_by_authority_statement": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "dual_role_statement": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "earlier_assessment_knowledge_statement": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "answers_typed_by_authority_statement",
+            "dual_role_statement",
+            "earlier_assessment_knowledge_statement"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "approver",
+        "role",
+        "date",
+        "scope",
+        "source_path",
+        "statement_sha256"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "status",
+    "answers_typed_by_authority_statement",
+    "earlier_assessment_knowledge_statement",
+    "wording_approval",
+    "proposals_path",
+    "proposals_sha256",
+    "drafting_record_path",
+    "drafting_record_sha256",
+    "drafting_commit",
+    "answers_path",
+    "answers_sha256",
+    "answers_sha256_normalisation",
+    "records"
+  ],
+  "title": "EMS Archive Assessment Governance Decisions",
+  "type": "object"
+}
