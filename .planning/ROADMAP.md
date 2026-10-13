@@ -20,7 +20,7 @@ EMS answers Hayes Verify request `DEMO3-W1-REQ-001` by extending the AA3 archive
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Rule Shape and Decision States** - The applicability schema can express a rule, a named authority, and three decision states, and rejects everything else
+- [x] **Phase 1: Rule Shape and Decision States** - The applicability schema can express a rule, a named authority, and three decision states, and rejects everything else (completed 2026-10-13)
 - [ ] **Phase 2: Blind Drafting** - 21 rule-or-no-rule proposals drafted from the control catalog alone and committed before any decision
 - [ ] **Phase 3: Governance Decisions** - The EMS authority decides each of the 21 proposals; each outcome becomes a schema-validated decision record (human gate)
 - [ ] **Phase 4: Certified Publication** - A new authority version carries the 21 decisions and 59 undecided controls, certified, traceable and tested, in a clean commit
@@ -97,7 +97,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Rule Shape and Decision States | 2/3 | In Progress|  |
+| 1. Rule Shape and Decision States | 3/3 | Complete   | 2026-10-13 |
 | 2. Blind Drafting | 0/TBD | Not started | - |
 | 3. Governance Decisions | 0/TBD | Not started | - |
 | 4. Certified Publication | 0/TBD | Not started | - |
