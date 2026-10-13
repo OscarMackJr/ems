@@ -24,6 +24,8 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - ✓ Governance decision ids (`AA1-GOV-001`..`008`) cited per control as what makes the authority binding — existing
 - ✓ The v2 applicability schema permits a structured `not_applicable_rule` and a `not_applicable_authority` per control (v1 files unchanged) — Validated in Phase 1: Rule Shape and Decision States
 - ✓ The v2 authority shape expresses three distinguishable states per control: rule published, "no rule will be published" decided, and not yet decided — Validated in Phase 1: Rule Shape and Decision States
+- ✓ A rule-or-no-rule proposal is drafted for each of the 21 controls from the control catalog definitions alone (`registry/archive_assessment_not_applicable_rule_proposals.json`, status `DRAFT_NO_AUTHORITY`) — Validated in Phase 2: Blind Drafting
+- ✓ Drafts are committed before any comparison with a target repository or with the RiskMVP assessment result (drafting commit `dc3b41c`, recorded in `registry/archive_assessment_rule_proposals_drafting_record.json`) — Validated in Phase 2: Blind Drafting
 
 ### Active
 
@@ -33,8 +35,6 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - [ ] Rule conditions are expressed only over the eight declared classification fields, each as a `KNOWN_TRUE` / `KNOWN_FALSE` fact about the target
 - [ ] Each rule is explicit and machine-readable, with no meaning left to convention
 - [ ] Each rule or no-rule decision names its authority (a governance decision id) so Hayes can cite what makes it binding
-- [ ] A rule-or-no-rule proposal is drafted for each of the 21 controls from the control catalog definitions alone
-- [ ] Drafts are committed before any comparison with a target repository or with the RiskMVP assessment result
 - [ ] The governance authority reviews and approves or changes each of the 21 proposals; nothing is published without that approval
 - [ ] Each approval is recorded as a governance decision record that states the approver holds both the EMS authority role and the Hayes developer role
 - [ ] The 59 controls outside the request remain in the "not yet decided" state, unchanged in meaning
@@ -102,7 +102,7 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 |----------|-----------|---------|
 | Scope limited to the 21 controls in the request | Request names 21; deadline is days | — Pending |
 | "No rule will be published" is an explicit published outcome with its own decision id | Lets Hayes tell "decided" from "not yet decided"; today both are `null` | — Pending |
-| Drafts written from the catalog alone and committed before comparison with any target | The RiskMVP result for all 21 is already known; a rule written with it in view could be shaped to an outcome | — Pending |
+| Drafts written from the catalog alone and committed before comparison with any target | The RiskMVP result for all 21 is already known; a rule written with it in view could be shaped to an outcome | ✓ Done in Phase 2: approved brief `6969f52`, drafting commit `dc3b41c`, record `be915e3` |
 | Each rule or no-rule decision is backed by a new governance decision id | That id is the named authority Hayes cites; mirrors `AA1-GOV-001`..`008` | — Pending |
 | Dual role (EMS approver and Hayes developer) recorded in every decision record | Same person rules on both sides; workable only if explicit | — Pending |
 | Success is defined on the EMS side only | Three Hayes-side changes are needed before the live count moves; they belong to the next milestone in the Hayes repository | — Pending |
@@ -128,4 +128,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-13 after Phase 1 (rule shape and decision states) — v2 publisher, schema and tests in place; nothing published yet*
+*Last updated: 2026-10-13 after Phase 2 (blind drafting) — 21 draft proposals committed and frozen with a drafting record; no governance decision made and nothing published yet*
