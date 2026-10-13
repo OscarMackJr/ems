@@ -1,0 +1,26 @@
+{
+  "approval": {
+    "approver": "Oscar Mack",
+    "date": "2026-10-13",
+    "role": "EMS_GOVERNANCE_AUTHORITY",
+    "scope": "Exact wording of the three statements below per D-06, D-16 and D-17; approval of wording only, not of any decision"
+  },
+  "settings": {
+    "S1_decided_rationale_2_to_4_sentences": true,
+    "S2_note_min_chars": 20,
+    "S2_note_not_equal_to_drafted_text": true,
+    "S3_request_id_in_decision_files": false,
+    "S4_decided_on_typed_by_authority": true
+  },
+  "statement_sha256": {
+    "answers_typed_by_authority_statement": "64aac424868d2a6f576de6b9475144adf95b317e055ca65086a1caaaf2fdba8a",
+    "dual_role_statement": "f90200d97e88c0c504d139d8cbb28bb65f43e70f668b4a34ce3b55bf2a84dbac",
+    "earlier_assessment_knowledge_statement": "45b11fb5f2177c30ac9561b882a78b759d1b6d7e3d7897db304ad55401598259"
+  },
+  "statements": {
+    "answers_typed_by_authority_statement": "The dispositions, notes and any decided rule or rationale in the answers file were typed by Oscar Mack. No AI agent chose, suggested or reworded any of them.",
+    "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+    "earlier_assessment_knowledge_statement": "The deciding authority knew the per-control result of an earlier assessment when making these decisions. The drafts were written without that knowledge. No rule was compared with any target during this phase."
+  },
+  "status": "WORDING_APPROVAL"
+}
