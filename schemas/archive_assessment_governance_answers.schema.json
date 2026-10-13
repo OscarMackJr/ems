@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "entries": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "control_id": {
+            "enum": [
+              "EMS-CTRL-009",
+              "EMS-CTRL-010",
+              "EMS-CTRL-011",
+              "EMS-CTRL-012",
+              "EMS-CTRL-013",
+              "EMS-CTRL-014",
+              "EMS-CTRL-015",
+              "EMS-CTRL-017",
+              "EMS-CTRL-018",
+              "EMS-CTRL-019",
+              "EMS-CTRL-020",
+              "EMS-CTRL-021",
+              "EMS-CTRL-022",
+              "EMS-CTRL-030",
+              "EMS-CTRL-033",
+              "EMS-CTRL-039",
+              "EMS-CTRL-042",
+              "EMS-CTRL-052",
+              "EMS-CTRL-062",
+              "EMS-CTRL-075",
+              "EMS-CTRL-079"
+            ]
+          },
+          "decided_on": {
+            "pattern": "^([0-9]{4}-[0-9]{2}-[0-9]{2})?$",
+            "type": "string"
+          },
+          "decided_rationale": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "minLength": 1,
+                "type": "string"
+              }
+            ]
+          },
+          "decided_rule": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "combination": {
+                    "const": "ALL_CONDITIONS_MUST_MATCH"
+                  },
+                  "conditions": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "field": {
+                          "enum": [
+                            "production",
+                            "internet_exposed",
+                            "contains_customer_data",
+                            "ai_enabled"
+                          ]
+                        },
+                        "state": {
+                          "enum": [
+                            "KNOWN_TRUE",
+                            "KNOWN_FALSE"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "field",
+                        "state"
+                      ],
+                      "type": "object"
+                    },
+                    "maxItems": 4,
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "combination",
+                  "conditions"
+                ],
+                "type": "object"
+              }
+            ]
+          },
+          "disposition": {
+            "enum": [
+              "APPROVED_AS_DRAFTED",
+              "CHANGED",
+              "REJECTED",
+              null
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "scope_note_ruling": {
+            "enum": [
+              "ACCEPTED_AS_TRUE_LIMITATION",
+              "NOT_ACCEPTED_AS_TRUE_LIMITATION",
+              null
+            ]
+          },
+          "supersedes": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "pattern": "^AA4-GOV-[0-9]{3}$",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "control_id",
+          "disposition",
+          "note",
+          "decided_rule",
+          "decided_rationale",
+          "scope_note_ruling",
+          "decided_on",
+          "supersedes"
+        ],
+        "type": "object"
+      },
+      "minItems": 21,
+      "type": "array"
+    },
+    "status": {
+      "const": "GOVERNANCE_ANSWERS"
+    }
+  },
+  "required": [
+    "status",
+    "entries"
+  ],
+  "title": "EMS Archive Assessment Governance Answers",
+  "type": "object"
+}
