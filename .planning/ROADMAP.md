@@ -100,7 +100,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Rule Shape and Decision States | 3/3 | Complete    | 2026-10-13 |
 | 2. Blind Drafting | 5/5 | Complete    | 2026-10-13 |
-| 3. Governance Decisions | 0/TBD | Not started | - |
+| 3. Governance Decisions | 1/4 | In Progress|  |
 | 4. Certified Publication | 0/TBD | Not started | - |
 | 5. Reply to Hayes | 0/TBD | Not started | - |
 
