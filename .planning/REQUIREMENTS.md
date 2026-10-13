@@ -18,6 +18,7 @@ The eight classification fields: `production`, `internet_exposed`, `contains_cus
 - [ ] **SCHEMA-03**: Every control carries an explicit decision state with exactly three values: rule published, no rule will be published, not yet decided
 - [ ] **SCHEMA-04**: The schema rejects inconsistent combinations (a published rule with no authority, an undecided control with a rule, a decided control with no decision id)
 - [ ] **SCHEMA-05**: Rule conditions can reference only the eight declared classification fields and only `KNOWN_TRUE` or `KNOWN_FALSE`; anything else fails validation
+  - Note (CONTEXT D-07/D-08): in 2.0.0, rule conditions may name only `production`, `internet_exposed`, `contains_customer_data`, `ai_enabled`; the other four fields (`owner`, `tier`, `service_criticality`, `data_classification`) stay declared but are not usable in rules.
 - [ ] **SCHEMA-06**: The authority states rule semantics in full: how conditions combine, what result a satisfied rule yields, and that an `UNKNOWN` field never yields not-applicable
 
 ### Blind Drafting

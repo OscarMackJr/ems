@@ -241,16 +241,18 @@ Not a moving domain. JSON Schema Draft 2020-12 `if/then/else` and `unevaluatedPr
 | A3 | `maxItems: 4` on conditions is acceptable given D-04 | Pattern 1 | Low; redundant with uniqueness |
 | A4 | pytest is not run in CI (ems-validate.yml only does py_compile and JSON/YAML parse); so the v2 files must py_compile on ubuntu and the schema JSON must parse | Pitfalls | Low |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Field definitions (D-10) wording**
+   - RESOLVED: plan 01 drafts the four definitions from tracked EMS sources and gates them behind a human-verify checkpoint (Oscar Mack approval) before plan 02 copies them verbatim.
    - Known: EMS sources only hold example values (`config/repository_overrides.example.yaml`, `registry/wave2d/applicability_rules.json` repository attributes and rule descriptions such as "AI-specific controls apply when ai_enabled=true"). The AA2 vocabulary file lists the fields but gives no definitions and is `PROPOSED_FOR_APPROVAL`. No authoritative definition text was found in tracked EMS sources.
    - Unclear: precise `KNOWN_TRUE` wording per field.
    - Recommendation: planner includes a task that drafts the four definitions citing source paths and a `checkpoint:human-verify` for Oscar Mack approval before commit; the schema/tests must not depend on the wording (only on presence and non-empty string), so code work can proceed and wording is filled after approval.
 2. **Top-level `approved_governance_decision_ids` in v2**
+   - RESOLVED: the eight AA1 ids stay at top level and per control; `not_applicable_authority` carries AA4-GOV-NNN ids (pattern-only check in Phase 1, optional `known_decision_ids` cross-check).
    - Known: v1 fixes it to eight AA1 ids; new `AA4-GOV-NNN` ids are issued in Phase 3.
    - Recommendation: keep the eight AA1 ids unchanged at top level and per control (`decision_ids`), and let `not_applicable_authority` carry the AA4 ids; have `validate_authority(a, known_decision_ids=None)` optionally cross-check authority ids against a supplied set (used by Phase 4), pattern-only in Phase 1.
-3. **Should v2 `publish()` exist in Phase 1?** Recommend defining `publish()` is deferred; provide only `--validate`-style hooks that fail if the v2 registry file is absent, and `--emit-schema`. Planner decides; either way no registry file is written.
+3. **Should v2 `publish()` exist in Phase 1?** RESOLVED: no `publish()`; the v2 CLI has only `--validate` (fails when the v2 registry file is absent) and `--emit-schema`. Recommend defining `publish()` is deferred; provide only `--validate`-style hooks that fail if the v2 registry file is absent, and `--emit-schema`. Planner decides; either way no registry file is written.
 
 ## Validation Architecture
 Skipped as a separate section: `workflow.nyquist_validation` is `false` in `.planning/config.json`. Verification commands: `python -m pytest tests/test_archive_assessment_applicability_authority.py tests/test_archive_assessment_applicability_authority_v2.py -q`; `git diff --quiet 62a8955 -- scripts/publish_archive_assessment_applicability_authority.py schemas/archive_assessment_applicability_authority.schema.json registry/archive_assessment_applicability_authority.json tests/test_archive_assessment_applicability_authority.py generated/archive-assessment/ems-aa3` (must exit 0, proves SC-5); `python -m py_compile scripts/publish_archive_assessment_applicability_authority_v2.py`; `git status --short registry/archive_assessment_applicability_authority_v2.json` must show nothing.
