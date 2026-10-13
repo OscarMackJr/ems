@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "brief_approval": {
+      "additionalProperties": false,
+      "properties": {
+        "approver": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "date": {
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "type": "string"
+        },
+        "role": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "approver",
+        "role",
+        "date",
+        "scope"
+      ],
+      "type": "object"
+    },
+    "brief_commit": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "brief_path": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "brief_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "catalog_git_blob_id": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "catalog_path": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "catalog_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "correction_rounds": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "discarded_attempts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "reason": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "drafted_on": {
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "type": "string"
+    },
+    "drafter": {
+      "additionalProperties": false,
+      "properties": {
+        "holds_ems_authority": {
+          "const": false
+        },
+        "kind": {
+          "const": "AI agent"
+        },
+        "model_id": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "model_id",
+        "holds_ems_authority"
+      ],
+      "type": "object"
+    },
+    "drafting_commit": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "isolation_method": {
+      "pattern": "by instruction and brief design",
+      "type": "string"
+    },
+    "proposals_path": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "proposals_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "statement": {
+      "const": "An AI agent drafted these proposals and holds no EMS authority. The proposals bind nothing until they are decided by the EMS governance authority."
+    },
+    "status": {
+      "const": "DRAFTING_RECORD"
+    },
+    "validator_result": {
+      "const": "PASS"
+    },
+    "validator_script": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "drafting_commit",
+    "proposals_path",
+    "proposals_sha256",
+    "catalog_path",
+    "catalog_sha256",
+    "catalog_git_blob_id",
+    "brief_path",
+    "brief_sha256",
+    "brief_commit",
+    "brief_approval",
+    "validator_script",
+    "validator_result",
+    "correction_rounds",
+    "discarded_attempts",
+    "drafted_on",
+    "isolation_method",
+    "drafter",
+    "statement"
+  ],
+  "title": "EMS Archive Assessment Rule Proposals Drafting Record",
+  "type": "object"
+}

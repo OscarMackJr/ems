@@ -1,0 +1,426 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "catalog_source": {
+      "additionalProperties": false,
+      "properties": {
+        "entries_have_description": {
+          "const": false
+        },
+        "git_blob_id": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "note": {
+          "const": "None of the 21 requested catalog entries carries a description, and the catalog seed rationale field is boilerplate, not a definition."
+        },
+        "relative_path": {
+          "const": "registry/control_catalog.yaml"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "relative_path",
+        "git_blob_id",
+        "sha256",
+        "entries_have_description",
+        "note"
+      ],
+      "type": "object"
+    },
+    "drafting_frame": {
+      "const": {
+        "absence_of_evidence_is_not_not_applicable": true,
+        "condition_combination": "ALL_CONDITIONS_MUST_MATCH",
+        "condition_states": [
+          "KNOWN_TRUE",
+          "KNOWN_FALSE"
+        ],
+        "decision_state_governs_resolved_result": true,
+        "decision_states": [
+          "RULE_PUBLISHED",
+          "NO_RULE_WILL_BE_PUBLISHED",
+          "NOT_YET_DECIDED"
+        ],
+        "field_definitions": {
+          "ai_enabled": "KNOWN_TRUE asserts that the target includes or uses AI capabilities, so AI-specific controls apply to it.",
+          "contains_customer_data": "KNOWN_TRUE asserts that the target holds or processes customer data.",
+          "internet_exposed": "KNOWN_TRUE asserts that the target, or a service it provides, is reachable from the public internet.",
+          "production": "KNOWN_TRUE asserts that the target is used as, or supports, a production system, so production-data, recovery and release controls are in play."
+        },
+        "field_may_appear_once": true,
+        "fields_not_usable_in_rules": [
+          "owner",
+          "tier",
+          "service_criticality",
+          "data_classification"
+        ],
+        "fields_not_usable_in_rules_statement": "owner, tier, service_criticality and data_classification are declared classification fields that are not usable in rules in this version.",
+        "min_conditions": 1,
+        "no_short_circuit": true,
+        "per_control_default_describes_result_absent_a_decision": true,
+        "requires_explicit_controlled_rule": true,
+        "resolution": [
+          {
+            "condition": "ALWAYS",
+            "decision_state": "NOT_YET_DECIDED",
+            "result": "APPLICABILITY_UNRESOLVED"
+          },
+          {
+            "condition": "ALWAYS",
+            "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+            "result": "APPLICABLE"
+          },
+          {
+            "condition": "ALL_NAMED_FIELDS_KNOWN_AND_ALL_CONDITIONS_MET",
+            "decision_state": "RULE_PUBLISHED",
+            "result": "NOT_APPLICABLE"
+          },
+          {
+            "condition": "ALL_NAMED_FIELDS_KNOWN_AND_NOT_ALL_CONDITIONS_MET",
+            "decision_state": "RULE_PUBLISHED",
+            "result": "APPLICABLE"
+          },
+          {
+            "condition": "ANY_NAMED_FIELD_UNKNOWN",
+            "decision_state": "RULE_PUBLISHED",
+            "result": "APPLICABILITY_UNRESOLVED"
+          }
+        ],
+        "rule_condition_fields": [
+          "production",
+          "internet_exposed",
+          "contains_customer_data",
+          "ai_enabled"
+        ],
+        "statements": [
+          "A not_applicable_rule is a flat list of conditions and all conditions must match.",
+          "When every field named by a published rule is known and every condition is met, the result is NOT_APPLICABLE.",
+          "When every field named by a published rule is known and not every condition is met, the result is APPLICABLE.",
+          "NO_RULE_WILL_BE_PUBLISHED resolves to APPLICABLE for every target whatever the facts.",
+          "NOT_YET_DECIDED resolves to APPLICABILITY_UNRESOLVED.",
+          "When any field named by a published rule is UNKNOWN the result is APPLICABILITY_UNRESOLVED, even when another named field already fails its condition.",
+          "UNKNOWN never yields NOT_APPLICABLE.",
+          "The not_applicable_decision_state governs the resolved result; default_applicability_result describes the result absent a decision."
+        ],
+        "unknown_is_never_not_applicable": true,
+        "unknown_is_not_not_applicable": true
+      }
+    },
+    "non_authority_statement": {
+      "const": "This file is a set of drafts. It is not an authority, it binds nothing and it must not be cited as a decision."
+    },
+    "proposals": {
+      "items": {
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "proposed_outcome": {
+                  "const": "PROPOSE_RULE"
+                }
+              },
+              "required": [
+                "proposed_outcome"
+              ]
+            },
+            "then": {
+              "properties": {
+                "proposed_rule": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "combination": {
+                      "const": "ALL_CONDITIONS_MUST_MATCH"
+                    },
+                    "conditions": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "field": {
+                            "enum": [
+                              "production",
+                              "internet_exposed",
+                              "contains_customer_data",
+                              "ai_enabled"
+                            ]
+                          },
+                          "state": {
+                            "enum": [
+                              "KNOWN_TRUE",
+                              "KNOWN_FALSE"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "field",
+                          "state"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 4,
+                      "minItems": 1,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "combination",
+                    "conditions"
+                  ],
+                  "type": "object"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "proposed_outcome": {
+                  "const": "PROPOSE_NO_RULE"
+                }
+              },
+              "required": [
+                "proposed_outcome"
+              ]
+            },
+            "then": {
+              "properties": {
+                "proposed_rule": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ],
+        "properties": {
+          "alternative_considered": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "outcome": {
+                    "enum": [
+                      "PROPOSE_RULE",
+                      "PROPOSE_NO_RULE"
+                    ]
+                  },
+                  "why": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "outcome",
+                  "why"
+                ],
+                "type": "object"
+              }
+            ]
+          },
+          "catalog_inputs": {
+            "additionalProperties": false,
+            "properties": {
+              "classification_status": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "control_name": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "evidence_authority": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "inheritance_allowed": {
+                "type": "boolean"
+              },
+              "scope": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "scope_owner": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "control_name",
+              "scope",
+              "scope_owner",
+              "evidence_authority"
+            ],
+            "type": "object"
+          },
+          "confidence": {
+            "enum": [
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          },
+          "control_id": {
+            "enum": [
+              "EMS-CTRL-009",
+              "EMS-CTRL-010",
+              "EMS-CTRL-011",
+              "EMS-CTRL-012",
+              "EMS-CTRL-013",
+              "EMS-CTRL-014",
+              "EMS-CTRL-015",
+              "EMS-CTRL-017",
+              "EMS-CTRL-018",
+              "EMS-CTRL-019",
+              "EMS-CTRL-020",
+              "EMS-CTRL-021",
+              "EMS-CTRL-022",
+              "EMS-CTRL-030",
+              "EMS-CTRL-033",
+              "EMS-CTRL-039",
+              "EMS-CTRL-042",
+              "EMS-CTRL-052",
+              "EMS-CTRL-062",
+              "EMS-CTRL-075",
+              "EMS-CTRL-079"
+            ]
+          },
+          "interpretation": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "const": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE"
+              },
+              "text": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "text"
+            ],
+            "type": "object"
+          },
+          "proposed_outcome": {
+            "enum": [
+              "PROPOSE_RULE",
+              "PROPOSE_NO_RULE"
+            ]
+          },
+          "proposed_rule": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "combination": {
+                    "const": "ALL_CONDITIONS_MUST_MATCH"
+                  },
+                  "conditions": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "field": {
+                          "enum": [
+                            "production",
+                            "internet_exposed",
+                            "contains_customer_data",
+                            "ai_enabled"
+                          ]
+                        },
+                        "state": {
+                          "enum": [
+                            "KNOWN_TRUE",
+                            "KNOWN_FALSE"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "field",
+                        "state"
+                      ],
+                      "type": "object"
+                    },
+                    "maxItems": 4,
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "combination",
+                  "conditions"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rationale": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "shape_limitation": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "note": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "scope": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "scope",
+                  "note"
+                ],
+                "type": "object"
+              }
+            ]
+          }
+        },
+        "required": [
+          "control_id",
+          "proposed_outcome",
+          "proposed_rule",
+          "catalog_inputs",
+          "interpretation",
+          "rationale",
+          "confidence",
+          "alternative_considered",
+          "shape_limitation"
+        ],
+        "type": "object"
+      },
+      "maxItems": 21,
+      "minItems": 21,
+      "type": "array"
+    },
+    "status": {
+      "const": "DRAFT_NO_AUTHORITY"
+    }
+  },
+  "required": [
+    "status",
+    "non_authority_statement",
+    "drafting_frame",
+    "catalog_source",
+    "proposals"
+  ],
+  "title": "EMS Archive Assessment Not-Applicable Rule Proposals (draft, no authority)",
+  "type": "object"
+}
