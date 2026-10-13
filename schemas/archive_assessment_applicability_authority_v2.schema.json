@@ -1,0 +1,418 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "approved_governance_decision_ids": {
+      "items": {
+        "pattern": "^AA1-GOV-00[1-8]$",
+        "type": "string"
+      },
+      "maxItems": 8,
+      "minItems": 8,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "assessment_semantics": {
+      "const": "CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT"
+    },
+    "authority_id": {
+      "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0"
+    },
+    "controls": {
+      "items": {
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "not_applicable_decision_state": {
+                  "const": "RULE_PUBLISHED"
+                }
+              },
+              "required": [
+                "not_applicable_decision_state"
+              ]
+            },
+            "then": {
+              "properties": {
+                "not_applicable_authority": {
+                  "pattern": "^AA4-GOV-[0-9]{3}$",
+                  "type": "string"
+                },
+                "not_applicable_rule": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "combination": {
+                      "const": "ALL_CONDITIONS_MUST_MATCH"
+                    },
+                    "conditions": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "field": {
+                            "enum": [
+                              "production",
+                              "internet_exposed",
+                              "contains_customer_data",
+                              "ai_enabled"
+                            ]
+                          },
+                          "state": {
+                            "enum": [
+                              "KNOWN_TRUE",
+                              "KNOWN_FALSE"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "field",
+                          "state"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 4,
+                      "minItems": 1,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "combination",
+                    "conditions"
+                  ],
+                  "type": "object"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "not_applicable_decision_state": {
+                  "const": "NO_RULE_WILL_BE_PUBLISHED"
+                }
+              },
+              "required": [
+                "not_applicable_decision_state"
+              ]
+            },
+            "then": {
+              "properties": {
+                "not_applicable_authority": {
+                  "pattern": "^AA4-GOV-[0-9]{3}$",
+                  "type": "string"
+                },
+                "not_applicable_rule": {
+                  "type": "null"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "not_applicable_decision_state": {
+                  "const": "NOT_YET_DECIDED"
+                }
+              },
+              "required": [
+                "not_applicable_decision_state"
+              ]
+            },
+            "then": {
+              "properties": {
+                "not_applicable_authority": {
+                  "type": "null"
+                },
+                "not_applicable_rule": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ],
+        "properties": {
+          "archive_population_membership": {
+            "const": "IN_ARCHIVE_CONTROL_POPULATION"
+          },
+          "assessment_semantics": {
+            "const": "CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT"
+          },
+          "classification_unknown_treatment": {
+            "const": "APPLICABILITY_UNRESOLVED"
+          },
+          "control_id": {
+            "pattern": "^EMS-CTRL-[0-9]{3}$",
+            "type": "string"
+          },
+          "decision_ids": {
+            "maxItems": 8,
+            "minItems": 8,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "default_applicability_result": {
+            "const": "APPLICABILITY_UNRESOLVED"
+          },
+          "not_applicable_authority": {
+            "anyOf": [
+              {
+                "pattern": "^AA4-GOV-[0-9]{3}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "not_applicable_decision_state": {
+            "enum": [
+              "RULE_PUBLISHED",
+              "NO_RULE_WILL_BE_PUBLISHED",
+              "NOT_YET_DECIDED"
+            ]
+          },
+          "not_applicable_rule": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "combination": {
+                    "const": "ALL_CONDITIONS_MUST_MATCH"
+                  },
+                  "conditions": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "field": {
+                          "enum": [
+                            "production",
+                            "internet_exposed",
+                            "contains_customer_data",
+                            "ai_enabled"
+                          ]
+                        },
+                        "state": {
+                          "enum": [
+                            "KNOWN_TRUE",
+                            "KNOWN_FALSE"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "field",
+                        "state"
+                      ],
+                      "type": "object"
+                    },
+                    "maxItems": 4,
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "combination",
+                  "conditions"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "target_type": {
+            "const": "ARCHIVED_REPOSITORY_SNAPSHOT"
+          }
+        },
+        "required": [
+          "control_id",
+          "archive_population_membership",
+          "target_type",
+          "assessment_semantics",
+          "classification_prerequisites",
+          "classification_unknown_treatment",
+          "archive_evidence_capability",
+          "required_non_repository_authority",
+          "default_applicability_result",
+          "unresolved_reason",
+          "not_applicable_decision_state",
+          "not_applicable_rule",
+          "not_applicable_authority",
+          "decision_ids"
+        ],
+        "type": "object"
+      },
+      "maxItems": 80,
+      "minItems": 80,
+      "type": "array"
+    },
+    "document_id": {
+      "const": "EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY"
+    },
+    "not_applicable_semantics": {
+      "properties": {
+        "absence_of_evidence_is_not_not_applicable": {
+          "const": true
+        },
+        "condition_combination": {
+          "const": "ALL_CONDITIONS_MUST_MATCH"
+        },
+        "condition_states": {
+          "const": [
+            "KNOWN_TRUE",
+            "KNOWN_FALSE"
+          ]
+        },
+        "decision_state_governs_resolved_result": {
+          "const": true
+        },
+        "decision_states": {
+          "const": [
+            "RULE_PUBLISHED",
+            "NO_RULE_WILL_BE_PUBLISHED",
+            "NOT_YET_DECIDED"
+          ]
+        },
+        "field_definitions": {
+          "additionalProperties": false,
+          "properties": {
+            "ai_enabled": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "contains_customer_data": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "internet_exposed": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "production": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "production",
+            "internet_exposed",
+            "contains_customer_data",
+            "ai_enabled"
+          ],
+          "type": "object"
+        },
+        "field_may_appear_once": {
+          "const": true
+        },
+        "fields_not_usable_in_rules": {
+          "const": [
+            "owner",
+            "tier",
+            "service_criticality",
+            "data_classification"
+          ]
+        },
+        "min_conditions": {
+          "const": 1
+        },
+        "no_short_circuit": {
+          "const": true
+        },
+        "per_control_default_describes_result_absent_a_decision": {
+          "const": true
+        },
+        "requires_explicit_controlled_rule": {
+          "const": true
+        },
+        "resolution": {
+          "const": [
+            {
+              "condition": "ALWAYS",
+              "decision_state": "NOT_YET_DECIDED",
+              "result": "APPLICABILITY_UNRESOLVED"
+            },
+            {
+              "condition": "ALWAYS",
+              "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+              "result": "APPLICABLE"
+            },
+            {
+              "condition": "ALL_NAMED_FIELDS_KNOWN_AND_ALL_CONDITIONS_MET",
+              "decision_state": "RULE_PUBLISHED",
+              "result": "NOT_APPLICABLE"
+            },
+            {
+              "condition": "ALL_NAMED_FIELDS_KNOWN_AND_NOT_ALL_CONDITIONS_MET",
+              "decision_state": "RULE_PUBLISHED",
+              "result": "APPLICABLE"
+            },
+            {
+              "condition": "ANY_NAMED_FIELD_UNKNOWN",
+              "decision_state": "RULE_PUBLISHED",
+              "result": "APPLICABILITY_UNRESOLVED"
+            }
+          ]
+        },
+        "rule_condition_fields": {
+          "const": [
+            "production",
+            "internet_exposed",
+            "contains_customer_data",
+            "ai_enabled"
+          ]
+        },
+        "unknown_is_never_not_applicable": {
+          "const": true
+        },
+        "unknown_is_not_not_applicable": {
+          "const": true
+        }
+      },
+      "required": [
+        "requires_explicit_controlled_rule",
+        "absence_of_evidence_is_not_not_applicable",
+        "unknown_is_not_not_applicable",
+        "decision_states",
+        "condition_states",
+        "condition_combination",
+        "min_conditions",
+        "field_may_appear_once",
+        "rule_condition_fields",
+        "fields_not_usable_in_rules",
+        "fields_not_usable_in_rules_statement",
+        "field_definitions",
+        "resolution",
+        "no_short_circuit",
+        "decision_state_governs_resolved_result",
+        "per_control_default_describes_result_absent_a_decision",
+        "unknown_is_never_not_applicable",
+        "statements"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "const": "CONTROLLED"
+    },
+    "target_type": {
+      "const": "ARCHIVED_REPOSITORY_SNAPSHOT"
+    },
+    "version": {
+      "const": "2.0.0"
+    }
+  },
+  "required": [
+    "document_id",
+    "version",
+    "status",
+    "authority_id",
+    "target_type",
+    "assessment_semantics",
+    "classification_vocabulary",
+    "applicability_vocabulary",
+    "not_applicable_semantics",
+    "evidence_boundary",
+    "source_lineage",
+    "approved_governance_decision_ids",
+    "controls"
+  ],
+  "title": "EMS AA3 Archive Assessment Applicability Authority v2",
+  "type": "object"
+}

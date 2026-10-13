@@ -1,0 +1,240 @@
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+from pathlib import Path
+
+import jsonschema
+import yaml
+
+ROOT = Path(__file__).resolve().parents[1]
+REGISTRY = ROOT / 'registry'
+SCHEMAS = ROOT / 'schemas'
+CATALOG = REGISTRY / 'control_catalog.yaml'
+AUTHORITY = REGISTRY / 'archive_assessment_applicability_authority_v2.json'
+SCHEMA = SCHEMAS / 'archive_assessment_applicability_authority_v2.schema.json'
+V1_AUTHORITY = REGISTRY / 'archive_assessment_applicability_authority.json'
+DECISIONS = [f'AA1-GOV-{n:03d}' for n in range(1, 9)]
+CLASSIFICATION_FIELDS = ['production','internet_exposed','contains_customer_data','ai_enabled','owner','tier','service_criticality','data_classification']
+RULE_FIELDS = CLASSIFICATION_FIELDS[:4]
+NON_RULE_FIELDS = CLASSIFICATION_FIELDS[4:]
+CONDITION_STATES = ['KNOWN_TRUE','KNOWN_FALSE']
+DECISION_STATES = ['RULE_PUBLISHED','NO_RULE_WILL_BE_PUBLISHED','NOT_YET_DECIDED']
+COMBINATION = 'ALL_CONDITIONS_MUST_MATCH'
+AUTHORITY_ID_RE = r'^AA4-GOV-[0-9]{3}$'
+RESULTS = ['APPLICABLE','NOT_APPLICABLE','APPLICABILITY_UNRESOLVED']
+FIELD_DEFINITIONS = {
+    'production': 'KNOWN_TRUE asserts that the target is used as, or supports, a production system, so production-data, recovery and release controls are in play.',
+    'internet_exposed': 'KNOWN_TRUE asserts that the target, or a service it provides, is reachable from the public internet.',
+    'contains_customer_data': 'KNOWN_TRUE asserts that the target holds or processes customer data.',
+    'ai_enabled': 'KNOWN_TRUE asserts that the target includes or uses AI capabilities, so AI-specific controls apply to it.',
+}
+RESOLUTION = [
+    {'decision_state': 'NOT_YET_DECIDED', 'condition': 'ALWAYS', 'result': 'APPLICABILITY_UNRESOLVED'},
+    {'decision_state': 'NO_RULE_WILL_BE_PUBLISHED', 'condition': 'ALWAYS', 'result': 'APPLICABLE'},
+    {'decision_state': 'RULE_PUBLISHED', 'condition': 'ALL_NAMED_FIELDS_KNOWN_AND_ALL_CONDITIONS_MET', 'result': 'NOT_APPLICABLE'},
+    {'decision_state': 'RULE_PUBLISHED', 'condition': 'ALL_NAMED_FIELDS_KNOWN_AND_NOT_ALL_CONDITIONS_MET', 'result': 'APPLICABLE'},
+    {'decision_state': 'RULE_PUBLISHED', 'condition': 'ANY_NAMED_FIELD_UNKNOWN', 'result': 'APPLICABILITY_UNRESOLVED'},
+]
+
+class AuthorityError(ValueError): pass
+
+def digest(p: Path) -> str: return hashlib.sha256(p.read_bytes()).hexdigest()
+def dump(p: Path, value: object) -> None:
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(value, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+def load(p: Path) -> dict: return json.loads(p.read_text(encoding='utf-8'))
+def contains_absolute(value: object) -> bool:
+    if isinstance(value, str): return value.startswith(('/', '\\\\')) or (len(value) > 2 and value[1] == ':' and value[2] in '\\/')
+    if isinstance(value, dict): return any(contains_absolute(v) for v in value.values())
+    if isinstance(value, list): return any(contains_absolute(v) for v in value)
+    return False
+
+def catalog_controls() -> list[dict]:
+    data = yaml.safe_load(CATALOG.read_text(encoding='utf-8'))
+    controls = data.get('controls', [])
+    ids = [c.get('control_id') for c in controls]
+    if len(controls) != 80 or len(set(ids)) != 80 or any(not x for x in ids):
+        raise AuthorityError('controlled catalog does not contain exactly 80 unique control IDs')
+    return controls
+
+def semantics() -> dict:
+    return {
+        'requires_explicit_controlled_rule': True,
+        'absence_of_evidence_is_not_not_applicable': True,
+        'unknown_is_not_not_applicable': True,
+        'decision_states': list(DECISION_STATES),
+        'condition_states': list(CONDITION_STATES),
+        'condition_combination': COMBINATION,
+        'min_conditions': 1,
+        'field_may_appear_once': True,
+        'rule_condition_fields': list(RULE_FIELDS),
+        'fields_not_usable_in_rules': list(NON_RULE_FIELDS),
+        'fields_not_usable_in_rules_statement': 'owner, tier, service_criticality and data_classification are declared classification fields that are not usable in rules in this version.',
+        'field_definitions': dict(FIELD_DEFINITIONS),
+        'resolution': [dict(r) for r in RESOLUTION],
+        'no_short_circuit': True,
+        'decision_state_governs_resolved_result': True,
+        'per_control_default_describes_result_absent_a_decision': True,
+        'unknown_is_never_not_applicable': True,
+        'statements': [
+            'A not_applicable_rule is a flat list of conditions and all conditions must match.',
+            'When every field named by a published rule is known and every condition is met, the result is NOT_APPLICABLE.',
+            'When every field named by a published rule is known and not every condition is met, the result is APPLICABLE.',
+            'NO_RULE_WILL_BE_PUBLISHED resolves to APPLICABLE for every target whatever the facts.',
+            'NOT_YET_DECIDED resolves to APPLICABILITY_UNRESOLVED.',
+            'When any field named by a published rule is UNKNOWN the result is APPLICABILITY_UNRESOLVED, even when another named field already fails its condition.',
+            'UNKNOWN never yields NOT_APPLICABLE.',
+            'The not_applicable_decision_state governs the resolved result; default_applicability_result describes the result absent a decision.',
+        ],
+    }
+
+def build_authority() -> dict:
+    catalog = catalog_controls()
+    v1 = load(V1_AUTHORITY)
+    lin = v1['source_lineage']
+    controls = []
+    for c in catalog:
+        scope = c['scope']
+        controls.append({
+            'control_id': c['control_id'], 'control_name': c['control_name'], 'catalog_scope': scope,
+            'archive_population_membership': 'IN_ARCHIVE_CONTROL_POPULATION',
+            'target_type': 'ARCHIVED_REPOSITORY_SNAPSHOT',
+            'assessment_semantics': 'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT',
+            'classification_prerequisites': list(CLASSIFICATION_FIELDS),
+            'classification_unknown_treatment': 'APPLICABILITY_UNRESOLVED',
+            'archive_evidence_capability': 'REPOSITORY_CONTENT_FACTS_ONLY',
+            'required_non_repository_authority': 'REPOSITORY_CONTENT_ONLY' if scope == 'REPOSITORY' else scope,
+            'default_applicability_result': 'APPLICABILITY_UNRESOLVED',
+            'unresolved_reason': 'CONTROLLED_TARGET_CLASSIFICATION_AND_AUTHORITY_INPUTS_REQUIRED',
+            'not_applicable_decision_state': 'NOT_YET_DECIDED',
+            'not_applicable_rule': None,
+            'not_applicable_authority': None,
+            'decision_ids': list(DECISIONS),
+        })
+    return {
+        '$schema': 'schemas/archive_assessment_applicability_authority_v2.schema.json',
+        'document_id': 'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY', 'version': '2.0.0', 'status': 'CONTROLLED',
+        'authority_id': 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0',
+        'target_type': 'ARCHIVED_REPOSITORY_SNAPSHOT',
+        'assessment_semantics': 'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT',
+        'attestation_prohibitions': {'historical_compliance_attestation': False, 'current_repository_attestation': False, 'production_readiness_attestation': False},
+        'classification_vocabulary': {'states': ['KNOWN_TRUE','KNOWN_FALSE','UNKNOWN'], 'fields': list(CLASSIFICATION_FIELDS), 'unknown_is_not_false': True, 'unknown_is_not_not_applicable': True},
+        'applicability_vocabulary': list(RESULTS),
+        'not_applicable_semantics': semantics(),
+        'evidence_boundary': {'archive_content_establishes': ['REPOSITORY_CONTENT_FACTS_ONLY'], 'archive_content_does_not_establish': ['LIVE_REPOSITORY_STATE','ORGANIZATION_AUTHORITY','SERVICE_STATE','PLATFORM_STATE','CURRENT_CICD_STATE','RUNTIME_STATE','EXTERNAL_SYSTEM_STATE','CURRENT_DEPLOYMENT_STATE','VENDOR_SERVICE_EVIDENCE']},
+        'source_lineage': {
+            'aa1_manifest_sha256': lin['aa1_manifest_sha256'], 'aa2_closure_sha256': lin['aa2_closure_sha256'], 'aa2_approval_sha256': lin['aa2_approval_sha256'],
+            'catalog_reference': {'relative_path': 'registry/control_catalog.yaml', 'sha256': digest(CATALOG), 'required_for_deterministic_compilation': False},
+            'supersedes': {'authority_id': v1['authority_id'], 'version': '1.0.0', 'commit': '62a8955', 'relative_path': 'registry/archive_assessment_applicability_authority.json', 'sha256': digest(V1_AUTHORITY)},
+        },
+        'approved_governance_decision_ids': list(DECISIONS), 'controls': controls,
+    }
+
+def validate_rule(cid: str, rule: object, errors: list) -> None:
+    if not isinstance(rule, dict) or set(rule) != {'combination', 'conditions'}:
+        errors.append(f'{cid}: rule must be an object with exactly combination and conditions'); return
+    if rule['combination'] != COMBINATION: errors.append(f'{cid}: rule combination invalid')
+    conds = rule['conditions']
+    if not isinstance(conds, list) or not conds:
+        errors.append(f'{cid}: rule needs at least one condition'); return
+    seen = []
+    for cond in conds:
+        if not isinstance(cond, dict) or set(cond) != {'field', 'state'}:
+            errors.append(f'{cid}: condition must have exactly field and state'); continue
+        if cond['field'] not in RULE_FIELDS: errors.append(f"{cid}: field {cond['field']!r} not usable in rules")
+        if cond['state'] not in CONDITION_STATES: errors.append(f"{cid}: condition state {cond['state']!r} invalid")
+        if cond['field'] in seen: errors.append(f"{cid}: field {cond['field']!r} repeated")
+        seen.append(cond['field'])
+
+def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
+    errors = []
+    req = {'document_id','version','status','authority_id','target_type','assessment_semantics','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','controls'}
+    if not req <= set(a): errors.append('missing required top-level authority fields')
+    if a.get('document_id') != 'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY' or a.get('version') != '2.0.0' or a.get('status') != 'CONTROLLED' or a.get('authority_id') != 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0': errors.append('authority identity/version/status invalid')
+    if a.get('target_type') != 'ARCHIVED_REPOSITORY_SNAPSHOT' or a.get('assessment_semantics') != 'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT': errors.append('unauthorized target or assessment semantics')
+    if a.get('approved_governance_decision_ids') != DECISIONS: errors.append('AA2 decision provenance is incomplete or contains an unapproved decision')
+    cv = a.get('classification_vocabulary', {})
+    if cv.get('states') != ['KNOWN_TRUE','KNOWN_FALSE','UNKNOWN'] or not cv.get('unknown_is_not_false') or not cv.get('unknown_is_not_not_applicable'): errors.append('UNKNOWN semantics collapse or vocabulary invalid')
+    sem = a.get('not_applicable_semantics', {})
+    if not isinstance(sem, dict): sem = {}
+    if sem.get('requires_explicit_controlled_rule') is not True: errors.append('implicit NOT_APPLICABLE is authorized')
+    pin = {k: v for k, v in sem.items() if k != 'field_definitions'}
+    expected = {k: v for k, v in semantics().items() if k != 'field_definitions'}
+    if pin != expected: errors.append('not_applicable_semantics does not match the published semantics')
+    fd = sem.get('field_definitions')
+    if not isinstance(fd, dict) or set(fd) != set(RULE_FIELDS) or any(not isinstance(v, str) or not v.strip() for v in fd.values()): errors.append('field_definitions must define exactly the four rule fields with non-empty text')
+    sup = a.get('source_lineage', {}).get('supersedes') if isinstance(a.get('source_lineage'), dict) else None
+    if not isinstance(sup, dict) or sup.get('commit') != '62a8955' or sup.get('version') != '1.0.0': errors.append('source_lineage supersedes v1 entry missing or invalid')
+    if contains_absolute(a): errors.append('absolute local path used as authority identity')
+    for dependency in a.get('dependencies', []):
+        if dependency.get('required_for_deterministic_compilation') and (not dependency.get('relative_path') or not dependency.get('sha256')): errors.append('required authority dependency cannot be deterministically frozen')
+    catalog_ids = {c['control_id'] for c in catalog_controls()}; rows = a.get('controls', []); ids = [r.get('control_id') for r in rows]
+    if len(ids) != 80 or len(set(ids)) != 80: errors.append('duplicate or incorrect control population count')
+    if set(ids) != catalog_ids: errors.append('missing or unknown control ID')
+    forbidden = set(a.get('evidence_boundary', {}).get('archive_content_does_not_establish', []))
+    if not {'LIVE_REPOSITORY_STATE','ORGANIZATION_AUTHORITY','SERVICE_STATE','PLATFORM_STATE','CURRENT_CICD_STATE','RUNTIME_STATE'} <= forbidden: errors.append('live authority evidence boundary incomplete')
+    for r in rows:
+        cid = r.get('control_id')
+        if r.get('archive_population_membership') != 'IN_ARCHIVE_CONTROL_POPULATION': errors.append(f'{cid}: population membership not explicit')
+        if r.get('default_applicability_result') != 'APPLICABILITY_UNRESOLVED' or r.get('classification_unknown_treatment') != 'APPLICABILITY_UNRESOLVED': errors.append(f'{cid}: UNKNOWN/missing input is not fail-closed unresolved')
+        if r.get('decision_ids') != DECISIONS: errors.append(f'{cid}: missing AA2 traceability')
+        state = r.get('not_applicable_decision_state'); rule = r.get('not_applicable_rule'); auth = r.get('not_applicable_authority')
+        if state not in DECISION_STATES: errors.append(f'{cid}: not_applicable_decision_state invalid'); continue
+        if state == 'NOT_YET_DECIDED':
+            if rule is not None or auth is not None: errors.append(f'{cid}: NOT_YET_DECIDED requires null rule and null authority')
+            continue
+        if state == 'RULE_PUBLISHED': validate_rule(cid, rule, errors)
+        elif rule is not None: errors.append(f'{cid}: NO_RULE_WILL_BE_PUBLISHED requires null rule')
+        if not isinstance(auth, str) or not re.match(AUTHORITY_ID_RE, auth): errors.append(f'{cid}: decided control needs an AA4-GOV-NNN authority')
+        elif known_decision_ids is not None and auth not in known_decision_ids: errors.append(f'{cid}: authority {auth} is not an approved decision id')
+    att = a.get('attestation_prohibitions', {})
+    if any(att.get(k) is not False for k in ['historical_compliance_attestation','current_repository_attestation','production_readiness_attestation']): errors.append('attestation leakage')
+    if errors: raise AuthorityError('; '.join(errors))
+
+def schema() -> dict:
+    cond = {'type':'object','additionalProperties':False,'required':['field','state'],'properties':{'field':{'enum':list(RULE_FIELDS)},'state':{'enum':list(CONDITION_STATES)}}}
+    rule = {'type':'object','additionalProperties':False,'required':['combination','conditions'],'properties':{'combination':{'const':COMBINATION},'conditions':{'type':'array','minItems':1,'maxItems':len(RULE_FIELDS),'items':cond}}}
+    auth = {'type':'string','pattern':AUTHORITY_ID_RE}
+    def branch(state, rule_s, auth_s):
+        return {'if':{'properties':{'not_applicable_decision_state':{'const':state}},'required':['not_applicable_decision_state']},'then':{'properties':{'not_applicable_rule':rule_s,'not_applicable_authority':auth_s}}}
+    sem = {'type':'object','required':['requires_explicit_controlled_rule','absence_of_evidence_is_not_not_applicable','unknown_is_not_not_applicable','decision_states','condition_states','condition_combination','min_conditions','field_may_appear_once','rule_condition_fields','fields_not_usable_in_rules','fields_not_usable_in_rules_statement','field_definitions','resolution','no_short_circuit','decision_state_governs_resolved_result','per_control_default_describes_result_absent_a_decision','unknown_is_never_not_applicable','statements'],
+        'properties':{'requires_explicit_controlled_rule':{'const':True},'absence_of_evidence_is_not_not_applicable':{'const':True},'unknown_is_not_not_applicable':{'const':True},'decision_states':{'const':list(DECISION_STATES)},'condition_states':{'const':list(CONDITION_STATES)},'condition_combination':{'const':COMBINATION},'min_conditions':{'const':1},'field_may_appear_once':{'const':True},'rule_condition_fields':{'const':list(RULE_FIELDS)},'fields_not_usable_in_rules':{'const':list(NON_RULE_FIELDS)},'field_definitions':{'type':'object','additionalProperties':False,'required':list(RULE_FIELDS),'properties':{f:{'type':'string','minLength':1} for f in RULE_FIELDS}},'resolution':{'const':[dict(r) for r in RESOLUTION]},'no_short_circuit':{'const':True},'decision_state_governs_resolved_result':{'const':True},'per_control_default_describes_result_absent_a_decision':{'const':True},'unknown_is_never_not_applicable':{'const':True}}}
+    return {'$schema':'https://json-schema.org/draft/2020-12/schema','title':'EMS AA3 Archive Assessment Applicability Authority v2','type':'object',
+        'required':['document_id','version','status','authority_id','target_type','assessment_semantics','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','controls'],
+        'properties':{'document_id':{'const':'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY'},'version':{'const':'2.0.0'},'status':{'const':'CONTROLLED'},'authority_id':{'const':'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0'},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},
+            'approved_governance_decision_ids':{'type':'array','minItems':8,'maxItems':8,'items':{'type':'string','pattern':'^AA1-GOV-00[1-8]$'},'uniqueItems':True},
+            'not_applicable_semantics':sem,
+            'controls':{'type':'array','minItems':80,'maxItems':80,'items':{'type':'object',
+                'required':['control_id','archive_population_membership','target_type','assessment_semantics','classification_prerequisites','classification_unknown_treatment','archive_evidence_capability','required_non_repository_authority','default_applicability_result','unresolved_reason','not_applicable_decision_state','not_applicable_rule','not_applicable_authority','decision_ids'],
+                'properties':{'control_id':{'type':'string','pattern':'^EMS-CTRL-[0-9]{3}$'},'archive_population_membership':{'const':'IN_ARCHIVE_CONTROL_POPULATION'},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},'classification_unknown_treatment':{'const':'APPLICABILITY_UNRESOLVED'},'default_applicability_result':{'const':'APPLICABILITY_UNRESOLVED'},
+                    'not_applicable_decision_state':{'enum':list(DECISION_STATES)},'not_applicable_rule':{'anyOf':[rule,{'type':'null'}]},'not_applicable_authority':{'anyOf':[auth,{'type':'null'}]},
+                    'decision_ids':{'type':'array','minItems':8,'maxItems':8,'uniqueItems':True}},
+                'allOf':[branch('RULE_PUBLISHED',rule,auth),branch('NO_RULE_WILL_BE_PUBLISHED',{'type':'null'},auth),branch('NOT_YET_DECIDED',{'type':'null'},{'type':'null'})]}}}}
+
+def resolve_applicability(control: dict, facts: dict) -> str:
+    state = control.get('not_applicable_decision_state')
+    if state == 'NOT_YET_DECIDED': return 'APPLICABILITY_UNRESOLVED'
+    if state == 'NO_RULE_WILL_BE_PUBLISHED': return 'APPLICABLE'
+    if state != 'RULE_PUBLISHED': return 'APPLICABILITY_UNRESOLVED'
+    rule = control.get('not_applicable_rule')
+    if not isinstance(rule, dict) or not isinstance(rule.get('conditions'), list) or not rule['conditions']: return 'APPLICABILITY_UNRESOLVED'
+    unknown = False; met = True
+    for cond in rule['conditions']:
+        if not isinstance(cond, dict) or cond.get('field') not in RULE_FIELDS or cond.get('state') not in CONDITION_STATES: return 'APPLICABILITY_UNRESOLVED'
+        value = facts.get(cond['field'], 'UNKNOWN')
+        if not (isinstance(value, str) and value in CONDITION_STATES): unknown = True
+        elif value != cond['state']: met = False
+    if unknown: return 'APPLICABILITY_UNRESOLVED'
+    return 'NOT_APPLICABLE' if met else 'APPLICABLE'
+
+def main() -> None:
+    parser = argparse.ArgumentParser(); parser.add_argument('--validate', action='store_true'); parser.add_argument('--emit-schema', action='store_true'); args = parser.parse_args()
+    if args.validate:
+        if not AUTHORITY.exists(): raise AuthorityError('v2 registry authority file is not published')
+        a = load(AUTHORITY); validate_authority(a); jsonschema.Draft202012Validator(load(SCHEMA)).validate(a); print('PASS')
+    elif args.emit_schema: dump(SCHEMA, schema())
+    else: parser.error('one of --validate or --emit-schema is required')
+if __name__ == '__main__': main()
