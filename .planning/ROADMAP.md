@@ -47,7 +47,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Requirements**: DRAFT-01, DRAFT-02, DRAFT-03
 **Success Criteria** (what must be TRUE):
   1. A committed proposals file lists exactly the 21 requested control ids (EMS-CTRL-009, 010, 011, 012, 013, 014, 015, 017, 018, 019, 020, 021, 022, 030, 033, 039, 042, 052, 062, 075, 079), and each entry is either a proposed rule in the Phase 1 shape or a proposed "no rule" outcome, with a written rationale.
-  2. Each proposal lists its inputs, and every listed input is a control catalog definition in this repository; a text search of the proposals for RiskMVP, the RiskMVP commit, Hayes evidence or the 2026-10-01 assessment result finds nothing.
+  2. Each proposal lists its EMS-source inputs, and every one is a control catalog definition in this repository; interpretation is labelled as such; the drafting frame is declared once; a text search of the proposals for RiskMVP, the RiskMVP commit, Hayes evidence or the 2026-10-01 assessment result finds nothing.
+     Note (Phase 2 CONTEXT D-26): amended 2026-10-13.
   3. `git log` shows a single drafting commit that contains all 21 proposals and predates every governance decision record; no decision record or new authority version exists at that commit.
   4. The drafting commit SHA is recorded in the decision trail in a later commit, so a reader can confirm from the repository alone that drafting came first.
   5. Proposals are marked as drafts with no authority; nothing in the published authority file changes in this phase.
