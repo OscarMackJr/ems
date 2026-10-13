@@ -1,6 +1,6 @@
 # Rule-Condition Field Definitions (D-10)
 
-Status: DRAFT - awaiting approval by Oscar Mack
+Status: APPROVED
 
 Definitions state what KNOWN_TRUE asserts about an archived repository snapshot target. Drafted from EMS sources only.
 
@@ -32,4 +32,7 @@ KNOWN_FALSE asserts the negation; UNKNOWN asserts nothing and never yields not-a
 Note: owner, tier, service_criticality and data_classification are declared classification fields not usable in rules in this version.
 
 ## Approval
-Pending
+Approver: Oscar Mack
+Role: EMS governance authority
+Date: 2026-10-13
+Approved per D-10 before publisher code carries this wording.
