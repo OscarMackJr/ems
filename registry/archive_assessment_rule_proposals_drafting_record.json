@@ -1,0 +1,30 @@
+{
+  "brief_approval": {
+    "approver": "Oscar Mack",
+    "date": "2026-10-13",
+    "role": "EMS governance authority",
+    "scope": "drafter instructions only; proposal content not seen before the drafting commit"
+  },
+  "brief_commit": "6969f520162984d79276744805432d1c8dd14c89",
+  "brief_path": "docs/ARCHIVE_ASSESSMENT_RULE_DRAFTER_BRIEF.md",
+  "brief_sha256": "8da9cbc462d3ae8b3c1a8ddf1a084bbb89529629520121449aad1fff84c7115d",
+  "catalog_git_blob_id": "03c9faa44af37860fe268a74bcb4468e8bfd34c4",
+  "catalog_path": "registry/control_catalog.yaml",
+  "catalog_sha256": "12bb1a9d2476e4b0208ff51f9296f51462395f01af8d0543ad3c7eae9f039477",
+  "correction_rounds": 0,
+  "discarded_attempts": [],
+  "drafted_on": "2026-10-13",
+  "drafter": {
+    "holds_ems_authority": false,
+    "kind": "AI agent",
+    "model_id": "claude-opus-5-5"
+  },
+  "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+  "isolation_method": "by instruction and brief design. One drafter attempt was run by the orchestrator as a headless CLI call in restricted mode with no tools, no MCP servers, no skills and no session persistence, from an otherwise empty working directory outside the repository; project instructions were not loaded. Residual exposure: the prompt hash verifies the prompt bytes only, the CLI built-in default system prompt was in effect, and isolation is claimed only by instruction and brief design, not by a technical guarantee.",
+  "proposals_path": "registry/archive_assessment_not_applicable_rule_proposals.json",
+  "proposals_sha256": "31684001ba3550fc98c1c86e487ff2c81fb106620f820dd0313311c8aea9886d",
+  "statement": "An AI agent drafted these proposals and holds no EMS authority. The proposals bind nothing until they are decided by the EMS governance authority.",
+  "status": "DRAFTING_RECORD",
+  "validator_result": "PASS",
+  "validator_script": "scripts/validate_archive_assessment_rule_proposals.py"
+}
