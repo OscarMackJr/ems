@@ -97,7 +97,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Rule Shape and Decision States | 0/TBD | Not started | - |
+| 1. Rule Shape and Decision States | 1/3 | In Progress|  |
 | 2. Blind Drafting | 0/TBD | Not started | - |
 | 3. Governance Decisions | 0/TBD | Not started | - |
 | 4. Certified Publication | 0/TBD | Not started | - |
