@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0.0
 milestone_name: milestone
 status: verifying
-last_updated: "2026-10-14T16:49:22.006Z"
+last_updated: "2026-10-14T16:49:32.218Z"
 last_activity: 2026-10-14
 progress:
   total_phases: 5
@@ -65,6 +65,7 @@ Recent decisions affecting current work:
 - [Roadmap]: Phase 3 is a human gate; the user gives an individual disposition for each of the 21 proposals and nothing is published before it
 - [Roadmap]: Rule shape (Phase 1) precedes drafting so that proposals are written in a shape with defined semantics; Phase 1 uses no target information
 - [Roadmap]: No phase carries a UI hint; the project is registry JSON, schema, publisher script, pytest and generated outputs
+- [Phase 3]: 21 governance answers typed by authority, committed unchanged (cc74445); records AA4-GOV-001..021 published (eed4a5f)
 
 ### Pending Todos
 
