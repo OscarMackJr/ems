@@ -100,7 +100,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 05-01-PLAN.md — Reply generator script and JSON schema (Wave 1)
-- [ ] 05-02-PLAN.md — Reply pytest and .gitattributes LF rules (Wave 2)
+- [x] 05-02-PLAN.md — Reply pytest and .gitattributes LF rules (Wave 2)
 - [ ] 05-03-PLAN.md — Generate, validate and commit the reply; report push state (Wave 3)
 
 ## Progress
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Blind Drafting | 5/5 | Complete    | 2026-10-13 |
 | 3. Governance Decisions | 4/4 | Complete    | 2026-10-14 |
 | 4. Certified Publication | 7/7 | Complete    | 2026-10-14 |
-| 5. Reply to Hayes | 1/3 | In Progress|  |
+| 5. Reply to Hayes | 2/3 | In Progress|  |
 
 ## Coverage
 
