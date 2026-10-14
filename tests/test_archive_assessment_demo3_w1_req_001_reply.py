@@ -132,6 +132,18 @@ def test_first_sentence_for_all_records():
         assert entry(r, cid)['reason'] == s
 
 
+def test_first_sentence_cases():
+    assert MODULE.first_sentence('One sentence. Two sentence.') == 'One sentence.'
+    assert MODULE.first_sentence('Line one.\nLine two.') == 'Line one.'
+    assert MODULE.first_sentence('Only one sentence.') == 'Only one sentence.'
+
+
+@pytest.mark.parametrize('text', ['See e.g. Section 2. Next one.', 'Broken line\ncontinues here. Next.', 'No period at all', ''])
+def test_first_sentence_fails_closed(text):
+    with pytest.raises(AuthorityError, match='cannot be cut deterministically'):
+        MODULE.first_sentence(text)
+
+
 def test_mutation_swapped_aa4_id(monkeypatch):
     r = build()
     a, b = r['controls'][0], r['controls'][1]

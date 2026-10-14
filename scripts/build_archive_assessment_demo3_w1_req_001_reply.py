@@ -34,7 +34,10 @@ FORBIDDEN_WORDS = ('best', 'critical', 'important', 'recommended', 'highest')
 
 
 def first_sentence(text: str) -> str:
-    return re.split(r'(?<=\.) (?=[A-Z])', text, maxsplit=1)[0]
+    s = re.split(r'(?<=\.)\s+(?=[A-Z])', text, maxsplit=1)[0]
+    if not s or '\n' in s or '\r' in s or not s.endswith('.') or re.search(r'\b(e\.g|i\.e|etc|vs)\.$', s):
+        raise V2.AuthorityError('rationale first sentence cannot be cut deterministically')
+    return s
 
 
 def build_reply(authority: dict, record: dict, signoff: dict, decisions: dict, manifest: dict) -> dict:
