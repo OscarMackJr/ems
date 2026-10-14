@@ -28,9 +28,9 @@ DECISIONS = REGISTRY / 'archive_assessment_governance_decisions.json'
 DECISIONS_SCHEMA = SCHEMAS / 'archive_assessment_governance_decisions.schema.json'
 WORDING_APPROVAL = REGISTRY / 'archive_assessment_governance_wording_approval.json'
 DRAFTING_COMMIT = 'dc3b41c9fbb3571a191d2da5164fb73439a0637b'
-APPROVER = 'Oscar Mack'
-APPROVER_ROLES = ['EMS_GOVERNANCE_AUTHORITY', 'HAYES_VERIFY_DEVELOPER']
-DUAL_ROLE_STATEMENT = 'Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.'
+APPROVER = V2.APPROVER
+APPROVER_ROLES = list(V2.APPROVER_ROLES)
+DUAL_ROLE_STATEMENT = V2.DUAL_ROLE_STATEMENT
 EARLIER_ASSESSMENT_STATEMENT = 'The deciding authority knew the per-control result of an earlier assessment when making these decisions. The drafts were written without that knowledge. No rule was compared with any target during this phase.'
 TYPED_BY_AUTHORITY_STATEMENT = 'The dispositions, notes and any decided rule or rationale in the answers file were typed by Oscar Mack. No AI agent chose, suggested or reworded any of them.'
 INTERPRETATION_BASIS = 'Accepted as the basis of this decision only. It is not a definition of the control.'
@@ -53,7 +53,7 @@ APPROVAL_REL = 'registry/archive_assessment_governance_wording_approval.json'
 SHA40_RE = r'^[0-9a-f]{40}$'
 SHA64_RE = r'^[0-9a-f]{64}$'
 VIEW = DOCS / 'ARCHIVE_ASSESSMENT_RULE_PROPOSALS_VIEW.md'
-CONTROL_IDS = [f'EMS-CTRL-{n:03d}' for n in (9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 30, 33, 39, 42, 52, 62, 75, 79)]
+CONTROL_IDS = list(V2.REQUEST_CONTROL_IDS)
 SCOPE_NOTE_IDS = ['EMS-CTRL-022', 'EMS-CTRL-030', 'EMS-CTRL-042', 'EMS-CTRL-052', 'EMS-CTRL-062', 'EMS-CTRL-075']
 DISPOSITIONS = ['APPROVED_AS_DRAFTED', 'CHANGED', 'REJECTED']
 SCOPE_RULINGS = ['ACCEPTED_AS_TRUE_LIMITATION', 'NOT_ACCEPTED_AS_TRUE_LIMITATION']
@@ -362,11 +362,16 @@ def build_from_files() -> dict:
     except jsonschema.ValidationError as e: raise AuthorityError(f'answers file fails the answers schema: {e.message}')
     return build_decisions(V2.load(PROPOSALS), answers, V2.load(DRAFTING_RECORD), V2.load(WORDING_APPROVAL), answers_digest(ANSWERS))
 
+def is_published() -> bool:
+    if not V2.AUTHORITY.exists(): return False
+    lineage = V2.load(V2.AUTHORITY).get('source_lineage', {}).get('governance_decisions', {})
+    return lineage.get('sha256') == V2.lf_digest(DECISIONS)
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--view', action='store_true'); parser.add_argument('--emit-template', action='store_true'); parser.add_argument('--emit-schema', action='store_true')
     parser.add_argument('--validate-answers', action='store_true'); parser.add_argument('--lenient', action='store_true')
-    parser.add_argument('--build', action='store_true'); parser.add_argument('--validate', action='store_true')
+    parser.add_argument('--build', action='store_true'); parser.add_argument('--validate', action='store_true'); parser.add_argument('--supersede-published', action='store_true')
     args = parser.parse_args()
     if args.view:
         with open(VIEW, 'w', encoding='utf-8', newline='\n') as f: f.write(view_text(V2.load(PROPOSALS)))
@@ -381,6 +386,9 @@ def main() -> None:
             raw = DECISIONS.read_bytes()
             if V2.lf_bytes(raw) != decisions_text(doc).encode('utf-8'):
                 if not refreshable(load_checked(DECISIONS), doc): raise AuthorityError('decisions file already exists with different content and is not overwritten')
+                if is_published():
+                    if not args.supersede_published: raise AuthorityError('decisions file is published in the v2 authority; a republish and re-sign-off are required, so rerun with --supersede-published to rewrite it')
+                    print('decisions file is published: a republish and re-sign-off are now required')
                 V2.dump(DECISIONS, doc)
             elif raw != V2.lf_bytes(raw): V2.dump(DECISIONS, doc)
         print('PASS')

@@ -1,9 +1,11 @@
 import copy
 import hashlib
 import importlib.util
+import inspect
 import json
 import re
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -444,6 +446,68 @@ def test_wr09_answers_sha_binding_test_still_present():
 
 def test_wr09_emit_template_refuses_existing_answers_file():
     before = MODULE.ANSWERS.read_bytes()
-    result = subprocess.run(['python', str(SCRIPT), '--emit-template'], cwd=ROOT, capture_output=True, text=True)
+    result = subprocess.run([sys.executable, str(SCRIPT), '--emit-template'], cwd=ROOT, capture_output=True, text=True)
     assert result.returncode != 0
+    assert 'already exists' in result.stderr
     assert MODULE.ANSWERS.read_bytes() == before
+
+def test_wr10_governance_constants_come_from_the_publisher():
+    assert MODULE.APPROVER == MODULE.V2.APPROVER
+    assert MODULE.APPROVER_ROLES == list(MODULE.V2.APPROVER_ROLES)
+    assert MODULE.DUAL_ROLE_STATEMENT == MODULE.V2.DUAL_ROLE_STATEMENT
+    assert MODULE.CONTROL_IDS == list(MODULE.V2.REQUEST_CONTROL_IDS)
+    source = inspect.getsource(MODULE)
+    assert "APPROVER = 'Oscar Mack'" not in source
+    assert MODULE.V2.DUAL_ROLE_STATEMENT not in source
+
+def build_cli_setup(monkeypatch, name, answers, published, old=None):
+    old_doc = built(filled()) if old is None else old
+    dec = TMP / f'{name}_decisions.json'; ans = TMP / f'{name}_answers.json'; auth = TMP / f'{name}_authority.json'
+    MODULE.V2.dump(dec, old_doc); MODULE.V2.dump(ans, answers)
+    digest = MODULE.V2.lf_digest(dec) if published else 'f' * 64
+    MODULE.V2.dump(auth, {'source_lineage': {'governance_decisions': {'sha256': digest}}})
+    monkeypatch.setattr(MODULE, 'DECISIONS', dec); monkeypatch.setattr(MODULE, 'ANSWERS', ans); monkeypatch.setattr(MODULE.V2, 'AUTHORITY', auth)
+    return dec
+
+def test_wr08_build_cli_main_appends_superseding_record(monkeypatch, capsys):
+    a = filled(); extra_entry(a)
+    dec = build_cli_setup(monkeypatch, 'wr08a', a, published=False)
+    monkeypatch.setattr('sys.argv', ['prog', '--build'])
+    MODULE.main()
+    assert len(load(dec)['records']) == 22
+    assert 'PASS' in capsys.readouterr().out
+
+def test_wr08_build_cli_main_refuses_changed_record(monkeypatch):
+    a = filled(); ent(a, NO_RULE_ID)['note'] = 'A different note than the one decided before, written afresh.'
+    dec = build_cli_setup(monkeypatch, 'wr08b', a, published=False)
+    before = dec.read_bytes()
+    monkeypatch.setattr('sys.argv', ['prog', '--build'])
+    with pytest.raises(AuthorityError, match='not overwritten'): MODULE.main()
+    assert dec.read_bytes() == before
+
+def test_wr05_build_refuses_published_decisions(monkeypatch):
+    a = filled(); extra_entry(a)
+    dec = build_cli_setup(monkeypatch, 'wr05a', a, published=True)
+    before = dec.read_bytes()
+    monkeypatch.setattr('sys.argv', ['prog', '--build'])
+    with pytest.raises(AuthorityError) as exc: MODULE.main()
+    assert 'republish' in str(exc.value) and 'sign-off' in str(exc.value)
+    assert dec.read_bytes() == before
+
+def test_wr05_build_supersede_published_flag_proceeds(monkeypatch, capsys):
+    a = filled(); extra_entry(a)
+    dec = build_cli_setup(monkeypatch, 'wr05b', a, published=True)
+    monkeypatch.setattr('sys.argv', ['prog', '--build', '--supersede-published'])
+    MODULE.main()
+    out = capsys.readouterr().out
+    assert 'republish' in out and 're-sign-off' in out
+    assert len(load(dec)['records']) == 22
+
+def test_wr05_identical_rebuild_still_passes_when_published(monkeypatch, capsys):
+    a = filled()
+    ans = TMP / 'wr05c_answers.json'; MODULE.V2.dump(ans, a)
+    same = MODULE.build_decisions(PROPOSALS, a, DRAFTING, APPROVAL, MODULE.V2.lf_digest(ans), MODULE.V2.lf_digest(MODULE.DRAFTING_RECORD))
+    build_cli_setup(monkeypatch, 'wr05c', a, published=True, old=same)
+    monkeypatch.setattr('sys.argv', ['prog', '--build'])
+    MODULE.main()
+    assert 'PASS' in capsys.readouterr().out
