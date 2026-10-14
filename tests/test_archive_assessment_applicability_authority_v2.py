@@ -28,14 +28,18 @@ def rule(*pairs): return {'combination': 'ALL_CONDITIONS_MUST_MATCH', 'condition
 
 def decide(c, state, r, a): c.update({'not_applicable_decision_state': state, 'not_applicable_rule': r, 'not_applicable_authority': a})
 
+def with_decisions_lineage(value):
+    value['source_lineage']['governance_decisions'] = {'relative_path': MODULE.GOVERNANCE_DECISIONS_REL, 'sha256': 'a' * 64, 'record_count': 21, 'drafting_commit': 'b' * 40}
+    return value
+
 def ok(mutator):
-    value = copy.deepcopy(build_authority())
+    value = with_decisions_lineage(copy.deepcopy(build_authority()))
     mutator(value)
     validate_authority(value)
     jsonschema.Draft202012Validator(schema()).validate(value)
 
 def schema_rejects(mutator):
-    value = copy.deepcopy(build_authority())
+    value = with_decisions_lineage(copy.deepcopy(build_authority()))
     mutator(value)
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.Draft202012Validator(schema()).validate(value)
@@ -77,8 +81,8 @@ def test_known_state_in_condition_fails_closed(): both_reject(lambda a: decide(a
 def test_free_text_rule_fails_closed(): both_reject(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', 'absence_of_evidence', 'AA4-GOV-001'))
 def test_implicit_not_applicable_fails_closed(): both_reject(lambda a: a['controls'][0].__setitem__('not_applicable_rule', 'absence_of_evidence'))
 def test_empty_conditions_fails_closed(): both_reject(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', rule(), 'AA4-GOV-001'))
-def test_duplicate_field_same_state_fails_closed_validator_only(): invalid(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', rule(('production', 'KNOWN_FALSE'), ('production', 'KNOWN_FALSE')), 'AA4-GOV-001'))
-def test_duplicate_field_contradictory_states_fails_closed_validator_only(): invalid(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', rule(('production', 'KNOWN_FALSE'), ('production', 'KNOWN_TRUE')), 'AA4-GOV-001'))
+def test_duplicate_field_same_state_fails_closed(): both_reject(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', rule(('production', 'KNOWN_FALSE'), ('production', 'KNOWN_FALSE')), 'AA4-GOV-001'))
+def test_duplicate_field_contradictory_states_fails_closed(): both_reject(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', rule(('production', 'KNOWN_FALSE'), ('production', 'KNOWN_TRUE')), 'AA4-GOV-001'))
 def test_extra_key_in_condition_fails_closed(): both_reject(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', {'combination': 'ALL_CONDITIONS_MUST_MATCH', 'conditions': [{'field': 'production', 'state': 'KNOWN_FALSE', 'negate': True}]}, 'AA4-GOV-001'))
 def test_extra_key_in_rule_fails_closed(): both_reject(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', dict(rule(*PROD_INET), reason='free text'), 'AA4-GOV-001'))
 def test_operator_key_in_rule_fails_closed(): both_reject(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', dict(rule(*PROD_INET), ANY=[{'field': 'ai_enabled', 'state': 'KNOWN_FALSE'}]), 'AA4-GOV-001'))
@@ -100,7 +104,10 @@ def test_unapproved_governance_decision_fails_closed(): invalid(lambda a: a.__se
 def test_missing_per_control_decision_ids_fails_closed(): invalid(lambda a: a['controls'][0].__setitem__('decision_ids', a['controls'][0]['decision_ids'][:-1]))
 def test_absolute_path_fails_closed(): invalid(lambda a: a['source_lineage'].__setitem__('bad_path', 'C:/temp/authority.json'))
 def test_unfreezable_dependency_fails_closed(): invalid(lambda a: a.__setitem__('dependencies', [{'required_for_deterministic_compilation': True, 'relative_path': 'registry/other.json'}]))
-def test_version_is_2_0_0(): assert build_authority()['version'] == '2.0.0'
+def test_version_and_authority_id_come_from_constants():
+    a = build_authority()
+    assert MODULE.VERSION == '2.0.1' and a['version'] == MODULE.VERSION
+    assert a['authority_id'] == MODULE.AUTHORITY_ID == 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-' + MODULE.VERSION
 def test_default_applicability_and_decision_ids_kept():
     a = build_authority()
     assert all(c['default_applicability_result'] == 'APPLICABILITY_UNRESOLVED' and len(c['decision_ids']) == 8 for c in a['controls'])
@@ -132,6 +139,27 @@ def test_non_rule_fields_declared_but_unusable():
         assert f in sem(a)['fields_not_usable_in_rules']
         assert f not in sem(a)['rule_condition_fields']
     assert all(isinstance(v, str) and v.strip() for v in sem(a)['field_definitions'].values())
+
+def test_lineage_keys_are_required_and_closed():
+    for key in ('governance_decisions', 'supersedes', 'v1_baseline', 'catalog_reference', 'digest_normalisation', 'aa1_manifest_sha256', 'aa2_closure_sha256', 'aa2_approval_sha256'):
+        schema_rejects(lambda a, k=key: a['source_lineage'].pop(k))
+    schema_rejects(lambda a: a['source_lineage'].__setitem__('extra', 'x'))
+
+def test_lineage_pins_are_enforced_by_schema():
+    schema_rejects(lambda a: a['source_lineage']['supersedes'].__setitem__('version', '9.9.9'))
+    schema_rejects(lambda a: a['source_lineage']['supersedes'].__setitem__('commit', 'abcdef0'))
+    schema_rejects(lambda a: a['source_lineage']['v1_baseline'].__setitem__('commit', '62a8955'))
+    schema_rejects(lambda a: a['source_lineage']['v1_baseline'].__setitem__('sha256', 'xyz'))
+    schema_rejects(lambda a: a['source_lineage']['supersedes'].__setitem__('sha256', 'A' * 64))
+
+def test_supersedes_and_v1_baseline_follow_constants():
+    lin = build_authority()['source_lineage']
+    assert lin['supersedes'] == MODULE.SUPERSEDED_V2_0_0
+    assert lin['v1_baseline']['commit'] == MODULE.V1_BASELINE_COMMIT and len(MODULE.V1_BASELINE_COMMIT) == 40
+    invalid(lambda a: a['source_lineage']['supersedes'].__setitem__('version', '9.9.9'))
+    invalid(lambda a: a['source_lineage']['v1_baseline'].__setitem__('commit', '62a8955'))
+
+def test_distinct_fields_in_one_rule_pass(): ok(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', rule(('production', 'KNOWN_FALSE'), ('ai_enabled', 'KNOWN_TRUE')), 'AA4-GOV-001'))
 
 def test_committed_schema_equals_schema_function(): assert json.loads(MODULE.SCHEMA.read_text(encoding='utf-8')) == schema()
 def test_v2_builder_does_not_use_generated_dir():

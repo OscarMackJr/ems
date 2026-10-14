@@ -25,7 +25,7 @@
       "const": "CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT"
     },
     "authority_id": {
-      "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0"
+      "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1"
     },
     "controls": {
       "items": {
@@ -54,6 +54,68 @@
                       "const": "ALL_CONDITIONS_MUST_MATCH"
                     },
                     "conditions": {
+                      "allOf": [
+                        {
+                          "contains": {
+                            "properties": {
+                              "field": {
+                                "const": "production"
+                              }
+                            },
+                            "required": [
+                              "field"
+                            ],
+                            "type": "object"
+                          },
+                          "maxContains": 1,
+                          "minContains": 0
+                        },
+                        {
+                          "contains": {
+                            "properties": {
+                              "field": {
+                                "const": "internet_exposed"
+                              }
+                            },
+                            "required": [
+                              "field"
+                            ],
+                            "type": "object"
+                          },
+                          "maxContains": 1,
+                          "minContains": 0
+                        },
+                        {
+                          "contains": {
+                            "properties": {
+                              "field": {
+                                "const": "contains_customer_data"
+                              }
+                            },
+                            "required": [
+                              "field"
+                            ],
+                            "type": "object"
+                          },
+                          "maxContains": 1,
+                          "minContains": 0
+                        },
+                        {
+                          "contains": {
+                            "properties": {
+                              "field": {
+                                "const": "ai_enabled"
+                              }
+                            },
+                            "required": [
+                              "field"
+                            ],
+                            "type": "object"
+                          },
+                          "maxContains": 1,
+                          "minContains": 0
+                        }
+                      ],
                       "items": {
                         "additionalProperties": false,
                         "properties": {
@@ -188,6 +250,68 @@
                     "const": "ALL_CONDITIONS_MUST_MATCH"
                   },
                   "conditions": {
+                    "allOf": [
+                      {
+                        "contains": {
+                          "properties": {
+                            "field": {
+                              "const": "production"
+                            }
+                          },
+                          "required": [
+                            "field"
+                          ],
+                          "type": "object"
+                        },
+                        "maxContains": 1,
+                        "minContains": 0
+                      },
+                      {
+                        "contains": {
+                          "properties": {
+                            "field": {
+                              "const": "internet_exposed"
+                            }
+                          },
+                          "required": [
+                            "field"
+                          ],
+                          "type": "object"
+                        },
+                        "maxContains": 1,
+                        "minContains": 0
+                      },
+                      {
+                        "contains": {
+                          "properties": {
+                            "field": {
+                              "const": "contains_customer_data"
+                            }
+                          },
+                          "required": [
+                            "field"
+                          ],
+                          "type": "object"
+                        },
+                        "maxContains": 1,
+                        "minContains": 0
+                      },
+                      {
+                        "contains": {
+                          "properties": {
+                            "field": {
+                              "const": "ai_enabled"
+                            }
+                          },
+                          "required": [
+                            "field"
+                          ],
+                          "type": "object"
+                        },
+                        "maxContains": 1,
+                        "minContains": 0
+                      }
+                    ],
                     "items": {
                       "additionalProperties": false,
                       "properties": {
@@ -399,7 +523,44 @@
       "type": "object"
     },
     "source_lineage": {
+      "additionalProperties": false,
       "properties": {
+        "aa1_manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "aa2_approval_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "aa2_closure_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "catalog_reference": {
+          "additionalProperties": false,
+          "properties": {
+            "relative_path": {
+              "const": "registry/control_catalog.yaml"
+            },
+            "required_for_deterministic_compilation": {
+              "const": false
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "relative_path",
+            "sha256",
+            "required_for_deterministic_compilation"
+          ],
+          "type": "object"
+        },
+        "digest_normalisation": {
+          "const": "CRLF_TO_LF"
+        },
         "governance_decisions": {
           "additionalProperties": false,
           "properties": {
@@ -408,8 +569,7 @@
               "type": "string"
             },
             "record_count": {
-              "minimum": 1,
-              "type": "integer"
+              "const": 21
             },
             "relative_path": {
               "const": "registry/archive_assessment_governance_decisions.json"
@@ -426,8 +586,81 @@
             "drafting_commit"
           ],
           "type": "object"
+        },
+        "supersedes": {
+          "additionalProperties": false,
+          "properties": {
+            "authority_id": {
+              "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0"
+            },
+            "commit": {
+              "const": "54a7fd09114704a97a7a48fce5f89aebeb48c90a"
+            },
+            "governance_decisions_sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "relative_path": {
+              "const": "registry/archive_assessment_applicability_authority_v2.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "version": {
+              "const": "2.0.0"
+            }
+          },
+          "required": [
+            "authority_id",
+            "version",
+            "commit",
+            "relative_path",
+            "sha256",
+            "governance_decisions_sha256"
+          ],
+          "type": "object"
+        },
+        "v1_baseline": {
+          "additionalProperties": false,
+          "properties": {
+            "authority_id": {
+              "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0"
+            },
+            "commit": {
+              "const": "62a8955dc28d9458cd1167fad314926e057c31fc"
+            },
+            "relative_path": {
+              "const": "registry/archive_assessment_applicability_authority.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          },
+          "required": [
+            "authority_id",
+            "version",
+            "commit",
+            "relative_path",
+            "sha256"
+          ],
+          "type": "object"
         }
       },
+      "required": [
+        "governance_decisions",
+        "supersedes",
+        "v1_baseline",
+        "catalog_reference",
+        "digest_normalisation",
+        "aa1_manifest_sha256",
+        "aa2_closure_sha256",
+        "aa2_approval_sha256"
+      ],
       "type": "object"
     },
     "status": {
@@ -437,7 +670,7 @@
       "const": "ARCHIVED_REPOSITORY_SNAPSHOT"
     },
     "version": {
-      "const": "2.0.0"
+      "const": "2.0.1"
     }
   },
   "required": [

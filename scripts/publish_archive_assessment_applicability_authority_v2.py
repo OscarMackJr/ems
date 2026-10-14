@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.util
 import json
 import re
 from datetime import date
 from pathlib import Path
+from typing import Callable, NamedTuple
 
 import jsonschema
 import yaml
@@ -29,6 +31,17 @@ CONDITION_STATES = ['KNOWN_TRUE','KNOWN_FALSE']
 DECISION_STATES = ['RULE_PUBLISHED','NO_RULE_WILL_BE_PUBLISHED','NOT_YET_DECIDED']
 COMBINATION = 'ALL_CONDITIONS_MUST_MATCH'
 AUTHORITY_ID_RE = r'^AA4-GOV-[0-9]{3}$'
+VERSION = '2.0.1'
+AUTHORITY_ID = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-' + VERSION
+SUPERSEDED_V2_0_0 = {
+    'authority_id': 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0', 'version': '2.0.0', 'commit': '54a7fd09114704a97a7a48fce5f89aebeb48c90a',
+    'relative_path': 'registry/archive_assessment_applicability_authority_v2.json',
+    'sha256': 'de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353',
+    'governance_decisions_sha256': '4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f',
+}
+V1_BASELINE_COMMIT = '62a8955dc28d9458cd1167fad314926e057c31fc'
+V1_BASELINE_ID = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0'
+V1_BASELINE_REL = 'registry/archive_assessment_applicability_authority.json'
 RESULTS = ['APPLICABLE','NOT_APPLICABLE','APPLICABILITY_UNRESOLVED']
 FIELD_DEFINITIONS = {
     'production': 'KNOWN_TRUE asserts that the target is used as, or supports, a production system, so production-data, recovery and release controls are in play.',
@@ -98,6 +111,9 @@ def semantics() -> dict:
         ],
     }
 
+def v1_baseline_entry() -> dict:
+    return {'authority_id': V1_BASELINE_ID, 'version': '1.0.0', 'commit': V1_BASELINE_COMMIT, 'relative_path': V1_BASELINE_REL, 'sha256': lf_digest(V1_AUTHORITY)}
+
 def build_authority() -> dict:
     catalog = catalog_controls()
     v1 = load(V1_AUTHORITY)
@@ -123,8 +139,8 @@ def build_authority() -> dict:
         })
     return {
         '$schema': 'schemas/archive_assessment_applicability_authority_v2.schema.json',
-        'document_id': 'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY', 'version': '2.0.0', 'status': 'CONTROLLED',
-        'authority_id': 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0',
+        'document_id': 'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY', 'version': VERSION, 'status': 'CONTROLLED',
+        'authority_id': AUTHORITY_ID,
         'target_type': 'ARCHIVED_REPOSITORY_SNAPSHOT',
         'assessment_semantics': 'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT',
         'attestation_prohibitions': {'historical_compliance_attestation': False, 'current_repository_attestation': False, 'production_readiness_attestation': False},
@@ -135,7 +151,8 @@ def build_authority() -> dict:
         'source_lineage': {
             'aa1_manifest_sha256': lin['aa1_manifest_sha256'], 'aa2_closure_sha256': lin['aa2_closure_sha256'], 'aa2_approval_sha256': lin['aa2_approval_sha256'],
             'catalog_reference': {'relative_path': 'registry/control_catalog.yaml', 'sha256': lf_digest(CATALOG), 'required_for_deterministic_compilation': False},
-            'supersedes': {'authority_id': v1['authority_id'], 'version': '1.0.0', 'commit': '62a8955', 'relative_path': 'registry/archive_assessment_applicability_authority.json', 'sha256': lf_digest(V1_AUTHORITY)},
+            'supersedes': dict(SUPERSEDED_V2_0_0),
+            'v1_baseline': v1_baseline_entry(),
             'digest_normalisation': 'CRLF_TO_LF',
         },
         'approved_governance_decision_ids': list(DECISIONS), 'applicability_decision_ids': [], 'controls': controls,
@@ -185,7 +202,7 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
     errors = []
     req = {'document_id','version','status','authority_id','target_type','assessment_semantics','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','controls'}
     if not req <= set(a): errors.append('missing required top-level authority fields')
-    if a.get('document_id') != 'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY' or a.get('version') != '2.0.0' or a.get('status') != 'CONTROLLED' or a.get('authority_id') != 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0': errors.append('authority identity/version/status invalid')
+    if a.get('document_id') != 'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY' or a.get('version') != VERSION or a.get('status') != 'CONTROLLED' or a.get('authority_id') != AUTHORITY_ID: errors.append('authority identity/version/status invalid')
     if a.get('target_type') != 'ARCHIVED_REPOSITORY_SNAPSHOT' or a.get('assessment_semantics') != 'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT': errors.append('unauthorized target or assessment semantics')
     if a.get('approved_governance_decision_ids') != DECISIONS: errors.append('AA2 decision provenance is incomplete or contains an unapproved decision')
     cv = a.get('classification_vocabulary', {})
@@ -198,8 +215,10 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
     if pin != expected: errors.append('not_applicable_semantics does not match the published semantics')
     fd = sem.get('field_definitions')
     if not isinstance(fd, dict) or set(fd) != set(RULE_FIELDS) or any(not isinstance(v, str) or not v.strip() for v in fd.values()): errors.append('field_definitions must define exactly the four rule fields with non-empty text')
-    sup = a.get('source_lineage', {}).get('supersedes') if isinstance(a.get('source_lineage'), dict) else None
-    if not isinstance(sup, dict) or sup.get('commit') != '62a8955' or sup.get('version') != '1.0.0': errors.append('source_lineage supersedes v1 entry missing or invalid')
+    lin0 = a.get('source_lineage') if isinstance(a.get('source_lineage'), dict) else {}
+    sup = lin0.get('supersedes'); v1b = lin0.get('v1_baseline')
+    if sup != SUPERSEDED_V2_0_0: errors.append('source_lineage supersedes does not name the 2.0.0 publication')
+    if not isinstance(v1b, dict) or {k: v for k, v in v1b.items() if k != 'sha256'} != {k: v for k, v in v1_baseline_entry().items() if k != 'sha256'}: errors.append('source_lineage v1_baseline entry missing or invalid')
     if contains_absolute(a): errors.append('absolute local path used as authority identity')
     for dependency in a.get('dependencies', []):
         if dependency.get('required_for_deterministic_compilation') and (not dependency.get('relative_path') or not dependency.get('sha256')): errors.append('required authority dependency cannot be deterministically frozen')
@@ -242,9 +261,16 @@ def validate_publication(a: dict) -> None:
     else:
         if gd.get('relative_path') != GOVERNANCE_DECISIONS_REL: errors.append('governance_decisions relative_path invalid')
         if gd.get('sha256') != lf_digest(GOVERNANCE_DECISIONS): errors.append('governance_decisions sha256 does not match the live decisions file')
+        if gd.get('sha256') != SUPERSEDED_V2_0_0['governance_decisions_sha256']: errors.append('governance_decisions sha256 does not equal the 2.0.0 decisions digest')
         if gd.get('record_count') != len(doc['records']): errors.append('governance_decisions record_count does not match the live decisions file')
         if gd.get('drafting_commit') != doc.get('drafting_commit'): errors.append('governance_decisions drafting_commit does not match the live decisions file')
+    if lf_digest(GOVERNANCE_DECISIONS) != SUPERSEDED_V2_0_0['governance_decisions_sha256']: errors.append('decisions file differs from the 2.0.0 decisions; 2.0.1 may not change any decision')
     latest = {r['control_id']: r for r in latest_records(doc)}
+    if a.get('applicability_decision_ids') != sorted(r['decision_id'] for r in latest.values()): errors.append('applicability_decision_ids does not equal the decision ids derived from the decision records')
+    for r in rows:
+        rec0 = latest.get(r.get('control_id'))
+        want = (rec0['decided_outcome'], rec0['decided']['rule'], rec0['decision_id']) if rec0 else ('NOT_YET_DECIDED', None, None)
+        if (r.get('not_applicable_decision_state'), r.get('not_applicable_rule'), r.get('not_applicable_authority')) != want: errors.append(f"{r.get('control_id')}: decision fields differ from the decision records")
     for r in rows:
         auth = r.get('not_applicable_authority')
         if auth is None: continue
@@ -258,16 +284,28 @@ def validate_publication(a: dict) -> None:
         keep = {'not_applicable_decision_state', 'not_applicable_rule', 'not_applicable_authority'} if r['control_id'] in REQUEST_CONTROL_IDS else {'not_applicable_decision_state'}
         if {k: v for k, v in r.items() if k not in keep} != {k: v for k, v in base.items() if k not in keep}: errors.append(f"{r['control_id']}: differs from v1.0.0 beyond the decision fields")
         if r['control_id'] not in REQUEST_CONTROL_IDS and (r.get('not_applicable_rule') is not None or r.get('not_applicable_authority') is not None): errors.append(f"{r['control_id']}: undecided control carries a rule or authority")
-    sup = lin.get('supersedes')
-    if not isinstance(sup, dict) or sup.get('authority_id') != 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0' or sup.get('commit') != '62a8955' or sup.get('version') != '1.0.0': errors.append('lineage must record v1.0.0 at 62a8955')
-    elif sup.get('sha256') != lf_digest(V1_AUTHORITY): errors.append('lineage v1 authority digest does not match')
+    if lin.get('supersedes') != SUPERSEDED_V2_0_0: errors.append('lineage must record the 2.0.0 publication it supersedes')
+    if lin.get('v1_baseline') != v1_baseline_entry(): errors.append('lineage v1_baseline must record v1.0.0 with the live v1 digest')
     cat = lin.get('catalog_reference')
     if not isinstance(cat, dict) or cat.get('sha256') != lf_digest(CATALOG): errors.append('lineage catalog digest does not match')
     if errors: raise AuthorityError('; '.join(errors))
 
 def schema() -> dict:
     cond = {'type':'object','additionalProperties':False,'required':['field','state'],'properties':{'field':{'enum':list(RULE_FIELDS)},'state':{'enum':list(CONDITION_STATES)}}}
-    rule = {'type':'object','additionalProperties':False,'required':['combination','conditions'],'properties':{'combination':{'const':COMBINATION},'conditions':{'type':'array','minItems':1,'maxItems':len(RULE_FIELDS),'items':cond}}}
+    dup_guard = [{'contains':{'type':'object','required':['field'],'properties':{'field':{'const':f}}},'minContains':0,'maxContains':1} for f in RULE_FIELDS]
+    rule = {'type':'object','additionalProperties':False,'required':['combination','conditions'],'properties':{'combination':{'const':COMBINATION},'conditions':{'type':'array','minItems':1,'maxItems':len(RULE_FIELDS),'items':cond,'allOf':dup_guard}}}
+    sha = {'type':'string','pattern':'^[0-9a-f]{64}$'}
+    def pinned(entry, sha_keys):
+        props = {k: ({'type':'string','pattern':'^[0-9a-f]{64}$'} if k in sha_keys else {'const':v}) for k, v in entry.items()}
+        return {'type':'object','additionalProperties':False,'required':list(entry),'properties':props}
+    lineage = {'type':'object','additionalProperties':False,
+        'required':['governance_decisions','supersedes','v1_baseline','catalog_reference','digest_normalisation','aa1_manifest_sha256','aa2_closure_sha256','aa2_approval_sha256'],
+        'properties':{
+            'supersedes':pinned(SUPERSEDED_V2_0_0, {'sha256','governance_decisions_sha256'}),
+            'v1_baseline':pinned({'authority_id':V1_BASELINE_ID,'version':'1.0.0','commit':V1_BASELINE_COMMIT,'relative_path':V1_BASELINE_REL,'sha256':None}, {'sha256'}),
+            'governance_decisions':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','record_count','drafting_commit'],'properties':{'relative_path':{'const':GOVERNANCE_DECISIONS_REL},'sha256':sha,'record_count':{'const':21},'drafting_commit':{'type':'string','pattern':'^[0-9a-f]{40}$'}}},
+            'catalog_reference':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','required_for_deterministic_compilation'],'properties':{'relative_path':{'const':'registry/control_catalog.yaml'},'sha256':sha,'required_for_deterministic_compilation':{'const':False}}},
+            'digest_normalisation':{'const':'CRLF_TO_LF'},'aa1_manifest_sha256':sha,'aa2_closure_sha256':sha,'aa2_approval_sha256':sha}}
     auth = {'type':'string','pattern':AUTHORITY_ID_RE}
     def branch(state, rule_s, auth_s):
         return {'if':{'properties':{'not_applicable_decision_state':{'const':state}},'required':['not_applicable_decision_state']},'then':{'properties':{'not_applicable_rule':rule_s,'not_applicable_authority':auth_s}}}
@@ -275,10 +313,10 @@ def schema() -> dict:
         'properties':{'requires_explicit_controlled_rule':{'const':True},'absence_of_evidence_is_not_not_applicable':{'const':True},'unknown_is_not_not_applicable':{'const':True},'decision_states':{'const':list(DECISION_STATES)},'condition_states':{'const':list(CONDITION_STATES)},'condition_combination':{'const':COMBINATION},'min_conditions':{'const':1},'field_may_appear_once':{'const':True},'rule_condition_fields':{'const':list(RULE_FIELDS)},'fields_not_usable_in_rules':{'const':list(NON_RULE_FIELDS)},'field_definitions':{'type':'object','additionalProperties':False,'required':list(RULE_FIELDS),'properties':{f:{'type':'string','minLength':1} for f in RULE_FIELDS}},'resolution':{'const':[dict(r) for r in RESOLUTION]},'no_short_circuit':{'const':True},'decision_state_governs_resolved_result':{'const':True},'per_control_default_describes_result_absent_a_decision':{'const':True},'unknown_is_never_not_applicable':{'const':True}}}
     return {'$schema':'https://json-schema.org/draft/2020-12/schema','title':'EMS AA3 Archive Assessment Applicability Authority v2','type':'object',
         'required':['document_id','version','status','authority_id','target_type','assessment_semantics','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','applicability_decision_ids','controls'],
-        'properties':{'document_id':{'const':'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY'},'version':{'const':'2.0.0'},'status':{'const':'CONTROLLED'},'authority_id':{'const':'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0'},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},
+        'properties':{'document_id':{'const':'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY'},'version':{'const':VERSION},'status':{'const':'CONTROLLED'},'authority_id':{'const':AUTHORITY_ID},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},
             'approved_governance_decision_ids':{'type':'array','minItems':8,'maxItems':8,'items':{'type':'string','pattern':'^AA1-GOV-00[1-8]$'},'uniqueItems':True},
             'applicability_decision_ids':{'type':'array','minItems':0,'maxItems':21,'items':{'type':'string','pattern':AUTHORITY_ID_RE},'uniqueItems':True},
-            'source_lineage':{'type':'object','properties':{'governance_decisions':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','record_count','drafting_commit'],'properties':{'relative_path':{'const':GOVERNANCE_DECISIONS_REL},'sha256':{'type':'string','pattern':'^[0-9a-f]{64}$'},'record_count':{'type':'integer','minimum':1},'drafting_commit':{'type':'string','pattern':'^[0-9a-f]{40}$'}}}}},
+            'source_lineage':lineage,
             'not_applicable_semantics':sem,
             'controls':{'type':'array','minItems':80,'maxItems':80,'items':{'type':'object',
                 'required':['control_id','archive_population_membership','target_type','assessment_semantics','classification_prerequisites','classification_unknown_treatment','archive_evidence_capability','required_non_repository_authority','default_applicability_result','unresolved_reason','not_applicable_decision_state','not_applicable_rule','not_applicable_authority','decision_ids'],
@@ -303,7 +341,6 @@ def resolve_applicability(control: dict, facts: dict) -> str:
     if unknown: return 'APPLICABILITY_UNRESOLVED'
     return 'NOT_APPLICABLE' if met else 'APPLICABLE'
 
-PUBLISHED_ON = '2026-10-14'
 OUT = ROOT / 'generated' / 'archive-assessment' / 'ems-aa3-v2'
 SIGNOFF = REGISTRY / 'archive_assessment_applicability_authority_v2_signoff.json'
 PUBLICATION_RECORD = REGISTRY / 'archive_assessment_applicability_authority_v2_publication_record.json'
@@ -312,7 +349,6 @@ APPROVER = 'Oscar Mack'
 APPROVER_ROLES = ['EMS_GOVERNANCE_AUTHORITY', 'HAYES_VERIFY_DEVELOPER']
 SIGNOFF_ROLE = 'EMS_GOVERNANCE_AUTHORITY'
 DUAL_ROLE_STATEMENT = 'Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.'
-AUTHORITY_ID = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0'
 N_MATRIX = 'archive_assessment_applicability_authority_v2_matrix.json'
 N_SEMANTIC = 'archive_assessment_applicability_authority_v2_semantic_validation.json'
 N_NEGATIVE = 'archive_assessment_applicability_authority_v2_negative_invariant_validation.json'
@@ -320,7 +356,60 @@ N_TRACE = 'archive_assessment_applicability_authority_v2_decision_traceability.j
 N_CERT = 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION.json'
 N_REPORT = 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION.md'
 N_MANIFEST = 'ems_aa3_v2_archive_applicability_authority_publication_manifest.json'
-NEGATIVE_MUTATIONS = ['swapped_authority', 'rule_field_change', 'rule_state_unknown', 'rule_unused_field', 'rule_state_flip', 'decided_flipped_to_not_yet_decided', 'twenty_second_control_decided', 'v1_field_change_on_undecided_row', 'extra_field_on_decided_row', 'authority_removed_from_id_list', 'authority_cited_twice', 'duplicate_id_in_list', 'altered_governance_digest', 'altered_record_count_or_drafting_commit', 'missing_governance_lineage', 'wrong_v1_lineage', 'superseded_record_cited']
+class Mutation(NamedTuple):
+    id: str
+    description: str
+    target: str
+    apply: Callable
+    schema_must_reject: bool = False
+
+def _row(a, cid): return next(c for c in a['controls'] if c['control_id'] == cid)
+def _cond(a, cid): return _row(a, cid)['not_applicable_rule']['conditions']
+def _gd(a): return a['source_lineage']['governance_decisions']
+
+def _m_swapped(a):
+    _row(a, 'EMS-CTRL-009')['not_applicable_authority'], _row(a, 'EMS-CTRL-010')['not_applicable_authority'] = 'AA4-GOV-002', 'AA4-GOV-001'
+def _m_flip_to_undecided(a): _row(a, 'EMS-CTRL-009').update({'not_applicable_decision_state': 'NOT_YET_DECIDED', 'not_applicable_authority': None})
+def _m_22nd(a): _row(a, 'EMS-CTRL-001').update({'not_applicable_decision_state': 'NO_RULE_WILL_BE_PUBLISHED', 'not_applicable_authority': 'AA4-GOV-001'})
+def _m_digest_and_count(a): _gd(a).update({'record_count': 20, 'drafting_commit': '0' * 40})
+def _m_wrong_v1(a): a['source_lineage']['v1_baseline'].update({'sha256': '0' * 64, 'commit': 'abcdef0'})
+def _m_superseded_cited(a):
+    _row(a, 'EMS-CTRL-009')['not_applicable_authority'] = 'AA4-GOV-010'
+    a['applicability_decision_ids'] = sorted((set(a['applicability_decision_ids']) - {'AA4-GOV-001'}) | {'AA4-GOV-010'})
+def _m_dup_field(a): _cond(a, 'EMS-CTRL-030').append({'field': 'production', 'state': 'KNOWN_TRUE'})
+def _m_dual_text(r): r['dual_role_statement'] = r['dual_role_statement'] + ' Extra text.'
+def _m_decision_approver(d): d['records'][0]['approver'] = 'Someone Else'
+def _m_decision_dual(d): d['records'][0]['dual_role_statement'] = ''
+def _m_decision_disposition(d): d['records'][0]['disposition'] = 'BOGUS'
+
+NEGATIVE_MUTATIONS = [
+    Mutation('swapped_authority', 'Authority ids of two decided controls are swapped.', 'AUTHORITY', _m_swapped),
+    Mutation('rule_field_change', 'A published rule is changed to name a different field.', 'AUTHORITY', lambda a: _cond(a, 'EMS-CTRL-030')[0].__setitem__('field', 'ai_enabled')),
+    Mutation('rule_state_unknown', 'A rule condition state is set to UNKNOWN.', 'AUTHORITY', lambda a: _cond(a, 'EMS-CTRL-030')[0].__setitem__('state', 'UNKNOWN'), True),
+    Mutation('rule_unused_field', 'A rule names a classification field that is not usable in rules.', 'AUTHORITY', lambda a: _cond(a, 'EMS-CTRL-030')[0].__setitem__('field', 'tier'), True),
+    Mutation('rule_state_flip', 'A rule condition state is flipped from its decision record.', 'AUTHORITY', lambda a: _cond(a, 'EMS-CTRL-052')[0].__setitem__('state', 'KNOWN_TRUE')),
+    Mutation('decided_flipped_to_not_yet_decided', 'A decided control is reverted to NOT_YET_DECIDED.', 'AUTHORITY', _m_flip_to_undecided),
+    Mutation('twenty_second_control_decided', 'A control outside the 21 requested controls is decided.', 'AUTHORITY', _m_22nd),
+    Mutation('v1_field_change_on_undecided_row', 'A non-decision field changes on an undecided row.', 'AUTHORITY', lambda a: _row(a, 'EMS-CTRL-001').__setitem__('default_applicability_result', 'APPLICABLE'), True),
+    Mutation('extra_field_on_decided_row', 'An extra field is added to a decided row.', 'AUTHORITY', lambda a: _row(a, 'EMS-CTRL-009').__setitem__('rationale', 'copied')),
+    Mutation('authority_removed_from_id_list', 'A cited authority id is removed from applicability_decision_ids.', 'AUTHORITY', lambda a: a['applicability_decision_ids'].pop()),
+    Mutation('authority_cited_twice', 'Two controls cite the same authority id.', 'AUTHORITY', lambda a: _row(a, 'EMS-CTRL-010').__setitem__('not_applicable_authority', 'AA4-GOV-001')),
+    Mutation('duplicate_id_in_list', 'applicability_decision_ids carries a duplicate id.', 'AUTHORITY', lambda a: a['applicability_decision_ids'].append('AA4-GOV-001'), True),
+    Mutation('altered_governance_digest', 'The governance decisions digest in the lineage is altered.', 'AUTHORITY', lambda a: _gd(a).__setitem__('sha256', '0' * 64)),
+    Mutation('altered_record_count_or_drafting_commit', 'The governance decisions record count and drafting commit are altered.', 'AUTHORITY', _m_digest_and_count),
+    Mutation('missing_governance_lineage', 'The governance decisions lineage entry is removed.', 'AUTHORITY', lambda a: a['source_lineage'].pop('governance_decisions'), True),
+    Mutation('wrong_v1_lineage', 'The v1 baseline lineage digest and commit are altered.', 'AUTHORITY', _m_wrong_v1),
+    Mutation('superseded_record_cited', 'A control cites a decision record that is not its latest unsuperseded record.', 'AUTHORITY', _m_superseded_cited),
+    Mutation('signoff_role_hayes_developer', 'The sign-off role is the Hayes developer role.', 'SIGNOFF', lambda r: r['approval'].__setitem__('role', 'HAYES_VERIFY_DEVELOPER')),
+    Mutation('signoff_invalid_date', 'The sign-off date is not a date.', 'SIGNOFF', lambda r: r['approval'].__setitem__('date', 'not-a-date')),
+    Mutation('signoff_dual_role_text_appended', 'Text is appended to the sign-off dual-role statement.', 'SIGNOFF', _m_dual_text),
+    Mutation('signoff_extra_keys', 'An extra key is added to the sign-off record.', 'SIGNOFF', lambda r: r.__setitem__('extra', 'x')),
+    Mutation('decision_record_tampered_approver', 'A decision record names a different approver.', 'DECISIONS', _m_decision_approver, True),
+    Mutation('decision_record_empty_dual_role_statement', 'A decision record carries an empty dual-role statement.', 'DECISIONS', _m_decision_dual, True),
+    Mutation('decision_record_bogus_disposition', 'A decision record carries an unknown disposition.', 'DECISIONS', _m_decision_disposition, True),
+    Mutation('rule_same_field_twice_opposite_states', 'A rule names the same field twice with opposite states.', 'AUTHORITY', _m_dup_field, True),
+    Mutation('supersedes_governance_digest_differs', 'The supersedes governance decisions digest differs from the 2.0.0 value.', 'AUTHORITY', lambda a: a['source_lineage']['supersedes'].__setitem__('governance_decisions_sha256', '0' * 64)),
+]
 
 def jtext(value: object) -> str: return json.dumps(value, indent=2, sort_keys=True) + '\n'
 def sha_text(text: str) -> str: return hashlib.sha256(text.encode('utf-8')).hexdigest()
@@ -351,7 +440,7 @@ def validate_signoff(record: object, authority_lf_digest: str) -> None:
     if not isinstance(scope, str) or not scope.strip(): errors.append('sign-off scope must be a non-empty string')
     if record.get('dual_role_statement') != DUAL_ROLE_STATEMENT: errors.append('sign-off dual_role_statement missing or altered')
     if 'authority_id' in record and record['authority_id'] != AUTHORITY_ID: errors.append('sign-off authority_id does not match')
-    if 'version' in record and record['version'] != '2.0.0': errors.append('sign-off version does not match')
+    if 'version' in record and record['version'] != VERSION: errors.append('sign-off version does not match')
     if 'authority_sha256' in record and record['authority_sha256'] != authority_lf_digest: errors.append('sign-off authority_sha256 does not match the rebuilt authority')
     if 'authority_sha256_normalisation' in record and record['authority_sha256_normalisation'] != 'CRLF_TO_LF': errors.append('sign-off authority_sha256_normalisation must be CRLF_TO_LF')
     if errors: raise AuthorityError('; '.join(errors))
@@ -363,46 +452,56 @@ def dry_run_summary(authority: dict) -> str:
     rows = authority['controls']
     decided = [r for r in rows if r['not_applicable_decision_state'] != 'NOT_YET_DECIDED']
     undecided = [r for r in rows if r['not_applicable_decision_state'] == 'NOT_YET_DECIDED']
+    dsha = lf_digest(GOVERNANCE_DECISIONS); sup = SUPERSEDED_V2_0_0
     lines = [f'Publication sign-off summary for {authority["authority_id"]}', f'Decided controls: {len(decided)}', f'Undecided controls: {len(undecided)}', '', 'Decisions:']
     for r in decided: lines.append(f"  {r['control_id']}  {r['not_applicable_authority']}  {r['not_applicable_decision_state']}")
+    lines += ['', 'Undecided:']
+    for r in undecided: lines.append(f"  {r['control_id']}  {r['not_applicable_decision_state']}")
     lines += ['', 'Published rules:']
     for r in decided:
         if r['not_applicable_decision_state'] == 'RULE_PUBLISHED': lines.append(f"  {r['control_id']}: {rule_text(r['not_applicable_rule'])}")
-    lines += ['', f'Authority LF sha256: {sha_text(jtext(authority))}', 'Digest normalisation: CRLF_TO_LF', f'Published on: {PUBLISHED_ON}']
+    lines += ['', f'Authority LF sha256: {sha_text(jtext(authority))}', 'Digest normalisation: CRLF_TO_LF']
+    same = 'equals' if dsha == sup['governance_decisions_sha256'] else 'DIFFERS FROM'
+    lines += ['', f'Version {authority["version"]} supersedes {sup["authority_id"]} version {sup["version"]} (commit {sup["commit"][:7]}). No decision changed: the governance decisions LF sha256 {dsha} {same} the {sup["version"]} value.']
     return '\n'.join(lines) + '\n'
 
-def build_all_outputs(authority: dict, signoff: dict | None = None) -> dict:
+def build_all_outputs(authority: dict, signoff: dict, script_sha256: str | None = None) -> dict:
+    if not isinstance(signoff, dict) or not isinstance(signoff.get('approval'), dict) or not is_date(signoff['approval'].get('date')): raise AuthorityError('a valid publication sign-off is required to build the outputs')
+    published_on = signoff['approval']['date']
     ash = sha_text(jtext(authority))
     ssh = lf_digest(SCHEMA)
-    signoff_rel = rel(SIGNOFF) if signoff is not None else None
-    signoff_sha = lf_digest(SIGNOFF) if signoff is not None else None
+    signoff_rel = rel(SIGNOFF); signoff_sha = lf_digest(SIGNOFF)
     rows = authority['controls']
+    conflicts = semantic_conflicts(rows)
+    if conflicts: raise AuthorityError('semantic conflicts: ' + '; '.join(conflicts))
+    outcomes = run_mutations(authority, signoff, load(GOVERNANCE_DECISIONS))
     n_decided = sum(r['not_applicable_decision_state'] != 'NOT_YET_DECIDED' for r in rows)
-    matrix = {'authority_id': authority['authority_id'], 'version': authority['version'], 'published_on': PUBLISHED_ON, 'control_population': 80, 'unique_control_count': 80, 'decided_control_count': n_decided, 'undecided_control_count': 80 - n_decided, 'controls': rows}
+    matrix = {'authority_id': authority['authority_id'], 'version': authority['version'], 'published_on': published_on, 'control_population': 80, 'unique_control_count': 80, 'decided_control_count': n_decided, 'undecided_control_count': 80 - n_decided, 'controls': rows}
     sem_rows = []
     for r in rows:
         if r['not_applicable_decision_state'] != 'RULE_PUBLISHED': continue
         field = r['not_applicable_rule']['conditions'][0]['field']
         sem_rows.append({'control_id': r['control_id'], 'rule': r['not_applicable_rule'], 'results': {st: resolve_applicability(r, {f: st for f in RULE_FIELDS}) for st in ('KNOWN_TRUE', 'KNOWN_FALSE', 'UNKNOWN')}, 'unknown_result': resolve_applicability(r, {field: 'UNKNOWN'}), 'empty_facts_result': resolve_applicability(r, {})})
-    semantic = {'result': 'PASS', 'published_on': PUBLISHED_ON, 'semantic_conflict_count': 0, 'unknown_never_not_applicable': all(x['unknown_result'] != 'NOT_APPLICABLE' and x['empty_facts_result'] != 'NOT_APPLICABLE' and x['results']['UNKNOWN'] != 'NOT_APPLICABLE' for x in sem_rows), 'rule_controls': sem_rows, 'checks': ['UNKNOWN preserved as APPLICABILITY_UNRESOLVED', 'NOT_APPLICABLE requires explicit controlled rule', 'repository evidence boundary preserved', 'historical attestation prohibited']}
-    negative = {'result': 'PASS', 'published_on': PUBLISHED_ON, 'negative_invariant_tests': [{'mutation': m, 'result': 'REJECTED_FAIL_CLOSED'} for m in NEGATIVE_MUTATIONS]}
+    semantic = {'result': 'PASS' if not conflicts else 'FAIL', 'published_on': published_on, 'semantic_conflict_count': len(conflicts), 'controls_checked': len(rows), 'unknown_never_not_applicable': all(x['unknown_result'] != 'NOT_APPLICABLE' and x['empty_facts_result'] != 'NOT_APPLICABLE' and x['results']['UNKNOWN'] != 'NOT_APPLICABLE' for x in sem_rows), 'rule_controls': sem_rows, 'checks': ['UNKNOWN preserved as APPLICABILITY_UNRESOLVED', 'NOT_APPLICABLE requires explicit controlled rule', 'repository evidence boundary preserved', 'historical attestation prohibited']}
+    all_rejected = all(o['result'] == 'REJECTED_FAIL_CLOSED' for o in outcomes)
+    negative = {'result': 'PASS' if all_rejected else 'FAIL', 'published_on': published_on, 'negative_invariant_tests': outcomes}
     doc_sha = lf_digest(GOVERNANCE_DECISIONS)
-    trace = {'traceability_type': 'AA4_DECISION_TO_CONTROL_TRACEABILITY', 'published_on': PUBLISHED_ON, 'decision_records': [], 'undecided_controls': []}
+    trace = {'traceability_type': 'AA4_DECISION_TO_CONTROL_TRACEABILITY', 'published_on': published_on, 'decision_records': [], 'undecided_controls': []}
     for r in rows:
         if r['not_applicable_decision_state'] == 'NOT_YET_DECIDED': trace['undecided_controls'].append(r['control_id']); continue
         trace['decision_records'].append({'control_id': r['control_id'], 'decision_id': r['not_applicable_authority'], 'state': r['not_applicable_decision_state'], 'rule': r['not_applicable_rule'], 'decision_record_path': GOVERNANCE_DECISIONS_REL, 'decision_record_sha256': doc_sha, 'decision_record_digest_normalisation': 'CRLF_TO_LF'})
     trace['decided_count'] = len(trace['decision_records']); trace['undecided_count'] = len(trace['undecided_controls'])
-    cert = {'certification_type': 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION', 'certification_version': '1.0', 'published_on': PUBLISHED_ON, 'authority_id': authority['authority_id'], 'version': authority['version'], 'authority_sha256': ash, 'schema_sha256': ssh, 'signoff_path': signoff_rel, 'signoff_sha256': signoff_sha, 'digest_normalisation': 'CRLF_TO_LF', 'control_population': 80, 'decided_control_count': n_decided, 'undecided_control_count': 80 - n_decided, 'semantic_conflicts': 0, 'negative_invariants': 'PASS', 'prohibitions': {'evaluator_executions': 0, 'hayes_modifications': 0, 'target_comparisons': 0}}
+    cert = {'certification_type': 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION', 'certification_version': '1.0', 'published_on': published_on, 'authority_id': authority['authority_id'], 'version': authority['version'], 'authority_sha256': ash, 'schema_sha256': ssh, 'signoff_path': signoff_rel, 'signoff_sha256': signoff_sha, 'digest_normalisation': 'CRLF_TO_LF', 'control_population': 80, 'decided_control_count': n_decided, 'undecided_control_count': 80 - n_decided, 'semantic_conflicts': len(conflicts), 'negative_invariants': negative['result'], 'prohibitions': {'evaluator_executions': 0, 'hayes_modifications': 0, 'target_comparisons': 0}}
     report = ('# EMS-AA3 v2 Archive Assessment Applicability Authority Publication\n\n'
-        f'Published on {PUBLISHED_ON}. Version 2.0.0 records an explicit decision for {n_decided} of the 80 EMS controls and leaves {80 - n_decided} as NOT_YET_DECIDED.\n\n'
+        f'Published on {published_on}. Version {authority["version"]} records an explicit decision for {n_decided} of the 80 EMS controls and leaves {80 - n_decided} as NOT_YET_DECIDED.\n\n'
         'Each decision is cited by an AA4 governance decision id approved by Oscar Mack, who is both the EMS governance authority and the developer of Hayes Verify.\n\n'
         'Not applicable is stated only by an explicit published rule over KNOWN_TRUE and KNOWN_FALSE conditions. UNKNOWN never resolves to not applicable.\n\n'
         f'Authority LF sha256: {ash}\nDigest normalisation: CRLF_TO_LF\n')
     outs = {N_MATRIX: jtext(matrix), N_SEMANTIC: jtext(semantic), N_NEGATIVE: jtext(negative), N_TRACE: jtext(trace), N_CERT: jtext(cert), N_REPORT: report}
-    arts = [{'relative_path': rel(SCRIPT), 'sha256': lf_digest(SCRIPT)}, {'relative_path': rel(SCHEMA), 'sha256': ssh}, {'relative_path': rel(AUTHORITY), 'sha256': ash}]
-    if signoff is not None: arts.append({'relative_path': signoff_rel, 'sha256': signoff_sha})
+    arts = [{'relative_path': rel(SCHEMA), 'sha256': ssh}, {'relative_path': rel(AUTHORITY), 'sha256': ash}, {'relative_path': signoff_rel, 'sha256': signoff_sha}]
     arts += [{'relative_path': f'{rel(OUT)}/{n}', 'sha256': sha_text(t)} for n, t in outs.items()]
-    manifest = {'manifest_type': 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_MANIFEST', 'published_on': PUBLISHED_ON, 'authority_id': authority['authority_id'], 'digest_normalisation': 'CRLF_TO_LF', 'artifacts': arts, 'self_entry_exclusion_reason': 'A SHA-256 manifest cannot include a hash of itself without recursion.'}
+    publisher_script = {'relative_path': rel(SCRIPT), 'sha256': script_sha256 or lf_digest(SCRIPT), 'sha256_normalisation': 'CRLF_TO_LF'}
+    manifest = {'manifest_type': 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_MANIFEST', 'published_on': published_on, 'authority_id': authority['authority_id'], 'digest_normalisation': 'CRLF_TO_LF', 'artifacts': arts, 'publisher_script': publisher_script, 'publisher_script_note': 'The publisher script digest is recorded at publication and is not recomputed on validation; validation rebuilds every output with the recorded value.', 'self_entry_exclusion_reason': 'A SHA-256 manifest cannot include a hash of itself without recursion.'}
     outs[N_MANIFEST] = jtext(manifest)
     return outs
 
@@ -426,6 +525,59 @@ def validate_governance_decisions() -> dict:
         raise AuthorityError(f'governance decisions rejected: {e}') from e
     return doc
 
+def mutation_gates(target: str, doc: object, authority_digest: str) -> list[str]:
+    gates = []
+    if target == 'AUTHORITY':
+        try: validate_publication(doc)
+        except (AuthorityError, KeyError, TypeError, AttributeError): gates.append('PYTHON_VALIDATOR')
+        try: jsonschema.Draft202012Validator(schema()).validate(doc)
+        except jsonschema.ValidationError: gates.append('SCHEMA')
+    elif target == 'SIGNOFF':
+        try: validate_signoff(doc, authority_digest)
+        except (AuthorityError, KeyError, TypeError, AttributeError): gates.append('PYTHON_VALIDATOR')
+    elif target == 'DECISIONS':
+        b = decisions_builder()
+        try: b.validate_decisions(doc)
+        except (ValueError, KeyError, TypeError, AttributeError): gates.append('PYTHON_VALIDATOR')
+        try: jsonschema.Draft202012Validator(load(b.DECISIONS_SCHEMA)).validate(doc)
+        except jsonschema.ValidationError: gates.append('SCHEMA')
+    else: raise AuthorityError(f'unknown mutation target {target}')
+    return sorted(gates)
+
+def run_mutations(authority: dict, signoff: dict, decisions_doc: dict) -> list[dict]:
+    docs = {'AUTHORITY': authority, 'SIGNOFF': signoff, 'DECISIONS': decisions_doc}
+    ash = sha_text(jtext(authority)); out = []
+    ids = [m.id for m in NEGATIVE_MUTATIONS]
+    if len(set(ids)) != len(ids): raise AuthorityError('negative mutation ids must be unique')
+    for m in NEGATIVE_MUTATIONS:
+        doc = copy.deepcopy(docs[m.target]); m.apply(doc)
+        rejected_by = mutation_gates(m.target, doc, ash)
+        if not rejected_by: raise AuthorityError(f'mutation {m.id} was accepted')
+        if m.schema_must_reject and 'SCHEMA' not in rejected_by: raise AuthorityError(f'mutation {m.id} was not rejected by the schema')
+        out.append({'mutation': m.id, 'id': m.id, 'description': m.description, 'rejected_by': rejected_by, 'result': 'REJECTED_FAIL_CLOSED'})
+    return out
+
+def semantic_conflicts(rows: list[dict]) -> list[str]:
+    out = []
+    for r in rows:
+        cid = r['control_id']; state = r['not_applicable_decision_state']
+        def chk(label, facts, want):
+            got = resolve_applicability(r, facts)
+            if got != want: out.append(f'{cid}: {label} resolved {got}, expected {want}')
+        for label, facts in (('empty facts', {}), ('all UNKNOWN facts', {f: 'UNKNOWN' for f in RULE_FIELDS})):
+            if resolve_applicability(r, facts) == 'NOT_APPLICABLE': out.append(f'{cid}: {label} resolved NOT_APPLICABLE')
+        if state == 'NOT_YET_DECIDED': chk('all KNOWN_FALSE facts', {f: 'KNOWN_FALSE' for f in RULE_FIELDS}, 'APPLICABILITY_UNRESOLVED')
+        elif state == 'NO_RULE_WILL_BE_PUBLISHED':
+            chk('all KNOWN_TRUE facts', {f: 'KNOWN_TRUE' for f in RULE_FIELDS}, 'APPLICABLE'); chk('empty facts', {}, 'APPLICABLE')
+        elif state == 'RULE_PUBLISHED':
+            met = {c['field']: c['state'] for c in r['not_applicable_rule']['conditions']}
+            chk('all conditions met', met, 'NOT_APPLICABLE')
+            for f, st in met.items():
+                chk(f'{f} flipped', dict(met, **{f: 'KNOWN_TRUE' if st == 'KNOWN_FALSE' else 'KNOWN_FALSE'}), 'APPLICABLE')
+                chk(f'{f} UNKNOWN', dict(met, **{f: 'UNKNOWN'}), 'APPLICABILITY_UNRESOLVED')
+        else: out.append(f'{cid}: decision state {state!r} invalid')
+    return out
+
 def published_authority_checked() -> dict:
     validate_governance_decisions()
     a = build_published_authority(); validate_publication(a)
@@ -436,7 +588,6 @@ def publish(dry_run: bool) -> None:
     a = published_authority_checked()
     ash = sha_text(jtext(a))
     if dry_run:
-        if SIGNOFF.exists(): validate_signoff(load(SIGNOFF), ash)
         print(dry_run_summary(a), end=''); return
     if not SIGNOFF.exists(): raise AuthorityError('publication sign-off record is absent')
     signoff = load(SIGNOFF); validate_signoff(signoff, ash)
@@ -454,13 +605,16 @@ def validate_published() -> None:
     if lf_bytes(AUTHORITY.read_bytes()) != jtext(a).encode('utf-8'): raise AuthorityError('published authority bytes differ from canonical serialisation')
     if not SIGNOFF.exists(): raise AuthorityError('publication sign-off record is absent')
     signoff = load(SIGNOFF); validate_signoff(signoff, lf_digest(AUTHORITY))
-    expected = build_all_outputs(a, signoff)
     if not OUT.is_dir(): raise AuthorityError('v2 generated output folder is absent')
+    if not (OUT / N_MANIFEST).exists(): raise AuthorityError('publication manifest is absent')
+    manifest = load(OUT / N_MANIFEST)
+    ps = manifest.get('publisher_script')
+    if not isinstance(ps, dict) or ps.get('relative_path') != rel(SCRIPT) or not re.fullmatch(r'[0-9a-f]{64}', str(ps.get('sha256'))) or ps.get('sha256_normalisation') != 'CRLF_TO_LF': raise AuthorityError('manifest publisher_script entry missing or invalid')
+    expected = build_all_outputs(a, signoff, script_sha256=ps['sha256'])
     actual = {p.name for p in OUT.iterdir() if p.is_file()}
     if actual != set(expected): raise AuthorityError('generated file set differs from the expected set')
     for n, t in expected.items():
         if lf_bytes((OUT / n).read_bytes()) != t.encode('utf-8'): raise AuthorityError(f'{n}: differs from a fresh build')
-    manifest = load(OUT / N_MANIFEST)
     for art in manifest['artifacts']:
         rp = art['relative_path']
         if not isinstance(rp, str) or contains_absolute(rp) or '..' in rp.replace('\\', '/').split('/'): raise AuthorityError(f'{rp}: manifest path must be repo-relative without ..')

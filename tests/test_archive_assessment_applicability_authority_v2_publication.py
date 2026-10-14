@@ -70,8 +70,10 @@ def test_lineage_records_governance_decisions_and_v1():
     assert gd['relative_path'] == 'registry/archive_assessment_governance_decisions.json'
     assert gd['record_count'] == 21 and len(gd['drafting_commit']) == 40
     assert gd['sha256'] == MODULE.lf_digest(MODULE.GOVERNANCE_DECISIONS)
-    assert lin['supersedes']['commit'] == '62a8955' and lin['supersedes']['version'] == '1.0.0'
-    assert lin['supersedes']['sha256'] == MODULE.lf_digest(MODULE.V1_AUTHORITY)
+    assert lin['supersedes'] == MODULE.SUPERSEDED_V2_0_0
+    assert lin['v1_baseline']['commit'] == MODULE.V1_BASELINE_COMMIT and len(lin['v1_baseline']['commit']) == 40 and lin['v1_baseline']['version'] == '1.0.0'
+    assert lin['v1_baseline']['sha256'] == MODULE.lf_digest(MODULE.V1_AUTHORITY)
+    assert gd['sha256'] == MODULE.SUPERSEDED_V2_0_0['governance_decisions_sha256']
     assert lin['catalog_reference']['sha256'] == MODULE.lf_digest(MODULE.CATALOG)
     assert lin['digest_normalisation'] == 'CRLF_TO_LF'
 
@@ -130,11 +132,15 @@ def test_altered_record_count_and_drafting_commit_fail():
     fails(lambda a: a['source_lineage']['governance_decisions'].__setitem__('drafting_commit', '0' * 40))
 
 def test_missing_governance_lineage_fails():
-    fails(lambda a: a['source_lineage'].pop('governance_decisions'))
+    fails(lambda a: a['source_lineage'].pop('governance_decisions'), True)
+    fails(lambda a: a['source_lineage'].pop('v1_baseline'), True)
+    fails(lambda a: a['source_lineage'].pop('supersedes'), True)
 
 def test_wrong_v1_lineage_fails():
-    fails(lambda a: a['source_lineage']['supersedes'].__setitem__('sha256', '0' * 64))
-    fails(lambda a: a['source_lineage']['supersedes'].__setitem__('commit', 'abcdef0'))
+    fails(lambda a: a['source_lineage']['v1_baseline'].__setitem__('sha256', '0' * 64))
+    fails(lambda a: a['source_lineage']['v1_baseline'].__setitem__('commit', 'abcdef0'), True)
+    fails(lambda a: a['source_lineage']['supersedes'].__setitem__('commit', 'abcdef0'), True)
+    fails(lambda a: a['source_lineage']['supersedes'].__setitem__('governance_decisions_sha256', '0' * 64))
 
 def test_superseded_record_cited_fails(monkeypatch):
     doc = MODULE.load(MODULE.GOVERNANCE_DECISIONS)
@@ -152,6 +158,21 @@ def test_superseded_record_cited_fails(monkeypatch):
     stale['applicability_decision_ids'] = sorted(set(stale['applicability_decision_ids']) - {'AA4-GOV-022'} | {'AA4-GOV-001'})
     with pytest.raises(AuthorityError, match='latest unsuperseded'):
         validate_publication(stale)
+
+def test_decisions_digest_bound_to_2_0_0_constant(monkeypatch, tmp_path):
+    doc = MODULE.load(MODULE.GOVERNANCE_DECISIONS)
+    doc['records'][0]['note'] = doc['records'][0]['note'] + ' amended'
+    p = tmp_path / 'decisions.json'; MODULE.dump(p, doc)
+    monkeypatch.setattr(MODULE, 'GOVERNANCE_DECISIONS', p)
+    a = build()
+    a['source_lineage']['governance_decisions']['sha256'] = MODULE.lf_digest(p)
+    with pytest.raises(AuthorityError, match='2.0.0'):
+        validate_publication(a)
+
+def test_row_decision_fields_are_rederived_from_records():
+    fails(lambda a: row(a, 'EMS-CTRL-009').__setitem__('not_applicable_decision_state', 'NO_RULE_WILL_BE_PUBLISHED' if row(a, 'EMS-CTRL-009')['not_applicable_decision_state'] != 'NO_RULE_WILL_BE_PUBLISHED' else 'RULE_PUBLISHED'))
+    fails(lambda a: row(a, 'EMS-CTRL-030').__setitem__('not_applicable_rule', {'combination': 'ALL_CONDITIONS_MUST_MATCH', 'conditions': [{'field': 'internet_exposed', 'state': 'KNOWN_FALSE'}]}))
+    fails(lambda a: a.__setitem__('applicability_decision_ids', list(reversed(a['applicability_decision_ids']))))
 
 def test_resolver_for_rule_controls():
     a = build()
@@ -173,8 +194,8 @@ DUAL = MODULE.DUAL_ROLE_STATEMENT
 
 def sha_text(t): return hashlib.sha256(t.encode('utf-8')).hexdigest()
 
-def valid_signoff(authority_digest):
-    return {'status': 'PUBLICATION_SIGNOFF', 'approval': {'approver': 'Oscar Mack', 'role': 'EMS_GOVERNANCE_AUTHORITY', 'date': '2026-10-14', 'scope': 'Publish v2 authority'}, 'dual_role_statement': DUAL, 'authority_id': MODULE.AUTHORITY_ID, 'version': '2.0.0', 'authority_sha256': authority_digest, 'authority_sha256_normalisation': 'CRLF_TO_LF'}
+def valid_signoff(authority_digest, on='2026-10-14'):
+    return {'status': 'PUBLICATION_SIGNOFF', 'approval': {'approver': 'Oscar Mack', 'role': 'EMS_GOVERNANCE_AUTHORITY', 'date': on, 'scope': 'Publish v2 authority'}, 'dual_role_statement': DUAL, 'authority_id': MODULE.AUTHORITY_ID, 'version': MODULE.VERSION, 'authority_sha256': authority_digest, 'authority_sha256_normalisation': 'CRLF_TO_LF'}
 
 @pytest.fixture
 def env(monkeypatch):
@@ -186,30 +207,34 @@ def env(monkeypatch):
         MODULE.write_text(MODULE.SCRIPT, 'print(1)\n')
         yield root
 
-def write_signoff(a=None):
+def write_signoff(a=None, on='2026-10-14'):
     a = a or build()
-    MODULE.dump(MODULE.SIGNOFF, valid_signoff(sha_text(MODULE.jtext(a))))
+    MODULE.dump(MODULE.SIGNOFF, valid_signoff(sha_text(MODULE.jtext(a)), on))
 
-def test_outputs_deterministic_and_lf_only():
-    a = build()
-    first = MODULE.build_all_outputs(a)
-    assert first == MODULE.build_all_outputs(a)
+def outputs(a=None, on='2026-10-14', **kw):
+    a = a or build()
+    write_signoff(a, on)
+    return MODULE.build_all_outputs(a, MODULE.load(MODULE.SIGNOFF), **kw)
+
+def test_outputs_deterministic_and_lf_only(env):
+    first = outputs()
+    assert first == outputs()
     assert list(first) == [MODULE.N_MATRIX, MODULE.N_SEMANTIC, MODULE.N_NEGATIVE, MODULE.N_TRACE, MODULE.N_CERT, MODULE.N_REPORT, MODULE.N_MANIFEST]
     for text in first.values():
         assert '\r' not in text
         assert 'T00:' not in text
-    assert MODULE.PUBLISHED_ON in first[MODULE.N_CERT]
+    assert '2026-10-14' in first[MODULE.N_CERT]
     assert json.loads(first[MODULE.N_CERT])['digest_normalisation'] == 'CRLF_TO_LF'
     assert json.loads(first[MODULE.N_MANIFEST])['digest_normalisation'] == 'CRLF_TO_LF'
 
-def test_traceability_21_and_59():
-    t = json.loads(MODULE.build_all_outputs(build())[MODULE.N_TRACE])
+def test_traceability_21_and_59(env):
+    t = json.loads(outputs()[MODULE.N_TRACE])
     assert len(t['decision_records']) == 21 and len(t['undecided_controls']) == 59
     r = t['decision_records'][0]
     assert {'control_id', 'decision_id', 'state', 'rule', 'decision_record_path', 'decision_record_sha256'} <= set(r)
 
-def test_semantic_output_never_resolves_unknown_to_not_applicable():
-    s = json.loads(MODULE.build_all_outputs(build())[MODULE.N_SEMANTIC])
+def test_semantic_output_never_resolves_unknown_to_not_applicable(env):
+    s = json.loads(outputs()[MODULE.N_SEMANTIC])
     assert s['unknown_never_not_applicable'] is True and len(s['rule_controls']) == 3
     for c in s['rule_controls']:
         assert c['results']['UNKNOWN'] == 'APPLICABILITY_UNRESOLVED'
@@ -353,7 +378,8 @@ def test_validate_rejects_hand_edit_with_consistent_rehash(env):
     row(a, 'EMS-CTRL-009')['not_applicable_authority'] = None
     MODULE.dump(MODULE.AUTHORITY, a)
     write_signoff(a)
-    outs = MODULE.build_all_outputs(a, MODULE.load(MODULE.SIGNOFF))
+    ps = MODULE.load(MODULE.OUT / MODULE.N_MANIFEST)['publisher_script']['sha256']
+    outs = MODULE.build_all_outputs(a, MODULE.load(MODULE.SIGNOFF), script_sha256=ps)
     for n, t in outs.items(): MODULE.write_text(MODULE.OUT / n, t)
     with pytest.raises(AuthorityError):
         MODULE.validate_published()
@@ -481,3 +507,162 @@ def test_publication_commit_ancestor_and_file_set():
     manifest = json.loads(git('show', f'{sha}:{out_rel}/{MODULE.N_MANIFEST}').stdout.decode('utf-8'))
     for art in manifest['artifacts']:
         assert lf_sha(git('show', f"{sha}:{art['relative_path']}").stdout) == art['sha256']
+
+
+# ---- 06-05: lineage constants, D-13, dry-run, script digest, executed mutations ----
+
+PREVIOUS_17 = ['swapped_authority', 'rule_field_change', 'rule_state_unknown', 'rule_unused_field', 'rule_state_flip', 'decided_flipped_to_not_yet_decided', 'twenty_second_control_decided', 'v1_field_change_on_undecided_row', 'extra_field_on_decided_row', 'authority_removed_from_id_list', 'authority_cited_twice', 'duplicate_id_in_list', 'altered_governance_digest', 'altered_record_count_or_drafting_commit', 'missing_governance_lineage', 'wrong_v1_lineage', 'superseded_record_cited']
+NEW_9 = ['signoff_role_hayes_developer', 'signoff_invalid_date', 'signoff_dual_role_text_appended', 'signoff_extra_keys', 'decision_record_tampered_approver', 'decision_record_empty_dual_role_statement', 'decision_record_bogus_disposition', 'rule_same_field_twice_opposite_states', 'supersedes_governance_digest_differs']
+
+def test_superseded_constants_match_git_history():
+    reason = git_ready()
+    if reason: pytest.skip(reason)
+    sup = MODULE.SUPERSEDED_V2_0_0
+    auth_bytes = git('show', '54a7fd0:registry/archive_assessment_applicability_authority_v2.json').stdout
+    dec_bytes = git('show', '54a7fd0:registry/archive_assessment_governance_decisions.json').stdout
+    old = json.loads(auth_bytes.decode('utf-8'))
+    assert sup['authority_id'] == old['authority_id'] and sup['version'] == old['version']
+    assert sup['sha256'] == lf_sha(auth_bytes) and sup['governance_decisions_sha256'] == lf_sha(dec_bytes)
+    rec = json.loads(git('show', '0ce89f2:registry/archive_assessment_applicability_authority_v2_publication_record.json').stdout.decode('utf-8'))
+    assert sup['commit'] == rec['publication_commit'] and sup['sha256'] == rec['authority_sha256']
+    assert git('rev-parse', '54a7fd0').stdout.decode().strip() == sup['commit']
+    assert git('rev-parse', '62a8955').stdout.decode().strip() == MODULE.V1_BASELINE_COMMIT
+
+def test_rows_equal_2_0_0_rows_and_only_identity_and_lineage_differ():
+    reason = git_ready()
+    if reason: pytest.skip(reason)
+    old = json.loads(git('show', '54a7fd0:registry/archive_assessment_applicability_authority_v2.json').stdout.decode('utf-8'))
+    new = build()
+    assert len(old['controls']) == len(new['controls']) == 80
+    assert old['controls'] == new['controls']
+    differing = {k for k in set(old) | set(new) if old.get(k) != new.get(k)}
+    assert differing <= {'authority_id', 'version', 'source_lineage'}
+    ol, nl = old['source_lineage'], new['source_lineage']
+    assert {k for k in set(ol) | set(nl) if ol.get(k) != nl.get(k)} == {'supersedes', 'v1_baseline'}
+
+def test_version_constants_and_published_on_removed():
+    assert MODULE.VERSION == '2.0.1' and MODULE.AUTHORITY_ID.endswith('-2.0.1')
+    assert not hasattr(MODULE, 'PUBLISHED_ON')
+
+def test_build_all_outputs_requires_signoff_and_uses_its_date(env):
+    with pytest.raises((TypeError, AuthorityError)):
+        MODULE.build_all_outputs(build())
+    one, two = outputs(on='2026-10-14'), outputs(on='2026-11-02')
+    assert set(one) == set(two)
+    for n in (MODULE.N_MATRIX, MODULE.N_SEMANTIC, MODULE.N_NEGATIVE, MODULE.N_TRACE, MODULE.N_CERT, MODULE.N_REPORT, MODULE.N_MANIFEST):
+        assert '2026-11-02' in two[n] and '2026-10-14' not in two[n]
+        assert '2026-10-14' in one[n]
+
+def test_manifest_records_publisher_script(env):
+    published(env)
+    m = MODULE.load(MODULE.OUT / MODULE.N_MANIFEST)
+    ps = m['publisher_script']
+    assert ps == {'relative_path': MODULE.rel(MODULE.SCRIPT), 'sha256': MODULE.lf_digest(MODULE.SCRIPT), 'sha256_normalisation': 'CRLF_TO_LF'}
+    assert all(a['relative_path'] != ps['relative_path'] for a in m['artifacts'])
+    assert {a['relative_path'] for a in m['artifacts']} >= {MODULE.rel(MODULE.SCHEMA), MODULE.rel(MODULE.AUTHORITY), MODULE.rel(MODULE.SIGNOFF)}
+
+def test_script_edit_after_publication_does_not_break_validate(env):
+    published(env)
+    MODULE.write_text(MODULE.SCRIPT, 'print(2)\n')
+    MODULE.validate_published()
+
+def test_validate_rejects_missing_publisher_script_entry(env):
+    published(env)
+    p = MODULE.OUT / MODULE.N_MANIFEST
+    m = json.loads(p.read_text(encoding='utf-8')); m.pop('publisher_script')
+    MODULE.dump(p, m)
+    with pytest.raises(AuthorityError):
+        MODULE.validate_published()
+
+def test_dry_run_summary_lists_decisions_rules_and_supersession(env, capsys):
+    MODULE.publish(True)
+    out = capsys.readouterr().out
+    for r in build()['controls']:
+        if r['not_applicable_decision_state'] != 'NOT_YET_DECIDED':
+            assert f"{r['control_id']}  {r['not_applicable_authority']}  {r['not_applicable_decision_state']}" in out
+    assert 'EMS-CTRL-039: ALL_CONDITIONS_MUST_MATCH: production = KNOWN_FALSE' in out
+    assert 'Published on' not in out and 'PUBLISHED_ON' not in out
+    sup = MODULE.SUPERSEDED_V2_0_0
+    assert f"supersedes {sup['authority_id']} version 2.0.0 (commit 54a7fd0). No decision changed" in out
+    assert f"{sup['governance_decisions_sha256']} equals the 2.0.0 value" in out
+    for word in ('best', 'critical', 'important', 'recommended', 'highest'): assert word not in out.lower()
+
+def test_mutation_records_shape():
+    ids = [m.id for m in MODULE.NEGATIVE_MUTATIONS]
+    assert len(ids) == 26 and len(set(ids)) == 26
+    assert ids[:17] == PREVIOUS_17 and set(ids[17:]) == set(NEW_9)
+    assert all(m.description and m.target in ('AUTHORITY', 'SIGNOFF', 'DECISIONS') for m in MODULE.NEGATIVE_MUTATIONS)
+    assert next(m for m in MODULE.NEGATIVE_MUTATIONS if m.id == 'missing_governance_lineage').schema_must_reject
+
+def mutation_inputs():
+    a = build(); ash = sha_text(MODULE.jtext(a))
+    return {'AUTHORITY': a, 'SIGNOFF': valid_signoff(ash), 'DECISIONS': MODULE.load(MODULE.GOVERNANCE_DECISIONS)}, ash
+
+@pytest.mark.parametrize('m', MODULE.NEGATIVE_MUTATIONS, ids=lambda m: m.id)
+def test_each_mutation_is_rejected_by_its_gates(m):
+    docs, ash = mutation_inputs()
+    doc = copy.deepcopy(docs[m.target]); m.apply(doc)
+    assert doc != docs[m.target]
+    gates = MODULE.mutation_gates(m.target, doc, ash)
+    assert gates
+    if m.schema_must_reject: assert 'SCHEMA' in gates
+    if m.target == 'SIGNOFF': assert gates == ['PYTHON_VALIDATOR']
+    if m.target == 'DECISIONS': assert gates == ['PYTHON_VALIDATOR', 'SCHEMA']
+    if m.id == 'rule_same_field_twice_opposite_states': assert gates == ['PYTHON_VALIDATOR', 'SCHEMA']
+    if m.id == 'supersedes_governance_digest_differs': assert gates == ['PYTHON_VALIDATOR']
+
+def test_run_mutations_outcomes_shape():
+    docs, _ = mutation_inputs()
+    out = MODULE.run_mutations(docs['AUTHORITY'], docs['SIGNOFF'], docs['DECISIONS'])
+    assert [o['id'] for o in out] == [m.id for m in MODULE.NEGATIVE_MUTATIONS]
+    for o in out:
+        assert o['mutation'] == o['id'] and o['description'] and o['result'] == 'REJECTED_FAIL_CLOSED'
+        assert o['rejected_by'] and set(o['rejected_by']) <= {'SCHEMA', 'PYTHON_VALIDATOR'} and o['rejected_by'] == sorted(o['rejected_by'])
+
+def test_accepted_mutation_aborts_build_and_writes_nothing(env, monkeypatch):
+    noop = [MODULE.NEGATIVE_MUTATIONS[0]._replace(apply=lambda d: None)] + list(MODULE.NEGATIVE_MUTATIONS[1:])
+    monkeypatch.setattr(MODULE, 'NEGATIVE_MUTATIONS', noop)
+    write_signoff()
+    with pytest.raises(AuthorityError, match='was accepted'):
+        MODULE.publish(False)
+    assert not MODULE.AUTHORITY.exists() and not MODULE.OUT.exists()
+
+def test_schema_must_reject_violation_aborts(env, monkeypatch):
+    weak = [m._replace(schema_must_reject=True) if m.id == 'swapped_authority' else m for m in MODULE.NEGATIVE_MUTATIONS]
+    monkeypatch.setattr(MODULE, 'NEGATIVE_MUTATIONS', weak)
+    write_signoff()
+    with pytest.raises(AuthorityError, match='schema'):
+        MODULE.publish(False)
+    assert not MODULE.AUTHORITY.exists()
+
+def test_unknown_resolving_to_not_applicable_aborts_build(env, monkeypatch):
+    monkeypatch.setattr(MODULE, 'resolve_applicability', lambda control, facts: 'NOT_APPLICABLE')
+    write_signoff()
+    with pytest.raises(AuthorityError, match='semantic conflicts'):
+        MODULE.publish(False)
+    assert not MODULE.AUTHORITY.exists() and not MODULE.OUT.exists()
+
+def test_semantic_conflicts_cover_all_80_rows_and_are_empty():
+    a = build()
+    assert len(a['controls']) == 80 and MODULE.semantic_conflicts(a['controls']) == []
+    bad = copy.deepcopy(a['controls']); bad[0]['not_applicable_decision_state'] = 'MAYBE'
+    assert MODULE.semantic_conflicts(bad)
+
+def test_certification_and_semantic_files_are_derived(env):
+    outs = outputs()
+    cert, sem, neg = (json.loads(outs[n]) for n in (MODULE.N_CERT, MODULE.N_SEMANTIC, MODULE.N_NEGATIVE))
+    assert cert['semantic_conflicts'] == sem['semantic_conflict_count'] == 0 and sem['controls_checked'] == 80
+    assert cert['negative_invariants'] == neg['result'] == 'PASS'
+    assert len(neg['negative_invariant_tests']) == 26
+    assert cert['prohibitions'] == {'evaluator_executions': 0, 'hayes_modifications': 0, 'target_comparisons': 0}
+
+def test_publisher_source_runs_no_subprocess_or_evaluator():
+    src = SCRIPT.read_text(encoding='utf-8')
+    for banned in ('subprocess', 'os.system', 'Evaluate-', 'Popen'): assert banned not in src
+
+def test_published_negative_file_equals_observed_outcomes(env):
+    published(env)
+    a = MODULE.load(MODULE.AUTHORITY)
+    observed = MODULE.run_mutations(a, MODULE.load(MODULE.SIGNOFF), MODULE.load(MODULE.GOVERNANCE_DECISIONS))
+    neg = MODULE.load(MODULE.OUT / MODULE.N_NEGATIVE)
+    assert neg['negative_invariant_tests'] == observed
