@@ -1,0 +1,74 @@
+{
+  "negative_invariant_tests": [
+    {
+      "mutation": "swapped_authority",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "rule_field_change",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "rule_state_unknown",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "rule_unused_field",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "rule_state_flip",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "decided_flipped_to_not_yet_decided",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "twenty_second_control_decided",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "v1_field_change_on_undecided_row",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "extra_field_on_decided_row",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "authority_removed_from_id_list",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "authority_cited_twice",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "duplicate_id_in_list",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "altered_governance_digest",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "altered_record_count_or_drafting_commit",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "missing_governance_lineage",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "wrong_v1_lineage",
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "mutation": "superseded_record_cited",
+      "result": "REJECTED_FAIL_CLOSED"
+    }
+  ],
+  "published_on": "2026-10-14",
+  "result": "PASS"
+}

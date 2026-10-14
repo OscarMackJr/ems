@@ -1,0 +1,282 @@
+{
+  "decided_count": 21,
+  "decision_records": [
+    {
+      "control_id": "EMS-CTRL-009",
+      "decision_id": "AA4-GOV-001",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-010",
+      "decision_id": "AA4-GOV-002",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-011",
+      "decision_id": "AA4-GOV-003",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-012",
+      "decision_id": "AA4-GOV-004",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-013",
+      "decision_id": "AA4-GOV-005",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-014",
+      "decision_id": "AA4-GOV-006",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-015",
+      "decision_id": "AA4-GOV-007",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-017",
+      "decision_id": "AA4-GOV-008",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-018",
+      "decision_id": "AA4-GOV-009",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-019",
+      "decision_id": "AA4-GOV-010",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-020",
+      "decision_id": "AA4-GOV-011",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-021",
+      "decision_id": "AA4-GOV-012",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-022",
+      "decision_id": "AA4-GOV-013",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-030",
+      "decision_id": "AA4-GOV-014",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "production",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      },
+      "state": "RULE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-033",
+      "decision_id": "AA4-GOV-015",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-039",
+      "decision_id": "AA4-GOV-016",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "production",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      },
+      "state": "RULE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-042",
+      "decision_id": "AA4-GOV-017",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-052",
+      "decision_id": "AA4-GOV-018",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "ai_enabled",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      },
+      "state": "RULE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-062",
+      "decision_id": "AA4-GOV-019",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-075",
+      "decision_id": "AA4-GOV-020",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    },
+    {
+      "control_id": "EMS-CTRL-079",
+      "decision_id": "AA4-GOV-021",
+      "decision_record_digest_normalisation": "CRLF_TO_LF",
+      "decision_record_path": "registry/archive_assessment_governance_decisions.json",
+      "decision_record_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "rule": null,
+      "state": "NO_RULE_WILL_BE_PUBLISHED"
+    }
+  ],
+  "published_on": "2026-10-14",
+  "traceability_type": "AA4_DECISION_TO_CONTROL_TRACEABILITY",
+  "undecided_controls": [
+    "EMS-CTRL-001",
+    "EMS-CTRL-002",
+    "EMS-CTRL-003",
+    "EMS-CTRL-004",
+    "EMS-CTRL-005",
+    "EMS-CTRL-006",
+    "EMS-CTRL-007",
+    "EMS-CTRL-008",
+    "EMS-CTRL-016",
+    "EMS-CTRL-023",
+    "EMS-CTRL-024",
+    "EMS-CTRL-025",
+    "EMS-CTRL-026",
+    "EMS-CTRL-027",
+    "EMS-CTRL-028",
+    "EMS-CTRL-029",
+    "EMS-CTRL-031",
+    "EMS-CTRL-032",
+    "EMS-CTRL-034",
+    "EMS-CTRL-035",
+    "EMS-CTRL-036",
+    "EMS-CTRL-037",
+    "EMS-CTRL-038",
+    "EMS-CTRL-040",
+    "EMS-CTRL-041",
+    "EMS-CTRL-043",
+    "EMS-CTRL-044",
+    "EMS-CTRL-045",
+    "EMS-CTRL-046",
+    "EMS-CTRL-047",
+    "EMS-CTRL-048",
+    "EMS-CTRL-049",
+    "EMS-CTRL-050",
+    "EMS-CTRL-051",
+    "EMS-CTRL-053",
+    "EMS-CTRL-054",
+    "EMS-CTRL-055",
+    "EMS-CTRL-056",
+    "EMS-CTRL-057",
+    "EMS-CTRL-058",
+    "EMS-CTRL-059",
+    "EMS-CTRL-060",
+    "EMS-CTRL-061",
+    "EMS-CTRL-063",
+    "EMS-CTRL-064",
+    "EMS-CTRL-065",
+    "EMS-CTRL-066",
+    "EMS-CTRL-067",
+    "EMS-CTRL-068",
+    "EMS-CTRL-069",
+    "EMS-CTRL-070",
+    "EMS-CTRL-071",
+    "EMS-CTRL-072",
+    "EMS-CTRL-073",
+    "EMS-CTRL-074",
+    "EMS-CTRL-076",
+    "EMS-CTRL-077",
+    "EMS-CTRL-078",
+    "EMS-CTRL-080"
+  ],
+  "undecided_count": 59
+}

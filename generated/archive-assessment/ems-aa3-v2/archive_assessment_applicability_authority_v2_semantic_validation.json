@@ -1,0 +1,71 @@
+{
+  "checks": [
+    "UNKNOWN preserved as APPLICABILITY_UNRESOLVED",
+    "NOT_APPLICABLE requires explicit controlled rule",
+    "repository evidence boundary preserved",
+    "historical attestation prohibited"
+  ],
+  "published_on": "2026-10-14",
+  "result": "PASS",
+  "rule_controls": [
+    {
+      "control_id": "EMS-CTRL-030",
+      "empty_facts_result": "APPLICABILITY_UNRESOLVED",
+      "results": {
+        "KNOWN_FALSE": "NOT_APPLICABLE",
+        "KNOWN_TRUE": "APPLICABLE",
+        "UNKNOWN": "APPLICABILITY_UNRESOLVED"
+      },
+      "rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "production",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      },
+      "unknown_result": "APPLICABILITY_UNRESOLVED"
+    },
+    {
+      "control_id": "EMS-CTRL-039",
+      "empty_facts_result": "APPLICABILITY_UNRESOLVED",
+      "results": {
+        "KNOWN_FALSE": "NOT_APPLICABLE",
+        "KNOWN_TRUE": "APPLICABLE",
+        "UNKNOWN": "APPLICABILITY_UNRESOLVED"
+      },
+      "rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "production",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      },
+      "unknown_result": "APPLICABILITY_UNRESOLVED"
+    },
+    {
+      "control_id": "EMS-CTRL-052",
+      "empty_facts_result": "APPLICABILITY_UNRESOLVED",
+      "results": {
+        "KNOWN_FALSE": "NOT_APPLICABLE",
+        "KNOWN_TRUE": "APPLICABLE",
+        "UNKNOWN": "APPLICABILITY_UNRESOLVED"
+      },
+      "rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "ai_enabled",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      },
+      "unknown_result": "APPLICABILITY_UNRESOLVED"
+    }
+  ],
+  "semantic_conflict_count": 0,
+  "unknown_never_not_applicable": true
+}
