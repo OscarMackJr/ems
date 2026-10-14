@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import re
+from datetime import date
 from pathlib import Path
 
 import jsonschema
@@ -308,6 +309,7 @@ PUBLICATION_RECORD = REGISTRY / 'archive_assessment_applicability_authority_v2_p
 SCRIPT = Path(__file__).resolve()
 APPROVER = 'Oscar Mack'
 APPROVER_ROLES = ['EMS_GOVERNANCE_AUTHORITY', 'HAYES_VERIFY_DEVELOPER']
+SIGNOFF_ROLE = 'EMS_GOVERNANCE_AUTHORITY'
 DUAL_ROLE_STATEMENT = 'Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.'
 AUTHORITY_ID = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0'
 N_MATRIX = 'archive_assessment_applicability_authority_v2_matrix.json'
@@ -326,20 +328,27 @@ def write_text(p: Path, text: str) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     with open(p, 'w', encoding='utf-8', newline='\n') as f: f.write(text)
 
+def is_date(value: object) -> bool:
+    if not isinstance(value, str) or not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', value): return False
+    try: date.fromisoformat(value)
+    except ValueError: return False
+    return True
+
 def validate_signoff(record: object, authority_lf_digest: str) -> None:
     errors = []
     if not isinstance(record, dict): raise AuthorityError('sign-off record must be an object')
-    for k in ('status', 'approval', 'dual_role_statement', 'authority_id', 'version', 'authority_sha256', 'authority_sha256_normalisation'):
-        if k not in record: errors.append(f'sign-off missing {k}')
+    record_keys = {'status', 'approval', 'dual_role_statement', 'authority_id', 'version', 'authority_sha256', 'authority_sha256_normalisation'}
+    if set(record) != record_keys: errors.append(f'sign-off keys must be exactly {sorted(record_keys)}')
     appr = record.get('approval')
     if not isinstance(appr, dict): errors.append('sign-off approval must be an object'); appr = {}
-    for k in ('approver', 'role', 'date', 'scope'):
-        if not appr.get(k): errors.append(f'sign-off approval missing {k}')
+    elif set(appr) != {'approver', 'role', 'date', 'scope'}: errors.append('sign-off approval keys must be exactly approver, role, date and scope')
     if record.get('status') != 'PUBLICATION_SIGNOFF': errors.append('sign-off status must be PUBLICATION_SIGNOFF')
     if appr.get('approver') != APPROVER: errors.append('sign-off approver must be Oscar Mack')
-    if appr.get('role') not in APPROVER_ROLES: errors.append('sign-off role is not an approved EMS governance role')
-    dr = record.get('dual_role_statement')
-    if not isinstance(dr, str) or not dr.strip() or DUAL_ROLE_STATEMENT not in dr: errors.append('sign-off dual_role_statement missing or altered')
+    if appr.get('role') != SIGNOFF_ROLE: errors.append(f'sign-off role must be {SIGNOFF_ROLE}')
+    if not is_date(appr.get('date')): errors.append('sign-off date must be a real ISO date')
+    scope = appr.get('scope')
+    if not isinstance(scope, str) or not scope.strip(): errors.append('sign-off scope must be a non-empty string')
+    if record.get('dual_role_statement') != DUAL_ROLE_STATEMENT: errors.append('sign-off dual_role_statement missing or altered')
     if 'authority_id' in record and record['authority_id'] != AUTHORITY_ID: errors.append('sign-off authority_id does not match')
     if 'version' in record and record['version'] != '2.0.0': errors.append('sign-off version does not match')
     if 'authority_sha256' in record and record['authority_sha256'] != authority_lf_digest: errors.append('sign-off authority_sha256 does not match the rebuilt authority')

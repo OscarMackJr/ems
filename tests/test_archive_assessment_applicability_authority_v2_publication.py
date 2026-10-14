@@ -241,6 +241,20 @@ def test_signoff_value_mutations_fail():
     so_fails(lambda r: r.__setitem__('authority_sha256', 'e' * 64))
     so_fails(lambda r: r.__setitem__('authority_sha256_normalisation', 'NONE'))
 
+def test_signoff_hardening_cases_fail():
+    so_fails(lambda r: r['approval'].__setitem__('role', 'HAYES_VERIFY_DEVELOPER'))
+    so_fails(lambda r: r['approval'].__setitem__('date', 'not-a-date'))
+    so_fails(lambda r: r['approval'].__setitem__('date', '2026-02-30'))
+    so_fails(lambda r: r.__setitem__('dual_role_statement', DUAL + ' Extra text.'))
+    so_fails(lambda r: r.__setitem__('extra', 'x'))
+    so_fails(lambda r: r['approval'].__setitem__('extra', 'x'))
+    so_fails(lambda r: r['approval'].__setitem__('scope', ''))
+    so_fails(lambda r: r['approval'].__setitem__('scope', 5))
+
+def test_signoff_role_constant():
+    assert MODULE.SIGNOFF_ROLE == 'EMS_GOVERNANCE_AUTHORITY'
+    assert MODULE.SIGNOFF_ROLE in MODULE.APPROVER_ROLES
+
 def test_publish_refuses_without_signoff(env):
     with pytest.raises(AuthorityError):
         MODULE.publish(False)
