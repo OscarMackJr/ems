@@ -24,6 +24,10 @@ F = 'KNOWN_FALSE'
 REAL_JSON = MODULE.REPLY_JSON
 REAL_MD = MODULE.REPLY_MD
 
+# tmp_path is not usable on this Windows machine; use one module-level temporary directory.
+_TMP = tempfile.TemporaryDirectory()
+TMP = Path(_TMP.name)
+
 
 def inputs():
     return V2.load(V2.AUTHORITY), V2.load(V2.PUBLICATION_RECORD), V2.load(V2.SIGNOFF), V2.load(V2.GOVERNANCE_DECISIONS), V2.load(V2.OUT / V2.N_MANIFEST)
@@ -37,14 +41,22 @@ def entry(reply, cid):
     return next(c for c in reply['controls'] if c['control_id'] == cid)
 
 
-def rejected(reply):
-    # Rejected by the object validator, or (for drift that stays schema-valid) different from a fresh build,
-    # which validate_reply() turns into a failure by byte comparison.
-    try:
-        MODULE.validate_reply_object(reply)
-    except REJECTS:
-        return True
-    return reply != build()
+def run_validate_reply(reply, monkeypatch):
+    p = TMP / 'reply.json'
+    V2.dump(p, reply)
+    monkeypatch.setattr(MODULE, 'REPLY_JSON', p)
+    MODULE.validate_reply()
+
+
+def assert_validate_rejects(reply, monkeypatch):
+    # Drift that stays schema-valid must be caught by the real file-comparison path in validate_reply().
+    MODULE.validate_reply_object(reply)
+    with pytest.raises(AuthorityError, match='reply JSON differs from a fresh build'):
+        run_validate_reply(reply, monkeypatch)
+
+
+def test_validate_reply_accepts_unmutated_reply_from_temp_file(monkeypatch):
+    run_validate_reply(build(), monkeypatch)
 
 
 def test_built_reply_counts():
@@ -86,11 +98,11 @@ def test_first_sentence_for_all_records():
         assert entry(r, cid)['reason'] == s
 
 
-def test_mutation_swapped_aa4_id():
+def test_mutation_swapped_aa4_id(monkeypatch):
     r = build()
     a, b = r['controls'][0], r['controls'][1]
     a['authority'], b['authority'] = b['authority'], a['authority']
-    assert rejected(r)
+    assert_validate_rejects(r, monkeypatch)
 
 
 def test_mutation_bad_aa4_format():
@@ -113,10 +125,10 @@ def test_mutation_flipped_state():
         MODULE.validate_reply_object(r)
 
 
-def test_mutation_altered_rule():
+def test_mutation_altered_rule(monkeypatch):
     r = build()
     entry(r, 'EMS-CTRL-030')['rule']['conditions'][0]['state'] = 'KNOWN_TRUE'
-    assert rejected(r)
+    assert_validate_rejects(r, monkeypatch)
     r = build()
     entry(r, 'EMS-CTRL-030')['rule']['conditions'][0]['state'] = 'UNKNOWN'
     with pytest.raises(REJECTS):
@@ -136,14 +148,14 @@ def test_mutation_removed_and_extra_control():
         MODULE.validate_reply_object(r)
 
 
-def test_mutation_sha_and_digest():
+def test_mutation_sha_and_digest(monkeypatch):
     r = build()
     r['pin']['publication_commit'] = 'a' * 39
     with pytest.raises(REJECTS):
         MODULE.validate_reply_object(r)
     r = build()
     r['pin']['authority_sha256'] = '0' * 64
-    assert rejected(r)
+    assert_validate_rejects(r, monkeypatch)
     r = build()
     r['pin']['manifest_sha256'] = 'xyz'
     with pytest.raises(REJECTS):
