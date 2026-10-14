@@ -37,11 +37,11 @@ The eight classification fields: `production`, `internet_exposed`, `contains_cus
 
 ### Publication
 
-- [ ] **PUB-01**: A new authority version carries the 21 decisions, each citing its decision id as authority
-- [ ] **PUB-02**: The other 59 controls are published as not yet decided, otherwise unchanged
+- [x] **PUB-01**: A new authority version carries the 21 decisions, each citing its decision id as authority
+- [x] **PUB-02**: The other 59 controls are published as not yet decided, otherwise unchanged
 - [x] **PUB-03**: The publisher produces certification, manifest and decision-to-control traceability with SHA-256 digests
 - [x] **PUB-04**: Tests assert the invariants: 21 decided, 59 undecided, condition vocabulary respected, every decided control has an authority
-- [ ] **PUB-05**: The new version records its lineage from AA3 v1.0.0 at commit `62a8955`
+- [x] **PUB-05**: The new version records its lineage from AA3 v1.0.0 at commit `62a8955`
 - [x] **PUB-06**: The publication commit contains only this project's changes
 
 ### Reply to Hayes
@@ -94,11 +94,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GOV-02 | Phase 3 | Complete |
 | GOV-03 | Phase 3 | Complete |
 | GOV-04 | Phase 3 | Complete |
-| PUB-01 | Phase 4 | Pending |
-| PUB-02 | Phase 4 | Pending |
+| PUB-01 | Phase 4 | Complete |
+| PUB-02 | Phase 4 | Complete |
 | PUB-03 | Phase 4 | Complete |
 | PUB-04 | Phase 4 | Complete |
-| PUB-05 | Phase 4 | Pending |
+| PUB-05 | Phase 4 | Complete |
 | PUB-06 | Phase 4 | Complete |
 | REPLY-01 | Phase 5 | Pending |
 | REPLY-02 | Phase 5 | Pending |
