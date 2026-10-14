@@ -80,7 +80,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   5. The new version has a new authority id and version, records its lineage from `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0` at commit `62a8955`, and `git show --stat` on the publication commit lists only this project's files (none of the unrelated modified or untracked files).
 **Plans**: 7 plans (sequential, waves 1–7)
 - [x] 04-01-PLAN.md — Phase 3 review fixes, part 1 (CR-01, CR-02, WR-05, WR-08); shared LF digest/dump; decisions-file header rewrite
-- [ ] 04-02-PLAN.md — Phase 3 review fixes, part 2 (CR-03, WR-01..04, WR-06, WR-07, WR-09) with tests
+- [x] 04-02-PLAN.md — Phase 3 review fixes, part 2 (CR-03, WR-01..04, WR-06, WR-07, WR-09) with tests
 - [ ] 04-03-PLAN.md — Narrow `.gitattributes` in its own commit
 - [ ] 04-04-PLAN.md — v2 publisher build/validate half: 21-decision overlay, decision ids, lineage, `validate_publication`, schema
 - [ ] 04-05-PLAN.md — v2 publisher publication half: outputs, AA4 traceability, dry-run, sign-off-gated publish, `--validate`, `validate_signoff`
@@ -108,7 +108,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Rule Shape and Decision States | 3/3 | Complete    | 2026-10-13 |
 | 2. Blind Drafting | 5/5 | Complete    | 2026-10-13 |
 | 3. Governance Decisions | 4/4 | Complete    | 2026-10-14 |
-| 4. Certified Publication | 1/7 | In Progress|  |
+| 4. Certified Publication | 2/7 | In Progress|  |
 | 5. Reply to Hayes | 0/TBD | Not started | - |
 
 ## Coverage
