@@ -96,7 +96,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. The reply names the authority id, the version and the full publication commit SHA to re-pin to, and that SHA is the Phase 4 publication commit; it describes the published shape well enough for Hayes to locate the rule, the authority and the decision state for a control.
   3. The reply states that the 59 other controls remain not yet decided, that three Hayes-side changes are still needed before any control resolves (target description carrying the eight classification facts, reading the published shape, re-pinning), and that the classification-prerequisites gap is untouched.
   4. The reply is committed as a document in this repository in a commit after the publication commit, containing only this project's files; sending it is left to the EMS authority.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Reply generator script and JSON schema (Wave 1)
+- [ ] 05-02-PLAN.md — Reply pytest and .gitattributes LF rules (Wave 2)
+- [ ] 05-03-PLAN.md — Generate, validate and commit the reply; report push state (Wave 3)
 
 ## Progress
 
@@ -109,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Blind Drafting | 5/5 | Complete    | 2026-10-13 |
 | 3. Governance Decisions | 4/4 | Complete    | 2026-10-14 |
 | 4. Certified Publication | 7/7 | Complete    | 2026-10-14 |
-| 5. Reply to Hayes | 0/TBD | Not started | - |
+| 5. Reply to Hayes | 0/3 | Planned | - |
 
 ## Coverage
 
