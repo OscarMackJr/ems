@@ -57,6 +57,7 @@ def build_reply(authority: dict, record: dict, signoff: dict, decisions: dict, m
     undecided = [r for r in authority['controls'] if r['not_applicable_decision_state'] == 'NOT_YET_DECIDED']
     if len(undecided) + len(controls) != len(rows):
         raise V2.AuthorityError('control counts do not add up')
+    V2.validate_signoff(signoff, record['authority_sha256'])
     appr = signoff['approval']
     if record['authority_id'] != authority['authority_id'] or record['version'] != authority['version']:
         raise V2.AuthorityError('publication record does not match the authority')
@@ -193,12 +194,32 @@ def validate_reply_object(reply: dict) -> None:
         raise V2.AuthorityError('dual role statement differs from the published statement')
 
 
+def check_inputs_bound(manifest: dict) -> None:
+    man = {a['relative_path']: a['sha256'] for a in manifest['artifacts']}
+    if man.get(V2.rel(V2.SIGNOFF)) != V2.lf_digest(V2.SIGNOFF):
+        raise V2.AuthorityError('sign-off differs from the published manifest')
+    trace = V2.load(V2.OUT / V2.N_TRACE)
+    if man.get(f'{V2.rel(V2.OUT)}/{V2.N_TRACE}') != V2.lf_digest(V2.OUT / V2.N_TRACE):
+        raise V2.AuthorityError('decision traceability differs from the published manifest')
+    doc_sha = V2.lf_digest(V2.GOVERNANCE_DECISIONS)
+    if not trace['decision_records'] or any(r['decision_record_sha256'] != doc_sha for r in trace['decision_records']):
+        raise V2.AuthorityError('decision records differ from the published traceability')
+
+
+def load_inputs() -> tuple:
+    authority, record, signoff = V2.load(V2.AUTHORITY), V2.load(V2.PUBLICATION_RECORD), V2.load(V2.SIGNOFF)
+    decisions, manifest = V2.load(V2.GOVERNANCE_DECISIONS), V2.load(V2.OUT / V2.N_MANIFEST)
+    if record['manifest_sha256'] != V2.lf_digest(V2.OUT / V2.N_MANIFEST):
+        raise V2.AuthorityError('publication record manifest digest differs from the published manifest')
+    check_inputs_bound(manifest)
+    return authority, record, signoff, decisions, manifest
+
+
 def validate_reply() -> None:
     for p in (REPLY_JSON, REPLY_MD, REPLY_SCHEMA):
         if not p.exists():
             raise V2.AuthorityError(f'{V2.rel(p)}: not generated')
-    authority, record, signoff = V2.load(V2.AUTHORITY), V2.load(V2.PUBLICATION_RECORD), V2.load(V2.SIGNOFF)
-    decisions, manifest = V2.load(V2.GOVERNANCE_DECISIONS), V2.load(V2.OUT / V2.N_MANIFEST)
+    authority, record, signoff, decisions, manifest = load_inputs()
     reply = build_reply(authority, record, signoff, decisions, manifest)
     if V2.lf_bytes(REPLY_JSON.read_bytes()) != V2.jtext(reply).encode('utf-8'):
         raise V2.AuthorityError('reply JSON differs from a fresh build')
@@ -236,7 +257,7 @@ def main() -> None:
     args = parser.parse_args()
     if args.emit_schema: V2.dump(REPLY_SCHEMA, schema())
     elif args.build:
-        reply = build_reply(V2.load(V2.AUTHORITY), V2.load(V2.PUBLICATION_RECORD), V2.load(V2.SIGNOFF), V2.load(V2.GOVERNANCE_DECISIONS), V2.load(V2.OUT / V2.N_MANIFEST))
+        reply = build_reply(*load_inputs())
         validate_reply_object(reply)
         V2.dump(REPLY_JSON, reply); V2.write_text(REPLY_MD, render_markdown(reply))
     elif args.validate: validate_reply()

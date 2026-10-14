@@ -59,6 +59,30 @@ def test_validate_reply_accepts_unmutated_reply_from_temp_file(monkeypatch):
     run_validate_reply(build(), monkeypatch)
 
 
+def test_validate_reply_rejects_edited_decision_rationale(monkeypatch):
+    doc = V2.load(V2.GOVERNANCE_DECISIONS)
+    rec = next(r for r in V2.latest_records(doc) if r['control_id'] == V2.REQUEST_CONTROL_IDS[0])
+    rec['decided']['rationale'] = 'Edited reason. ' + rec['decided']['rationale']
+    assert doc != V2.load(V2.GOVERNANCE_DECISIONS)
+    p = TMP / 'decisions.json'
+    V2.dump(p, doc)
+    monkeypatch.setattr(V2, 'GOVERNANCE_DECISIONS', p)
+    with pytest.raises(AuthorityError, match='decision records differ'):
+        MODULE.validate_reply()
+
+
+def test_validate_reply_rejects_edited_signoff(monkeypatch):
+    signoff = V2.load(V2.SIGNOFF)
+    signoff['approval']['role'] = next(r for r in V2.APPROVER_ROLES if r != signoff['approval']['role'])
+    p = TMP / 'signoff.json'
+    V2.dump(p, signoff)
+    real_rel, orig_rel = V2.rel(V2.SIGNOFF), V2.rel
+    monkeypatch.setattr(V2, 'rel', lambda q: real_rel if q == p else orig_rel(q))
+    monkeypatch.setattr(V2, 'SIGNOFF', p)
+    with pytest.raises(AuthorityError, match='sign-off differs'):
+        MODULE.validate_reply()
+
+
 def test_built_reply_counts():
     r = build()
     assert [c['control_id'] for c in r['controls']] == sorted(MODULE.V2.REQUEST_CONTROL_IDS)
