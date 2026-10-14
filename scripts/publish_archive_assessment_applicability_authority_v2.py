@@ -407,11 +407,12 @@ def build_all_outputs(authority: dict, signoff: dict | None = None) -> dict:
     return outs
 
 _BUILDER = None
+BUILDER_SCRIPT = Path(__file__).resolve().parent / 'build_archive_assessment_governance_decisions.py'
 
 def decisions_builder():
     global _BUILDER
     if _BUILDER is None:
-        spec = importlib.util.spec_from_file_location('aa_governance_decisions_builder', ROOT / 'scripts' / 'build_archive_assessment_governance_decisions.py')
+        spec = importlib.util.spec_from_file_location('aa_governance_decisions_builder', BUILDER_SCRIPT)
         module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module); _BUILDER = module
     return _BUILDER
 
@@ -461,7 +462,14 @@ def validate_published() -> None:
         if lf_bytes((OUT / n).read_bytes()) != t.encode('utf-8'): raise AuthorityError(f'{n}: differs from a fresh build')
     manifest = load(OUT / N_MANIFEST)
     for art in manifest['artifacts']:
+        rp = art['relative_path']
+        if not isinstance(rp, str) or contains_absolute(rp) or '..' in rp.replace('\\', '/').split('/'): raise AuthorityError(f'{rp}: manifest path must be repo-relative without ..')
         if lf_digest(ROOT / art['relative_path']) != art['sha256']: raise AuthorityError(f"{art['relative_path']}: manifest digest differs")
+    if PUBLICATION_RECORD.exists():
+        record = load(PUBLICATION_RECORD)
+        if record.get('authority_id') == a['authority_id']:
+            if record.get('authority_sha256') != lf_digest(AUTHORITY): raise AuthorityError('publication record authority_sha256 does not match the committed authority')
+            if record.get('manifest_sha256') != lf_digest(OUT / N_MANIFEST): raise AuthorityError('publication record manifest_sha256 does not match the committed manifest')
     print('PASS')
 
 def write_publication_record(sha: str) -> None:

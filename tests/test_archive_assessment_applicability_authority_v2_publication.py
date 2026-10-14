@@ -394,6 +394,45 @@ def test_write_publication_record(env):
         with pytest.raises(AuthorityError):
             MODULE.write_publication_record(bad)
 
+def test_validate_record_absent_passes(env):
+    published(env)
+    assert not MODULE.PUBLICATION_RECORD.exists()
+    MODULE.validate_published()
+
+def test_validate_record_matching_passes(env):
+    published(env)
+    MODULE.write_publication_record('a' * 40)
+    MODULE.validate_published()
+
+def test_validate_record_other_authority_id_is_pending(env):
+    published(env)
+    MODULE.write_publication_record('a' * 40)
+    rec = MODULE.load(MODULE.PUBLICATION_RECORD)
+    rec['authority_id'] = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-9.9.9'
+    rec['authority_sha256'] = '0' * 64; rec['manifest_sha256'] = '0' * 64
+    MODULE.dump(MODULE.PUBLICATION_RECORD, rec)
+    MODULE.validate_published()
+
+@pytest.mark.parametrize('key', ['authority_sha256', 'manifest_sha256'])
+def test_validate_record_digest_mismatch_fails(env, key):
+    published(env)
+    MODULE.write_publication_record('a' * 40)
+    rec = MODULE.load(MODULE.PUBLICATION_RECORD)
+    rec[key] = '0' * 64
+    MODULE.dump(MODULE.PUBLICATION_RECORD, rec)
+    with pytest.raises(AuthorityError, match=key):
+        MODULE.validate_published()
+
+@pytest.mark.parametrize('bad', ['/etc/passwd', 'C:\\Windows\\x', '../outside.txt', 'a/../../b'])
+def test_validate_rejects_manifest_path_traversal(env, bad):
+    published(env)
+    p = MODULE.OUT / MODULE.N_MANIFEST
+    m = json.loads(p.read_text(encoding='utf-8'))
+    m['artifacts'][0]['relative_path'] = bad
+    MODULE.dump(p, m)
+    with pytest.raises(AuthorityError):
+        MODULE.validate_published()
+
 REAL_AUTHORITY = MODULE.AUTHORITY
 REAL_RECORD = MODULE.PUBLICATION_RECORD
 REAL_OUT = MODULE.OUT
