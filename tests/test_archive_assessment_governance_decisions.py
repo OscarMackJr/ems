@@ -325,3 +325,125 @@ def test_records_unchanged_since_eed4a5f():
     old, new = json.loads(lf(r.stdout).decode('utf-8')), load(MODULE.DECISIONS)
     assert old['records'] == new['records']
     assert {k: v for k, v in old.items() if k != 'records'} == {k: v for k, v in new.items() if k not in ('records', 'frozen_input_sha256_normalisation')}
+
+
+def extra_entry(a, cid=NO_RULE_ID, **changes):
+    e = copy.deepcopy(ent(a, cid))
+    e.update(note=f'Superseding review of {cid}, reconsidered after a second reading of the catalog.', supersedes=f'AA4-GOV-{MODULE.CONTROL_IDS.index(cid) + 1:03d}')
+    e.update(changes)
+    a['entries'].append(e)
+    return e
+
+def strict_rejects(a):
+    with pytest.raises(AuthorityError): MODULE.validate_answers(a, PROPOSALS, strict=True)
+    with pytest.raises(AuthorityError): built(a)
+
+def test_cr03_valid_superseding_entry_builds_and_validates():
+    a = filled(); extra_entry(a)
+    d = built(a)
+    MODULE.validate_decisions(d)
+    assert d['records'][21]['supersedes'] == 'AA4-GOV-001'
+
+def test_cr03_superseding_entry_conflicting_fields_rejected():
+    a = filled(); extra_entry(a, decided_rule=rule(('production', 'KNOWN_FALSE')), decided_rationale='x')
+    strict_rejects(a)
+
+def test_cr03_superseding_entry_blank_rejected():
+    a = filled(); extra_entry(a, disposition=None, note='')
+    strict_rejects(a)
+
+def test_cr03_superseding_scope_ruling_on_unscoped_control_rejected():
+    a = filled(); extra_entry(a, scope_note_ruling='ACCEPTED_AS_TRUE_LIMITATION')
+    strict_rejects(a)
+
+def test_cr03_build_refuses_conflicting_fields_without_prior_validation(monkeypatch):
+    a = filled(); extra_entry(a, scope_note_ruling='ACCEPTED_AS_TRUE_LIMITATION')
+    monkeypatch.setattr(MODULE, 'validate_answers', lambda *args, **kw: None)
+    with pytest.raises(AuthorityError): built(a)
+
+def test_wr01_note_differing_only_by_control_id_or_digits_rejected():
+    p = BY_ID[NO_RULE_ID]
+    for text in (f"{p['interpretation']['text']} EMS-CTRL-099 7", f"{p['rationale']} 42"):
+        a = filled(); ent(a, NO_RULE_ID)['note'] = text
+        strict_rejects(a)
+
+def test_wr02_first_21_entries_cannot_supersede():
+    a = filled(); a['entries'][3]['supersedes'] = 'AA4-GOV-001'
+    with pytest.raises(AuthorityError): MODULE.validate_answers(a, PROPOSALS, strict=True)
+
+@pytest.mark.parametrize('sup', ['AA4-GOV-002', 'AA4-GOV-023', 'AA4-GOV-099'])
+def test_wr02_later_entry_must_name_earlier_entry_of_same_control(sup):
+    a = filled(); extra_entry(a, supersedes=sup)
+    with pytest.raises(AuthorityError): MODULE.validate_answers(a, PROPOSALS, strict=True)
+
+def test_wr03_unknown_control_in_extra_entry_is_authority_error():
+    a = filled(); extra_entry(a, cid=NO_RULE_ID, control_id='EMS-CTRL-001')
+    strict_rejects(a)
+
+def test_wr03_build_from_files_runs_answers_schema(monkeypatch):
+    a = filled(); extra_entry(a)
+    a['entries'][-1]['unexpected'] = 1
+    path = TMP / 'wr03_answers.json'
+    path.write_text(json.dumps(a), encoding='utf-8')
+    monkeypatch.setattr(MODULE, 'ANSWERS', path)
+    with pytest.raises(AuthorityError): MODULE.build_from_files()
+
+@pytest.mark.parametrize('field,value', [('note', ['x']), ('decided_rule', ['x']), ('supersedes', ['AA4-GOV-001']), ('control_id', ['EMS-CTRL-009'])])
+def test_wr06_malformed_answer_types_raise_authority_error(field, value):
+    a = filled(); extra_entry(a, **{field: value})
+    with pytest.raises(AuthorityError): MODULE.validate_answers(a, PROPOSALS, strict=True)
+
+def test_wr06_decision_type_confusion_raises_authority_error():
+    for mutator in (lambda d: rec(d, RULE_ID)['decided'].__setitem__('rationale', 5),
+                    lambda d: d['records'][0].__setitem__('control_id', ['x']),
+                    lambda d: d['records'][0].__setitem__('note', 5),
+                    lambda d: rec(d, RULE_ID)['decided'].__setitem__('rule', {'combination': 'ALL_CONDITIONS_MUST_MATCH', 'conditions': [{'field': ['x'], 'state': {}}]}),
+                    lambda d: d['records'][0].__setitem__('supersedes', ['AA4-GOV-001'])):
+        validator_rejects(mutator)
+
+@pytest.mark.parametrize('bad', ['2026-02-30', '2026-99-99', '2026-13-01', '14/10/2026'])
+def test_wr04_impossible_date_rejected_by_both_validators(bad):
+    a = filled(); ent(a, NO_RULE_ID)['decided_on'] = bad
+    with pytest.raises(AuthorityError): MODULE.validate_answers(a, PROPOSALS, strict=True)
+    validator_rejects(lambda d: d['records'][0].__setitem__('decided_on', bad))
+
+def test_wr07_append_only_rebuild_accepted_and_rewrite_refused():
+    old = built(); new = built(superseded_answers())
+    assert MODULE.refreshable(old, new)
+    changed = copy.deepcopy(new); changed['records'][0]['note'] = 'A different note than before.'
+    assert not MODULE.refreshable(old, changed)
+    assert not MODULE.refreshable(new, old)
+
+def superseded_answers():
+    a = filled(); extra_entry(a)
+    return a
+
+def test_wr07_build_cli_appends_superseding_record(monkeypatch):
+    a = filled(); old_doc = built(a)
+    extra_entry(a)
+    new_doc = built(a)
+    dec = TMP / 'wr07_decisions.json'
+    MODULE.V2.dump(dec, old_doc)
+    assert MODULE.refreshable(MODULE.load_checked(dec), new_doc)
+
+def test_wr09_records_equal_answer_entries():
+    a = filled(); extra_entry(a)
+    d = built(a)
+    assert len(d['records']) == len(a['entries'])
+    for e, r in zip(a['entries'], d['records']):
+        assert r['control_id'] == e['control_id'] and r['note'] == e['note'] and r['decided_on'] == e['decided_on'] and r['supersedes'] == e['supersedes']
+        assert r['disposition'] == e['disposition']
+        assert (r['scope_note'] or {}).get('ruling') == e['scope_note_ruling']
+        if e['disposition'] != 'APPROVED_AS_DRAFTED':
+            assert r['decided']['rule'] == e['decided_rule'] and r['decided']['rationale'] == e['decided_rationale']
+        else:
+            assert r['decided'] == r['drafted']
+
+def test_wr09_answers_sha_binding_test_still_present():
+    assert 'test_answers_sha_not_bound_to_live_file_rejected' in globals()
+
+def test_wr09_emit_template_refuses_existing_answers_file():
+    before = MODULE.ANSWERS.read_bytes()
+    result = subprocess.run(['python', str(SCRIPT), '--emit-template'], cwd=ROOT, capture_output=True, text=True)
+    assert result.returncode != 0
+    assert MODULE.ANSWERS.read_bytes() == before

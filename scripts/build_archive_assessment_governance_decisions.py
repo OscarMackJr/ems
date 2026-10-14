@@ -5,6 +5,7 @@ import hashlib
 import importlib.util
 import json
 import re
+from datetime import date
 from pathlib import Path
 
 import jsonschema
@@ -67,6 +68,20 @@ def nonempty(v: object) -> bool: return isinstance(v, str) and bool(v.strip())
 
 def norm(text: str) -> str: return ' '.join(text.casefold().split())
 
+def norm_templated(text: str) -> str: return ' '.join(re.sub(r'ems-ctrl-[0-9]+|[0-9]+', '', norm(text)).split())
+
+def is_date(v: object) -> bool:
+    if not isinstance(v, str) or not re.match(DATE_RE, v): return False
+    try: date.fromisoformat(v)
+    except ValueError: return False
+    return True
+
+def drafted_strings(p: object) -> list:
+    if isinstance(p, str): return [p]
+    if isinstance(p, dict): return [s for v in p.values() for s in drafted_strings(v)]
+    if isinstance(p, list): return [s for v in p for s in drafted_strings(v)]
+    return []
+
 def sentences_ok(r: object) -> bool: return nonempty(r) and 2 <= len(re.findall(r'[.!?](\s|$)', r.strip())) <= 4
 
 def answers_digest(path: Path) -> str: return V2.lf_digest(path)
@@ -77,7 +92,7 @@ def load_checked(path: Path) -> object:
 
 def pairs(rule: object) -> set:
     if not isinstance(rule, dict) or not isinstance(rule.get('conditions'), list): return set()
-    return {(c.get('field'), c.get('state')) for c in rule['conditions'] if isinstance(c, dict)}
+    return {(c.get('field'), c.get('state')) for c in rule['conditions'] if isinstance(c, dict) and isinstance(c.get('field'), str) and isinstance(c.get('state'), str)}
 
 def render(value: object) -> str:
     if isinstance(value, str): return value
@@ -121,24 +136,32 @@ def validate_answers(a: object, proposals: dict, strict: bool = False) -> None:
         if e['decided_rationale'] is not None and not isinstance(e['decided_rationale'], str): errors.append(f'{cid}: decided_rationale must be null or a string')
         if i >= len(CONTROL_IDS) and (not isinstance(e['supersedes'], str) or not re.match(V2.AUTHORITY_ID_RE, e['supersedes'])): errors.append(f'entry {i}: entries beyond 21 need a supersedes reference')
         if e['supersedes'] is not None and (not isinstance(e['supersedes'], str) or not re.match(V2.AUTHORITY_ID_RE, e['supersedes'])): errors.append(f'{cid}: supersedes invalid')
+        if not isinstance(cid, str) or cid not in CONTROL_IDS: errors.append(f'entry {i}: unknown control {cid!r}')
+        if e['decided_rule'] is not None and not isinstance(e['decided_rule'], dict): errors.append(f'{cid}: decided_rule must be null or an object')
+        if i < len(CONTROL_IDS):
+            if e['supersedes'] is not None: errors.append(f'entry {i}: the first 21 entries cannot supersede')
+        elif isinstance(e['supersedes'], str) and re.match(V2.AUTHORITY_ID_RE, e['supersedes']):
+            pos = int(e['supersedes'][-3:])
+            if not 1 <= pos <= i: errors.append(f'entry {i}: supersedes must name an earlier entry')
+            elif not isinstance(entries[pos - 1], dict) or entries[pos - 1].get('control_id') != cid: errors.append(f'entry {i}: supersedes an entry for another control')
     if V2.contains_absolute(a): errors.append('absolute path used in answers')
-    if strict and not errors: strict_checks(first, proposals, errors)
+    if strict and not errors: strict_checks(entries, proposals, errors)
     if errors: raise AuthorityError('; '.join(errors))
 
-def strict_checks(first: list, proposals: dict, errors: list) -> None:
+def strict_checks(entries: list, proposals: dict, errors: list) -> None:
     by_id = {p['control_id']: p for p in proposals['proposals']}
     seen: dict = {}
-    for e in first:
+    for e in entries:
         cid = e['control_id']; p = by_id[cid]; d = e['disposition']
         if d is None: errors.append(f'{cid}: disposition is required'); continue
         n = e['note']
         if not nonempty(n): errors.append(f'{cid}: note is required')
         else:
             if len(n.strip()) < NOTE_MIN_CHARS: errors.append(f'{cid}: note shorter than {NOTE_MIN_CHARS} characters')
-            if norm(n) in (norm(p['rationale']), norm(p['interpretation']['text'])): errors.append(f'{cid}: note repeats drafted text')
+            if norm_templated(n) in {norm_templated(x) for x in drafted_strings(p)}: errors.append(f'{cid}: note repeats drafted text')
             if norm(n) in seen: errors.append(f'{cid}: note repeats the note of {seen[norm(n)]}')
             seen.setdefault(norm(n), cid)
-        if not isinstance(e['decided_on'], str) or not re.match(DATE_RE, e['decided_on']): errors.append(f'{cid}: decided_on must be a date')
+        if not is_date(e['decided_on']): errors.append(f'{cid}: decided_on must be a date')
         ruling = e['scope_note_ruling']
         if cid in SCOPE_NOTE_IDS:
             if ruling is None: errors.append(f'{cid}: scope_note_ruling is required')
@@ -183,6 +206,9 @@ def kind_of(rule: object) -> str: return 'PROPOSE_RULE' if rule is not None else
 
 def build_decisions(proposals: dict, answers: dict, drafting_record: dict, wording_approval: dict, answers_sha256: str, drafting_record_sha256: str | None = None) -> dict:
     validate_answers(answers, proposals, strict=True)
+    for e in answers['entries']:
+        if e['disposition'] == 'APPROVED_AS_DRAFTED' and (e['decided_rule'] is not None or e['decided_rationale'] is not None): raise AuthorityError(f"{e['control_id']}: APPROVED_AS_DRAFTED carries no decided_rule or decided_rationale")
+        if e['scope_note_ruling'] is not None and e['control_id'] not in SCOPE_NOTE_IDS: raise AuthorityError(f"{e['control_id']}: scope_note_ruling on a control without a scope note")
     by_id = {p['control_id']: p for p in proposals['proposals']}
     ap = wording_approval['approval']
     records = []
@@ -243,6 +269,7 @@ def validate_decisions(d: object, proposals: dict | None = None, drafting_record
     for i, r in enumerate(records):
         if not isinstance(r, dict) or set(r) != set(RECORD_KEYS): errors.append(f'record {i}: keys must be exactly {RECORD_KEYS}'); continue
         rid, cid = r['decision_id'], r['control_id']
+        if not isinstance(cid, str): errors.append(f'record {i}: control_id invalid'); continue
         if not isinstance(rid, str) or not re.match(V2.AUTHORITY_ID_RE, rid): errors.append(f'record {i}: decision_id invalid'); continue
         if rid in index: errors.append(f'{rid}: duplicate decision_id')
         if rid != f'AA4-GOV-{i + 1:03d}': errors.append(f'{rid}: decision_id must be AA4-GOV-{i + 1:03d} by position')
@@ -256,10 +283,12 @@ def validate_decisions(d: object, proposals: dict | None = None, drafting_record
         if r['header_statement_ref'] != HEADER_STATEMENT_REF: errors.append(f'{rid}: header_statement_ref invalid')
         if r['drafting_commit'] != DRAFTING_COMMIT: errors.append(f'{rid}: drafting_commit invalid')
         if r['drafting_record_path'] != DRAFTING_RECORD_REL: errors.append(f'{rid}: drafting_record_path invalid')
+        if not isinstance(r['note'], str): errors.append(f'{rid}: note must be a string'); continue
         if not nonempty(r['note']): errors.append(f'{rid}: note is required')
-        if not isinstance(r['decided_on'], str) or not re.match(DATE_RE, r['decided_on']): errors.append(f'{rid}: decided_on must be a date')
+        if not is_date(r['decided_on']): errors.append(f'{rid}: decided_on must be a date')
         dr, de = r['drafted'], r['decided']
         if not all(isinstance(x, dict) and set(x) == set(SIDE_KEYS) for x in (dr, de)): errors.append(f'{rid}: drafted and decided need exactly {SIDE_KEYS}'); continue
+        if not all(isinstance(x['rationale'], str) for x in (dr, de)): errors.append(f'{rid}: drafted and decided rationale must be strings'); continue
         if dr != {'outcome': p['proposed_outcome'], 'rule': p['proposed_rule'], 'rationale': p['rationale']}: errors.append(f'{rid}: drafted text differs from the live proposal')
         if de['outcome'] != kind_of(de['rule']): errors.append(f'{rid}: decided outcome does not match decided rule')
         if r['decided_outcome'] not in DECIDED_STATES: errors.append(f'{rid}: decided_outcome must be one of {DECIDED_STATES}')
@@ -281,7 +310,8 @@ def validate_decisions(d: object, proposals: dict | None = None, drafting_record
             if not isinstance(sn, dict) or set(sn) != set(SCOPE_NOTE_KEYS) or sn['ruling'] not in SCOPE_RULINGS or sn['drafted_note'] != p['shape_limitation']: errors.append(f'{rid}: scope_note invalid')
         elif sn is not None: errors.append(f'{rid}: scope_note must be null')
         sup = r['supersedes']
-        if sup is not None:
+        if sup is not None and not isinstance(sup, str): errors.append(f'{rid}: supersedes must be null or a string')
+        elif sup is not None:
             if sup == rid: errors.append(f'{rid}: supersedes itself')
             elif sup not in index: errors.append(f'{rid}: supersedes an id that is not an earlier record')
             elif index[sup][1] != cid: errors.append(f'{rid}: supersedes a record for another control')
@@ -318,13 +348,19 @@ def decisions_schema() -> dict:
 def decisions_text(value: dict) -> str: return json.dumps(value, indent=2, sort_keys=True) + '\n'
 
 def refreshable(existing: object, rebuilt: dict) -> bool:
-    if not isinstance(existing, dict) or existing.get('records') != rebuilt['records']: return False
+    if not isinstance(existing, dict) or not isinstance(existing.get('records'), list): return False
+    n = len(existing['records'])
+    if n > len(rebuilt['records']) or existing['records'] != rebuilt['records'][:n]: return False
     keep = lambda x: {k: v for k, v in x.items() if k not in HEADER_REFRESH_KEYS}
-    return keep(existing) == keep(rebuilt)
+    skip = ('records', 'answers_sha256')
+    return {k: v for k, v in keep(existing).items() if k not in skip} == {k: v for k, v in keep(rebuilt).items() if k not in skip}
 
 def build_from_files() -> dict:
     if not ANSWERS.exists(): raise AuthorityError('answers file is not present')
-    return build_decisions(V2.load(PROPOSALS), load_checked(ANSWERS), V2.load(DRAFTING_RECORD), V2.load(WORDING_APPROVAL), answers_digest(ANSWERS))
+    answers = load_checked(ANSWERS)
+    try: jsonschema.Draft202012Validator(answers_schema()).validate(answers)
+    except jsonschema.ValidationError as e: raise AuthorityError(f'answers file fails the answers schema: {e.message}')
+    return build_decisions(V2.load(PROPOSALS), answers, V2.load(DRAFTING_RECORD), V2.load(WORDING_APPROVAL), answers_digest(ANSWERS))
 
 def main() -> None:
     parser = argparse.ArgumentParser()
