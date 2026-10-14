@@ -81,7 +81,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 7 plans (sequential, waves 1–7)
 - [x] 04-01-PLAN.md — Phase 3 review fixes, part 1 (CR-01, CR-02, WR-05, WR-08); shared LF digest/dump; decisions-file header rewrite
 - [x] 04-02-PLAN.md — Phase 3 review fixes, part 2 (CR-03, WR-01..04, WR-06, WR-07, WR-09) with tests
-- [ ] 04-03-PLAN.md — Narrow `.gitattributes` in its own commit
+- [x] 04-03-PLAN.md — Narrow `.gitattributes` in its own commit
 - [ ] 04-04-PLAN.md — v2 publisher build/validate half: 21-decision overlay, decision ids, lineage, `validate_publication`, schema
 - [ ] 04-05-PLAN.md — v2 publisher publication half: outputs, AA4 traceability, dry-run, sign-off-gated publish, `--validate`, `validate_signoff`
 - [ ] 04-06-PLAN.md — Dry run, Oscar Mack sign-off (blocking human gate), publish, clean 9-file publication commit
@@ -108,7 +108,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Rule Shape and Decision States | 3/3 | Complete    | 2026-10-13 |
 | 2. Blind Drafting | 5/5 | Complete    | 2026-10-13 |
 | 3. Governance Decisions | 4/4 | Complete    | 2026-10-14 |
-| 4. Certified Publication | 2/7 | In Progress|  |
+| 4. Certified Publication | 3/7 | In Progress|  |
 | 5. Reply to Hayes | 0/TBD | Not started | - |
 
 ## Coverage
