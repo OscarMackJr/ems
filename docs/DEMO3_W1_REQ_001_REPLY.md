@@ -65,7 +65,7 @@ Dual role: Oscar Mack made this decision as the EMS governance authority and is 
 
 If any field named by a rule is UNKNOWN, the result is APPLICABILITY_UNRESOLVED. UNKNOWN never resolves to not applicable. An explicit controlled rule is required for not applicable, unknown is not false, and absence of evidence is not not-applicable. A control with NO_RULE_WILL_BE_PUBLISHED is applicable whatever the facts.
 
-No control resolves until the target description carries the eight classification facts.
+Hayes's resolver resolves no control until the target description carries the eight classification facts; under the EMS resolution table alone, a control with NO_RULE_WILL_BE_PUBLISHED is applicable whatever the facts.
 
 ## The pin
 

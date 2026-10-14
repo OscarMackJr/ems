@@ -217,6 +217,8 @@ def test_markdown_content():
     pin = r['pin']
     for needle in (pin['publication_commit'], pin['authority_id'], pin['version'], pin['authority_sha256'], pin['manifest_sha256'], r['dual_role_statement'], 'WR-01', '04-VERIFICATION', 'NOT_YET_DECIDED', 'v2.0.1'):
         assert needle in text
+    assert 'No control resolves until' not in text
+    assert "Hayes's resolver resolves no control until the target description carries the eight classification facts" in text
     reasons = {c['reason'] for c in r['controls']}
     prose = '\n'.join(line for line in text.split('\n') if not (line.startswith('  Reason: ') and line[len('  Reason: '):] in reasons))
     prose = prose.replace('service_criticality', '')
