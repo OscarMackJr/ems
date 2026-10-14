@@ -161,3 +161,234 @@ def test_resolver_for_rule_controls():
         assert resolve_applicability(c, {field: T}) == 'APPLICABLE'
         assert resolve_applicability(c, {field: U}) == 'APPLICABILITY_UNRESOLVED'
         assert resolve_applicability(c, {}) == 'APPLICABILITY_UNRESOLVED'
+
+
+import hashlib
+import json
+import subprocess
+import tempfile
+
+ROOT = Path(__file__).parents[1]
+DUAL = MODULE.DUAL_ROLE_STATEMENT
+
+def sha_text(t): return hashlib.sha256(t.encode('utf-8')).hexdigest()
+
+def valid_signoff(authority_digest):
+    return {'status': 'PUBLICATION_SIGNOFF', 'approval': {'approver': 'Oscar Mack', 'role': 'EMS_GOVERNANCE_AUTHORITY', 'date': '2026-10-14', 'scope': 'Publish v2 authority'}, 'dual_role_statement': DUAL, 'authority_id': MODULE.AUTHORITY_ID, 'version': '2.0.0', 'authority_sha256': authority_digest, 'authority_sha256_normalisation': 'CRLF_TO_LF'}
+
+@pytest.fixture
+def env(monkeypatch):
+    with tempfile.TemporaryDirectory() as d:
+        root = Path(d)
+        for name, value in {'ROOT': root, 'AUTHORITY': root / 'registry' / 'a.json', 'SCHEMA': root / 'schemas' / 's.json', 'SIGNOFF': root / 'registry' / 'signoff.json', 'PUBLICATION_RECORD': root / 'registry' / 'record.json', 'OUT': root / 'generated' / 'out', 'SCRIPT': root / 'scripts' / 'pub.py'}.items():
+            monkeypatch.setattr(MODULE, name, value)
+        MODULE.dump(MODULE.SCHEMA, MODULE.schema())
+        MODULE.write_text(MODULE.SCRIPT, 'print(1)\n')
+        yield root
+
+def write_signoff(a=None):
+    a = a or build()
+    MODULE.dump(MODULE.SIGNOFF, valid_signoff(sha_text(MODULE.jtext(a))))
+
+def test_outputs_deterministic_and_lf_only():
+    a = build()
+    first = MODULE.build_all_outputs(a)
+    assert first == MODULE.build_all_outputs(a)
+    assert list(first) == [MODULE.N_MATRIX, MODULE.N_SEMANTIC, MODULE.N_NEGATIVE, MODULE.N_TRACE, MODULE.N_CERT, MODULE.N_REPORT, MODULE.N_MANIFEST]
+    for text in first.values():
+        assert '\r' not in text
+        assert 'T00:' not in text
+    assert MODULE.PUBLISHED_ON in first[MODULE.N_CERT]
+    assert json.loads(first[MODULE.N_CERT])['digest_normalisation'] == 'CRLF_TO_LF'
+    assert json.loads(first[MODULE.N_MANIFEST])['digest_normalisation'] == 'CRLF_TO_LF'
+
+def test_traceability_21_and_59():
+    t = json.loads(MODULE.build_all_outputs(build())[MODULE.N_TRACE])
+    assert len(t['decision_records']) == 21 and len(t['undecided_controls']) == 59
+    r = t['decision_records'][0]
+    assert {'control_id', 'decision_id', 'state', 'rule', 'decision_record_path', 'decision_record_sha256'} <= set(r)
+
+def test_semantic_output_never_resolves_unknown_to_not_applicable():
+    s = json.loads(MODULE.build_all_outputs(build())[MODULE.N_SEMANTIC])
+    assert s['unknown_never_not_applicable'] is True and len(s['rule_controls']) == 3
+    for c in s['rule_controls']:
+        assert c['results']['UNKNOWN'] == 'APPLICABILITY_UNRESOLVED'
+        assert c['results']['KNOWN_FALSE'] == 'NOT_APPLICABLE' and c['results']['KNOWN_TRUE'] == 'APPLICABLE'
+
+def so_fails(mutator):
+    r = valid_signoff('d' * 64)
+    mutator(r)
+    with pytest.raises(AuthorityError):
+        MODULE.validate_signoff(r, 'd' * 64)
+
+def test_signoff_valid_passes():
+    MODULE.validate_signoff(valid_signoff('d' * 64), 'd' * 64)
+
+@pytest.mark.parametrize('key', ['status', 'approval', 'dual_role_statement', 'authority_id', 'version', 'authority_sha256', 'authority_sha256_normalisation'])
+def test_signoff_missing_key_fails(key):
+    so_fails(lambda r: r.pop(key))
+
+@pytest.mark.parametrize('key', ['approver', 'role', 'date', 'scope'])
+def test_signoff_missing_approval_key_fails(key):
+    so_fails(lambda r: r['approval'].pop(key))
+
+def test_signoff_value_mutations_fail():
+    so_fails(lambda r: r.__setitem__('status', 'DRAFT'))
+    so_fails(lambda r: r['approval'].__setitem__('approver', 'Someone Else'))
+    so_fails(lambda r: r['approval'].__setitem__('role', 'INTERN'))
+    so_fails(lambda r: r.__setitem__('dual_role_statement', ''))
+    so_fails(lambda r: r.__setitem__('dual_role_statement', 'Oscar Mack approved this.'))
+    so_fails(lambda r: r.__setitem__('authority_sha256', 'e' * 64))
+    so_fails(lambda r: r.__setitem__('authority_sha256_normalisation', 'NONE'))
+
+def test_publish_refuses_without_signoff(env):
+    with pytest.raises(AuthorityError):
+        MODULE.publish(False)
+    assert not MODULE.AUTHORITY.exists() and not MODULE.OUT.exists()
+
+def test_publish_refuses_on_digest_mismatch_or_wrong_approver(env):
+    MODULE.dump(MODULE.SIGNOFF, valid_signoff('f' * 64))
+    with pytest.raises(AuthorityError):
+        MODULE.publish(False)
+    r = valid_signoff(sha_text(MODULE.jtext(build())))
+    r['approval']['approver'] = 'Someone Else'
+    MODULE.dump(MODULE.SIGNOFF, r)
+    with pytest.raises(AuthorityError):
+        MODULE.publish(False)
+    assert not MODULE.AUTHORITY.exists()
+
+def test_dry_run_writes_nothing_and_summarises(env, capsys):
+    MODULE.publish(True)
+    out = capsys.readouterr().out
+    assert 'Decided controls: 21' in out and 'Undecided controls: 59' in out
+    assert 'EMS-CTRL-030: ALL_CONDITIONS_MUST_MATCH: production = KNOWN_FALSE' in out
+    assert 'EMS-CTRL-052: ALL_CONDITIONS_MUST_MATCH: ai_enabled = KNOWN_FALSE' in out
+    assert sha_text(MODULE.jtext(build())) in out
+    for cid in REQUEST: assert cid in out
+    assert 'AA4-GOV-001' in out and 'NO_RULE_WILL_BE_PUBLISHED' in out
+    for word in ('best', 'critical', 'important', 'recommended', 'highest'): assert word not in out.lower()
+    assert not MODULE.AUTHORITY.exists() and not MODULE.OUT.exists()
+
+def snapshot():
+    return {p: p.read_bytes() for p in sorted(MODULE.OUT.iterdir())} | {MODULE.AUTHORITY: MODULE.AUTHORITY.read_bytes()}
+
+def published(env):
+    write_signoff()
+    MODULE.publish(False)
+
+def test_publish_writes_all_and_is_byte_identical(env):
+    published(env)
+    first = snapshot()
+    assert len(first) == 8
+    assert all(b'\r' not in v for v in first.values())
+    MODULE.publish(False)
+    assert snapshot() == first
+    MODULE.validate_published()
+
+def test_validate_published_rejects_absent_authority(env):
+    with pytest.raises(AuthorityError, match='not published'):
+        MODULE.validate_published()
+
+def test_validate_rejects_changed_output(env):
+    published(env)
+    p = MODULE.OUT / MODULE.N_MATRIX
+    p.write_bytes(p.read_bytes().replace(b'80', b'81', 1))
+    with pytest.raises(AuthorityError):
+        MODULE.validate_published()
+
+def test_validate_rejects_hand_edit_with_consistent_rehash(env):
+    published(env)
+    a = MODULE.load(MODULE.AUTHORITY)
+    row(a, 'EMS-CTRL-009')['not_applicable_decision_state'] = 'NOT_YET_DECIDED'
+    row(a, 'EMS-CTRL-009')['not_applicable_authority'] = None
+    MODULE.dump(MODULE.AUTHORITY, a)
+    write_signoff(a)
+    outs = MODULE.build_all_outputs(a, MODULE.load(MODULE.SIGNOFF))
+    for n, t in outs.items(): MODULE.write_text(MODULE.OUT / n, t)
+    with pytest.raises(AuthorityError):
+        MODULE.validate_published()
+
+def test_validate_rejects_signoff_digest_mismatch(env):
+    published(env)
+    MODULE.dump(MODULE.SIGNOFF, valid_signoff('a' * 64))
+    with pytest.raises(AuthorityError):
+        MODULE.validate_published()
+
+def test_validate_rejects_manifest_digest_difference(env):
+    published(env)
+    p = MODULE.OUT / MODULE.N_MANIFEST
+    m = json.loads(p.read_text(encoding='utf-8'))
+    m['artifacts'][0]['sha256'] = '0' * 64
+    MODULE.dump(p, m)
+    with pytest.raises(AuthorityError):
+        MODULE.validate_published()
+
+def test_validate_rejects_extra_or_missing_file(env):
+    published(env)
+    (MODULE.OUT / 'extra.txt').write_text('x', encoding='utf-8')
+    with pytest.raises(AuthorityError):
+        MODULE.validate_published()
+    (MODULE.OUT / 'extra.txt').unlink()
+    (MODULE.OUT / MODULE.N_REPORT).unlink()
+    with pytest.raises(AuthorityError):
+        MODULE.validate_published()
+
+def test_write_publication_record(env):
+    published(env)
+    MODULE.write_publication_record('a' * 40)
+    rec = MODULE.load(MODULE.PUBLICATION_RECORD)
+    assert set(rec) == {'publication_commit', 'authority_id', 'version', 'authority_sha256', 'manifest_sha256', 'digest_normalisation'}
+    assert rec['publication_commit'] == 'a' * 40 and rec['digest_normalisation'] == 'CRLF_TO_LF'
+    assert rec['authority_sha256'] == MODULE.lf_digest(MODULE.AUTHORITY)
+    for bad in ('abc', 'A' * 40, 'g' * 40, ''):
+        with pytest.raises(AuthorityError):
+            MODULE.write_publication_record(bad)
+
+REAL_AUTHORITY = MODULE.AUTHORITY
+REAL_RECORD = MODULE.PUBLICATION_RECORD
+REAL_OUT = MODULE.OUT
+REAL_SIGNOFF = MODULE.SIGNOFF
+
+@pytest.mark.skipif(not REAL_AUTHORITY.exists(), reason='v2 authority not published yet')
+def test_real_published_files_validate():
+    MODULE.validate_published()
+    a = MODULE.load(REAL_AUTHORITY)
+    assert sum(c['not_applicable_decision_state'] != 'NOT_YET_DECIDED' for c in a['controls']) == 21
+    assert sum(c['not_applicable_decision_state'] == 'NOT_YET_DECIDED' for c in a['controls']) == 59
+    ids = {r['decision_id'] for r in MODULE.load(MODULE.GOVERNANCE_DECISIONS)['records']}
+    assert set(a['applicability_decision_ids']) <= ids
+    for c in a['controls']:
+        if c['not_applicable_rule']:
+            for cond in c['not_applicable_rule']['conditions']:
+                assert cond['field'] in ('production', 'internet_exposed', 'contains_customer_data', 'ai_enabled') and cond['state'] in ('KNOWN_TRUE', 'KNOWN_FALSE')
+
+def git(*args):
+    r = subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
+    return subprocess.CompletedProcess(r.args, r.returncode, r.stdout, r.stderr.decode('utf-8', 'replace').strip())
+
+def git_ready():
+    try: r = git('rev-parse', '--is-shallow-repository')
+    except OSError: return 'git is unavailable'
+    if r.returncode != 0: return 'not a git repository'
+    if r.stdout.decode().strip() == 'true': return 'shallow repository, history is incomplete'
+    return None
+
+def lf_sha(b): return hashlib.sha256(b.replace(b'\r\n', b'\n')).hexdigest()
+
+@pytest.mark.skipif(not REAL_RECORD.exists(), reason='publication record not written yet')
+def test_publication_commit_ancestor_and_file_set():
+    reason = git_ready()
+    if reason: pytest.skip(reason)
+    rec = MODULE.load(REAL_RECORD)
+    sha = rec['publication_commit']
+    assert git('merge-base', '--is-ancestor', sha, 'HEAD').returncode == 0
+    files = git('diff-tree', '--no-commit-id', '--name-only', '-r', sha).stdout.decode().split()
+    out_rel = REAL_OUT.relative_to(ROOT).as_posix()
+    expected = {REAL_AUTHORITY.relative_to(ROOT).as_posix(), REAL_SIGNOFF.relative_to(ROOT).as_posix(), *(f'{out_rel}/{p.name}' for p in REAL_OUT.iterdir())}
+    assert set(files) == expected
+    assert 'registry/adjudication_rules.json' not in files and 'registry/policy_decisions.json' not in files
+    auth_rel = REAL_AUTHORITY.relative_to(ROOT).as_posix()
+    assert lf_sha(git('show', f'{sha}:{auth_rel}').stdout) == rec['authority_sha256']
+    manifest = json.loads(git('show', f'{sha}:{out_rel}/{MODULE.N_MANIFEST}').stdout.decode('utf-8'))
+    for art in manifest['artifacts']:
+        assert lf_sha(git('show', f"{sha}:{art['relative_path']}").stdout) == art['sha256']

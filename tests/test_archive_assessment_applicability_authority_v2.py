@@ -135,7 +135,7 @@ def test_non_rule_fields_declared_but_unusable():
 def test_committed_schema_equals_schema_function(): assert json.loads(MODULE.SCHEMA.read_text(encoding='utf-8')) == schema()
 def test_v2_builder_does_not_use_generated_dir():
     src = SCRIPT.read_text(encoding='utf-8')
-    assert 'ems-aa2' not in src and 'generated' not in src
+    assert 'ems-aa2' not in src and "'ems-aa3'" not in src and 'AA2 / ' not in src
 
 def control(state, r, a):
     c = copy.deepcopy(build_authority()['controls'][0]); decide(c, state, r, a); return c

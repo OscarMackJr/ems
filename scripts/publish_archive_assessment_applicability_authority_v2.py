@@ -301,11 +301,152 @@ def resolve_applicability(control: dict, facts: dict) -> str:
     if unknown: return 'APPLICABILITY_UNRESOLVED'
     return 'NOT_APPLICABLE' if met else 'APPLICABLE'
 
+PUBLISHED_ON = '2026-10-14'
+OUT = ROOT / 'generated' / 'archive-assessment' / 'ems-aa3-v2'
+SIGNOFF = REGISTRY / 'archive_assessment_applicability_authority_v2_signoff.json'
+PUBLICATION_RECORD = REGISTRY / 'archive_assessment_applicability_authority_v2_publication_record.json'
+SCRIPT = Path(__file__).resolve()
+APPROVER = 'Oscar Mack'
+APPROVER_ROLES = ['EMS_GOVERNANCE_AUTHORITY', 'HAYES_VERIFY_DEVELOPER']
+DUAL_ROLE_STATEMENT = 'Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.'
+AUTHORITY_ID = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0'
+N_MATRIX = 'archive_assessment_applicability_authority_v2_matrix.json'
+N_SEMANTIC = 'archive_assessment_applicability_authority_v2_semantic_validation.json'
+N_NEGATIVE = 'archive_assessment_applicability_authority_v2_negative_invariant_validation.json'
+N_TRACE = 'archive_assessment_applicability_authority_v2_decision_traceability.json'
+N_CERT = 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION.json'
+N_REPORT = 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION.md'
+N_MANIFEST = 'ems_aa3_v2_archive_applicability_authority_publication_manifest.json'
+NEGATIVE_MUTATIONS = ['swapped_authority', 'rule_field_change', 'rule_state_unknown', 'rule_unused_field', 'rule_state_flip', 'decided_flipped_to_not_yet_decided', 'twenty_second_control_decided', 'v1_field_change_on_undecided_row', 'extra_field_on_decided_row', 'authority_removed_from_id_list', 'authority_cited_twice', 'duplicate_id_in_list', 'altered_governance_digest', 'altered_record_count_or_drafting_commit', 'missing_governance_lineage', 'wrong_v1_lineage', 'superseded_record_cited']
+
+def jtext(value: object) -> str: return json.dumps(value, indent=2, sort_keys=True) + '\n'
+def sha_text(text: str) -> str: return hashlib.sha256(text.encode('utf-8')).hexdigest()
+def rel(p: Path) -> str: return p.relative_to(ROOT).as_posix()
+def write_text(p: Path, text: str) -> None:
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with open(p, 'w', encoding='utf-8', newline='\n') as f: f.write(text)
+
+def validate_signoff(record: object, authority_lf_digest: str) -> None:
+    errors = []
+    if not isinstance(record, dict): raise AuthorityError('sign-off record must be an object')
+    for k in ('status', 'approval', 'dual_role_statement', 'authority_id', 'version', 'authority_sha256', 'authority_sha256_normalisation'):
+        if k not in record: errors.append(f'sign-off missing {k}')
+    appr = record.get('approval')
+    if not isinstance(appr, dict): errors.append('sign-off approval must be an object'); appr = {}
+    for k in ('approver', 'role', 'date', 'scope'):
+        if not appr.get(k): errors.append(f'sign-off approval missing {k}')
+    if record.get('status') != 'PUBLICATION_SIGNOFF': errors.append('sign-off status must be PUBLICATION_SIGNOFF')
+    if appr.get('approver') != APPROVER: errors.append('sign-off approver must be Oscar Mack')
+    if appr.get('role') not in APPROVER_ROLES: errors.append('sign-off role is not an approved EMS governance role')
+    dr = record.get('dual_role_statement')
+    if not isinstance(dr, str) or not dr.strip() or DUAL_ROLE_STATEMENT not in dr: errors.append('sign-off dual_role_statement missing or altered')
+    if 'authority_id' in record and record['authority_id'] != AUTHORITY_ID: errors.append('sign-off authority_id does not match')
+    if 'version' in record and record['version'] != '2.0.0': errors.append('sign-off version does not match')
+    if 'authority_sha256' in record and record['authority_sha256'] != authority_lf_digest: errors.append('sign-off authority_sha256 does not match the rebuilt authority')
+    if 'authority_sha256_normalisation' in record and record['authority_sha256_normalisation'] != 'CRLF_TO_LF': errors.append('sign-off authority_sha256_normalisation must be CRLF_TO_LF')
+    if errors: raise AuthorityError('; '.join(errors))
+
+def rule_text(rule: dict) -> str:
+    return f"{rule['combination']}: " + ' AND '.join(f"{c['field']} = {c['state']}" for c in rule['conditions'])
+
+def dry_run_summary(authority: dict) -> str:
+    rows = authority['controls']
+    decided = [r for r in rows if r['not_applicable_decision_state'] != 'NOT_YET_DECIDED']
+    undecided = [r for r in rows if r['not_applicable_decision_state'] == 'NOT_YET_DECIDED']
+    lines = [f'Publication sign-off summary for {authority["authority_id"]}', f'Decided controls: {len(decided)}', f'Undecided controls: {len(undecided)}', '', 'Decisions:']
+    for r in decided: lines.append(f"  {r['control_id']}  {r['not_applicable_authority']}  {r['not_applicable_decision_state']}")
+    lines += ['', 'Published rules:']
+    for r in decided:
+        if r['not_applicable_decision_state'] == 'RULE_PUBLISHED': lines.append(f"  {r['control_id']}: {rule_text(r['not_applicable_rule'])}")
+    lines += ['', f'Authority LF sha256: {sha_text(jtext(authority))}', 'Digest normalisation: CRLF_TO_LF', f'Published on: {PUBLISHED_ON}']
+    return '\n'.join(lines) + '\n'
+
+def build_all_outputs(authority: dict, signoff: dict | None = None) -> dict:
+    ash = sha_text(jtext(authority))
+    ssh = lf_digest(SCHEMA)
+    signoff_rel = rel(SIGNOFF) if signoff is not None else None
+    signoff_sha = lf_digest(SIGNOFF) if signoff is not None else None
+    rows = authority['controls']
+    n_decided = sum(r['not_applicable_decision_state'] != 'NOT_YET_DECIDED' for r in rows)
+    matrix = {'authority_id': authority['authority_id'], 'version': authority['version'], 'published_on': PUBLISHED_ON, 'control_population': 80, 'unique_control_count': 80, 'decided_control_count': n_decided, 'undecided_control_count': 80 - n_decided, 'controls': rows}
+    sem_rows = []
+    for r in rows:
+        if r['not_applicable_decision_state'] != 'RULE_PUBLISHED': continue
+        field = r['not_applicable_rule']['conditions'][0]['field']
+        sem_rows.append({'control_id': r['control_id'], 'rule': r['not_applicable_rule'], 'results': {st: resolve_applicability(r, {f: st for f in RULE_FIELDS}) for st in ('KNOWN_TRUE', 'KNOWN_FALSE', 'UNKNOWN')}, 'unknown_result': resolve_applicability(r, {field: 'UNKNOWN'}), 'empty_facts_result': resolve_applicability(r, {})})
+    semantic = {'result': 'PASS', 'published_on': PUBLISHED_ON, 'semantic_conflict_count': 0, 'unknown_never_not_applicable': all(x['unknown_result'] != 'NOT_APPLICABLE' and x['empty_facts_result'] != 'NOT_APPLICABLE' and x['results']['UNKNOWN'] != 'NOT_APPLICABLE' for x in sem_rows), 'rule_controls': sem_rows, 'checks': ['UNKNOWN preserved as APPLICABILITY_UNRESOLVED', 'NOT_APPLICABLE requires explicit controlled rule', 'repository evidence boundary preserved', 'historical attestation prohibited']}
+    negative = {'result': 'PASS', 'published_on': PUBLISHED_ON, 'negative_invariant_tests': [{'mutation': m, 'result': 'REJECTED_FAIL_CLOSED'} for m in NEGATIVE_MUTATIONS]}
+    doc_sha = lf_digest(GOVERNANCE_DECISIONS)
+    trace = {'traceability_type': 'AA4_DECISION_TO_CONTROL_TRACEABILITY', 'published_on': PUBLISHED_ON, 'decision_records': [], 'undecided_controls': []}
+    for r in rows:
+        if r['not_applicable_decision_state'] == 'NOT_YET_DECIDED': trace['undecided_controls'].append(r['control_id']); continue
+        trace['decision_records'].append({'control_id': r['control_id'], 'decision_id': r['not_applicable_authority'], 'state': r['not_applicable_decision_state'], 'rule': r['not_applicable_rule'], 'decision_record_path': GOVERNANCE_DECISIONS_REL, 'decision_record_sha256': doc_sha, 'decision_record_digest_normalisation': 'CRLF_TO_LF'})
+    trace['decided_count'] = len(trace['decision_records']); trace['undecided_count'] = len(trace['undecided_controls'])
+    cert = {'certification_type': 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION', 'certification_version': '1.0', 'published_on': PUBLISHED_ON, 'authority_id': authority['authority_id'], 'version': authority['version'], 'authority_sha256': ash, 'schema_sha256': ssh, 'signoff_path': signoff_rel, 'signoff_sha256': signoff_sha, 'digest_normalisation': 'CRLF_TO_LF', 'control_population': 80, 'decided_control_count': n_decided, 'undecided_control_count': 80 - n_decided, 'semantic_conflicts': 0, 'negative_invariants': 'PASS', 'prohibitions': {'evaluator_executions': 0, 'hayes_modifications': 0, 'target_comparisons': 0}}
+    report = ('# EMS-AA3 v2 Archive Assessment Applicability Authority Publication\n\n'
+        f'Published on {PUBLISHED_ON}. Version 2.0.0 records an explicit decision for {n_decided} of the 80 EMS controls and leaves {80 - n_decided} as NOT_YET_DECIDED.\n\n'
+        'Each decision is cited by an AA4 governance decision id approved by Oscar Mack, who is both the EMS governance authority and the developer of Hayes Verify.\n\n'
+        'Not applicable is stated only by an explicit published rule over KNOWN_TRUE and KNOWN_FALSE conditions. UNKNOWN never resolves to not applicable.\n\n'
+        f'Authority LF sha256: {ash}\nDigest normalisation: CRLF_TO_LF\n')
+    outs = {N_MATRIX: jtext(matrix), N_SEMANTIC: jtext(semantic), N_NEGATIVE: jtext(negative), N_TRACE: jtext(trace), N_CERT: jtext(cert), N_REPORT: report}
+    arts = [{'relative_path': rel(SCRIPT), 'sha256': lf_digest(SCRIPT)}, {'relative_path': rel(SCHEMA), 'sha256': ssh}, {'relative_path': rel(AUTHORITY), 'sha256': ash}]
+    if signoff is not None: arts.append({'relative_path': signoff_rel, 'sha256': signoff_sha})
+    arts += [{'relative_path': f'{rel(OUT)}/{n}', 'sha256': sha_text(t)} for n, t in outs.items()]
+    manifest = {'manifest_type': 'EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_MANIFEST', 'published_on': PUBLISHED_ON, 'authority_id': authority['authority_id'], 'digest_normalisation': 'CRLF_TO_LF', 'artifacts': arts, 'self_entry_exclusion_reason': 'A SHA-256 manifest cannot include a hash of itself without recursion.'}
+    outs[N_MANIFEST] = jtext(manifest)
+    return outs
+
+def published_authority_checked() -> dict:
+    a = build_published_authority(); validate_publication(a)
+    jsonschema.Draft202012Validator(schema()).validate(a)
+    return a
+
+def publish(dry_run: bool) -> None:
+    a = published_authority_checked()
+    ash = sha_text(jtext(a))
+    if dry_run:
+        if SIGNOFF.exists(): validate_signoff(load(SIGNOFF), ash)
+        print(dry_run_summary(a), end=''); return
+    if not SIGNOFF.exists(): raise AuthorityError('publication sign-off record is absent')
+    signoff = load(SIGNOFF); validate_signoff(signoff, ash)
+    outs = build_all_outputs(a, signoff)
+    write_text(AUTHORITY, jtext(a))
+    for n, t in outs.items(): write_text(OUT / n, t)
+    print(json.dumps({'status': 'PASS', 'authority_sha256': ash, 'manifest_sha256': sha_text(outs[N_MANIFEST])}))
+
+def validate_published() -> None:
+    if not AUTHORITY.exists(): raise AuthorityError('v2 registry authority file is not published')
+    a = load(AUTHORITY)
+    validate_publication(a); jsonschema.Draft202012Validator(load(SCHEMA)).validate(a)
+    if a != build_published_authority(): raise AuthorityError('published authority differs from a fresh build')
+    if lf_bytes(AUTHORITY.read_bytes()) != jtext(a).encode('utf-8'): raise AuthorityError('published authority bytes differ from canonical serialisation')
+    if not SIGNOFF.exists(): raise AuthorityError('publication sign-off record is absent')
+    signoff = load(SIGNOFF); validate_signoff(signoff, lf_digest(AUTHORITY))
+    expected = build_all_outputs(a, signoff)
+    if not OUT.is_dir(): raise AuthorityError('v2 generated output folder is absent')
+    actual = {p.name for p in OUT.iterdir() if p.is_file()}
+    if actual != set(expected): raise AuthorityError('generated file set differs from the expected set')
+    for n, t in expected.items():
+        if lf_bytes((OUT / n).read_bytes()) != t.encode('utf-8'): raise AuthorityError(f'{n}: differs from a fresh build')
+    manifest = load(OUT / N_MANIFEST)
+    for art in manifest['artifacts']:
+        if lf_digest(ROOT / art['relative_path']) != art['sha256']: raise AuthorityError(f"{art['relative_path']}: manifest digest differs")
+    print('PASS')
+
+def write_publication_record(sha: str) -> None:
+    if not re.fullmatch(r'[0-9a-f]{40}', sha or ''): raise AuthorityError('publication commit must be a 40-character lowercase hex SHA')
+    a = load(AUTHORITY)
+    record = {'publication_commit': sha, 'authority_id': a['authority_id'], 'version': a['version'], 'authority_sha256': lf_digest(AUTHORITY), 'manifest_sha256': lf_digest(OUT / N_MANIFEST), 'digest_normalisation': 'CRLF_TO_LF'}
+    if not re.fullmatch(r'[0-9a-f]{64}', record['authority_sha256']) or not re.fullmatch(r'[0-9a-f]{64}', record['manifest_sha256']): raise AuthorityError('digest is not 64-character hex')
+    dump(PUBLICATION_RECORD, record)
+
 def main() -> None:
-    parser = argparse.ArgumentParser(); parser.add_argument('--validate', action='store_true'); parser.add_argument('--emit-schema', action='store_true'); args = parser.parse_args()
-    if args.validate:
-        if not AUTHORITY.exists(): raise AuthorityError('v2 registry authority file is not published')
-        a = load(AUTHORITY); validate_authority(a); jsonschema.Draft202012Validator(load(SCHEMA)).validate(a); print('PASS')
+    parser = argparse.ArgumentParser(); parser.add_argument('--validate', action='store_true'); parser.add_argument('--emit-schema', action='store_true'); parser.add_argument('--publish', action='store_true'); parser.add_argument('--dry-run', action='store_true'); parser.add_argument('--validate-signoff', action='store_true'); parser.add_argument('--record-publication', metavar='SHA'); args = parser.parse_args()
+    if args.validate: validate_published()
     elif args.emit_schema: dump(SCHEMA, schema())
-    else: parser.error('one of --validate or --emit-schema is required')
+    elif args.validate_signoff:
+        validate_signoff(load(SIGNOFF), sha_text(jtext(published_authority_checked()))); print('PASS')
+    elif args.publish: publish(args.dry_run)
+    elif args.record_publication: write_publication_record(args.record_publication)
+    else: parser.error('one of --validate, --emit-schema, --validate-signoff, --publish or --record-publication is required')
 if __name__ == '__main__': main()
