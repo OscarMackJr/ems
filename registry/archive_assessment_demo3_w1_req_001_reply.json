@@ -1,0 +1,292 @@
+{
+  "classification_prerequisites_gap_untouched": true,
+  "controls": [
+    {
+      "authority": "AA4-GOV-001",
+      "control_id": "EMS-CTRL-009",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Branch protection is a configuration of the repository itself that guards branch history against direct or forced changes, so it follows the repository and not any deployment fact.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-002",
+      "control_id": "EMS-CTRL-010",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Pull request review is a practice about how changes are accepted into a repository, and the evidence for it lives in the merge history that a snapshot still carries.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-003",
+      "control_id": "EMS-CTRL-011",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "CODEOWNERS enforcement is a repository practice that ties paths to accountable reviewers, and it is evidenced by a file and settings that belong to the repository.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-004",
+      "control_id": "EMS-CTRL-012",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Signed commits are a property of the commit history, and that history is exactly what an archived snapshot preserves and what a reader of the snapshot relies on for authorship.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-005",
+      "control_id": "EMS-CTRL-013",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Protected release tags keep the mapping between a version label and a commit from being altered, which is an integrity property of the repository history and not of a deployment.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-006",
+      "control_id": "EMS-CTRL-014",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Mandatory issue linkage is a traceability practice recorded in commits and pull requests, and that record remains in a snapshot of the repository.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-007",
+      "control_id": "EMS-CTRL-015",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Repository template compliance checks the structure and required files of the repository itself, which can be assessed on a snapshot as readily as on a live repository.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-008",
+      "control_id": "EMS-CTRL-017",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "A secure coding standard governs how the code in the repository is written, and the code is the content that a snapshot preserves and that may later be reused.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-009",
+      "control_id": "EMS-CTRL-018",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Secret scanning looks for credentials committed to repository content and history, and an archived snapshot retains any such credentials for as long as the copy exists.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-010",
+      "control_id": "EMS-CTRL-019",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Dependency vulnerability scanning examines the dependency declarations held in the repository, and those declarations are present in a snapshot and become riskier as new vulnerabilities are disclosed over time.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-011",
+      "control_id": "EMS-CTRL-020",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "License compliance concerns the legal terms attached to the code and dependencies that the repository holds, and holding a copy in an archive does not remove those terms.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-012",
+      "control_id": "EMS-CTRL-021",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "SBOM generation produces an inventory of the components in the repository, and that inventory is useful for an archived copy because it lets later vulnerability and licence questions be answered without rebuilding.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-013",
+      "control_id": "EMS-CTRL-022",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Security advisory monitoring watches for newly published advisories against components in use, and advisories keep appearing after a snapshot is taken.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-014",
+      "control_id": "EMS-CTRL-030",
+      "decision_state": "RULE_PUBLISHED",
+      "reason": "Disaster recovery testing exercises the recovery of a running service, and the approved definition of production states that recovery controls are in play when the target is used as, or supports, a production system.",
+      "rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "production",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      }
+    },
+    {
+      "authority": "AA4-GOV-015",
+      "control_id": "EMS-CTRL-033",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Reproducible builds depend on pinned inputs and build definitions held in the repository, and an archived copy is valuable largely because it can be rebuilt faithfully later.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-016",
+      "control_id": "EMS-CTRL-039",
+      "decision_state": "RULE_PUBLISHED",
+      "reason": "A release approval workflow gates the promotion of a release into production use, and the approved definition of production states that release controls are in play when the target is used as, or supports, a production system.",
+      "rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "production",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      }
+    },
+    {
+      "authority": "AA4-GOV-017",
+      "control_id": "EMS-CTRL-042",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "IaC security scanning checks infrastructure definitions for insecure configuration, and whether it is relevant turns on whether the target holds such definitions.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-018",
+      "control_id": "EMS-CTRL-052",
+      "decision_state": "RULE_PUBLISHED",
+      "reason": "AI attribution is an AI-specific practice of marking what was produced with AI capabilities, and the approved definition of ai_enabled states that AI-specific controls apply when the target includes or uses AI capabilities.",
+      "rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "ai_enabled",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      }
+    },
+    {
+      "authority": "AA4-GOV-019",
+      "control_id": "EMS-CTRL-062",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "Schema version control keeps schema definitions and migrations under tracked revision, and whether it is relevant turns on whether the target defines any schema.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-020",
+      "control_id": "EMS-CTRL-075",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "A continuous compliance scan is the recurring check that registered targets still meet their controls, and it is operated by the EMS across targets.",
+      "rule": null
+    },
+    {
+      "authority": "AA4-GOV-021",
+      "control_id": "EMS-CTRL-079",
+      "decision_state": "NO_RULE_WILL_BE_PUBLISHED",
+      "reason": "A repository health review is a periodic check on the upkeep and continued need for a repository, and an archived copy is a natural subject for the question of whether it is still owned and still needed.",
+      "rule": null
+    }
+  ],
+  "disclosure": {
+    "review_path": ".planning/phases/04-certified-publication/04-REVIEW.md",
+    "v2_0_1_date": null,
+    "v2_0_1_possible": true,
+    "verification_path": ".planning/phases/04-certified-publication/04-VERIFICATION.md",
+    "wr_01": "WR-01: the semantic, negative-invariant and certification outputs record PASS and REJECTED_FAIL_CLOSED for checks the publisher does not run."
+  },
+  "document_id": "EMS-DEMO3-W1-REQ-001-REPLY",
+  "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+  "from_authority": {
+    "approver": "Oscar Mack",
+    "role": "EMS_GOVERNANCE_AUTHORITY",
+    "roles": [
+      "EMS_GOVERNANCE_AUTHORITY",
+      "HAYES_VERIFY_DEVELOPER"
+    ]
+  },
+  "hayes_side_changes_needed": [
+    "The target description must carry the eight classification facts.",
+    "Hayes must read the published v2 shape.",
+    "Hayes must re-pin to 54a7fd09114704a97a7a48fce5f89aebeb48c90a."
+  ],
+  "live_resolved_count_stays_zero": true,
+  "not_yet_decided": {
+    "count": 59,
+    "date": null,
+    "state": "NOT_YET_DECIDED"
+  },
+  "pin": {
+    "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0",
+    "authority_sha256": "de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353",
+    "digest_normalisation": "CRLF_TO_LF",
+    "manifest_sha256": "64c6c0e0dc216ed157962e2bab804e1b6f252fe25838efd76ed98e935b0e1680",
+    "publication_commit": "54a7fd09114704a97a7a48fce5f89aebeb48c90a",
+    "publication_record_commit": "0ce89f2",
+    "version": "2.0.0"
+  },
+  "published_shape": {
+    "authority_path": "registry/archive_assessment_applicability_authority_v2.json",
+    "decision_records_path": "registry/archive_assessment_governance_decisions.json",
+    "decision_state_values": [
+      "RULE_PUBLISHED",
+      "NO_RULE_WILL_BE_PUBLISHED",
+      "NOT_YET_DECIDED"
+    ],
+    "decision_traceability_path": "generated/archive-assessment/ems-aa3-v2/archive_assessment_applicability_authority_v2_decision_traceability.json",
+    "example_decided_row": {
+      "archive_evidence_capability": "REPOSITORY_CONTENT_FACTS_ONLY",
+      "archive_population_membership": "IN_ARCHIVE_CONTROL_POPULATION",
+      "assessment_semantics": "CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT",
+      "catalog_scope": "SERVICE",
+      "classification_prerequisites": [
+        "production",
+        "internet_exposed",
+        "contains_customer_data",
+        "ai_enabled",
+        "owner",
+        "tier",
+        "service_criticality",
+        "data_classification"
+      ],
+      "classification_unknown_treatment": "APPLICABILITY_UNRESOLVED",
+      "control_id": "EMS-CTRL-030",
+      "control_name": "Disaster Recovery Testing",
+      "decision_ids": [
+        "AA1-GOV-001",
+        "AA1-GOV-002",
+        "AA1-GOV-003",
+        "AA1-GOV-004",
+        "AA1-GOV-005",
+        "AA1-GOV-006",
+        "AA1-GOV-007",
+        "AA1-GOV-008"
+      ],
+      "default_applicability_result": "APPLICABILITY_UNRESOLVED",
+      "not_applicable_authority": "AA4-GOV-014",
+      "not_applicable_decision_state": "RULE_PUBLISHED",
+      "not_applicable_rule": {
+        "combination": "ALL_CONDITIONS_MUST_MATCH",
+        "conditions": [
+          {
+            "field": "production",
+            "state": "KNOWN_FALSE"
+          }
+        ]
+      },
+      "required_non_repository_authority": "SERVICE",
+      "target_type": "ARCHIVED_REPOSITORY_SNAPSHOT",
+      "unresolved_reason": "CONTROLLED_TARGET_CLASSIFICATION_AND_AUTHORITY_INPUTS_REQUIRED"
+    },
+    "generated_folder": "generated/archive-assessment/ems-aa3-v2",
+    "manifest_path": "generated/archive-assessment/ems-aa3-v2/ems_aa3_v2_archive_applicability_authority_publication_manifest.json",
+    "per_control_fields": [
+      "not_applicable_decision_state",
+      "not_applicable_rule",
+      "not_applicable_authority"
+    ],
+    "per_control_ids_carry": [
+      "AA1-GOV-001",
+      "AA1-GOV-002",
+      "AA1-GOV-003",
+      "AA1-GOV-004",
+      "AA1-GOV-005",
+      "AA1-GOV-006",
+      "AA1-GOV-007",
+      "AA1-GOV-008"
+    ],
+    "per_control_ids_field": "decision_ids",
+    "schema_path": "schemas/archive_assessment_applicability_authority_v2.schema.json",
+    "semantics_block": "not_applicable_semantics",
+    "top_level_field": "applicability_decision_ids"
+  },
+  "reply_date": "2026-10-14",
+  "request_id": "DEMO3-W1-REQ-001",
+  "request_label": "EMSREQ-APPLIC-RULES",
+  "send_condition": "Do not send this reply until commit 54a7fd09114704a97a7a48fce5f89aebeb48c90a is on the remote branch feature/ems-aa3-archive-applicability-authority."
+}
