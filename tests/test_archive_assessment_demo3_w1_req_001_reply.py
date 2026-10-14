@@ -226,7 +226,6 @@ def test_markdown_content():
         assert not re.search(rf'\b{word}\b', prose, re.IGNORECASE), word
 
 
-@pytest.mark.skipif(not REAL_JSON.exists(), reason='reply not generated yet')
 def test_real_reply_files_validate():
     MODULE.validate_reply()
     for p in (REAL_JSON, REAL_MD, MODULE.REPLY_SCHEMA):
