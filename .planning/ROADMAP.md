@@ -166,14 +166,14 @@ Facts read from the repository on 2026-10-13 that the phase plans must account f
 **Goal:** Harden the gates guarding the AA3 v2 applicability authority (Phase 4 review CR-01, CR-02, WR-01..WR-10, IN-01, IN-07; Phase 2 WR-01; Phase 5 reply IN-01..IN-06; vocabulary wording), republish it as `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1` with a fresh sign-off by Oscar Mack and a new publication commit, with none of the 21 decisions changed, then regenerate the unsent `DEMO3-W1-REQ-001` reply to cite 2.0.1. Nothing is pushed or sent.
 **Requirements**: none mapped; scope is 06-CONTEXT.md decisions D-01..D-22
 **Depends on:** Phase 5
-**Plans:** 2/9 plans executed
+**Plans:** 3/9 plans executed
 
 Plans:
 
 Wave 1
 - [x] 06-01-PLAN.md — Vocabulary wording fix in CLAUDE.md and PROJECT.md (D-04)
 - [x] 06-02-PLAN.md — Frozen proposals validated against catalog and frame at `dc3b41c` (D-03)
-- [ ] 06-03-PLAN.md — Governance-decisions builder fixes WR-05, WR-07, WR-08, WR-10 (D-01, D-11)
+- [x] 06-03-PLAN.md — Governance-decisions builder fixes WR-05, WR-07, WR-08, WR-10 (D-01, D-11)
 
 Wave 2 *(blocked on Wave 1 completion)*
 - [ ] 06-04-PLAN.md — Output-neutral publisher gates CR-01, WR-04, CR-02, IN-01, IN-07, WR-09 (D-01, D-02)
