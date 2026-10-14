@@ -1,6 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "properties": {
+    "applicability_decision_ids": {
+      "items": {
+        "pattern": "^AA4-GOV-[0-9]{3}$",
+        "type": "string"
+      },
+      "maxItems": 21,
+      "minItems": 0,
+      "type": "array",
+      "uniqueItems": true
+    },
     "approved_governance_decision_ids": {
       "items": {
         "pattern": "^AA1-GOV-00[1-8]$",
@@ -388,6 +398,38 @@
       ],
       "type": "object"
     },
+    "source_lineage": {
+      "properties": {
+        "governance_decisions": {
+          "additionalProperties": false,
+          "properties": {
+            "drafting_commit": {
+              "pattern": "^[0-9a-f]{40}$",
+              "type": "string"
+            },
+            "record_count": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "relative_path": {
+              "const": "registry/archive_assessment_governance_decisions.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "relative_path",
+            "sha256",
+            "record_count",
+            "drafting_commit"
+          ],
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
     "status": {
       "const": "CONTROLLED"
     },
@@ -411,6 +453,7 @@
     "evidence_boundary",
     "source_lineage",
     "approved_governance_decision_ids",
+    "applicability_decision_ids",
     "controls"
   ],
   "title": "EMS AA3 Archive Assessment Applicability Authority v2",

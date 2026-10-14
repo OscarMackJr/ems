@@ -16,6 +16,9 @@ CATALOG = REGISTRY / 'control_catalog.yaml'
 AUTHORITY = REGISTRY / 'archive_assessment_applicability_authority_v2.json'
 SCHEMA = SCHEMAS / 'archive_assessment_applicability_authority_v2.schema.json'
 V1_AUTHORITY = REGISTRY / 'archive_assessment_applicability_authority.json'
+GOVERNANCE_DECISIONS = REGISTRY / 'archive_assessment_governance_decisions.json'
+GOVERNANCE_DECISIONS_REL = 'registry/archive_assessment_governance_decisions.json'
+REQUEST_CONTROL_IDS = [f'EMS-CTRL-{n:03d}' for n in (9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 30, 33, 39, 42, 52, 62, 75, 79)]
 DECISIONS = [f'AA1-GOV-{n:03d}' for n in range(1, 9)]
 CLASSIFICATION_FIELDS = ['production','internet_exposed','contains_customer_data','ai_enabled','owner','tier','service_criticality','data_classification']
 RULE_FIELDS = CLASSIFICATION_FIELDS[:4]
@@ -129,11 +132,36 @@ def build_authority() -> dict:
         'evidence_boundary': {'archive_content_establishes': ['REPOSITORY_CONTENT_FACTS_ONLY'], 'archive_content_does_not_establish': ['LIVE_REPOSITORY_STATE','ORGANIZATION_AUTHORITY','SERVICE_STATE','PLATFORM_STATE','CURRENT_CICD_STATE','RUNTIME_STATE','EXTERNAL_SYSTEM_STATE','CURRENT_DEPLOYMENT_STATE','VENDOR_SERVICE_EVIDENCE']},
         'source_lineage': {
             'aa1_manifest_sha256': lin['aa1_manifest_sha256'], 'aa2_closure_sha256': lin['aa2_closure_sha256'], 'aa2_approval_sha256': lin['aa2_approval_sha256'],
-            'catalog_reference': {'relative_path': 'registry/control_catalog.yaml', 'sha256': digest(CATALOG), 'required_for_deterministic_compilation': False},
-            'supersedes': {'authority_id': v1['authority_id'], 'version': '1.0.0', 'commit': '62a8955', 'relative_path': 'registry/archive_assessment_applicability_authority.json', 'sha256': digest(V1_AUTHORITY)},
+            'catalog_reference': {'relative_path': 'registry/control_catalog.yaml', 'sha256': lf_digest(CATALOG), 'required_for_deterministic_compilation': False},
+            'supersedes': {'authority_id': v1['authority_id'], 'version': '1.0.0', 'commit': '62a8955', 'relative_path': 'registry/archive_assessment_applicability_authority.json', 'sha256': lf_digest(V1_AUTHORITY)},
+            'digest_normalisation': 'CRLF_TO_LF',
         },
-        'approved_governance_decision_ids': list(DECISIONS), 'controls': controls,
+        'approved_governance_decision_ids': list(DECISIONS), 'applicability_decision_ids': [], 'controls': controls,
     }
+
+def latest_records(doc: dict) -> list[dict]:
+    recs = doc.get('records', [])
+    superseded = set()
+    for r in recs:
+        sup = r.get('supersedes')
+        if isinstance(sup, str): superseded.add(sup)
+        elif isinstance(sup, list): superseded.update(x for x in sup if isinstance(x, str))
+    return [r for r in recs if r.get('decision_id') not in superseded]
+
+def build_published_authority() -> dict:
+    a = build_authority()
+    doc = load(GOVERNANCE_DECISIONS)
+    by_control = {}
+    for r in latest_records(doc):
+        if r['control_id'] in by_control: raise AuthorityError(f"{r['control_id']}: more than one unsuperseded decision record")
+        by_control[r['control_id']] = r
+    rows = {c['control_id']: c for c in a['controls']}
+    for cid, r in by_control.items():
+        if cid not in rows: raise AuthorityError(f'{cid}: decision record for unknown control')
+        rows[cid].update({'not_applicable_decision_state': r['decided_outcome'], 'not_applicable_rule': r['decided']['rule'], 'not_applicable_authority': r['decision_id']})
+    a['applicability_decision_ids'] = sorted(r['decision_id'] for r in by_control.values())
+    a['source_lineage']['governance_decisions'] = {'relative_path': GOVERNANCE_DECISIONS_REL, 'sha256': lf_digest(GOVERNANCE_DECISIONS), 'record_count': len(doc['records']), 'drafting_commit': doc['drafting_commit']}
+    return a
 
 def validate_rule(cid: str, rule: object, errors: list) -> None:
     if not isinstance(rule, dict) or set(rule) != {'combination', 'conditions'}:
@@ -196,6 +224,45 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
     if any(att.get(k) is not False for k in ['historical_compliance_attestation','current_repository_attestation','production_readiness_attestation']): errors.append('attestation leakage')
     if errors: raise AuthorityError('; '.join(errors))
 
+def validate_publication(a: dict) -> None:
+    doc = load(GOVERNANCE_DECISIONS)
+    validate_authority(a, known_decision_ids={r['decision_id'] for r in doc['records']})
+    errors = []
+    rows = a.get('controls', [])
+    decided = {r['control_id'] for r in rows if r.get('not_applicable_decision_state') != 'NOT_YET_DECIDED'}
+    if decided != set(REQUEST_CONTROL_IDS): errors.append('decided control set is not exactly the 21 requested controls')
+    auths = [r.get('not_applicable_authority') for r in rows if r.get('not_applicable_authority') is not None]
+    ids = a.get('applicability_decision_ids')
+    if not isinstance(ids, list) or len(set(ids)) != len(ids) or set(ids) != set(auths) or len(auths) != len(set(auths)): errors.append('applicability_decision_ids must list each cited authority exactly once')
+    lin = a.get('source_lineage') if isinstance(a.get('source_lineage'), dict) else {}
+    gd = lin.get('governance_decisions')
+    if not isinstance(gd, dict): errors.append('governance_decisions lineage missing')
+    else:
+        if gd.get('relative_path') != GOVERNANCE_DECISIONS_REL: errors.append('governance_decisions relative_path invalid')
+        if gd.get('sha256') != lf_digest(GOVERNANCE_DECISIONS): errors.append('governance_decisions sha256 does not match the live decisions file')
+        if gd.get('record_count') != len(doc['records']): errors.append('governance_decisions record_count does not match the live decisions file')
+        if gd.get('drafting_commit') != doc.get('drafting_commit'): errors.append('governance_decisions drafting_commit does not match the live decisions file')
+    latest = {r['control_id']: r for r in latest_records(doc)}
+    for r in rows:
+        auth = r.get('not_applicable_authority')
+        if auth is None: continue
+        rec = latest.get(r['control_id'])
+        if rec is None or rec['decision_id'] != auth: errors.append(f"{r['control_id']}: authority {auth} is not the latest unsuperseded decision record")
+        elif r.get('not_applicable_decision_state') != rec['decided_outcome'] or r.get('not_applicable_rule') != rec['decided']['rule']: errors.append(f"{r['control_id']}: state or rule does not match decision record {auth}")
+    v1 = {r['control_id']: r for r in load(V1_AUTHORITY)['controls']}
+    for r in rows:
+        base = v1.get(r.get('control_id'))
+        if base is None: errors.append(f"{r.get('control_id')}: not present in v1.0.0"); continue
+        keep = {'not_applicable_decision_state', 'not_applicable_rule', 'not_applicable_authority'} if r['control_id'] in REQUEST_CONTROL_IDS else {'not_applicable_decision_state'}
+        if {k: v for k, v in r.items() if k not in keep} != {k: v for k, v in base.items() if k not in keep}: errors.append(f"{r['control_id']}: differs from v1.0.0 beyond the decision fields")
+        if r['control_id'] not in REQUEST_CONTROL_IDS and (r.get('not_applicable_rule') is not None or r.get('not_applicable_authority') is not None): errors.append(f"{r['control_id']}: undecided control carries a rule or authority")
+    sup = lin.get('supersedes')
+    if not isinstance(sup, dict) or sup.get('authority_id') != 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0' or sup.get('commit') != '62a8955' or sup.get('version') != '1.0.0': errors.append('lineage must record v1.0.0 at 62a8955')
+    elif sup.get('sha256') != lf_digest(V1_AUTHORITY): errors.append('lineage v1 authority digest does not match')
+    cat = lin.get('catalog_reference')
+    if not isinstance(cat, dict) or cat.get('sha256') != lf_digest(CATALOG): errors.append('lineage catalog digest does not match')
+    if errors: raise AuthorityError('; '.join(errors))
+
 def schema() -> dict:
     cond = {'type':'object','additionalProperties':False,'required':['field','state'],'properties':{'field':{'enum':list(RULE_FIELDS)},'state':{'enum':list(CONDITION_STATES)}}}
     rule = {'type':'object','additionalProperties':False,'required':['combination','conditions'],'properties':{'combination':{'const':COMBINATION},'conditions':{'type':'array','minItems':1,'maxItems':len(RULE_FIELDS),'items':cond}}}
@@ -205,9 +272,11 @@ def schema() -> dict:
     sem = {'type':'object','required':['requires_explicit_controlled_rule','absence_of_evidence_is_not_not_applicable','unknown_is_not_not_applicable','decision_states','condition_states','condition_combination','min_conditions','field_may_appear_once','rule_condition_fields','fields_not_usable_in_rules','fields_not_usable_in_rules_statement','field_definitions','resolution','no_short_circuit','decision_state_governs_resolved_result','per_control_default_describes_result_absent_a_decision','unknown_is_never_not_applicable','statements'],
         'properties':{'requires_explicit_controlled_rule':{'const':True},'absence_of_evidence_is_not_not_applicable':{'const':True},'unknown_is_not_not_applicable':{'const':True},'decision_states':{'const':list(DECISION_STATES)},'condition_states':{'const':list(CONDITION_STATES)},'condition_combination':{'const':COMBINATION},'min_conditions':{'const':1},'field_may_appear_once':{'const':True},'rule_condition_fields':{'const':list(RULE_FIELDS)},'fields_not_usable_in_rules':{'const':list(NON_RULE_FIELDS)},'field_definitions':{'type':'object','additionalProperties':False,'required':list(RULE_FIELDS),'properties':{f:{'type':'string','minLength':1} for f in RULE_FIELDS}},'resolution':{'const':[dict(r) for r in RESOLUTION]},'no_short_circuit':{'const':True},'decision_state_governs_resolved_result':{'const':True},'per_control_default_describes_result_absent_a_decision':{'const':True},'unknown_is_never_not_applicable':{'const':True}}}
     return {'$schema':'https://json-schema.org/draft/2020-12/schema','title':'EMS AA3 Archive Assessment Applicability Authority v2','type':'object',
-        'required':['document_id','version','status','authority_id','target_type','assessment_semantics','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','controls'],
+        'required':['document_id','version','status','authority_id','target_type','assessment_semantics','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','applicability_decision_ids','controls'],
         'properties':{'document_id':{'const':'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY'},'version':{'const':'2.0.0'},'status':{'const':'CONTROLLED'},'authority_id':{'const':'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0'},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},
             'approved_governance_decision_ids':{'type':'array','minItems':8,'maxItems':8,'items':{'type':'string','pattern':'^AA1-GOV-00[1-8]$'},'uniqueItems':True},
+            'applicability_decision_ids':{'type':'array','minItems':0,'maxItems':21,'items':{'type':'string','pattern':AUTHORITY_ID_RE},'uniqueItems':True},
+            'source_lineage':{'type':'object','properties':{'governance_decisions':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','record_count','drafting_commit'],'properties':{'relative_path':{'const':GOVERNANCE_DECISIONS_REL},'sha256':{'type':'string','pattern':'^[0-9a-f]{64}$'},'record_count':{'type':'integer','minimum':1},'drafting_commit':{'type':'string','pattern':'^[0-9a-f]{40}$'}}}}},
             'not_applicable_semantics':sem,
             'controls':{'type':'array','minItems':80,'maxItems':80,'items':{'type':'object',
                 'required':['control_id','archive_population_membership','target_type','assessment_semantics','classification_prerequisites','classification_unknown_treatment','archive_evidence_capability','required_non_repository_authority','default_applicability_result','unresolved_reason','not_applicable_decision_state','not_applicable_rule','not_applicable_authority','decision_ids'],
