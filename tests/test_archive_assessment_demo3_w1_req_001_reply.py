@@ -241,6 +241,41 @@ def test_publisher_still_valid_and_digest_matches_manifest():
     assert V2.lf_digest(V2.SCRIPT) == recorded
 
 
+def fake_git(ls_remote_rc=0, cat_file_rc=0, merge_base_rc=0):
+    tip = 'b' * 40
+    def run(*args):
+        if args[0] == 'ls-remote':
+            out = f'{tip}\trefs/heads/{MODULE.REMOTE_BRANCH}\n' if ls_remote_rc == 0 else ''
+            return subprocess.CompletedProcess(args, ls_remote_rc, out, '')
+        if args[0] == 'cat-file':
+            return subprocess.CompletedProcess(args, cat_file_rc, '', '')
+        if args[0] == 'merge-base':
+            return subprocess.CompletedProcess(args, merge_base_rc, '', '')
+        raise AssertionError(f'push-check ran an unexpected git command: {args}')
+    return run
+
+
+@pytest.mark.parametrize('kwargs, expected', [
+    ({}, MODULE.PUSH_ON),
+    ({'merge_base_rc': 1}, MODULE.PUSH_NOT_ON),
+    ({'merge_base_rc': 128}, MODULE.PUSH_UNKNOWN),
+    ({'cat_file_rc': 1}, MODULE.PUSH_UNKNOWN),
+    ({'ls_remote_rc': 2}, MODULE.PUSH_UNKNOWN),
+])
+def test_push_check_status(monkeypatch, capsys, kwargs, expected):
+    monkeypatch.setattr(MODULE, 'git', fake_git(**kwargs))
+    assert MODULE.push_check() == expected
+    assert MODULE.PUSH_ON == 0 and MODULE.PUSH_NOT_ON != 0 and MODULE.PUSH_UNKNOWN != 0
+
+
+def test_push_check_cli_exit_code(monkeypatch):
+    monkeypatch.setattr(MODULE, 'git', fake_git(merge_base_rc=1))
+    monkeypatch.setattr('sys.argv', ['x', '--push-check'])
+    with pytest.raises(SystemExit) as e:
+        MODULE.main()
+    assert e.value.code == MODULE.PUSH_NOT_ON
+
+
 def git(*args):
     r = subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
     return subprocess.CompletedProcess(r.args, r.returncode, r.stdout, r.stderr.decode('utf-8', 'replace').strip())

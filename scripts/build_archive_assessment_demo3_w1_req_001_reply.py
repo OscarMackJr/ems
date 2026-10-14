@@ -4,6 +4,7 @@ import argparse
 import importlib.util
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 import jsonschema
@@ -238,19 +239,33 @@ def git(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(['git', *args], cwd=ROOT, capture_output=True, text=True)
 
 
-def push_check() -> None:
+PUSH_ON, PUSH_NOT_ON, PUSH_UNKNOWN = 0, 1, 2
+
+
+def push_check() -> int:
     sha = V2.load(V2.PUBLICATION_RECORD)['publication_commit']
     ref = f'refs/heads/{REMOTE_BRANCH}'
     r = git('ls-remote', 'origin', ref)
     tip = r.stdout.split()[0] if r.returncode == 0 and r.stdout.strip() else None
     if tip is None:
         print(f'UNKNOWN: could not read the remote tip of {ref} (ls-remote exit {r.returncode}; branch may be absent on the remote)')
+        status = PUSH_UNKNOWN
     elif git('cat-file', '-e', f'{tip}^{{commit}}').returncode != 0:
         print(f'UNKNOWN: remote tip {tip} is not present locally, so ancestry cannot be checked without a fetch')
+        status = PUSH_UNKNOWN
     else:
-        on = git('merge-base', '--is-ancestor', sha, tip).returncode == 0
-        print(f'Publication commit {sha} is {"on" if on else "NOT on"} the remote branch (remote tip {tip})')
+        mb = git('merge-base', '--is-ancestor', sha, tip).returncode
+        if mb == 0:
+            print(f'Publication commit {sha} is on the remote branch (remote tip {tip})')
+            status = PUSH_ON
+        elif mb == 1:
+            print(f'Publication commit {sha} is NOT on the remote branch (remote tip {tip})')
+            status = PUSH_NOT_ON
+        else:
+            print(f'UNKNOWN: ancestry of {sha} against remote tip {tip} cannot be determined (merge-base exit {mb})')
+            status = PUSH_UNKNOWN
     print(f'Push command: git push origin {REMOTE_BRANCH}')
+    return status
 
 
 def main() -> None:
@@ -263,7 +278,7 @@ def main() -> None:
         validate_reply_object(reply)
         V2.dump(REPLY_JSON, reply); V2.write_text(REPLY_MD, render_markdown(reply))
     elif args.validate: validate_reply()
-    elif args.push_check: push_check()
+    elif args.push_check: sys.exit(push_check())
     else: parser.error('one of --build, --validate, --emit-schema or --push-check is required')
 
 
