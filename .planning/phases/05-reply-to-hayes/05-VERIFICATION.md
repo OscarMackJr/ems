@@ -1,7 +1,7 @@
 ---
 phase: 05-reply-to-hayes
 verified: 2026-10-14T00:00:00Z
-status: human_needed
+status: passed
 score: 4/4 must-haves verified
 human_verification:
   - test: "Decide on the sentence 'No control resolves until the target description carries the eight classification facts.' (docs/DEMO3_W1_REQ_001_REPLY.md line 68, review WR-04)"

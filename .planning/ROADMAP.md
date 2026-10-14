@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Blind Drafting | 5/5 | Complete    | 2026-10-13 |
 | 3. Governance Decisions | 4/4 | Complete    | 2026-10-14 |
 | 4. Certified Publication | 7/7 | Complete    | 2026-10-14 |
-| 5. Reply to Hayes | 3/3 | Complete   | 2026-10-14 |
+| 5. Reply to Hayes | 3/3 | Complete    | 2026-10-14 |
 
 ## Coverage
 
