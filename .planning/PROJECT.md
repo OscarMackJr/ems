@@ -30,7 +30,7 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - ✓ Each disposition is recorded as a schema-validated governance decision record `AA4-GOV-001`..`021` in `registry/archive_assessment_governance_decisions.json` (commit `eed4a5f`), each stating the approver holds both the EMS authority role and the Hayes developer role — Validated in Phase 3: Governance Decisions
 
 - ✓ A "no rule will be published" outcome is itself a published decision with its own decision id (18 controls, `NO_RULE_WILL_BE_PUBLISHED`) — Validated in Phase 4: Certified Publication
-- ✓ Rule conditions are expressed only over the eight declared classification fields, each as a `KNOWN_TRUE` / `KNOWN_FALSE` fact (CTRL-030, CTRL-039 `production = KNOWN_FALSE`; CTRL-052 `ai_enabled = KNOWN_FALSE`) — Validated in Phase 4: Certified Publication
+- ✓ Rule conditions are expressed only over the first four of the eight declared classification fields (`production`, `internet_exposed`, `contains_customer_data`, `ai_enabled`), each as a `KNOWN_TRUE` / `KNOWN_FALSE` fact (CTRL-030, CTRL-039 `production = KNOWN_FALSE`; CTRL-052 `ai_enabled = KNOWN_FALSE`) — Validated in Phase 4: Certified Publication
 - ✓ Each rule is explicit and machine-readable, with no meaning left to convention — Validated in Phase 4: Certified Publication
 - ✓ Each rule or no-rule decision names its authority (`AA4-GOV-001`..`021`) so Hayes can cite what makes it binding — Validated in Phase 4: Certified Publication
 - ✓ The 59 controls outside the request remain "not yet decided", identical to v1.0.0 apart from the explicit state — Validated in Phase 4: Certified Publication
@@ -89,7 +89,7 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - **Authority**: Oscar Mack is the approving EMS governance authority — no rule or no-rule decision is published on drafting judgment alone
 - **Dual role**: The same person is the EMS approver and the Hayes developer — this must be written into each decision record, not left implicit
 - **Drafting independence**: Drafts come from the control catalog definitions alone and are committed before any comparison with a target — prevents rules being shaped to a known result
-- **Vocabulary**: Rule conditions use only the eight declared classification fields and the `KNOWN_TRUE` / `KNOWN_FALSE` states — Hayes's resolver requires this, and `UNKNOWN` must never resolve to not-applicable
+- **Vocabulary**: Rule conditions use only the first four of the eight declared classification fields (`production`, `internet_exposed`, `contains_customer_data`, `ai_enabled`; the other four remain classification prerequisites, not rule fields) and the `KNOWN_TRUE` / `KNOWN_FALSE` states — Hayes's resolver requires this, and `UNKNOWN` must never resolve to not-applicable
 - **Semantics**: Existing not-applicable semantics hold — explicit controlled rule required; unknown is not false; absence of evidence is not not-applicable
 - **Boundary**: Nothing defined in Hayes is adopted into EMS — EMS chooses the shape
 - **Publication pattern**: Follow the existing authority pattern (schema, publisher script, certification, traceability, pytest) — hash-based certification breaks on uncoordinated hand edits

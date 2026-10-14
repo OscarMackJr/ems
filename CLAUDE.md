@@ -14,7 +14,7 @@ The consumer is Hayes Verify, an external assessor that reads EMS at a pinned co
 - **Authority**: Oscar Mack is the approving EMS governance authority — no rule or no-rule decision is published on drafting judgment alone
 - **Dual role**: The same person is the EMS approver and the Hayes developer — this must be written into each decision record, not left implicit
 - **Drafting independence**: Drafts come from the control catalog definitions alone and are committed before any comparison with a target — prevents rules being shaped to a known result
-- **Vocabulary**: Rule conditions use only the eight declared classification fields and the `KNOWN_TRUE` / `KNOWN_FALSE` states — Hayes's resolver requires this, and `UNKNOWN` must never resolve to not-applicable
+- **Vocabulary**: Rule conditions use only the first four of the eight declared classification fields (`production`, `internet_exposed`, `contains_customer_data`, `ai_enabled`; the other four remain classification prerequisites, not rule fields) and the `KNOWN_TRUE` / `KNOWN_FALSE` states — Hayes's resolver requires this, and `UNKNOWN` must never resolve to not-applicable
 - **Semantics**: Existing not-applicable semantics hold — explicit controlled rule required; unknown is not false; absence of evidence is not not-applicable
 - **Boundary**: Nothing defined in Hayes is adopted into EMS — EMS chooses the shape
 - **Publication pattern**: Follow the existing authority pattern (schema, publisher script, certification, traceability, pytest) — hash-based certification breaks on uncoordinated hand edits
