@@ -1,0 +1,15 @@
+registry/archive_assessment_governance_answers.json text eol=lf
+registry/archive_assessment_governance_decisions.json text eol=lf
+registry/archive_assessment_governance_wording_approval.json text eol=lf
+registry/archive_assessment_not_applicable_rule_proposals.json text eol=lf
+registry/archive_assessment_rule_proposals_drafting_record.json text eol=lf
+registry/archive_assessment_applicability_authority_v2.json text eol=lf
+registry/archive_assessment_applicability_authority_v2_signoff.json text eol=lf
+registry/archive_assessment_applicability_authority_v2_publication_record.json text eol=lf
+schemas/archive_assessment_applicability_authority_v2.schema.json text eol=lf
+schemas/archive_assessment_governance_answers.schema.json text eol=lf
+schemas/archive_assessment_governance_decisions.schema.json text eol=lf
+schemas/archive_assessment_not_applicable_rule_proposals.schema.json text eol=lf
+schemas/archive_assessment_rule_proposals_drafting_record.schema.json text eol=lf
+docs/ARCHIVE_ASSESSMENT_RULE_PROPOSALS_VIEW.md text eol=lf
+generated/archive-assessment/ems-aa3-v2/** text eol=lf
