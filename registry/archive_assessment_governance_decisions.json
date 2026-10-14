@@ -1,0 +1,867 @@
+{
+  "answers_path": "registry/archive_assessment_governance_answers.json",
+  "answers_sha256": "8efccce99e0368b2efa5f15676607596424a29370b2df1709ad034418883a972",
+  "answers_sha256_normalisation": "CRLF_TO_LF",
+  "answers_typed_by_authority_statement": "The dispositions, notes and any decided rule or rationale in the answers file were typed by Oscar Mack. No AI agent chose, suggested or reworded any of them.",
+  "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+  "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+  "drafting_record_sha256": "b2d3f0e15fcb86d005a3490450c4ccaf63c9b5c7f939d0ef66ed2df6828df994",
+  "earlier_assessment_knowledge_statement": "The deciding authority knew the per-control result of an earlier assessment when making these decisions. The drafts were written without that knowledge. No rule was compared with any target during this phase.",
+  "proposals_path": "registry/archive_assessment_not_applicable_rule_proposals.json",
+  "proposals_sha256": "31684001ba3550fc98c1c86e487ff2c81fb106620f820dd0313311c8aea9886d",
+  "records": [
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-009",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Branch protection is a configuration of the repository itself that guards branch history against direct or forced changes, so it follows the repository and not any deployment fact. None of production, internet_exposed, contains_customer_data or ai_enabled says whether a repository has branch history worth protecting, so none of them gives a sound exemption. Proposing no rule claims that branch protection applies to every archived repository snapshot, and the frozen nature of a snapshot cannot be expressed with the four usable fields.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-001",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Branch protection is a configuration of the repository itself that guards branch history against direct or forced changes, so it follows the repository and not any deployment fact. None of production, internet_exposed, contains_customer_data or ai_enabled says whether a repository has branch history worth protecting, so none of them gives a sound exemption. Proposing no rule claims that branch protection applies to every archived repository snapshot, and the frozen nature of a snapshot cannot be expressed with the four usable fields.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "The important branches of the repository are configured so that direct pushes, forced pushes and deletion are blocked and changes must pass defined gates before they land."
+      },
+      "note": "009-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-010",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Pull request review is a practice about how changes are accepted into a repository, and the evidence for it lives in the merge history that a snapshot still carries. Whether the target is production, internet exposed, holds customer data or is AI enabled does not change whether its changes should have been reviewed, so none of the four fields gives a sound exemption. Proposing no rule therefore claims that pull request review applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-002",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Pull request review is a practice about how changes are accepted into a repository, and the evidence for it lives in the merge history that a snapshot still carries. Whether the target is production, internet exposed, holds customer data or is AI enabled does not change whether its changes should have been reviewed, so none of the four fields gives a sound exemption. Proposing no rule therefore claims that pull request review applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Changes enter the repository through pull requests that are approved by at least one reviewer other than the author before merge."
+      },
+      "note": "010-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-011",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "CODEOWNERS enforcement is a repository practice that ties paths to accountable reviewers, and it is evidenced by a file and settings that belong to the repository. None of production, internet_exposed, contains_customer_data or ai_enabled describes whether a repository needs accountable path owners, so none of them gives a sound exemption. Proposing no rule claims that CODEOWNERS enforcement applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-003",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "CODEOWNERS enforcement is a repository practice that ties paths to accountable reviewers, and it is evidenced by a file and settings that belong to the repository. None of production, internet_exposed, contains_customer_data or ai_enabled describes whether a repository needs accountable path owners, so none of them gives a sound exemption. Proposing no rule claims that CODEOWNERS enforcement applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "The repository carries a CODEOWNERS file that assigns owners to paths, and review by those owners is enforced for changes to the paths they own."
+      },
+      "note": "011-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-012",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Signed commits are a property of the commit history, and that history is exactly what an archived snapshot preserves and what a reader of the snapshot relies on for authorship. None of production, internet_exposed, contains_customer_data or ai_enabled bears on whether authorship of commits should be verifiable, so none of them gives a sound exemption. Proposing no rule claims that signed commits apply to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-004",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Signed commits are a property of the commit history, and that history is exactly what an archived snapshot preserves and what a reader of the snapshot relies on for authorship. None of production, internet_exposed, contains_customer_data or ai_enabled bears on whether authorship of commits should be verifiable, so none of them gives a sound exemption. Proposing no rule claims that signed commits apply to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Commits in the repository are cryptographically signed by their authors and the signatures can be verified."
+      },
+      "note": "012-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-013",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Protected release tags keep the mapping between a version label and a commit from being altered, which is an integrity property of the repository history and not of a deployment. A repository that supports no production system can still publish tagged versions that others consume, so production KNOWN_FALSE is not a sound exemption, and internet_exposed, contains_customer_data and ai_enabled do not relate to tags at all. Proposing no rule claims that protected release tags apply to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-005",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Protected release tags keep the mapping between a version label and a commit from being altered, which is an integrity property of the repository history and not of a deployment. A repository that supports no production system can still publish tagged versions that others consume, so production KNOWN_FALSE is not a sound exemption, and internet_exposed, contains_customer_data and ai_enabled do not relate to tags at all. Proposing no rule claims that protected release tags apply to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Tags that mark released versions are protected so that they cannot be moved, overwritten or deleted by ordinary contributors."
+      },
+      "note": "013-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-014",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Mandatory issue linkage is a traceability practice recorded in commits and pull requests, and that record remains in a snapshot of the repository. None of production, internet_exposed, contains_customer_data or ai_enabled describes whether changes need a traceable reason, so none of them gives a sound exemption. Proposing no rule claims that mandatory issue linkage applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-006",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Mandatory issue linkage is a traceability practice recorded in commits and pull requests, and that record remains in a snapshot of the repository. None of production, internet_exposed, contains_customer_data or ai_enabled describes whether changes need a traceable reason, so none of them gives a sound exemption. Proposing no rule claims that mandatory issue linkage applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Every change merged into the repository references a tracked issue or work item so that the reason for the change can be traced."
+      },
+      "note": "014-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-015",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Repository template compliance checks the structure and required files of the repository itself, which can be assessed on a snapshot as readily as on a live repository. None of production, internet_exposed, contains_customer_data or ai_enabled describes whether a repository should follow the standard template, so none of them gives a sound exemption. Proposing no rule claims that repository template compliance applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-007",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Repository template compliance checks the structure and required files of the repository itself, which can be assessed on a snapshot as readily as on a live repository. None of production, internet_exposed, contains_customer_data or ai_enabled describes whether a repository should follow the standard template, so none of them gives a sound exemption. Proposing no rule claims that repository template compliance applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "The repository conforms to the standard repository template of the organisation, including its required files, layout and baseline settings."
+      },
+      "note": "015-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-017",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "A secure coding standard governs how the code in the repository is written, and the code is the content that a snapshot preserves and that may later be reused. Code that is not internet exposed or not in production can still be copied, restored or deployed later, so neither internet_exposed nor production gives a sound exemption, and contains_customer_data and ai_enabled do not relate to coding practice. Proposing no rule claims that the secure coding standard applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-008",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "A secure coding standard governs how the code in the repository is written, and the code is the content that a snapshot preserves and that may later be reused. Code that is not internet exposed or not in production can still be copied, restored or deployed later, so neither internet_exposed nor production gives a sound exemption, and contains_customer_data and ai_enabled do not relate to coding practice. Proposing no rule claims that the secure coding standard applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "The code in the repository is written and checked against a defined secure coding standard."
+      },
+      "note": "017-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-018",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Secret scanning looks for credentials committed to repository content and history, and an archived snapshot retains any such credentials for as long as the copy exists. Secrets are not customer data, and a leaked key is harmful whether or not the target is production, internet exposed or AI enabled, so none of the four fields gives a sound exemption. Proposing no rule claims that secret scanning applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-009",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Secret scanning looks for credentials committed to repository content and history, and an archived snapshot retains any such credentials for as long as the copy exists. Secrets are not customer data, and a leaked key is harmful whether or not the target is production, internet exposed or AI enabled, so none of the four fields gives a sound exemption. Proposing no rule claims that secret scanning applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "The repository content and history are scanned for committed credentials, keys and tokens, and findings are handled."
+      },
+      "note": "018-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-019",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Dependency vulnerability scanning examines the dependency declarations held in the repository, and those declarations are present in a snapshot and become riskier as new vulnerabilities are disclosed over time. A vulnerable dependency matters when the code is restored or reused whatever the exposure or production status at the time of the snapshot, and contains_customer_data and ai_enabled do not relate to dependencies. Proposing no rule claims that dependency vulnerability scanning applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-010",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Dependency vulnerability scanning examines the dependency declarations held in the repository, and those declarations are present in a snapshot and become riskier as new vulnerabilities are disclosed over time. A vulnerable dependency matters when the code is restored or reused whatever the exposure or production status at the time of the snapshot, and contains_customer_data and ai_enabled do not relate to dependencies. Proposing no rule claims that dependency vulnerability scanning applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "The third party dependencies declared by the repository are scanned for known vulnerabilities and the findings are tracked."
+      },
+      "note": "019-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-020",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "License compliance concerns the legal terms attached to the code and dependencies that the repository holds, and holding a copy in an archive does not remove those terms. None of production, internet_exposed, contains_customer_data or ai_enabled describes licence obligations, so none of them gives a sound exemption. Proposing no rule claims that license compliance applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-011",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "License compliance concerns the legal terms attached to the code and dependencies that the repository holds, and holding a copy in an archive does not remove those terms. None of production, internet_exposed, contains_customer_data or ai_enabled describes licence obligations, so none of them gives a sound exemption. Proposing no rule claims that license compliance applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "The licences of the code and dependencies in the repository are identified and checked against the licences the organisation permits."
+      },
+      "note": "020-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-021",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "SBOM generation produces an inventory of the components in the repository, and that inventory is useful for an archived copy because it lets later vulnerability and licence questions be answered without rebuilding. The control name does not point at production, internet_exposed, contains_customer_data or ai_enabled, and a component inventory is meaningful whatever those facts are. Proposing no rule claims that SBOM generation applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-012",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "SBOM generation produces an inventory of the components in the repository, and that inventory is useful for an archived copy because it lets later vulnerability and licence questions be answered without rebuilding. The control name does not point at production, internet_exposed, contains_customer_data or ai_enabled, and a component inventory is meaningful whatever those facts are. Proposing no rule claims that SBOM generation applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "A software bill of materials listing the components and dependencies of the repository is generated and kept with it."
+      },
+      "note": "021-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-022",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Security advisory monitoring watches for newly published advisories against components in use, and advisories keep appearing after a snapshot is taken. None of production, internet_exposed, contains_customer_data or ai_enabled says whether advisories are relevant to the components a target holds, so none of them gives a sound exemption. Proposing no rule claims that security advisory monitoring applies to every archived repository snapshot, although the real doubt is about platform scope and not about any of the four fields.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-013",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Security advisory monitoring watches for newly published advisories against components in use, and advisories keep appearing after a snapshot is taken. None of production, internet_exposed, contains_customer_data or ai_enabled says whether advisories are relevant to the components a target holds, so none of them gives a sound exemption. Proposing no rule claims that security advisory monitoring applies to every archived repository snapshot, although the real doubt is about platform scope and not about any of the four fields.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Published security advisories that affect the components in use are monitored at platform level and routed to the teams that must act on them."
+      },
+      "note": "022-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": {
+        "drafted_note": {
+          "note": "The control is scoped to the platform and its evidence is platform evidence, so the real reason it might not apply to an archived repository snapshot is that the snapshot is not the platform that operates the monitoring. None of the four usable fields can express a mismatch between control scope and target type.",
+          "scope": "PLATFORM"
+        },
+        "ruling": "ACCEPTED_AS_TRUE_LIMITATION"
+      },
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-030",
+      "decided": {
+        "outcome": "PROPOSE_RULE",
+        "rationale": "Disaster recovery testing exercises the recovery of a running service, and the approved definition of production states that recovery controls are in play when the target is used as, or supports, a production system. When production is KNOWN_FALSE the target neither is nor supports a production system, so there is no production recovery to test and the control does not apply. A snapshot that serves as a recovery source for a production system would be production KNOWN_TRUE and the control would then resolve as applicable, and an UNKNOWN value leaves applicability unresolved.",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "production",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "RULE_PUBLISHED",
+      "decision_id": "AA4-GOV-014",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_RULE",
+        "rationale": "Disaster recovery testing exercises the recovery of a running service, and the approved definition of production states that recovery controls are in play when the target is used as, or supports, a production system. When production is KNOWN_FALSE the target neither is nor supports a production system, so there is no production recovery to test and the control does not apply. A snapshot that serves as a recovery source for a production system would be production KNOWN_TRUE and the control would then resolve as applicable, and an UNKNOWN value leaves applicability unresolved.",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "production",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "The ability to recover a service after a major outage or loss is exercised on a schedule and the results are recorded."
+      },
+      "note": "030-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": {
+        "drafted_note": {
+          "note": "The control is scoped to a service and an archived repository snapshot is not itself a service. The production field is used as the nearest expressible condition, but the four usable fields cannot state that the target type falls outside service scope.",
+          "scope": "SERVICE"
+        },
+        "ruling": "ACCEPTED_AS_TRUE_LIMITATION"
+      },
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-033",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Reproducible builds depend on pinned inputs and build definitions held in the repository, and an archived copy is valuable largely because it can be rebuilt faithfully later. The control name does not point at production, internet_exposed, contains_customer_data or ai_enabled, and build determinism is a property of the source and its build definition whatever those facts are. Proposing no rule claims that reproducible builds apply to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-015",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Reproducible builds depend on pinned inputs and build definitions held in the repository, and an archived copy is valuable largely because it can be rebuilt faithfully later. The control name does not point at production, internet_exposed, contains_customer_data or ai_enabled, and build determinism is a property of the source and its build definition whatever those facts are. Proposing no rule claims that reproducible builds apply to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Building the same source revision with the pinned toolchain and dependencies yields the same output each time."
+      },
+      "note": "033-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-039",
+      "decided": {
+        "outcome": "PROPOSE_RULE",
+        "rationale": "A release approval workflow gates the promotion of a release into production use, and the approved definition of production states that release controls are in play when the target is used as, or supports, a production system. When production is KNOWN_FALSE the target feeds no production system, so there is no production release for the workflow to approve and the control does not apply. A single condition is used so that only one field can be UNKNOWN, and an UNKNOWN value leaves applicability unresolved.",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "production",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "RULE_PUBLISHED",
+      "decision_id": "AA4-GOV-016",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_RULE",
+        "rationale": "A release approval workflow gates the promotion of a release into production use, and the approved definition of production states that release controls are in play when the target is used as, or supports, a production system. When production is KNOWN_FALSE the target feeds no production system, so there is no production release for the workflow to approve and the control does not apply. A single condition is used so that only one field can be UNKNOWN, and an UNKNOWN value leaves applicability unresolved.",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "production",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "A release from the repository must pass a recorded approval step by an authorised person before it is promoted to production use."
+      },
+      "note": "039-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-042",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "IaC security scanning checks infrastructure definitions for insecure configuration, and whether it is relevant turns on whether the target holds such definitions. None of production, internet_exposed, contains_customer_data or ai_enabled says whether infrastructure definitions are present, and exposure or production status of the snapshot does not show that its definitions are safe to reuse. Proposing no rule claims that IaC security scanning applies to every archived repository snapshot, because no usable field gives a sound exemption.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-017",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "IaC security scanning checks infrastructure definitions for insecure configuration, and whether it is relevant turns on whether the target holds such definitions. None of production, internet_exposed, contains_customer_data or ai_enabled says whether infrastructure definitions are present, and exposure or production status of the snapshot does not show that its definitions are safe to reuse. Proposing no rule claims that IaC security scanning applies to every archived repository snapshot, because no usable field gives a sound exemption.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Infrastructure as code definitions are scanned for insecure configuration before they are applied."
+      },
+      "note": "042-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": {
+        "drafted_note": {
+          "note": "The control is scoped to the platform, and the real reasons it might not apply are that the target is not the platform and that the snapshot may hold no infrastructure as code. None of the four usable fields can express control scope or the presence of infrastructure definitions.",
+          "scope": "PLATFORM"
+        },
+        "ruling": "ACCEPTED_AS_TRUE_LIMITATION"
+      },
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-052",
+      "decided": {
+        "outcome": "PROPOSE_RULE",
+        "rationale": "AI attribution is an AI-specific practice of marking what was produced with AI capabilities, and the approved definition of ai_enabled states that AI-specific controls apply when the target includes or uses AI capabilities. When ai_enabled is KNOWN_FALSE the target neither includes nor uses AI capabilities, so there is nothing produced by AI to attribute and the control does not apply. An UNKNOWN value leaves applicability unresolved, which keeps a target with unexamined AI involvement from being exempted.",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "ai_enabled",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "RULE_PUBLISHED",
+      "decision_id": "AA4-GOV-018",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_RULE",
+        "rationale": "AI attribution is an AI-specific practice of marking what was produced with AI capabilities, and the approved definition of ai_enabled states that AI-specific controls apply when the target includes or uses AI capabilities. When ai_enabled is KNOWN_FALSE the target neither includes nor uses AI capabilities, so there is nothing produced by AI to attribute and the control does not apply. An UNKNOWN value leaves applicability unresolved, which keeps a target with unexamined AI involvement from being exempted.",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "ai_enabled",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Content or output that was produced with AI capabilities is identified and attributed as such. This reading assumes that AI assisted authoring of the target content counts as the target using AI capabilities."
+      },
+      "note": "052-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": {
+        "drafted_note": {
+          "note": "The control is scoped to the organisation and its evidence is organisational evidence, so an archived repository snapshot may not be the level at which attribution is operated. The ai_enabled field expresses AI involvement of the target but none of the four usable fields can express that the control is operated at organisation level.",
+          "scope": "ORGANIZATION"
+        },
+        "ruling": "ACCEPTED_AS_TRUE_LIMITATION"
+      },
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-062",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Schema version control keeps schema definitions and migrations under tracked revision, and whether it is relevant turns on whether the target defines any schema. None of production, internet_exposed, contains_customer_data or ai_enabled says whether a schema exists, and a schema can exist without customer data or production use. Proposing no rule claims that schema version control applies to every archived repository snapshot, because no usable field gives a sound exemption.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-019",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "Schema version control keeps schema definitions and migrations under tracked revision, and whether it is relevant turns on whether the target defines any schema. None of production, internet_exposed, contains_customer_data or ai_enabled says whether a schema exists, and a schema can exist without customer data or production use. Proposing no rule claims that schema version control applies to every archived repository snapshot, because no usable field gives a sound exemption.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Data and interface schemas of the application, and the migrations between their versions, are kept under version control."
+      },
+      "note": "062-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": {
+        "drafted_note": {
+          "note": "The control is scoped to an application, and the real reasons it might not apply are that the target is a repository snapshot and not an application, or that it defines no schema. None of the four usable fields can express control scope or the presence of a schema.",
+          "scope": "APPLICATION"
+        },
+        "ruling": "ACCEPTED_AS_TRUE_LIMITATION"
+      },
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-075",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "A continuous compliance scan is the recurring check that registered targets still meet their controls, and it is operated by the EMS across targets. Exempting a target from the continuous compliance scan on production, internet_exposed, contains_customer_data or ai_enabled would remove the mechanism that detects drift in every other control, so none of the four fields gives a sound exemption. Proposing no rule claims that the continuous compliance scan applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-020",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "A continuous compliance scan is the recurring check that registered targets still meet their controls, and it is operated by the EMS across targets. Exempting a target from the continuous compliance scan on production, internet_exposed, contains_customer_data or ai_enabled would remove the mechanism that detects drift in every other control, so none of the four fields gives a sound exemption. Proposing no rule claims that the continuous compliance scan applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "Targets registered in the EMS are scanned on a recurring basis to check that they still meet the controls that apply to them."
+      },
+      "note": "075-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": {
+        "drafted_note": {
+          "note": "The control is scoped to the EMS itself and its evidence is EMS evidence, so the real question is whether it is assessed per target at all or once for the EMS. None of the four usable fields can express that the control is operated at EMS level.",
+          "scope": "EMS"
+        },
+        "ruling": "ACCEPTED_AS_TRUE_LIMITATION"
+      },
+      "supersedes": null
+    },
+    {
+      "amendment_present": false,
+      "approver": "Oscar Mack",
+      "approver_roles": [
+        "EMS_GOVERNANCE_AUTHORITY",
+        "HAYES_VERIFY_DEVELOPER"
+      ],
+      "control_id": "EMS-CTRL-079",
+      "decided": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "A repository health review is a periodic check on the upkeep and continued need for a repository, and an archived copy is a natural subject for the question of whether it is still owned and still needed. None of production, internet_exposed, contains_customer_data or ai_enabled describes whether a repository deserves periodic review, so none of them gives a sound exemption. Proposing no rule claims that the repository health review applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "decided_on": "2026-10-14",
+      "decided_outcome": "NO_RULE_WILL_BE_PUBLISHED",
+      "decision_id": "AA4-GOV-021",
+      "disposition": "APPROVED_AS_DRAFTED",
+      "drafted": {
+        "outcome": "PROPOSE_NO_RULE",
+        "rationale": "A repository health review is a periodic check on the upkeep and continued need for a repository, and an archived copy is a natural subject for the question of whether it is still owned and still needed. None of production, internet_exposed, contains_customer_data or ai_enabled describes whether a repository deserves periodic review, so none of them gives a sound exemption. Proposing no rule claims that the repository health review applies to every archived repository snapshot.",
+        "rule": null
+      },
+      "drafting_commit": "dc3b41c9fbb3571a191d2da5164fb73439a0637b",
+      "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
+      "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+      "header_statement_ref": "earlier_assessment_knowledge_statement",
+      "interpretation": {
+        "accepted_as_basis_of_this_decision_only": true,
+        "basis_statement": "Accepted as the basis of this decision only. It is not a definition of the control.",
+        "label": "DRAFTER_ASSUMPTION_NOT_AN_EMS_SOURCE",
+        "text": "The repository is reviewed periodically for upkeep matters such as ownership, stale content, documentation and whether it should still be retained."
+      },
+      "note": "079-Frozen nature of snapshot can not be expressed in fields available",
+      "scope_note": null,
+      "supersedes": null
+    }
+  ],
+  "status": "GOVERNANCE_DECISIONS",
+  "wording_approval": {
+    "approver": "Oscar Mack",
+    "date": "2026-10-13",
+    "role": "EMS_GOVERNANCE_AUTHORITY",
+    "scope": "Exact wording of the three statements below per D-06, D-16 and D-17; approval of wording only, not of any decision",
+    "source_path": "registry/archive_assessment_governance_wording_approval.json",
+    "statement_sha256": {
+      "answers_typed_by_authority_statement": "64aac424868d2a6f576de6b9475144adf95b317e055ca65086a1caaaf2fdba8a",
+      "dual_role_statement": "f90200d97e88c0c504d139d8cbb28bb65f43e70f668b4a34ce3b55bf2a84dbac",
+      "earlier_assessment_knowledge_statement": "45b11fb5f2177c30ac9561b882a78b759d1b6d7e3d7897db304ad55401598259"
+    }
+  }
+}
