@@ -181,13 +181,15 @@ def test_real_proposals_validate_under_validator_and_schema():
     p = load(MODULE.PROPOSALS); MODULE.validate_proposals(p); jsonschema.Draft202012Validator(MODULE.schema()).validate(p)
 
 @gated(MODULE.PROPOSALS)
-def test_catalog_drift_real_proposals_match_live_catalog():
+def test_catalog_drift_info_real_proposals_equal_live_catalog():
+    # drift information only: validity is judged against the frozen catalog, not the live one
     live = MODULE.live_catalog()
     for p in load(MODULE.PROPOSALS)['proposals']:
         for k, v in p['catalog_inputs'].items(): assert live[p['control_id']][k] == v
 
 @gated(MODULE.PROPOSALS)
-def test_catalog_fingerprint_matches_blob_bytes():
+def test_catalog_drift_info_recorded_blob_equals_live_blob():
+    # drift information only: validity is judged against the frozen catalog, not the live one
     blob = git_out('hash-object', MODULE.CATALOG_REL).decode('ascii').strip()
     data = git_out('cat-file', 'blob', blob)
     src = load(MODULE.PROPOSALS)['catalog_source']

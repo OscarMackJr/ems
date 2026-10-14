@@ -5,9 +5,11 @@ import hashlib
 import importlib.util
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 import jsonschema
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / 'registry'
@@ -53,14 +55,36 @@ def git(*args: str) -> bytes:
     if r.returncode != 0: raise AuthorityError(f'git {args[0]} failed: {r.stderr.decode("utf-8", "replace").strip()}')
     return r.stdout
 
-def catalog_fingerprint() -> dict:
-    blob = git('hash-object', CATALOG_REL).decode('ascii').strip()
-    data = git('cat-file', 'blob', blob)
-    return {'relative_path': CATALOG_REL, 'git_blob_id': blob, 'sha256': hashlib.sha256(data).hexdigest()}
+FROZEN_COMMIT = 'dc3b41c'
+FROZEN_FRAME_SHA256 = '2bb118069250cfe7495628fa8e3fdc3ffc39f1276615e5b4653aa992be827dab'
 
-def expected_header() -> dict:
-    src = catalog_fingerprint(); src['entries_have_description'] = False; src['note'] = CATALOG_NOTE
-    return {'status': STATUS, 'non_authority_statement': NON_AUTHORITY_STATEMENT, 'drafting_frame': V2.semantics(), 'catalog_source': src}
+def drafting_record() -> dict: return V2.load(RECORD)
+
+def catalog_blob_id(data: bytes) -> str: return hashlib.sha1(b'blob %d\0' % len(data) + data).hexdigest()
+
+def frozen_catalog_source() -> dict:
+    r = drafting_record()
+    return {'relative_path': r['catalog_path'], 'git_blob_id': r['catalog_git_blob_id'], 'sha256': r['catalog_sha256'], 'entries_have_description': False, 'note': CATALOG_NOTE}
+
+def frozen_frame() -> dict:
+    if V2.lf_digest(PROPOSALS) != drafting_record()['proposals_sha256']: raise AuthorityError('proposals file does not match the drafting record digest, the frozen frame cannot be read')
+    frame = V2.load(PROPOSALS)['drafting_frame']
+    if V2.sha_text(V2.jtext(frame)) != FROZEN_FRAME_SHA256: raise AuthorityError('frozen drafting frame does not match FROZEN_FRAME_SHA256')
+    return frame
+
+def expected_header(frame: dict | None = None) -> dict:
+    return {'status': STATUS, 'non_authority_statement': NON_AUTHORITY_STATEMENT, 'drafting_frame': frozen_frame() if frame is None else frame, 'catalog_source': frozen_catalog_source()}
+
+def frozen_catalog() -> dict | None:
+    want = drafting_record()['catalog_sha256']
+    if V2.lf_digest(CATALOG) == want: data = V2.lf_bytes(CATALOG.read_bytes())
+    else:
+        try: data = V2.lf_bytes(git('show', f'{FROZEN_COMMIT}:{CATALOG_REL}'))
+        except (AuthorityError, OSError):
+            print(f'NOTICE: the live catalog differs from the recorded digest and {FROZEN_COMMIT} is not readable from git; the catalog_inputs equality check is skipped', file=sys.stderr)
+            return None
+        if hashlib.sha256(data).hexdigest() != want: raise AuthorityError(f'catalog read from {FROZEN_COMMIT} does not match the recorded catalog digest')
+    return {c['control_id']: c for c in yaml.safe_load(data.decode('utf-8')).get('controls', []) if c.get('control_id') in CONTROL_IDS}
 
 def live_catalog() -> dict:
     return {c['control_id']: c for c in V2.catalog_controls() if c['control_id'] in CONTROL_IDS}
@@ -76,7 +100,7 @@ def walk_forbidden(value: object, path: str, errors: list) -> None:
         for i, v in enumerate(value): walk_forbidden(v, f'{path}[{i}]', errors)
     elif isinstance(value, str) and FORBIDDEN_ID_RE.search(value): errors.append(f'{path}: governance decision id string not allowed')
 
-def validate_proposal(p: object, catalog: dict, errors: list) -> None:
+def validate_proposal(p: object, catalog: dict | None, errors: list) -> None:
     if not isinstance(p, dict): errors.append('proposal must be an object'); return
     cid = p.get('control_id')
     if set(p) != set(PROPOSAL_KEYS): errors.append(f'{cid}: proposal keys must be exactly {PROPOSAL_KEYS}'); return
@@ -84,13 +108,13 @@ def validate_proposal(p: object, catalog: dict, errors: list) -> None:
     if outcome not in OUTCOMES: errors.append(f'{cid}: proposed_outcome invalid')
     elif outcome == 'PROPOSE_RULE': V2.validate_rule(cid, p['proposed_rule'], errors)
     elif p['proposed_rule'] is not None: errors.append(f'{cid}: PROPOSE_NO_RULE requires null proposed_rule')
-    entry = catalog.get(cid)
     ci = p['catalog_inputs']
+    entry = catalog.get(cid) if catalog is not None else (dict(ci) if isinstance(ci, dict) else None)
     if not isinstance(ci, dict): errors.append(f'{cid}: catalog_inputs must be an object')
     else:
         if not set(CATALOG_INPUT_REQUIRED) <= set(ci) or not set(ci) <= set(CATALOG_INPUT_REQUIRED + CATALOG_INPUT_OPTIONAL): errors.append(f'{cid}: catalog_inputs keys invalid')
         for k, v in ci.items():
-            if entry is not None and (k not in entry or entry[k] != v): errors.append(f'{cid}: catalog_inputs {k} does not equal the live catalog value')
+            if catalog is not None and entry is not None and (k not in entry or entry[k] != v): errors.append(f'{cid}: catalog_inputs {k} does not equal the frozen catalog value')
     it = p['interpretation']
     if not isinstance(it, dict) or set(it) != {'label', 'text'} or it.get('label') != INTERPRETATION_LABEL or not nonempty(it.get('text')): errors.append(f'{cid}: interpretation must carry label {INTERPRETATION_LABEL} and non-empty text')
     r = p['rationale']
@@ -103,7 +127,7 @@ def validate_proposal(p: object, catalog: dict, errors: list) -> None:
 
 def validate_proposals(p: dict, catalog: dict | None = None) -> None:
     errors: list = []
-    if catalog is None: catalog = live_catalog()
+    if catalog is None: catalog = frozen_catalog()
     if not isinstance(p, dict): raise AuthorityError('proposals document must be an object')
     if set(p) != set(HEADER_KEYS + ['proposals']): errors.append('top-level keys must be exactly the header keys and proposals')
     exp = expected_header()

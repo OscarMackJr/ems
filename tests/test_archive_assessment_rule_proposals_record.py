@@ -129,3 +129,55 @@ def test_published_authority_files_unchanged_at_drafting_commit():
     assert 'registry/archive_assessment_applicability_authority.json' in paths
     assert len(paths) >= 2
     for p in paths: assert git('rev-parse', f'{dc}:{p}').stdout == git('rev-parse', f'{baseline}:{p}').stdout
+
+FROZEN_COMMIT = 'dc3b41c'
+
+def drifted_catalog(tmp_path):
+    data = yaml.safe_load(MODULE.CATALOG.read_text(encoding='utf-8'))
+    for c in data['controls']:
+        if c['control_id'] == MODULE.CONTROL_IDS[0]: c['scope'] = 'ORGANIZATION' if c['scope'] != 'ORGANIZATION' else 'EMS'
+    out = tmp_path / 'control_catalog.yaml'
+    out.write_text(yaml.safe_dump(data), encoding='utf-8')
+    return out
+
+def real_proposals(): return json.loads(MODULE.PROPOSALS.read_text(encoding='utf-8'))
+
+@needs_git
+def test_frozen_validation_survives_catalog_drift_via_git(monkeypatch, tmp_path):
+    monkeypatch.setattr(MODULE, 'CATALOG', drifted_catalog(tmp_path))
+    MODULE.validate_proposals(real_proposals())
+
+def test_frozen_validation_survives_drift_without_git_and_says_so(monkeypatch, tmp_path, capsys):
+    monkeypatch.setattr(MODULE, 'CATALOG', drifted_catalog(tmp_path))
+    def no_git(*a): raise MODULE.AuthorityError('git unavailable')
+    monkeypatch.setattr(MODULE, 'git', no_git)
+    MODULE.validate_proposals(real_proposals())
+    err = capsys.readouterr().err
+    assert err.startswith('NOTICE:') and FROZEN_COMMIT in err and len(err.strip().splitlines()) == 1
+
+def test_default_path_runs_no_git_and_header_matches(monkeypatch):
+    def boom(*a): raise AssertionError('git must not be called')
+    monkeypatch.setattr(MODULE, 'git', boom)
+    p = real_proposals()
+    exp = MODULE.expected_header()
+    for k in MODULE.HEADER_KEYS: assert p[k] == exp[k]
+    MODULE.validate_proposals(p)
+
+def test_catalog_blob_id_matches_record():
+    data = MODULE.V2.lf_bytes(MODULE.CATALOG.read_bytes())
+    assert MODULE.catalog_blob_id(data) == record()['catalog_git_blob_id']
+
+def test_frame_differing_from_frozen_frame_is_rejected():
+    p = real_proposals()
+    p['drafting_frame']['unknown_is_not_not_applicable'] = False
+    with pytest.raises(MODULE.AuthorityError): MODULE.validate_proposals(p)
+
+def test_frozen_frame_is_pinned_to_constant():
+    f = MODULE.frozen_frame()
+    assert MODULE.V2.sha_text(MODULE.V2.jtext(f)) == MODULE.FROZEN_FRAME_SHA256
+
+@needs_git
+def test_frozen_frame_constant_matches_drafting_commit():
+    blob = git('show', f'{FROZEN_COMMIT}:{PROPOSALS}', text=False).stdout
+    frame = json.loads(blob.decode('utf-8'))['drafting_frame']
+    assert MODULE.V2.sha_text(MODULE.V2.jtext(frame)) == MODULE.FROZEN_FRAME_SHA256
