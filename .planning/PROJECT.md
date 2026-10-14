@@ -29,16 +29,17 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - ✓ The governance authority reviewed and gave an individual disposition for each of the 21 proposals, typed by the authority in `registry/archive_assessment_governance_answers.json` (commit `cc74445`) after the wording sign-off (`bcba0f1`); nothing is published yet — Validated in Phase 3: Governance Decisions
 - ✓ Each disposition is recorded as a schema-validated governance decision record `AA4-GOV-001`..`021` in `registry/archive_assessment_governance_decisions.json` (commit `eed4a5f`), each stating the approver holds both the EMS authority role and the Hayes developer role — Validated in Phase 3: Governance Decisions
 
+- ✓ A "no rule will be published" outcome is itself a published decision with its own decision id (18 controls, `NO_RULE_WILL_BE_PUBLISHED`) — Validated in Phase 4: Certified Publication
+- ✓ Rule conditions are expressed only over the eight declared classification fields, each as a `KNOWN_TRUE` / `KNOWN_FALSE` fact (CTRL-030, CTRL-039 `production = KNOWN_FALSE`; CTRL-052 `ai_enabled = KNOWN_FALSE`) — Validated in Phase 4: Certified Publication
+- ✓ Each rule is explicit and machine-readable, with no meaning left to convention — Validated in Phase 4: Certified Publication
+- ✓ Each rule or no-rule decision names its authority (`AA4-GOV-001`..`021`) so Hayes can cite what makes it binding — Validated in Phase 4: Certified Publication
+- ✓ The 59 controls outside the request remain "not yet decided", identical to v1.0.0 apart from the explicit state — Validated in Phase 4: Certified Publication
+- ✓ `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0` published with certification, traceability and passing tests at commit `54a7fd0` (signed off by Oscar Mack as EMS governance authority; SHA recorded in `0ce89f2`) — Validated in Phase 4: Certified Publication
+
 ### Active
 
 <!-- Hypotheses until shipped and validated. -->
 
-- [ ] A "no rule will be published" outcome is itself a published decision with its own decision id
-- [ ] Rule conditions are expressed only over the eight declared classification fields, each as a `KNOWN_TRUE` / `KNOWN_FALSE` fact about the target
-- [ ] Each rule is explicit and machine-readable, with no meaning left to convention
-- [ ] Each rule or no-rule decision names its authority (a governance decision id) so Hayes can cite what makes it binding
-- [ ] The 59 controls outside the request remain in the "not yet decided" state, unchanged in meaning
-- [ ] A new controlled authority version is published with certification, traceability and passing tests, at a commit Hayes can re-pin to
 - [ ] A written reply to request `DEMO3-W1-REQ-001` cites the published authority, version and commit, and states what EMS did and did not publish
 
 ### Out of Scope
