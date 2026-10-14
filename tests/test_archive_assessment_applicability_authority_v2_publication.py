@@ -255,6 +255,42 @@ def test_signoff_role_constant():
     assert MODULE.SIGNOFF_ROLE == 'EMS_GOVERNANCE_AUTHORITY'
     assert MODULE.SIGNOFF_ROLE in MODULE.APPROVER_ROLES
 
+_TAMPER_DIR = tempfile.TemporaryDirectory()
+
+def tampered_decisions(name, mutator):
+    doc = copy.deepcopy(json.loads(MODULE.GOVERNANCE_DECISIONS.read_text(encoding='utf-8')))
+    mutator(doc)
+    p = Path(_TAMPER_DIR.name) / f'{name}.json'
+    p.write_text(json.dumps(doc, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+    return p
+
+def _all(key, value):
+    def m(doc):
+        for r in doc['records']: r[key] = value
+    return m
+
+def _drop_decided(doc): doc['records'][0].pop('decided')
+
+@pytest.mark.parametrize('name,mutator', [
+    ('approver', _all('approver', 'Someone Else')),
+    ('dual_role', _all('dual_role_statement', '')),
+    ('disposition', _all('disposition', 'BOGUS')),
+    ('missing_decided', _drop_decided),
+])
+def test_decisions_gate_rejects_tampered_file(monkeypatch, name, mutator):
+    monkeypatch.setattr(MODULE, 'GOVERNANCE_DECISIONS', tampered_decisions(name, mutator))
+    with pytest.raises(MODULE.AuthorityError):
+        MODULE.published_authority_checked()
+    with pytest.raises(MODULE.AuthorityError):
+        MODULE.validate_published()
+
+def test_decisions_gate_passes_real_file():
+    doc = MODULE.validate_governance_decisions()
+    assert len(doc['records']) == 21
+
+def test_decisions_builder_is_cached():
+    assert MODULE.decisions_builder() is MODULE.decisions_builder()
+
 def test_publish_refuses_without_signoff(env):
     with pytest.raises(AuthorityError):
         MODULE.publish(False)

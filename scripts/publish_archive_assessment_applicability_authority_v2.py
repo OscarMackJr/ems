@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
 from datetime import date
@@ -405,7 +406,27 @@ def build_all_outputs(authority: dict, signoff: dict | None = None) -> dict:
     outs[N_MANIFEST] = jtext(manifest)
     return outs
 
+_BUILDER = None
+
+def decisions_builder():
+    global _BUILDER
+    if _BUILDER is None:
+        spec = importlib.util.spec_from_file_location('aa_governance_decisions_builder', ROOT / 'scripts' / 'build_archive_assessment_governance_decisions.py')
+        module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module); _BUILDER = module
+    return _BUILDER
+
+def validate_governance_decisions() -> dict:
+    b = decisions_builder()
+    try:
+        doc = b.load_checked(GOVERNANCE_DECISIONS)
+        b.validate_decisions(doc)
+        jsonschema.Draft202012Validator(load(b.DECISIONS_SCHEMA)).validate(doc)
+    except (ValueError, jsonschema.ValidationError, KeyError, TypeError, AttributeError) as e:
+        raise AuthorityError(f'governance decisions rejected: {e}') from e
+    return doc
+
 def published_authority_checked() -> dict:
+    validate_governance_decisions()
     a = build_published_authority(); validate_publication(a)
     jsonschema.Draft202012Validator(schema()).validate(a)
     return a
@@ -424,6 +445,7 @@ def publish(dry_run: bool) -> None:
     print(json.dumps({'status': 'PASS', 'authority_sha256': ash, 'manifest_sha256': sha_text(outs[N_MANIFEST])}))
 
 def validate_published() -> None:
+    validate_governance_decisions()
     if not AUTHORITY.exists(): raise AuthorityError('v2 registry authority file is not published')
     a = load(AUTHORITY)
     validate_publication(a); jsonschema.Draft202012Validator(load(SCHEMA)).validate(a)
