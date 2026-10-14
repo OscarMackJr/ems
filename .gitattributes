@@ -13,3 +13,6 @@ schemas/archive_assessment_not_applicable_rule_proposals.schema.json text eol=lf
 schemas/archive_assessment_rule_proposals_drafting_record.schema.json text eol=lf
 docs/ARCHIVE_ASSESSMENT_RULE_PROPOSALS_VIEW.md text eol=lf
 generated/archive-assessment/ems-aa3-v2/** text eol=lf
+docs/DEMO3_W1_REQ_001_REPLY.md text eol=lf
+registry/archive_assessment_demo3_w1_req_001_reply.json text eol=lf
+schemas/archive_assessment_demo3_w1_req_001_reply.schema.json text eol=lf
