@@ -46,9 +46,9 @@ The eight classification fields: `production`, `internet_exposed`, `contains_cus
 
 ### Reply to Hayes
 
-- [ ] **REPLY-01**: A written reply to `DEMO3-W1-REQ-001` gives, for each of the 21, the rule and its authority or the no-rule decision and its id
-- [ ] **REPLY-02**: The reply cites the authority id, version and commit to re-pin to, and describes the published shape
-- [ ] **REPLY-03**: The reply states what publication does not do: the three Hayes-side changes still needed, and that the classification-prerequisites gap is untouched
+- [x] **REPLY-01**: A written reply to `DEMO3-W1-REQ-001` gives, for each of the 21, the rule and its authority or the no-rule decision and its id
+- [x] **REPLY-02**: The reply cites the authority id, version and commit to re-pin to, and describes the published shape
+- [x] **REPLY-03**: The reply states what publication does not do: the three Hayes-side changes still needed, and that the classification-prerequisites gap is untouched
 
 ## v2 Requirements
 
@@ -100,9 +100,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PUB-04 | Phase 4 | Complete |
 | PUB-05 | Phase 4 | Complete |
 | PUB-06 | Phase 4 | Complete |
-| REPLY-01 | Phase 5 | Pending |
-| REPLY-02 | Phase 5 | Pending |
-| REPLY-03 | Phase 5 | Pending |
+| REPLY-01 | Phase 5 | Complete |
+| REPLY-02 | Phase 5 | Complete |
+| REPLY-03 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 22 total
