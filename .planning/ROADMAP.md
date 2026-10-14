@@ -15,6 +15,7 @@ EMS answers Hayes Verify request `DEMO3-W1-REQ-001` by extending the AA3 archive
 ## Phases
 
 **Phase Numbering:**
+
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
@@ -29,56 +30,71 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Rule Shape and Decision States
+
 **Goal**: EMS has a chosen, machine-checkable shape for a not-applicable rule, its named authority and a three-valued decision state per control, with rule semantics written out in full, so that a rule can be drafted and later published without any meaning left to convention.
 **Depends on**: Nothing (first phase)
 **Requirements**: SCHEMA-01, SCHEMA-02, SCHEMA-03, SCHEMA-04, SCHEMA-05, SCHEMA-06
 **Success Criteria** (what must be TRUE):
+
   1. Validating an authority document against the new schema passes when a control carries a structured `not_applicable_rule`, a `not_applicable_authority` naming a governance decision id, and a decision state of "rule published"; it also passes for a "no rule will be published" control and for a "not yet decided" control.
   2. Validation fails for each inconsistent combination: a rule with no authority, a "not yet decided" control that carries a rule, a decided control with no decision id, and a decision state outside the three allowed values.
   3. Validation fails for a rule condition that names a field outside the eight declared classification fields, or that uses any state other than `KNOWN_TRUE` or `KNOWN_FALSE` (including `UNKNOWN`), or that is a free-text string such as `absence_of_evidence`.
      Note (CONTEXT D-07/D-08): in 2.0.0, rule conditions may name only `production`, `internet_exposed`, `contains_customer_data`, `ai_enabled`; the other four fields (`owner`, `tier`, `service_criticality`, `data_classification`) stay declared but are not usable in rules.
+
   4. A reader of the schema and semantics block can state, without consulting any other source, how conditions in a rule combine, what applicability result a satisfied rule yields, and that an `UNKNOWN` classification field never yields not-applicable.
   5. The existing AA3 pytest invariants still pass, and the published v1.0.0 authority content at `62a8955` is not altered in meaning by this phase.
+
 **Plans**: TBD
 
 ### Phase 2: Blind Drafting
+
 **Goal**: A rule-or-no-rule proposal with rationale exists for each of the 21 requested controls, drafted from the control catalog definitions alone, and is fixed in git history before any governance decision or any contact with a target.
 **Depends on**: Phase 1
 **Requirements**: DRAFT-01, DRAFT-02, DRAFT-03
 **Success Criteria** (what must be TRUE):
+
   1. A committed proposals file lists exactly the 21 requested control ids (EMS-CTRL-009, 010, 011, 012, 013, 014, 015, 017, 018, 019, 020, 021, 022, 030, 033, 039, 042, 052, 062, 075, 079), and each entry is either a proposed rule in the Phase 1 shape or a proposed "no rule" outcome, with a written rationale.
   2. Each proposal lists its EMS-source inputs, and every one is a control catalog definition in this repository; interpretation is labelled as such; the drafting frame is declared once; a text search of the proposals for RiskMVP, the RiskMVP commit, Hayes evidence or the 2026-10-01 assessment result finds nothing.
      Note (Phase 2 CONTEXT D-26): amended 2026-10-13.
+
   3. `git log` shows a single drafting commit that contains all 21 proposals and predates every governance decision record; no decision record or new authority version exists at that commit.
   4. The drafting commit SHA is recorded in the decision trail in a later commit, so a reader can confirm from the repository alone that drafting came first.
   5. Proposals are marked as drafts with no authority; nothing in the published authority file changes in this phase.
+
 **Plans**: TBD
 
 ### Phase 3: Governance Decisions
+
 **Goal**: The EMS governance authority has personally approved, changed or rejected each of the 21 proposals, and each outcome is a machine-readable, schema-validated governance decision with its own id that names the approver's dual role.
 **Depends on**: Phase 2
 **Requirements**: GOV-01, GOV-02, GOV-03, GOV-04
 **Success Criteria** (what must be TRUE):
+
   1. The decision records show 21 individual dispositions, one per requested control, each one of approved as drafted, changed, or rejected, each given by Oscar Mack for that control specifically; a single blanket approval of all 21 is not present.
   2. Each of the 21 outcomes, rule or no-rule, has a unique governance decision id that does not collide with `AA1-GOV-001`..`008`, and each record cites the drafting commit SHA from Phase 2.
   3. Every decision record states in its own text that the approver holds both the EMS authority role and the Hayes developer role.
   4. Validating the decision records against their schema passes; removing the dual-role statement, the decision id, the disposition or the control id from a record makes validation fail.
   5. Where the authority changed a proposal, the record shows both the drafted text and the decided text; the Phase 2 drafting commit is left unamended.
+
 **Plans**: TBD
 
 **Human gate:** This phase cannot be completed by drafting judgment. It finishes only when the user has given a disposition for each of the 21 proposals. No authority file, certification or reply is produced before it.
 
 ### Phase 4: Certified Publication
+
 **Goal**: A new controlled version of the archive-assessment applicability authority is published at a commit Hayes can re-pin to, in which each of the 21 requested controls shows an explicit decision citing its governance decision id, and the other 59 controls show "not yet decided".
 **Depends on**: Phase 3
 **Requirements**: PUB-01, PUB-02, PUB-03, PUB-04, PUB-05, PUB-06
 **Success Criteria** (what must be TRUE):
+
   1. The authority file shows 21 decided and 59 not-yet-decided controls; each of the 21 is either "rule published" with a rule and a `not_applicable_authority`, or "no rule will be published" with a decision id, and every cited id resolves to a Phase 3 decision record.
   2. For each of the 59 controls outside the request, the entry is the same as in v1.0.0 apart from the explicit "not yet decided" state: still `APPLICABILITY_UNRESOLVED`, no rule, no rule authority.
   3. Running the publisher regenerates the certification, the publication manifest and a decision-to-control traceability file, and the SHA-256 digests in the manifest match the files in the commit; the publisher's `--validate` run prints `PASS`.
   4. `python -m pytest` on the authority tests passes, including tests that fail if the decided count is not 21, the undecided count is not 59, a rule condition leaves the declared vocabulary, or a decided control lacks an authority.
   5. The new version has a new authority id and version, records its lineage from `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0` at commit `62a8955`, and `git show --stat` on the publication commit lists only this project's files (none of the unrelated modified or untracked files).
+
 **Plans**: 7 plans (sequential, waves 1–7)
+
 - [x] 04-01-PLAN.md — Phase 3 review fixes, part 1 (CR-01, CR-02, WR-05, WR-08); shared LF digest/dump; decisions-file header rewrite
 - [x] 04-02-PLAN.md — Phase 3 review fixes, part 2 (CR-03, WR-01..04, WR-06, WR-07, WR-09) with tests
 - [x] 04-03-PLAN.md — Narrow `.gitattributes` in its own commit
@@ -88,17 +104,21 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 04-07-PLAN.md — Publication record follow-up commit and git-gated tests
 
 ### Phase 5: Reply to Hayes
+
 **Goal**: A written reply to request `DEMO3-W1-REQ-001` sits in the repository, tells Hayes exactly what EMS decided for each of the 21 controls and where to cite it, and is plain about what publication does not change.
 **Depends on**: Phase 4
 **Requirements**: REPLY-01, REPLY-02, REPLY-03
 **Success Criteria** (what must be TRUE):
+
   1. The reply lists all 21 requested controls, and for each gives either the rule and its authority or the no-rule decision and its id; every entry agrees with the published authority file.
   2. The reply names the authority id, the version and the full publication commit SHA to re-pin to, and that SHA is the Phase 4 publication commit; it describes the published shape well enough for Hayes to locate the rule, the authority and the decision state for a control.
   3. The reply states that the 59 other controls remain not yet decided, that three Hayes-side changes are still needed before any control resolves (target description carrying the eight classification facts, reading the published shape, re-pinning), and that the classification-prerequisites gap is untouched.
   4. The reply is committed as a document in this repository in a commit after the publication commit, containing only this project's files; sending it is left to the EMS authority.
+
 **Plans**: 3 plans
 
 Plans:
+
 - [x] 05-01-PLAN.md — Reply generator script and JSON schema (Wave 1)
 - [x] 05-02-PLAN.md — Reply pytest and .gitattributes LF rules (Wave 2)
 - [x] 05-03-PLAN.md — Generate, validate and commit the reply; report push state (Wave 3)
@@ -140,6 +160,38 @@ Facts read from the repository on 2026-10-13 that the phase plans must account f
 - **Commit SHAs cannot be recorded in the commit they name.** The drafting SHA (DRAFT-03) is recorded in a later commit; the publication SHA (REPLY-02) is cited from the Phase 5 commit.
 - **Working tree.** `registry/adjudication_rules.json` and `registry/policy_decisions.json` are modified, and about 60 untracked files from other work are present. Stage this project's files by explicit path; never `git add -A` or `git add .`.
 - **No user-facing screens.** This project is registry JSON, a schema, a publisher script, pytest and generated certification outputs.
+
+### Phase 6: Address tech debt: publication gate hardening (2.0.1)
+
+**Goal:** Harden the gates guarding the AA3 v2 applicability authority (Phase 4 review CR-01, CR-02, WR-01..WR-10, IN-01, IN-07; Phase 2 WR-01; Phase 5 reply IN-01..IN-06; vocabulary wording), republish it as `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1` with a fresh sign-off by Oscar Mack and a new publication commit, with none of the 21 decisions changed, then regenerate the unsent `DEMO3-W1-REQ-001` reply to cite 2.0.1. Nothing is pushed or sent.
+**Requirements**: none mapped; scope is 06-CONTEXT.md decisions D-01..D-22
+**Depends on:** Phase 5
+**Plans:** 9 plans
+
+Plans:
+
+Wave 1
+- [ ] 06-01-PLAN.md — Vocabulary wording fix in CLAUDE.md and PROJECT.md (D-04)
+- [ ] 06-02-PLAN.md — Frozen proposals validated against catalog and frame at `dc3b41c` (D-03)
+- [ ] 06-03-PLAN.md — Governance-decisions builder fixes WR-05, WR-07, WR-08, WR-10 (D-01, D-11)
+
+Wave 2 *(blocked on Wave 1 completion)*
+- [ ] 06-04-PLAN.md — Output-neutral publisher gates CR-01, WR-04, CR-02, IN-01, IN-07, WR-09 (D-01, D-02)
+
+Wave 3 *(blocked on Wave 2 completion)*
+- [ ] 06-05-PLAN.md — Publisher 2.0.1 code in one commit: lineage, D-12 binding, stricter schema, executed mutation harness (opens the documented red window)
+
+Wave 4 *(blocked on Wave 3 completion)*
+- [ ] 06-06-PLAN.md — Dry run, BLOCKING sign-off by Oscar Mack, publish, publication commit (D-21)
+
+Wave 5 *(blocked on Wave 4 completion)*
+- [ ] 06-07-PLAN.md — 2.0.1 publication record commit (D-07, D-21)
+
+Wave 6 *(blocked on Wave 5 completion)*
+- [ ] 06-08-PLAN.md — Reply script fixes and history note, then regenerated reply citing 2.0.1 (D-05, D-14..D-16)
+
+Wave 7 *(blocked on Wave 6 completion)*
+- [ ] 06-09-PLAN.md — BLOCKING reply read-through; push commands reported, not run (D-16)
 
 ---
 *Roadmap created: 2026-10-13*
