@@ -4,6 +4,7 @@ import importlib.util
 import json
 import re
 import subprocess
+import tempfile
 from pathlib import Path
 
 import jsonschema
@@ -26,6 +27,8 @@ RULE_ID = 'EMS-CTRL-010'
 NO_RULE_ID = 'EMS-CTRL-009'
 TWO = 'First decided sentence. Second decided sentence.'
 SYNTH_SHA = 'a' * 64
+TMPDIR = tempfile.TemporaryDirectory()
+TMP = Path(TMPDIR.name)
 
 def scan(text): return [t for t in TERMS if re.search(re.escape(t), text, re.IGNORECASE)]
 
@@ -55,7 +58,7 @@ def filled():
 def ent(a, cid): return next(e for e in a['entries'] if e['control_id'] == cid)
 
 def built(answers=None):
-    return MODULE.build_decisions(PROPOSALS, answers or filled(), DRAFTING, APPROVAL, SYNTH_SHA, MODULE.V2.digest(MODULE.DRAFTING_RECORD))
+    return MODULE.build_decisions(PROPOSALS, answers or filled(), DRAFTING, APPROVAL, MODULE.answers_digest(MODULE.ANSWERS), MODULE.V2.lf_digest(MODULE.DRAFTING_RECORD))
 
 def rec(d, cid): return next(r for r in d['records'] if r['control_id'] == cid)
 
@@ -238,7 +241,7 @@ def test_proposals_frozen_since_drafting_commit():
 def test_drafting_record_and_frozen_inputs_unchanged():
     assert git('diff', '--quiet', 'HEAD', '--', MODULE.DRAFTING_RECORD_REL).returncode == 0
     assert DRAFTING['drafting_commit'] == MODULE.DRAFTING_COMMIT
-    assert DRAFTING['proposals_sha256'] == MODULE.V2.digest(MODULE.PROPOSALS)
+    assert DRAFTING['proposals_sha256'] == MODULE.V2.lf_digest(MODULE.PROPOSALS)
     for path in ('registry/control_catalog.yaml', '.planning/phases/01-rule-shape-and-decision-states/01-FIELD-DEFINITIONS.md'):
         assert git('diff', '--quiet', 'HEAD', '--', path).returncode == 0, path
 
@@ -273,3 +276,52 @@ def test_source_hygiene():
         assert f'dump({name}' not in src and f'{name}.write' not in src and f'open({name}' not in src
     assert 'control_catalog' not in src and 'FIELD-DEFINITIONS' not in src
     assert 'FORBIDDEN_ID_RE' not in src and 'walk_forbidden' not in src
+
+def test_lf_digest_ignores_crlf():
+    a, b = TMP / 'a.json', TMP / 'b.json'
+    a.write_bytes(b'{\n  "k": 1\n}\n'); b.write_bytes(b'{\r\n  "k": 1\r\n}\r\n')
+    assert MODULE.V2.lf_digest(a) == MODULE.V2.lf_digest(b) == hashlib.sha256(b'{\n  "k": 1\n}\n').hexdigest()
+    assert MODULE.V2.lf_bytes(b'x\r\ny') == b'x\ny'
+
+def test_answers_sha_not_bound_to_live_file_rejected(): validator_rejects(lambda d: d.__setitem__('answers_sha256', 'a' * 64))
+
+@pytest.mark.parametrize('value', ['LF', None, ''])
+def test_frozen_normalisation_wrong_rejected(value): both_reject(lambda d: d.__setitem__('frozen_input_sha256_normalisation', value))
+
+def test_frozen_normalisation_missing_rejected(): both_reject(lambda d: d.pop('frozen_input_sha256_normalisation'))
+
+def test_frozen_digests_are_lf_normalised(monkeypatch):
+    for name in ('PROPOSALS', 'DRAFTING_RECORD'):
+        src = getattr(MODULE, name)
+        crlf = TMP / src.name
+        crlf.write_bytes(MODULE.V2.lf_bytes(src.read_bytes()).replace(b'\n', b'\r\n'))
+        assert MODULE.V2.lf_digest(crlf) == MODULE.V2.lf_digest(src)
+    d = built()
+    assert d['proposals_sha256'] == MODULE.V2.lf_digest(MODULE.PROPOSALS) and d['drafting_record_sha256'] == MODULE.V2.lf_digest(MODULE.DRAFTING_RECORD)
+    assert d['frozen_input_sha256_normalisation'] == 'CRLF_TO_LF'
+
+@pytest.mark.parametrize('key', ['approver', 'role', 'date', 'scope', 'source_path'])
+def test_wording_approval_field_changed_rejected(key): validator_rejects(lambda d: d['wording_approval'].__setitem__(key, d['wording_approval'][key] + ' x'))
+
+def test_dump_writes_lf_only():
+    p = TMP / 'x.json'
+    MODULE.V2.dump(p, {'a': [1, 2], 'b': 'c'})
+    raw = p.read_bytes()
+    assert b'\r\n' not in raw and raw.endswith(b'\n')
+
+def test_validate_rejects_file_differing_from_rebuild(monkeypatch):
+    d = load(MODULE.DECISIONS)
+    d['records'][0]['note'] = d['records'][0]['note'] + ' extra'
+    p = TMP / 'decisions.json'; MODULE.V2.dump(p, d)
+    MODULE.validate_decisions(d)
+    monkeypatch.setattr(MODULE, 'DECISIONS', p)
+    monkeypatch.setattr('sys.argv', ['x', '--validate'])
+    with pytest.raises(AuthorityError): MODULE.main()
+
+@needs_git
+def test_records_unchanged_since_eed4a5f():
+    r = git('show', 'eed4a5f:registry/archive_assessment_governance_decisions.json')
+    if r.returncode != 0: pytest.skip('eed4a5f is not available')
+    old, new = json.loads(lf(r.stdout).decode('utf-8')), load(MODULE.DECISIONS)
+    assert old['records'] == new['records']
+    assert {k: v for k, v in old.items() if k != 'records'} == {k: v for k, v in new.items() if k not in ('records', 'frozen_input_sha256_normalisation')}

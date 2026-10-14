@@ -42,9 +42,11 @@ RESOLUTION = [
 class AuthorityError(ValueError): pass
 
 def digest(p: Path) -> str: return hashlib.sha256(p.read_bytes()).hexdigest()
+def lf_bytes(b: bytes) -> bytes: return b.replace(b'\r\n', b'\n')
+def lf_digest(p: Path) -> str: return hashlib.sha256(lf_bytes(p.read_bytes())).hexdigest()
 def dump(p: Path, value: object) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(value, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+    with open(p, 'w', encoding='utf-8', newline='\n') as f: f.write(json.dumps(value, indent=2, sort_keys=True) + '\n')
 def load(p: Path) -> dict: return json.loads(p.read_text(encoding='utf-8'))
 def contains_absolute(value: object) -> bool:
     if isinstance(value, str): return value.startswith(('/', '\\\\')) or (len(value) > 2 and value[1] == ':' and value[2] in '\\/')

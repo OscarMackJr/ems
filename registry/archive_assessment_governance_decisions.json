@@ -7,6 +7,7 @@
   "drafting_record_path": "registry/archive_assessment_rule_proposals_drafting_record.json",
   "drafting_record_sha256": "b2d3f0e15fcb86d005a3490450c4ccaf63c9b5c7f939d0ef66ed2df6828df994",
   "earlier_assessment_knowledge_statement": "The deciding authority knew the per-control result of an earlier assessment when making these decisions. The drafts were written without that knowledge. No rule was compared with any target during this phase.",
+  "frozen_input_sha256_normalisation": "CRLF_TO_LF",
   "proposals_path": "registry/archive_assessment_not_applicable_rule_proposals.json",
   "proposals_sha256": "31684001ba3550fc98c1c86e487ff2c81fb106620f820dd0313311c8aea9886d",
   "records": [

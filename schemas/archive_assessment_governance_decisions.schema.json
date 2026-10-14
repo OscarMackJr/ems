@@ -28,6 +28,9 @@
     "earlier_assessment_knowledge_statement": {
       "const": "The deciding authority knew the per-control result of an earlier assessment when making these decisions. The drafts were written without that knowledge. No rule was compared with any target during this phase."
     },
+    "frozen_input_sha256_normalisation": {
+      "const": "CRLF_TO_LF"
+    },
     "proposals_path": {
       "const": "registry/archive_assessment_not_applicable_rule_proposals.json"
     },
@@ -429,6 +432,7 @@
     "answers_path",
     "answers_sha256",
     "answers_sha256_normalisation",
+    "frozen_input_sha256_normalisation",
     "records"
   ],
   "title": "EMS Archive Assessment Governance Decisions",

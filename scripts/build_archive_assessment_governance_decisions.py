@@ -34,10 +34,11 @@ EARLIER_ASSESSMENT_STATEMENT = 'The deciding authority knew the per-control resu
 TYPED_BY_AUTHORITY_STATEMENT = 'The dispositions, notes and any decided rule or rationale in the answers file were typed by Oscar Mack. No AI agent chose, suggested or reworded any of them.'
 INTERPRETATION_BASIS = 'Accepted as the basis of this decision only. It is not a definition of the control.'
 HEADER_STATEMENT_REF = 'earlier_assessment_knowledge_statement'
+HEADER_REFRESH_KEYS = {'frozen_input_sha256_normalisation'}
 DECIDED_STATES = ['RULE_PUBLISHED', 'NO_RULE_WILL_BE_PUBLISHED']
 KINDS = ['PROPOSE_RULE', 'PROPOSE_NO_RULE']
 DECISIONS_STATUS = 'GOVERNANCE_DECISIONS'
-HEADER_KEYS = ['status', 'answers_typed_by_authority_statement', 'earlier_assessment_knowledge_statement', 'wording_approval', 'proposals_path', 'proposals_sha256', 'drafting_record_path', 'drafting_record_sha256', 'drafting_commit', 'answers_path', 'answers_sha256', 'answers_sha256_normalisation', 'records']
+HEADER_KEYS = ['status', 'answers_typed_by_authority_statement', 'earlier_assessment_knowledge_statement', 'wording_approval', 'proposals_path', 'proposals_sha256', 'drafting_record_path', 'drafting_record_sha256', 'drafting_commit', 'answers_path', 'answers_sha256', 'answers_sha256_normalisation', 'frozen_input_sha256_normalisation', 'records']
 APPROVAL_KEYS = ['approver', 'role', 'date', 'scope', 'source_path', 'statement_sha256']
 STATEMENT_KEYS = ['answers_typed_by_authority_statement', 'dual_role_statement', 'earlier_assessment_knowledge_statement']
 RECORD_KEYS = ['decision_id', 'control_id', 'disposition', 'decided_outcome', 'drafted', 'decided', 'interpretation', 'note', 'scope_note', 'approver', 'approver_roles', 'dual_role_statement', 'decided_on', 'drafting_commit', 'drafting_record_path', 'header_statement_ref', 'supersedes', 'amendment_present']
@@ -68,7 +69,7 @@ def norm(text: str) -> str: return ' '.join(text.casefold().split())
 
 def sentences_ok(r: object) -> bool: return nonempty(r) and 2 <= len(re.findall(r'[.!?](\s|$)', r.strip())) <= 4
 
-def answers_digest(path: Path) -> str: return hashlib.sha256(path.read_bytes().replace(b'\r\n', b'\n')).hexdigest()
+def answers_digest(path: Path) -> str: return V2.lf_digest(path)
 
 def load_checked(path: Path) -> object:
     try: return json.loads(path.read_text(encoding='utf-8'))
@@ -201,10 +202,10 @@ def build_decisions(proposals: dict, answers: dict, drafting_record: dict, wordi
     return {'status': DECISIONS_STATUS, 'answers_typed_by_authority_statement': TYPED_BY_AUTHORITY_STATEMENT, 'earlier_assessment_knowledge_statement': EARLIER_ASSESSMENT_STATEMENT,
         'wording_approval': {'approver': ap['approver'], 'role': ap['role'], 'date': ap['date'], 'scope': ap['scope'], 'source_path': APPROVAL_REL, 'statement_sha256': dict(wording_approval['statement_sha256'])},
         'proposals_path': PROPOSALS_REL, 'proposals_sha256': drafting_record['proposals_sha256'], 'drafting_record_path': DRAFTING_RECORD_REL,
-        'drafting_record_sha256': drafting_record_sha256 if drafting_record_sha256 is not None else V2.digest(DRAFTING_RECORD),
-        'drafting_commit': drafting_record['drafting_commit'], 'answers_path': ANSWERS_REL, 'answers_sha256': answers_sha256, 'answers_sha256_normalisation': 'CRLF_TO_LF', 'records': records}
+        'drafting_record_sha256': drafting_record_sha256 if drafting_record_sha256 is not None else V2.lf_digest(DRAFTING_RECORD),
+        'drafting_commit': drafting_record['drafting_commit'], 'answers_path': ANSWERS_REL, 'answers_sha256': answers_sha256, 'answers_sha256_normalisation': 'CRLF_TO_LF', 'frozen_input_sha256_normalisation': 'CRLF_TO_LF', 'records': records}
 
-def validate_decisions(d: object, proposals: dict | None = None, drafting_record: dict | None = None) -> None:
+def validate_decisions(d: object, proposals: dict | None = None, drafting_record: dict | None = None, wording_approval: dict | None = None) -> None:
     errors: list = []
     if not isinstance(d, dict): raise AuthorityError('decisions document must be an object')
     proposals = proposals if proposals is not None else V2.load(PROPOSALS)
@@ -218,13 +219,18 @@ def validate_decisions(d: object, proposals: dict | None = None, drafting_record
     if not isinstance(wa, dict) or set(wa) != set(APPROVAL_KEYS): errors.append(f'wording_approval keys must be exactly {APPROVAL_KEYS}')
     else:
         if wa['approver'] != APPROVER: errors.append('wording_approval approver invalid')
+        approval_doc = wording_approval if wording_approval is not None else V2.load(WORDING_APPROVAL)
+        ap = approval_doc['approval']
+        if wa != {'approver': ap['approver'], 'role': ap['role'], 'date': ap['date'], 'scope': ap['scope'], 'source_path': APPROVAL_REL, 'statement_sha256': dict(approval_doc['statement_sha256'])}: errors.append('wording_approval differs from the wording approval file')
         expected = {'answers_typed_by_authority_statement': sha_text(TYPED_BY_AUTHORITY_STATEMENT), 'dual_role_statement': sha_text(DUAL_ROLE_STATEMENT), 'earlier_assessment_knowledge_statement': sha_text(EARLIER_ASSESSMENT_STATEMENT)}
         if wa['statement_sha256'] != expected: errors.append('wording_approval statement_sha256 does not match the approved statements')
-    for k, live in (('proposals_sha256', V2.digest(PROPOSALS)), ('drafting_record_sha256', V2.digest(DRAFTING_RECORD))):
+    for k, live in (('proposals_sha256', V2.lf_digest(PROPOSALS)), ('drafting_record_sha256', V2.lf_digest(DRAFTING_RECORD))):
         if not isinstance(d.get(k), str) or not re.match(SHA64_RE, d[k]): errors.append(f'{k} must be 64 hex characters')
         elif d[k] != live: errors.append(f'{k} does not match the live file')
     if not isinstance(d.get('answers_sha256'), str) or not re.match(SHA64_RE, d['answers_sha256']): errors.append('answers_sha256 must be 64 hex characters')
+    elif not ANSWERS.exists() or d['answers_sha256'] != answers_digest(ANSWERS): errors.append('answers_sha256 does not match the live answers file')
     if d.get('answers_sha256_normalisation') != 'CRLF_TO_LF': errors.append('answers_sha256_normalisation invalid')
+    if d.get('frozen_input_sha256_normalisation') != 'CRLF_TO_LF': errors.append('frozen_input_sha256_normalisation invalid')
     if d.get('drafting_commit') != DRAFTING_COMMIT or drafting_record.get('drafting_commit') != DRAFTING_COMMIT or not re.match(SHA40_RE, str(d.get('drafting_commit'))): errors.append('drafting_commit invalid')
     for k, v in (('proposals_path', PROPOSALS_REL), ('drafting_record_path', DRAFTING_RECORD_REL), ('answers_path', ANSWERS_REL)):
         if d.get(k) != v: errors.append(f'{k} invalid')
@@ -306,10 +312,15 @@ def decisions_schema() -> dict:
     return {'$schema': 'https://json-schema.org/draft/2020-12/schema', 'title': 'EMS Archive Assessment Governance Decisions', 'type': 'object', 'additionalProperties': False, 'required': list(HEADER_KEYS), 'properties': {
         'status': {'const': DECISIONS_STATUS}, 'answers_typed_by_authority_statement': {'const': TYPED_BY_AUTHORITY_STATEMENT}, 'earlier_assessment_knowledge_statement': {'const': EARLIER_ASSESSMENT_STATEMENT},
         'wording_approval': approval, 'proposals_path': {'const': PROPOSALS_REL}, 'proposals_sha256': sha, 'drafting_record_path': {'const': DRAFTING_RECORD_REL}, 'drafting_record_sha256': sha,
-        'drafting_commit': {'const': DRAFTING_COMMIT}, 'answers_path': {'const': ANSWERS_REL}, 'answers_sha256': sha, 'answers_sha256_normalisation': {'const': 'CRLF_TO_LF'},
+        'drafting_commit': {'const': DRAFTING_COMMIT}, 'answers_path': {'const': ANSWERS_REL}, 'answers_sha256': sha, 'answers_sha256_normalisation': {'const': 'CRLF_TO_LF'}, 'frozen_input_sha256_normalisation': {'const': 'CRLF_TO_LF'},
         'records': {'type': 'array', 'minItems': len(CONTROL_IDS), 'items': record}}}
 
 def decisions_text(value: dict) -> str: return json.dumps(value, indent=2, sort_keys=True) + '\n'
+
+def refreshable(existing: object, rebuilt: dict) -> bool:
+    if not isinstance(existing, dict) or existing.get('records') != rebuilt['records']: return False
+    keep = lambda x: {k: v for k, v in x.items() if k not in HEADER_REFRESH_KEYS}
+    return keep(existing) == keep(rebuilt)
 
 def build_from_files() -> dict:
     if not ANSWERS.exists(): raise AuthorityError('answers file is not present')
@@ -329,12 +340,18 @@ def main() -> None:
     elif args.emit_schema: V2.dump(ANSWERS_SCHEMA, answers_schema()); V2.dump(DECISIONS_SCHEMA, decisions_schema())
     elif args.build:
         doc = build_from_files(); validate_decisions(doc)
-        if DECISIONS.exists() and DECISIONS.read_bytes().replace(b'\r\n', b'\n') != decisions_text(doc).encode('utf-8'): raise AuthorityError('decisions file already exists with different content and is not overwritten')
         if not DECISIONS.exists(): V2.dump(DECISIONS, doc)
+        else:
+            raw = DECISIONS.read_bytes()
+            if V2.lf_bytes(raw) != decisions_text(doc).encode('utf-8'):
+                if not refreshable(load_checked(DECISIONS), doc): raise AuthorityError('decisions file already exists with different content and is not overwritten')
+                V2.dump(DECISIONS, doc)
+            elif raw != V2.lf_bytes(raw): V2.dump(DECISIONS, doc)
         print('PASS')
     elif args.validate:
         if not DECISIONS.exists(): raise AuthorityError('decisions file is not present')
         doc = load_checked(DECISIONS); validate_decisions(doc)
+        if V2.lf_bytes(DECISIONS.read_bytes()).decode('utf-8') != decisions_text(build_from_files()): raise AuthorityError('decisions file differs from a rebuild')
         jsonschema.Draft202012Validator(V2.load(DECISIONS_SCHEMA)).validate(doc); print('PASS')
     elif args.validate_answers:
         if not ANSWERS.exists(): raise AuthorityError('answers file is not present')
