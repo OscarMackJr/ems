@@ -84,7 +84,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 04-03-PLAN.md — Narrow `.gitattributes` in its own commit
 - [x] 04-04-PLAN.md — v2 publisher build/validate half: 21-decision overlay, decision ids, lineage, `validate_publication`, schema
 - [x] 04-05-PLAN.md — v2 publisher publication half: outputs, AA4 traceability, dry-run, sign-off-gated publish, `--validate`, `validate_signoff`
-- [ ] 04-06-PLAN.md — Dry run, Oscar Mack sign-off (blocking human gate), publish, clean 9-file publication commit
+- [x] 04-06-PLAN.md — Dry run, Oscar Mack sign-off (blocking human gate), publish, clean 9-file publication commit
 - [ ] 04-07-PLAN.md — Publication record follow-up commit and git-gated tests
 
 ### Phase 5: Reply to Hayes
@@ -108,7 +108,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Rule Shape and Decision States | 3/3 | Complete    | 2026-10-13 |
 | 2. Blind Drafting | 5/5 | Complete    | 2026-10-13 |
 | 3. Governance Decisions | 4/4 | Complete    | 2026-10-14 |
-| 4. Certified Publication | 5/7 | In Progress|  |
+| 4. Certified Publication | 6/7 | In Progress|  |
 | 5. Reply to Hayes | 0/TBD | Not started | - |
 
 ## Coverage
