@@ -23,7 +23,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Rule Shape and Decision States** - The applicability schema can express a rule, a named authority, and three decision states, and rejects everything else (completed 2026-10-13)
 - [x] **Phase 2: Blind Drafting** - 21 rule-or-no-rule proposals drafted from the control catalog alone and committed before any decision (completed 2026-10-13)
 - [x] **Phase 3: Governance Decisions** - The EMS authority decides each of the 21 proposals; each outcome becomes a schema-validated decision record (human gate) (completed 2026-10-14)
-- [ ] **Phase 4: Certified Publication** - A new authority version carries the 21 decisions and 59 undecided controls, certified, traceable and tested, in a clean commit
+- [x] **Phase 4: Certified Publication** - A new authority version carries the 21 decisions and 59 undecided controls, certified, traceable and tested, in a clean commit (completed 2026-10-14)
 - [ ] **Phase 5: Reply to Hayes** - A written reply to `DEMO3-W1-REQ-001` cites the published authority, version and commit
 
 ## Phase Details
@@ -85,7 +85,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 04-04-PLAN.md — v2 publisher build/validate half: 21-decision overlay, decision ids, lineage, `validate_publication`, schema
 - [x] 04-05-PLAN.md — v2 publisher publication half: outputs, AA4 traceability, dry-run, sign-off-gated publish, `--validate`, `validate_signoff`
 - [x] 04-06-PLAN.md — Dry run, Oscar Mack sign-off (blocking human gate), publish, clean 9-file publication commit
-- [ ] 04-07-PLAN.md — Publication record follow-up commit and git-gated tests
+- [x] 04-07-PLAN.md — Publication record follow-up commit and git-gated tests
 
 ### Phase 5: Reply to Hayes
 **Goal**: A written reply to request `DEMO3-W1-REQ-001` sits in the repository, tells Hayes exactly what EMS decided for each of the 21 controls and where to cite it, and is plain about what publication does not change.
@@ -108,7 +108,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Rule Shape and Decision States | 3/3 | Complete    | 2026-10-13 |
 | 2. Blind Drafting | 5/5 | Complete    | 2026-10-13 |
 | 3. Governance Decisions | 4/4 | Complete    | 2026-10-14 |
-| 4. Certified Publication | 6/7 | In Progress|  |
+| 4. Certified Publication | 7/7 | Complete   | 2026-10-14 |
 | 5. Reply to Hayes | 0/TBD | Not started | - |
 
 ## Coverage
