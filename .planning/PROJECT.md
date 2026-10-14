@@ -26,6 +26,8 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - ✓ The v2 authority shape expresses three distinguishable states per control: rule published, "no rule will be published" decided, and not yet decided — Validated in Phase 1: Rule Shape and Decision States
 - ✓ A rule-or-no-rule proposal is drafted for each of the 21 controls from the control catalog definitions alone (`registry/archive_assessment_not_applicable_rule_proposals.json`, status `DRAFT_NO_AUTHORITY`) — Validated in Phase 2: Blind Drafting
 - ✓ Drafts are committed before any comparison with a target repository or with the RiskMVP assessment result (drafting commit `dc3b41c`, recorded in `registry/archive_assessment_rule_proposals_drafting_record.json`) — Validated in Phase 2: Blind Drafting
+- ✓ The governance authority reviewed and gave an individual disposition for each of the 21 proposals, typed by the authority in `registry/archive_assessment_governance_answers.json` (commit `cc74445`) after the wording sign-off (`bcba0f1`); nothing is published yet — Validated in Phase 3: Governance Decisions
+- ✓ Each disposition is recorded as a schema-validated governance decision record `AA4-GOV-001`..`021` in `registry/archive_assessment_governance_decisions.json` (commit `eed4a5f`), each stating the approver holds both the EMS authority role and the Hayes developer role — Validated in Phase 3: Governance Decisions
 
 ### Active
 
@@ -35,8 +37,6 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - [ ] Rule conditions are expressed only over the eight declared classification fields, each as a `KNOWN_TRUE` / `KNOWN_FALSE` fact about the target
 - [ ] Each rule is explicit and machine-readable, with no meaning left to convention
 - [ ] Each rule or no-rule decision names its authority (a governance decision id) so Hayes can cite what makes it binding
-- [ ] The governance authority reviews and approves or changes each of the 21 proposals; nothing is published without that approval
-- [ ] Each approval is recorded as a governance decision record that states the approver holds both the EMS authority role and the Hayes developer role
 - [ ] The 59 controls outside the request remain in the "not yet decided" state, unchanged in meaning
 - [ ] A new controlled authority version is published with certification, traceability and passing tests, at a commit Hayes can re-pin to
 - [ ] A written reply to request `DEMO3-W1-REQ-001` cites the published authority, version and commit, and states what EMS did and did not publish
@@ -103,8 +103,8 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 | Scope limited to the 21 controls in the request | Request names 21; deadline is days | — Pending |
 | "No rule will be published" is an explicit published outcome with its own decision id | Lets Hayes tell "decided" from "not yet decided"; today both are `null` | — Pending |
 | Drafts written from the catalog alone and committed before comparison with any target | The RiskMVP result for all 21 is already known; a rule written with it in view could be shaped to an outcome | ✓ Done in Phase 2: approved brief `6969f52`, drafting commit `dc3b41c`, record `be915e3` |
-| Each rule or no-rule decision is backed by a new governance decision id | That id is the named authority Hayes cites; mirrors `AA1-GOV-001`..`008` | — Pending |
-| Dual role (EMS approver and Hayes developer) recorded in every decision record | Same person rules on both sides; workable only if explicit | — Pending |
+| Each rule or no-rule decision is backed by a new governance decision id | That id is the named authority Hayes cites; mirrors `AA1-GOV-001`..`008` | ✓ Done in Phase 3: `AA4-GOV-001`..`021`, one per control (`eed4a5f`); cited from the authority in Phase 4 |
+| Dual role (EMS approver and Hayes developer) recorded in every decision record | Same person rules on both sides; workable only if explicit | ✓ Done in Phase 3: authority-approved sentence (`bcba0f1`) in all 21 records |
 | Success is defined on the EMS side only | Three Hayes-side changes are needed before the live count moves; they belong to the next milestone in the Hayes repository | — Pending |
 | Complete answer means a published, certified authority plus a written reply | Chosen over replying with a decision date alone | — Pending |
 | EMS chooses the rule shape; Hayes's placeholder shape is not adopted | Hayes stated the shape is EMS's to choose and its placeholder is a stand-in | — Pending |
@@ -128,4 +128,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-13 after Phase 2 (blind drafting) — 21 draft proposals committed and frozen with a drafting record; no governance decision made and nothing published yet*
+*Last updated: 2026-10-14 after Phase 3 (governance decisions) — 21 authority-typed dispositions and 21 decision records AA4-GOV-001..021 committed; nothing published yet. Code review debt (CR-01 line-ending hashing, CR-02 answers binding) is a Phase 4 prerequisite*
