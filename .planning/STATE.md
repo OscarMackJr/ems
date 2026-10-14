@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0.0
 milestone_name: milestone
-status: verifying
-last_updated: "2026-10-14T16:49:32.218Z"
+status: ready_to_plan
+last_updated: 2026-10-14T16:57:52.116Z
 last_activity: 2026-10-14
 progress:
   total_phases: 5
@@ -11,7 +11,7 @@ progress:
   total_plans: 12
   completed_plans: 12
   percent: 60
-stopped_at: Phase 02 complete (5/5) — ready to discuss Phase 3
+stopped_at: Phase 03 complete (4/4) — ready to discuss Phase 4
 ---
 
 # Project State
@@ -21,13 +21,13 @@ stopped_at: Phase 02 complete (5/5) — ready to discuss Phase 3
 See: .planning/PROJECT.md (updated 2026-10-13)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Phase 03 — governance-decisions
+**Current focus:** Phase 4 — certified publication
 
 ## Current Position
 
-Phase: 03 (governance-decisions) — EXECUTING
-Plan: 4 of 4
-Status: Phase complete — ready for verification
+Phase: 4
+Plan: Not started
+Status: Ready to plan
 Last activity: 2026-10-14
 
 Progress: [██████████] 100%
@@ -36,7 +36,7 @@ Progress: [██████████] 100%
 
 **Velocity:**
 
-- Total plans completed: 8
+- Total plans completed: 12
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -45,6 +45,7 @@ Progress: [██████████] 100%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 02 | 5 | - | - |
+| 03 | 4 | - | - |
 
 **Recent Trend:**
 
@@ -77,6 +78,8 @@ None yet.
 - [Phase 1]: The v1.0.0 publication manifest hashes the publisher script, schema and authority; planning must choose in-place change or new versioned files, since in-place edits leave the v1.0.0 manifest digests stale until Phase 4
 - [Phase 1]: v1.0.0 schema constants (`version` 1.0.0, exactly eight `AA1-GOV-00[1-8]` decision ids, `null` rule and authority) must be relaxed for new decision ids and states
 - [Phase 3]: Blocks on the user; the AA2 precedent was a blanket `APPROVE_ALL_AS_PREPARED`, which does not satisfy GOV-01 (individual disposition per control)
+- [Phase 4, prerequisite]: Phase 3 code review CR-01 — `proposals_sha256` and `drafting_record_sha256` hash raw bytes; with `core.autocrlf=true` and no `.gitattributes`, a fresh Windows clone fails `--validate` and 6 tests. Normalise input hashing and pin line endings before certifying hashes or publishing the commit Hayes re-pins to (see 03-REVIEW.md)
+- [Phase 4, prerequisite]: Phase 3 code review CR-02 — `validate_decisions` does not tie records to the answers file (forged `answers_sha256` or edited record passes `--validate`); fix before `--validate` is used as a publication gate. CR-03 (superseding entries skip strict checks) and the 9 warnings ride along
 - [All phases]: Working tree holds two modified registry files and about 60 untracked files from unrelated work; stage by explicit path only
 
 ## Deferred Items

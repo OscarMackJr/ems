@@ -30,10 +30,10 @@ The eight classification fields: `production`, `internet_exposed`, `contains_cus
 
 ### Governance Decisions
 
-- [ ] **GOV-01**: The governance authority approves, changes or rejects each of the 21 proposals individually
-- [ ] **GOV-02**: Each outcome, rule or no-rule, is recorded as a governance decision with a unique id
-- [ ] **GOV-03**: Each decision record states that the approver holds both the EMS authority role and the Hayes developer role
-- [ ] **GOV-04**: Decision records are machine-readable and schema-validated
+- [x] **GOV-01**: The governance authority approves, changes or rejects each of the 21 proposals individually
+- [x] **GOV-02**: Each outcome, rule or no-rule, is recorded as a governance decision with a unique id
+- [x] **GOV-03**: Each decision record states that the approver holds both the EMS authority role and the Hayes developer role
+- [x] **GOV-04**: Decision records are machine-readable and schema-validated
 
 ### Publication
 
@@ -90,10 +90,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DRAFT-01 | Phase 2 | Complete |
 | DRAFT-02 | Phase 2 | Complete |
 | DRAFT-03 | Phase 2 | Complete |
-| GOV-01 | Phase 3 | Pending |
-| GOV-02 | Phase 3 | Pending |
-| GOV-03 | Phase 3 | Pending |
-| GOV-04 | Phase 3 | Pending |
+| GOV-01 | Phase 3 | Complete |
+| GOV-02 | Phase 3 | Complete |
+| GOV-03 | Phase 3 | Complete |
+| GOV-04 | Phase 3 | Complete |
 | PUB-01 | Phase 4 | Pending |
 | PUB-02 | Phase 4 | Pending |
 | PUB-03 | Phase 4 | Pending |
