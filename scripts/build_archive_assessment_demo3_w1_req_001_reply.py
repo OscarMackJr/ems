@@ -225,6 +225,8 @@ def validate_reply() -> None:
         raise V2.AuthorityError('reply JSON differs from a fresh build')
     if V2.lf_bytes(REPLY_MD.read_bytes()) != render_markdown(reply).encode('utf-8'):
         raise V2.AuthorityError('reply Markdown differs from a fresh build')
+    if V2.lf_bytes(REPLY_SCHEMA.read_bytes()) != V2.jtext(schema()).encode('utf-8'):
+        raise V2.AuthorityError('reply schema differs from a fresh build')
     validate_reply_object(V2.load(REPLY_JSON))
     jsonschema.Draft202012Validator(V2.load(REPLY_SCHEMA)).validate(V2.load(REPLY_JSON))
     if record['authority_sha256'] != V2.lf_digest(V2.AUTHORITY) or record['manifest_sha256'] != V2.lf_digest(V2.OUT / V2.N_MANIFEST):

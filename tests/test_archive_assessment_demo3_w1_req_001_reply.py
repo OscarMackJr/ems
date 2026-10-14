@@ -59,6 +59,16 @@ def test_validate_reply_accepts_unmutated_reply_from_temp_file(monkeypatch):
     run_validate_reply(build(), monkeypatch)
 
 
+def test_validate_reply_rejects_loosened_schema_file(monkeypatch):
+    s = V2.load(MODULE.REPLY_SCHEMA)
+    s['additionalProperties'] = True
+    p = TMP / 'reply.schema.json'
+    V2.dump(p, s)
+    monkeypatch.setattr(MODULE, 'REPLY_SCHEMA', p)
+    with pytest.raises(AuthorityError, match='reply schema differs'):
+        MODULE.validate_reply()
+
+
 def test_validate_reply_rejects_edited_decision_rationale(monkeypatch):
     doc = V2.load(V2.GOVERNANCE_DECISIONS)
     rec = next(r for r in V2.latest_records(doc) if r['control_id'] == V2.REQUEST_CONTROL_IDS[0])
