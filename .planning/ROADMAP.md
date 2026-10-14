@@ -78,7 +78,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Running the publisher regenerates the certification, the publication manifest and a decision-to-control traceability file, and the SHA-256 digests in the manifest match the files in the commit; the publisher's `--validate` run prints `PASS`.
   4. `python -m pytest` on the authority tests passes, including tests that fail if the decided count is not 21, the undecided count is not 59, a rule condition leaves the declared vocabulary, or a decided control lacks an authority.
   5. The new version has a new authority id and version, records its lineage from `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0` at commit `62a8955`, and `git show --stat` on the publication commit lists only this project's files (none of the unrelated modified or untracked files).
-**Plans**: TBD
+**Plans**: 7 plans (sequential, waves 1–7)
+- [ ] 04-01-PLAN.md — Phase 3 review fixes, part 1 (CR-01, CR-02, WR-05, WR-08); shared LF digest/dump; decisions-file header rewrite
+- [ ] 04-02-PLAN.md — Phase 3 review fixes, part 2 (CR-03, WR-01..04, WR-06, WR-07, WR-09) with tests
+- [ ] 04-03-PLAN.md — Narrow `.gitattributes` in its own commit
+- [ ] 04-04-PLAN.md — v2 publisher build/validate half: 21-decision overlay, decision ids, lineage, `validate_publication`, schema
+- [ ] 04-05-PLAN.md — v2 publisher publication half: outputs, AA4 traceability, dry-run, sign-off-gated publish, `--validate`, `validate_signoff`
+- [ ] 04-06-PLAN.md — Dry run, Oscar Mack sign-off (blocking human gate), publish, clean 9-file publication commit
+- [ ] 04-07-PLAN.md — Publication record follow-up commit and git-gated tests
 
 ### Phase 5: Reply to Hayes
 **Goal**: A written reply to request `DEMO3-W1-REQ-001` sits in the repository, tells Hayes exactly what EMS decided for each of the 21 controls and where to cite it, and is plain about what publication does not change.
