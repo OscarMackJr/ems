@@ -128,4 +128,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-14 after Phase 3 (governance decisions) — 21 authority-typed dispositions and 21 decision records AA4-GOV-001..021 committed; nothing published yet. Code review debt (CR-01 line-ending hashing, CR-02 answers binding) is a Phase 4 prerequisite*
+*Last updated: 2026-10-14 after Phase 4 (certified publication) — v2.0.0 authority published at `54a7fd0` (21 decided: 3 rules, 18 no-rule; 59 not yet decided), `--validate` PASS, 372 tests pass. Open: 04-REVIEW.md gate-hardening findings (CR-01, CR-02, WR-01..10) would require a coordinated v2.0.1 republish with fresh sign-off*
