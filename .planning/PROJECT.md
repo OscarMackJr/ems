@@ -35,12 +35,13 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - ✓ Each rule or no-rule decision names its authority (`AA4-GOV-001`..`021`) so Hayes can cite what makes it binding — Validated in Phase 4: Certified Publication
 - ✓ The 59 controls outside the request remain "not yet decided", identical to v1.0.0 apart from the explicit state — Validated in Phase 4: Certified Publication
 - ✓ `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0` published with certification, traceability and passing tests at commit `54a7fd0` (signed off by Oscar Mack as EMS governance authority; SHA recorded in `0ce89f2`) — Validated in Phase 4: Certified Publication
+- ✓ A written reply to request `DEMO3-W1-REQ-001` (`docs/DEMO3_W1_REQ_001_REPLY.md`, `registry/archive_assessment_demo3_w1_req_001_reply.json`, generated and `--validate`-checked by `scripts/build_archive_assessment_demo3_w1_req_001_reply.py`) cites authority `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0`, version 2.0.0 and commit `54a7fd0`, and states what EMS did and did not publish; unsigned and not sent until the pin is on the remote — Validated in Phase 5: Reply to Hayes
 
 ### Active
 
 <!-- Hypotheses until shipped and validated. -->
 
-- [ ] A written reply to request `DEMO3-W1-REQ-001` cites the published authority, version and commit, and states what EMS did and did not publish
+(none — all v1 requirements validated)
 
 ### Out of Scope
 
@@ -129,4 +130,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-14 after Phase 4 (certified publication) — v2.0.0 authority published at `54a7fd0` (21 decided: 3 rules, 18 no-rule; 59 not yet decided), `--validate` PASS, 372 tests pass. Open: 04-REVIEW.md gate-hardening findings (CR-01, CR-02, WR-01..10) would require a coordinated v2.0.1 republish with fresh sign-off*
+*Last updated: 2026-10-14 after Phase 5 (reply to Hayes) — reply committed (`7623f73`, `5f2e36c`; review fixes `ad46d43`..`c3dad63`, line-68 reword approved), `--validate` PASS. Open: push `feature/ems-aa3-archive-applicability-authority` so `54a7fd0` is on the remote before sending; 04-REVIEW.md hardening may lead to a v2.0.1 republish with fresh sign-off*
