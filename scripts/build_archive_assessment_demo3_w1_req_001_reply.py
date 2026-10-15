@@ -27,7 +27,7 @@ DECIDED_STATES = ['RULE_PUBLISHED', 'NO_RULE_WILL_BE_PUBLISHED']
 REPLY_KEYS = ['document_id', 'request_id', 'request_label', 'reply_date', 'from_authority', 'dual_role_statement', 'pin', 'published_shape', 'controls', 'not_yet_decided', 'hayes_side_changes_needed', 'classification_prerequisites_gap_untouched', 'live_resolved_count_stays_zero', 'history_note', 'send_condition']
 PIN_KEYS = ['publication_commit', 'authority_id', 'version', 'authority_sha256', 'manifest_sha256', 'digest_normalisation', 'publication_record_commit']
 DIGEST_RE = r'^[0-9a-f]{64}$'
-ENFORCED_GATES = ['The sign-off approver role is checked against the permitted roles.', 'The governance decisions are validated against their schema and invariants.', 'The certification results are computed from the checks that run, not recorded as constants.', 'The authority schema is stricter and rejects unknown fields.']
+ENFORCED_GATES = ['The sign-off approver role must be EMS_GOVERNANCE_AUTHORITY; the Hayes Verify developer role is rejected.', 'The governance decisions are validated against their schema and invariants.', 'The certification results are computed from the checks that run, not recorded as constants.', 'The authority schema is stricter: it rejects unknown fields in a rule, a condition and the source lineage, and a field repeated within one rule; an extra field on a decided control row is rejected by the Python validator.']
 FORBIDDEN_WORDS = ('best', 'critical', 'important', 'recommended', 'highest')
 
 

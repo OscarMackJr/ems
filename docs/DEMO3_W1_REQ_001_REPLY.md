@@ -161,10 +161,10 @@ A Hayes test that expects all 21 controls to refuse is expected to fail after th
 
 EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1 supersedes EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0 (commit 54a7fd0). Hardens the publication checks. The publisher now enforces these gates:
 
-- The sign-off approver role is checked against the permitted roles.
+- The sign-off approver role must be EMS_GOVERNANCE_AUTHORITY; the Hayes Verify developer role is rejected.
 - The governance decisions are validated against their schema and invariants.
 - The certification results are computed from the checks that run, not recorded as constants.
-- The authority schema is stricter and rejects unknown fields.
+- The authority schema is stricter: it rejects unknown fields in a rule, a condition and the source lineage, and a field repeated within one rule; an extra field on a decided control row is rejected by the Python validator.
 
 None of the 21 decisions changed. The governance decisions file has the same LF sha256 as at 2.0.0: 4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f.
 
