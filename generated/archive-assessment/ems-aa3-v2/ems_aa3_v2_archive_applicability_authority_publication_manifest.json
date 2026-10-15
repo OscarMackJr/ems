@@ -1,32 +1,28 @@
 {
   "artifacts": [
     {
-      "relative_path": "scripts/publish_archive_assessment_applicability_authority_v2.py",
-      "sha256": "51bd4bd423c9c1749812f129535c1a39ade6f7660bf1895977a4d2353f55f8cd"
-    },
-    {
       "relative_path": "schemas/archive_assessment_applicability_authority_v2.schema.json",
-      "sha256": "13c2b8fd4664f036212cfaf712bcc5a5319a6e1c2d383dac7a51f64a0dc889bb"
+      "sha256": "05a5f8668daac06ba3c340f9fca14f7fc6c206e337ac445b8f59529c51ad9e89"
     },
     {
       "relative_path": "registry/archive_assessment_applicability_authority_v2.json",
-      "sha256": "de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353"
+      "sha256": "7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f"
     },
     {
       "relative_path": "registry/archive_assessment_applicability_authority_v2_signoff.json",
-      "sha256": "a3fcfb89ba6d5bf9ed51ee142876572c5fdece69241abaa23d5398b6a8f16950"
+      "sha256": "539c59f1141f85fecee670a95b264c4f7affd000d6cf966ed53042bf743f33a1"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/archive_assessment_applicability_authority_v2_matrix.json",
-      "sha256": "8531e1c5089ac0b17cd83272e4557dd4435332eb82fc5d520f3bb7255ac41af0"
+      "sha256": "1218febdf09a8fcdbebe3978dbcc707da42e1f17865262690bfcde05184631ac"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/archive_assessment_applicability_authority_v2_semantic_validation.json",
-      "sha256": "4ff0d1a596e83c78f22cadd7f46606b16feb0757bac8b1e26dd4b9a87d05f7ba"
+      "sha256": "56b7291ac1c43c1b155da38bea7fd0a51c86a48a1191f3c12cfdc39a5873c614"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/archive_assessment_applicability_authority_v2_negative_invariant_validation.json",
-      "sha256": "692c68a23af51e737d43e84156072f1f240124ba92ff5739305b41d4addff2f0"
+      "sha256": "e18ad1a612f2d44c67d983ff39e7e26abe17749d420a5ab8e9c108ccffdf7f0b"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/archive_assessment_applicability_authority_v2_decision_traceability.json",
@@ -34,16 +30,22 @@
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION.json",
-      "sha256": "118495f61a9995f2e441a9e448799442c8ccf38686b73f8470fbb68bc15b8b63"
+      "sha256": "89022fc871026d318ed191630215ce205ceaeafe9e1e4aa63e97fd7415fad7aa"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION.md",
-      "sha256": "0b3d77f895680d5545980a2053b87c27e49e63f43283bbbb0d61857ff74bab54"
+      "sha256": "834c2ba5b325d744f1b9216b616fae0ee8c273f51b4d4a31e7d1435b62bb86ed"
     }
   ],
-  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0",
+  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1",
   "digest_normalisation": "CRLF_TO_LF",
   "manifest_type": "EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_MANIFEST",
   "published_on": "2026-10-14",
+  "publisher_script": {
+    "relative_path": "scripts/publish_archive_assessment_applicability_authority_v2.py",
+    "sha256": "8195cbc2be8a2735abfac7402a885f84c2ed7c9061e368c3948cd9a5e410e6fc",
+    "sha256_normalisation": "CRLF_TO_LF"
+  },
+  "publisher_script_note": "The publisher script digest is recorded at publication and is not recomputed on validation; validation rebuilds every output with the recorded value.",
   "self_entry_exclusion_reason": "A SHA-256 manifest cannot include a hash of itself without recursion."
 }

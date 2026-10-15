@@ -1,71 +1,248 @@
 {
   "negative_invariant_tests": [
     {
+      "description": "Authority ids of two decided controls are swapped.",
+      "id": "swapped_authority",
       "mutation": "swapped_authority",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "A published rule is changed to name a different field.",
+      "id": "rule_field_change",
       "mutation": "rule_field_change",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "A rule condition state is set to UNKNOWN.",
+      "id": "rule_state_unknown",
       "mutation": "rule_state_unknown",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "A rule names a classification field that is not usable in rules.",
+      "id": "rule_unused_field",
       "mutation": "rule_unused_field",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "A rule condition state is flipped from its decision record.",
+      "id": "rule_state_flip",
       "mutation": "rule_state_flip",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "A decided control is reverted to NOT_YET_DECIDED.",
+      "id": "decided_flipped_to_not_yet_decided",
       "mutation": "decided_flipped_to_not_yet_decided",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "A control outside the 21 requested controls is decided.",
+      "id": "twenty_second_control_decided",
       "mutation": "twenty_second_control_decided",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "A non-decision field changes on an undecided row.",
+      "id": "v1_field_change_on_undecided_row",
       "mutation": "v1_field_change_on_undecided_row",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "An extra field is added to a decided row.",
+      "id": "extra_field_on_decided_row",
       "mutation": "extra_field_on_decided_row",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "A cited authority id is removed from applicability_decision_ids.",
+      "id": "authority_removed_from_id_list",
       "mutation": "authority_removed_from_id_list",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "Two controls cite the same authority id.",
+      "id": "authority_cited_twice",
       "mutation": "authority_cited_twice",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "applicability_decision_ids carries a duplicate id.",
+      "id": "duplicate_id_in_list",
       "mutation": "duplicate_id_in_list",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "The governance decisions digest in the lineage is altered.",
+      "id": "altered_governance_digest",
       "mutation": "altered_governance_digest",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "The governance decisions record count and drafting commit are altered.",
+      "id": "altered_record_count_or_drafting_commit",
       "mutation": "altered_record_count_or_drafting_commit",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "The governance decisions lineage entry is removed.",
+      "id": "missing_governance_lineage",
       "mutation": "missing_governance_lineage",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "The v1 baseline lineage digest and commit are altered.",
+      "id": "wrong_v1_lineage",
       "mutation": "wrong_v1_lineage",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
+      "description": "A control cites a decision record that is not its latest unsuperseded record.",
+      "id": "superseded_record_cited",
       "mutation": "superseded_record_cited",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "The sign-off role is the Hayes developer role.",
+      "id": "signoff_role_hayes_developer",
+      "mutation": "signoff_role_hayes_developer",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "The sign-off date is not a date.",
+      "id": "signoff_invalid_date",
+      "mutation": "signoff_invalid_date",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "Text is appended to the sign-off dual-role statement.",
+      "id": "signoff_dual_role_text_appended",
+      "mutation": "signoff_dual_role_text_appended",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "An extra key is added to the sign-off record.",
+      "id": "signoff_extra_keys",
+      "mutation": "signoff_extra_keys",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "A decision record names a different approver.",
+      "id": "decision_record_tampered_approver",
+      "mutation": "decision_record_tampered_approver",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "A decision record carries an empty dual-role statement.",
+      "id": "decision_record_empty_dual_role_statement",
+      "mutation": "decision_record_empty_dual_role_statement",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "A decision record carries an unknown disposition.",
+      "id": "decision_record_bogus_disposition",
+      "mutation": "decision_record_bogus_disposition",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "A rule names the same field twice with opposite states.",
+      "id": "rule_same_field_twice_opposite_states",
+      "mutation": "rule_same_field_twice_opposite_states",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "The supersedes governance decisions digest differs from the 2.0.0 value.",
+      "id": "supersedes_governance_digest_differs",
+      "mutation": "supersedes_governance_digest_differs",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ],
       "result": "REJECTED_FAIL_CLOSED"
     }
   ],

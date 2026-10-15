@@ -5,6 +5,7 @@
     "repository evidence boundary preserved",
     "historical attestation prohibited"
   ],
+  "controls_checked": 80,
   "published_on": "2026-10-14",
   "result": "PASS",
   "rule_controls": [

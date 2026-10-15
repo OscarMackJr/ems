@@ -3,12 +3,12 @@
     "approver": "Oscar Mack",
     "date": "2026-10-14",
     "role": "EMS_GOVERNANCE_AUTHORITY",
-    "scope": "publish EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0 with the 21 decisions AA4-GOV-001..021"
+    "scope": "Publication of EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1 (authority LF sha256 7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f), superseding 2.0.0 with no decision changed."
   },
-  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0",
-  "authority_sha256": "de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353",
+  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1",
+  "authority_sha256": "7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f",
   "authority_sha256_normalisation": "CRLF_TO_LF",
   "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
   "status": "PUBLICATION_SIGNOFF",
-  "version": "2.0.0"
+  "version": "2.0.1"
 }

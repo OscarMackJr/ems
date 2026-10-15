@@ -1,6 +1,6 @@
 {
-  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0",
-  "authority_sha256": "de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353",
+  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1",
+  "authority_sha256": "7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f",
   "certification_type": "EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION",
   "certification_version": "1.0",
   "control_population": 80,
@@ -13,10 +13,10 @@
     "target_comparisons": 0
   },
   "published_on": "2026-10-14",
-  "schema_sha256": "13c2b8fd4664f036212cfaf712bcc5a5319a6e1c2d383dac7a51f64a0dc889bb",
+  "schema_sha256": "05a5f8668daac06ba3c340f9fca14f7fc6c206e337ac445b8f59529c51ad9e89",
   "semantic_conflicts": 0,
   "signoff_path": "registry/archive_assessment_applicability_authority_v2_signoff.json",
-  "signoff_sha256": "a3fcfb89ba6d5bf9ed51ee142876572c5fdece69241abaa23d5398b6a8f16950",
+  "signoff_sha256": "539c59f1141f85fecee670a95b264c4f7affd000d6cf966ed53042bf743f33a1",
   "undecided_control_count": 59,
-  "version": "2.0.0"
+  "version": "2.0.1"
 }
