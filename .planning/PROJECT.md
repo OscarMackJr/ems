@@ -6,6 +6,16 @@ EMS is a spec-driven governance repository: 80 controls (EMS-CTRL-001..080), dec
 
 The consumer is Hayes Verify, an external assessor that reads EMS at a pinned commit, treats it as read-only, and will not make applicability decisions itself.
 
+## Current State
+
+**Shipped:** v1.0.0 Not-Applicable Rule Publication (2026-10-15). `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1` is published at `31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb` (pushed to `origin/feature/ems-aa3-archive-applicability-authority`): 21 controls decided (3 rules, 18 no-rule, `AA4-GOV-001`..`021`), 59 `NOT_YET_DECIDED`. The DEMO3-W1-REQ-001 reply cites 2.0.1; its gate wording was corrected and approved (`258875d`). The send condition is met; sending the reply is the authority's action. Archive: `.planning/milestones/v1.0.0-*`.
+
+## Next Milestone Goals
+
+- Candidate: rule-or-no-rule decisions for some or all of the other 59 controls (V2-01)
+- Candidate: confirm from a Hayes re-run that the 21 resolve at `31addfa` (V2-02, Hayes-side)
+- Candidate: close the audit tech debt — 06-REVIEW WR-02 (record check skipped when absent), WR-04 (mutation gate counts crashes), catalog live coupling, CI execution of the archive-assessment tests and validators
+
 ## Core Value
 
 For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
@@ -36,12 +46,13 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - ✓ The 59 controls outside the request remain "not yet decided", identical to v1.0.0 apart from the explicit state — Validated in Phase 4: Certified Publication
 - ✓ `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0` published with certification, traceability and passing tests at commit `54a7fd0` (signed off by Oscar Mack as EMS governance authority; SHA recorded in `0ce89f2`) — Validated in Phase 4: Certified Publication
 - ✓ A written reply to request `DEMO3-W1-REQ-001` (`docs/DEMO3_W1_REQ_001_REPLY.md`, `registry/archive_assessment_demo3_w1_req_001_reply.json`, generated and `--validate`-checked by `scripts/build_archive_assessment_demo3_w1_req_001_reply.py`) cites authority `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0`, version 2.0.0 and commit `54a7fd0`, and states what EMS did and did not publish; unsigned and not sent until the pin is on the remote — Validated in Phase 5: Reply to Hayes
+- ✓ Publication gates hardened and the authority republished as `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1` at `31addfa` with no decision changed; reply regenerated to cite 2.0.1 — Validated in Phase 6; shipped v1.0.0
 
 ### Active
 
 <!-- Hypotheses until shipped and validated. -->
 
-(none — all v1 requirements validated)
+(none — v1.0.0 shipped; next milestone requirements are defined by `/gsd-new-milestone`, see Next Milestone Goals)
 
 ### Out of Scope
 
@@ -102,15 +113,17 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Scope limited to the 21 controls in the request | Request names 21; deadline is days | — Pending |
-| "No rule will be published" is an explicit published outcome with its own decision id | Lets Hayes tell "decided" from "not yet decided"; today both are `null` | — Pending |
+| Scope limited to the 21 controls in the request | Request names 21; deadline is days | ✓ Good: 21 decided, 59 left `NOT_YET_DECIDED` in 2.0.1 |
+| "No rule will be published" is an explicit published outcome with its own decision id | Lets Hayes tell "decided" from "not yet decided"; today both are `null` | ✓ Good: 18 controls `NO_RULE_WILL_BE_PUBLISHED`, each with an AA4 id |
 | Drafts written from the catalog alone and committed before comparison with any target | The RiskMVP result for all 21 is already known; a rule written with it in view could be shaped to an outcome | ✓ Done in Phase 2: approved brief `6969f52`, drafting commit `dc3b41c`, record `be915e3` |
 | Each rule or no-rule decision is backed by a new governance decision id | That id is the named authority Hayes cites; mirrors `AA1-GOV-001`..`008` | ✓ Done in Phase 3: `AA4-GOV-001`..`021`, one per control (`eed4a5f`); cited from the authority in Phase 4 |
 | Dual role (EMS approver and Hayes developer) recorded in every decision record | Same person rules on both sides; workable only if explicit | ✓ Done in Phase 3: authority-approved sentence (`bcba0f1`) in all 21 records |
-| Success is defined on the EMS side only | Three Hayes-side changes are needed before the live count moves; they belong to the next milestone in the Hayes repository | — Pending |
-| Complete answer means a published, certified authority plus a written reply | Chosen over replying with a decision date alone | — Pending |
-| EMS chooses the rule shape; Hayes's placeholder shape is not adopted | Hayes stated the shape is EMS's to choose and its placeholder is a stand-in | — Pending |
-| Unrelated in-flight work left out of this project's commits | Assumed default, stated to the user before the PROJECT.md gate and not objected to | — Pending |
+| Success is defined on the EMS side only | Three Hayes-side changes are needed before the live count moves; they belong to the next milestone in the Hayes repository | ✓ Good: EMS side shipped; Hayes-side changes remain out of scope |
+| Complete answer means a published, certified authority plus a written reply | Chosen over replying with a decision date alone | ✓ Good: 2.0.1 at `31addfa` plus approved reply |
+| EMS chooses the rule shape; Hayes's placeholder shape is not adopted | Hayes stated the shape is EMS's to choose and its placeholder is a stand-in | ✓ Good |
+| Unrelated in-flight work left out of this project's commits | Assumed default, stated to the user before the PROJECT.md gate and not objected to | ✓ Good: staged by explicit path throughout |
+| Republish as 2.0.1 to harden gates instead of patching 2.0.0 (Phase 6) | Phase 4 review found fail-open gates; hash certification forbids hand edits | ✓ Good: no decision changed, decisions digest pinned to 2.0.0 |
+| No git tag for the milestone | Hayes pins by commit; a release-style tag could be cited by mistake | ✓ Good |
 
 ## Evolution
 
@@ -130,4 +143,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-15 after Phase 6 (publication gate hardening, 2.0.1) — authority 2.0.1 published at `31addfa` with sign-off by Oscar Mack (2026-10-14), no decision changed; record `4d9b7c1`; reply regenerated to cite 2.0.1 (`fe9d50d`) and approved. Open: push `feature/ems-aa3-archive-applicability-authority` so `31addfa` is on the remote before sending; Hayes re-pins to `31addfa`. Follow-up advisories: 06-REVIEW.md WR-02, WR-04*
+*Last updated: 2026-10-15 after v1.0.0 milestone — authority 2.0.1 at `31addfa` pushed; reply gate wording corrected (`258875d`); milestone archived to `.planning/milestones/`*
