@@ -500,13 +500,30 @@ def test_publication_commit_ancestor_and_file_set():
     files = git('diff-tree', '--no-commit-id', '--name-only', '-r', sha).stdout.decode().split()
     out_rel = REAL_OUT.relative_to(ROOT).as_posix()
     expected = {REAL_AUTHORITY.relative_to(ROOT).as_posix(), REAL_SIGNOFF.relative_to(ROOT).as_posix(), *(f'{out_rel}/{p.name}' for p in REAL_OUT.iterdir())}
-    assert set(files) == expected
-    assert 'registry/adjudication_rules.json' not in files and 'registry/policy_decisions.json' not in files
+    # Outputs byte-identical to the previous version are not re-committed, so the commit may hold a subset of the expected set.
     auth_rel = REAL_AUTHORITY.relative_to(ROOT).as_posix()
+    signoff_rel = REAL_SIGNOFF.relative_to(ROOT).as_posix()
+    assert set(files) <= expected
+    assert {auth_rel, signoff_rel, f'{out_rel}/{MODULE.N_MANIFEST}'} <= set(files)
+    present = set(git('ls-tree', '-r', '--name-only', sha, '--', *sorted(expected)).stdout.decode().split())
+    assert present == expected
+    assert 'registry/adjudication_rules.json' not in files and 'registry/policy_decisions.json' not in files
     assert lf_sha(git('show', f'{sha}:{auth_rel}').stdout) == rec['authority_sha256']
     manifest = json.loads(git('show', f'{sha}:{out_rel}/{MODULE.N_MANIFEST}').stdout.decode('utf-8'))
     for art in manifest['artifacts']:
         assert lf_sha(git('show', f"{sha}:{art['relative_path']}").stdout) == art['sha256']
+
+
+@pytest.mark.skipif(not REAL_RECORD.exists(), reason='publication record not written yet')
+def test_manifest_publisher_script_digest_matches_publication_commit():
+    reason = git_ready()
+    if reason: pytest.skip(reason)
+    sha = MODULE.load(REAL_RECORD)['publication_commit']
+    manifest = MODULE.load(REAL_OUT / MODULE.N_MANIFEST)
+    script_rel = MODULE.SCRIPT.relative_to(ROOT).as_posix()
+    shown = git('show', f'{sha}:{script_rel}')
+    assert shown.returncode == 0
+    assert manifest['publisher_script']['sha256'] == lf_sha(shown.stdout)
 
 
 # ---- 06-05: lineage constants, D-13, dry-run, script digest, executed mutations ----

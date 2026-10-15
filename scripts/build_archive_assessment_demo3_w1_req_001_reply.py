@@ -17,19 +17,17 @@ _spec.loader.exec_module(V2)
 REPLY_JSON = ROOT / 'registry' / 'archive_assessment_demo3_w1_req_001_reply.json'
 REPLY_MD = ROOT / 'docs' / 'DEMO3_W1_REQ_001_REPLY.md'
 REPLY_SCHEMA = ROOT / 'schemas' / 'archive_assessment_demo3_w1_req_001_reply.schema.json'
-REPLY_DATE = '2026-10-14'
 REQUEST_ID = 'DEMO3-W1-REQ-001'
 REQUEST_LABEL = 'EMSREQ-APPLIC-RULES'
 DOCUMENT_ID = 'EMS-DEMO3-W1-REQ-001-REPLY'
-RECORD_COMMIT_ABBREV = '0ce89f2'
-REVIEW_REL = '.planning/phases/04-certified-publication/04-REVIEW.md'
-VERIFICATION_REL = '.planning/phases/04-certified-publication/04-VERIFICATION.md'
 SCRIPT_REL = 'scripts/build_archive_assessment_demo3_w1_req_001_reply.py'
 REMOTE_BRANCH = 'feature/ems-aa3-archive-applicability-authority'
+PER_CONTROL_FIELDS = ['not_applicable_decision_state', 'not_applicable_rule', 'not_applicable_authority']
 DECIDED_STATES = ['RULE_PUBLISHED', 'NO_RULE_WILL_BE_PUBLISHED']
-REPLY_KEYS = ['document_id', 'request_id', 'request_label', 'reply_date', 'from_authority', 'dual_role_statement', 'pin', 'published_shape', 'controls', 'not_yet_decided', 'hayes_side_changes_needed', 'classification_prerequisites_gap_untouched', 'live_resolved_count_stays_zero', 'disclosure', 'send_condition']
+REPLY_KEYS = ['document_id', 'request_id', 'request_label', 'reply_date', 'from_authority', 'dual_role_statement', 'pin', 'published_shape', 'controls', 'not_yet_decided', 'hayes_side_changes_needed', 'classification_prerequisites_gap_untouched', 'live_resolved_count_stays_zero', 'history_note', 'send_condition']
 PIN_KEYS = ['publication_commit', 'authority_id', 'version', 'authority_sha256', 'manifest_sha256', 'digest_normalisation', 'publication_record_commit']
 DIGEST_RE = r'^[0-9a-f]{64}$'
+ENFORCED_GATES = ['The sign-off approver role is checked against the permitted roles.', 'The governance decisions are validated against their schema and invariants.', 'The certification results are computed from the checks that run, not recorded as constants.', 'The authority schema is stricter and rejects unknown fields.']
 FORBIDDEN_WORDS = ('best', 'critical', 'important', 'recommended', 'highest')
 
 
@@ -40,12 +38,20 @@ def first_sentence(text: str) -> str:
     return s
 
 
-def build_reply(authority: dict, record: dict, signoff: dict, decisions: dict, manifest: dict) -> dict:
+def build_reply(authority: dict, record: dict, signoff: dict, decisions: dict) -> dict:
     rows = {r['control_id']: r for r in authority['controls']}
     latest = {r['control_id']: r for r in V2.latest_records(decisions)}
     decided_rows = [r for r in authority['controls'] if r['not_applicable_decision_state'] != 'NOT_YET_DECIDED']
     if sorted(r['control_id'] for r in decided_rows) != sorted(V2.REQUEST_CONTROL_IDS):
         raise V2.AuthorityError('decided control set differs from the 21 requested controls')
+    for name, label in (('applicability_decision_ids', 'top_level_field'), ('not_applicable_semantics', 'semantics_block')):
+        if name not in authority:
+            raise V2.AuthorityError(f'authority lacks the {label} {name}')
+    for field in PER_CONTROL_FIELDS:
+        if any(field not in r for r in authority['controls']):
+            raise V2.AuthorityError(f'authority rows lack the field {field}')
+    if any(r.get('decision_ids') != list(V2.DECISIONS) for r in authority['controls']):
+        raise V2.AuthorityError('authority rows do not carry the eight AA1-GOV ids')
     controls = []
     for row in sorted(decided_rows, key=lambda r: r['control_id']):
         cid = row['control_id']
@@ -57,7 +63,9 @@ def build_reply(authority: dict, record: dict, signoff: dict, decisions: dict, m
         if rec['decided_outcome'] != row['not_applicable_decision_state'] or rec['decision_id'] != row['not_applicable_authority'] or rec['decided']['rule'] != row['not_applicable_rule']:
             raise V2.AuthorityError(f'{cid}: decision record disagrees with the authority row')
         controls.append({'control_id': cid, 'decision_state': row['not_applicable_decision_state'], 'authority': row['not_applicable_authority'], 'rule': row['not_applicable_rule'], 'reason': first_sentence(rec['decided']['rationale'])})
-    example = next(r for r in sorted(decided_rows, key=lambda r: r['control_id']) if r['not_applicable_decision_state'] == 'RULE_PUBLISHED')
+    example = next((r for r in sorted(decided_rows, key=lambda r: r['control_id']) if r['not_applicable_decision_state'] == 'RULE_PUBLISHED'), None)
+    if example is None:
+        raise V2.AuthorityError('no RULE_PUBLISHED row for the example')
     undecided = [r for r in authority['controls'] if r['not_applicable_decision_state'] == 'NOT_YET_DECIDED']
     if len(undecided) + len(controls) != len(rows):
         raise V2.AuthorityError('control counts do not add up')
@@ -65,16 +73,23 @@ def build_reply(authority: dict, record: dict, signoff: dict, decisions: dict, m
     appr = signoff['approval']
     if record['authority_id'] != authority['authority_id'] or record['version'] != authority['version']:
         raise V2.AuthorityError('publication record does not match the authority')
+    sup = authority['source_lineage']['supersedes']
+    if V2.lf_digest(V2.GOVERNANCE_DECISIONS) != sup['governance_decisions_sha256']:
+        raise V2.AuthorityError('governance decisions differ from the superseded version, so no-decision-changed cannot be stated')
+    record_commit = resolve_record_commit()
+    if record_commit == record['publication_commit']:
+        raise V2.AuthorityError('record commit equals the publication commit')
+    history_note = {'supersedes_authority_id': sup['authority_id'], 'supersedes_version': sup['version'], 'supersedes_commit': sup['commit'], 'purpose': 'Hardens the publication checks.', 'enforced_gates': list(ENFORCED_GATES), 'decisions_changed': False, 'governance_decisions_sha256': V2.lf_digest(V2.GOVERNANCE_DECISIONS)}
     return {
-        'document_id': DOCUMENT_ID, 'request_id': REQUEST_ID, 'request_label': REQUEST_LABEL, 'reply_date': REPLY_DATE,
+        'document_id': DOCUMENT_ID, 'request_id': REQUEST_ID, 'request_label': REQUEST_LABEL, 'reply_date': appr['date'],
         'from_authority': {'approver': appr['approver'], 'role': appr['role'], 'roles': list(V2.APPROVER_ROLES)},
         'dual_role_statement': signoff['dual_role_statement'],
-        'pin': {'publication_commit': record['publication_commit'], 'authority_id': record['authority_id'], 'version': record['version'], 'authority_sha256': record['authority_sha256'], 'manifest_sha256': record['manifest_sha256'], 'digest_normalisation': record['digest_normalisation'], 'publication_record_commit': RECORD_COMMIT_ABBREV},
+        'pin': {'publication_commit': record['publication_commit'], 'authority_id': record['authority_id'], 'version': record['version'], 'authority_sha256': record['authority_sha256'], 'manifest_sha256': record['manifest_sha256'], 'digest_normalisation': record['digest_normalisation'], 'publication_record_commit': record_commit},
         'published_shape': {
             'authority_path': V2.rel(V2.AUTHORITY), 'schema_path': V2.rel(V2.SCHEMA), 'generated_folder': V2.rel(V2.OUT),
             'manifest_path': f'{V2.rel(V2.OUT)}/{V2.N_MANIFEST}', 'decision_traceability_path': f'{V2.rel(V2.OUT)}/{V2.N_TRACE}',
             'decision_records_path': V2.GOVERNANCE_DECISIONS_REL,
-            'per_control_fields': ['not_applicable_decision_state', 'not_applicable_rule', 'not_applicable_authority'],
+            'per_control_fields': list(PER_CONTROL_FIELDS),
             'decision_state_values': list(V2.DECISION_STATES),
             'top_level_field': 'applicability_decision_ids', 'per_control_ids_field': 'decision_ids', 'per_control_ids_carry': list(V2.DECISIONS),
             'semantics_block': 'not_applicable_semantics',
@@ -89,13 +104,13 @@ def build_reply(authority: dict, record: dict, signoff: dict, decisions: dict, m
         ],
         'classification_prerequisites_gap_untouched': True,
         'live_resolved_count_stays_zero': True,
-        'disclosure': {'review_path': REVIEW_REL, 'verification_path': VERIFICATION_REL, 'wr_01': 'WR-01: the semantic, negative-invariant and certification outputs record PASS and REJECTED_FAIL_CLOSED for checks the publisher does not run.', 'v2_0_1_possible': True, 'v2_0_1_date': None},
+        'history_note': history_note,
         'send_condition': f"Do not send this reply until commit {record['publication_commit']} is on the remote branch {REMOTE_BRANCH}.",
     }
 
 
 def render_markdown(reply: dict) -> str:
-    pin, shape, disc = reply['pin'], reply['published_shape'], reply['disclosure']
+    pin, shape, hist = reply['pin'], reply['published_shape'], reply['history_note']
     by_id = {c['control_id']: c for c in reply['controls']}
     rules = {c['control_id']: c['rule'] for c in reply['controls'] if c['rule']}
     n_rule = sum(c['decision_state'] == 'RULE_PUBLISHED' for c in reply['controls'])
@@ -150,10 +165,12 @@ def render_markdown(reply: dict) -> str:
     L += ['',
           'The classification-prerequisites gap is untouched by this publication. The live count of resolved controls stays at zero until those changes land.', '',
           'A Hayes test that expects all 21 controls to refuse is expected to fail after the re-pin.', '']
-    L += ['## Disclosure', '',
-          f"The published data was checked independently and is correct; see {disc['verification_path']}. The checks that guard publication have known gaps, listed in {disc['review_path']}. None of them changes any of the 21 decisions. The list of findings is not repeated here.", '',
-          f"{disc['wr_01']} Do not cite those fields as independent evidence.", '',
-          'A hardening release, v2.0.1, may follow. EMS gives no date. It would need a new sign-off and a new pin, and it is not intended to change any of the 21 decisions.', '']
+    L += ['## History', '',
+          f"{pin['authority_id']} supersedes {hist['supersedes_authority_id']} (commit {hist['supersedes_commit'][:7]}). {hist['purpose']} The publisher now enforces these gates:", '']
+    for gate in hist['enforced_gates']:
+        L.append(f"- {gate}")
+    L += ['',
+          f"None of the 21 decisions changed. The governance decisions file has the same LF sha256 as at {hist['supersedes_version']}: {hist['governance_decisions_sha256']}.", '']
     L += ['## Sending', '', reply['send_condition'], '']
     text = '\n'.join(L)
     if '\r' in text:
@@ -175,15 +192,15 @@ def schema() -> dict:
     return {'$schema': 'https://json-schema.org/draft/2020-12/schema', 'title': 'EMS reply to Hayes Verify request DEMO3-W1-REQ-001', 'type': 'object', 'additionalProperties': False, 'required': list(REPLY_KEYS),
         'properties': {
             'document_id': {'const': DOCUMENT_ID}, 'request_id': {'const': REQUEST_ID}, 'request_label': {'const': REQUEST_LABEL}, 'reply_date': {'type': 'string', 'pattern': r'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'},
-            'from_authority': {'type': 'object', 'additionalProperties': False, 'required': ['approver', 'role', 'roles'], 'properties': {'approver': s, 'role': s, 'roles': {'type': 'array', 'items': s}}},
+            'from_authority': {'type': 'object', 'additionalProperties': False, 'required': ['approver', 'role', 'roles'], 'properties': {'approver': s, 'role': {'enum': list(V2.APPROVER_ROLES)}, 'roles': {'type': 'array', 'items': {'enum': list(V2.APPROVER_ROLES)}}}},
             'dual_role_statement': s,
-            'pin': {'type': 'object', 'additionalProperties': False, 'required': list(PIN_KEYS), 'properties': {'publication_commit': {'type': 'string', 'pattern': '^[0-9a-f]{40}$'}, 'authority_id': s, 'version': s, 'authority_sha256': sha, 'manifest_sha256': sha, 'digest_normalisation': {'const': 'CRLF_TO_LF'}, 'publication_record_commit': {'type': 'string', 'pattern': '^[0-9a-f]{7,40}$'}}},
+            'pin': {'type': 'object', 'additionalProperties': False, 'required': list(PIN_KEYS), 'properties': {'publication_commit': {'type': 'string', 'pattern': '^[0-9a-f]{40}$'}, 'authority_id': s, 'version': s, 'authority_sha256': sha, 'manifest_sha256': sha, 'digest_normalisation': {'const': 'CRLF_TO_LF'}, 'publication_record_commit': {'type': 'string', 'pattern': '^[0-9a-f]{40}$'}}},
             'published_shape': {'type': 'object', 'additionalProperties': False, 'required': shape_keys, 'properties': {**{k: s for k in shape_keys if k not in ('per_control_fields', 'decision_state_values', 'per_control_ids_carry', 'example_decided_row')}, 'per_control_fields': {'type': 'array', 'items': s}, 'decision_state_values': {'type': 'array', 'items': s}, 'per_control_ids_carry': {'type': 'array', 'items': s}, 'example_decided_row': {'type': 'object'}}},
             'controls': {'type': 'array', 'minItems': 21, 'maxItems': 21, 'items': control},
-            'not_yet_decided': {'type': 'object', 'additionalProperties': False, 'required': ['count', 'state', 'date'], 'properties': {'count': {'type': 'integer', 'minimum': 0}, 'state': {'const': 'NOT_YET_DECIDED'}, 'date': {'type': 'null'}}},
+            'not_yet_decided': {'type': 'object', 'additionalProperties': False, 'required': ['count', 'state', 'date'], 'properties': {'count': {'const': 59}, 'state': {'const': 'NOT_YET_DECIDED'}, 'date': {'type': 'null'}}},
             'hayes_side_changes_needed': {'type': 'array', 'minItems': 3, 'maxItems': 3, 'items': s},
             'classification_prerequisites_gap_untouched': {'const': True}, 'live_resolved_count_stays_zero': {'const': True},
-            'disclosure': {'type': 'object', 'additionalProperties': False, 'required': ['review_path', 'verification_path', 'wr_01', 'v2_0_1_possible', 'v2_0_1_date'], 'properties': {'review_path': s, 'verification_path': s, 'wr_01': s, 'v2_0_1_possible': {'const': True}, 'v2_0_1_date': {'type': 'null'}}},
+            'history_note': {'type': 'object', 'additionalProperties': False, 'required': ['supersedes_authority_id', 'supersedes_version', 'supersedes_commit', 'purpose', 'enforced_gates', 'decisions_changed', 'governance_decisions_sha256'], 'properties': {'supersedes_authority_id': s, 'supersedes_version': s, 'supersedes_commit': {'type': 'string', 'pattern': '^[0-9a-f]{40}$'}, 'purpose': s, 'enforced_gates': {'type': 'array', 'minItems': 4, 'maxItems': 4, 'items': s}, 'decisions_changed': {'const': False}, 'governance_decisions_sha256': sha}},
             'send_condition': s}}
 
 
@@ -216,15 +233,15 @@ def load_inputs() -> tuple:
     if record['manifest_sha256'] != V2.lf_digest(V2.OUT / V2.N_MANIFEST):
         raise V2.AuthorityError('publication record manifest digest differs from the published manifest')
     check_inputs_bound(manifest)
-    return authority, record, signoff, decisions, manifest
+    return authority, record, signoff, decisions
 
 
 def validate_reply() -> None:
     for p in (REPLY_JSON, REPLY_MD, REPLY_SCHEMA):
         if not p.exists():
             raise V2.AuthorityError(f'{V2.rel(p)}: not generated')
-    authority, record, signoff, decisions, manifest = load_inputs()
-    reply = build_reply(authority, record, signoff, decisions, manifest)
+    authority, record, signoff, decisions = load_inputs()
+    reply = build_reply(authority, record, signoff, decisions)
     if V2.lf_bytes(REPLY_JSON.read_bytes()) != V2.jtext(reply).encode('utf-8'):
         raise V2.AuthorityError('reply JSON differs from a fresh build')
     if V2.lf_bytes(REPLY_MD.read_bytes()) != render_markdown(reply).encode('utf-8'):
@@ -240,6 +257,14 @@ def validate_reply() -> None:
 
 def git(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(['git', *args], cwd=ROOT, capture_output=True, text=True)
+
+
+def resolve_record_commit() -> str:
+    r = git('log', '-n1', '--format=%H', '--', V2.rel(V2.PUBLICATION_RECORD))
+    sha = r.stdout.strip()
+    if r.returncode != 0 or not re.fullmatch(r'[0-9a-f]{40}', sha):
+        raise V2.AuthorityError('cannot resolve the publication record commit from git')
+    return sha
 
 
 PUSH_ON, PUSH_NOT_ON, PUSH_UNKNOWN = 0, 1, 2
@@ -273,7 +298,8 @@ def push_check() -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument('--build', action='store_true'); parser.add_argument('--validate', action='store_true'); parser.add_argument('--emit-schema', action='store_true'); parser.add_argument('--push-check', action='store_true')
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--build', action='store_true'); group.add_argument('--validate', action='store_true'); group.add_argument('--emit-schema', action='store_true'); group.add_argument('--push-check', action='store_true')
     args = parser.parse_args()
     if args.emit_schema: V2.dump(REPLY_SCHEMA, schema())
     elif args.build:
@@ -282,7 +308,6 @@ def main() -> None:
         V2.dump(REPLY_JSON, reply); V2.write_text(REPLY_MD, render_markdown(reply))
     elif args.validate: validate_reply()
     elif args.push_check: sys.exit(push_check())
-    else: parser.error('one of --build, --validate, --emit-schema or --push-check is required')
 
 
 if __name__ == '__main__': main()

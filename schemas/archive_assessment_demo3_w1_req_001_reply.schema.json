@@ -169,37 +169,6 @@
       "minItems": 21,
       "type": "array"
     },
-    "disclosure": {
-      "additionalProperties": false,
-      "properties": {
-        "review_path": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "v2_0_1_date": {
-          "type": "null"
-        },
-        "v2_0_1_possible": {
-          "const": true
-        },
-        "verification_path": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "wr_01": {
-          "minLength": 1,
-          "type": "string"
-        }
-      },
-      "required": [
-        "review_path",
-        "verification_path",
-        "wr_01",
-        "v2_0_1_possible",
-        "v2_0_1_date"
-      ],
-      "type": "object"
-    },
     "document_id": {
       "const": "EMS-DEMO3-W1-REQ-001-REPLY"
     },
@@ -215,13 +184,17 @@
           "type": "string"
         },
         "role": {
-          "minLength": 1,
-          "type": "string"
+          "enum": [
+            "EMS_GOVERNANCE_AUTHORITY",
+            "HAYES_VERIFY_DEVELOPER"
+          ]
         },
         "roles": {
           "items": {
-            "minLength": 1,
-            "type": "string"
+            "enum": [
+              "EMS_GOVERNANCE_AUTHORITY",
+              "HAYES_VERIFY_DEVELOPER"
+            ]
           },
           "type": "array"
         }
@@ -242,6 +215,53 @@
       "minItems": 3,
       "type": "array"
     },
+    "history_note": {
+      "additionalProperties": false,
+      "properties": {
+        "decisions_changed": {
+          "const": false
+        },
+        "enforced_gates": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "type": "array"
+        },
+        "governance_decisions_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "purpose": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "supersedes_authority_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "supersedes_commit": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "supersedes_version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "supersedes_authority_id",
+        "supersedes_version",
+        "supersedes_commit",
+        "purpose",
+        "enforced_gates",
+        "decisions_changed",
+        "governance_decisions_sha256"
+      ],
+      "type": "object"
+    },
     "live_resolved_count_stays_zero": {
       "const": true
     },
@@ -249,8 +269,7 @@
       "additionalProperties": false,
       "properties": {
         "count": {
-          "minimum": 0,
-          "type": "integer"
+          "const": 59
         },
         "date": {
           "type": "null"
@@ -289,7 +308,7 @@
           "type": "string"
         },
         "publication_record_commit": {
-          "pattern": "^[0-9a-f]{7,40}$",
+          "pattern": "^[0-9a-f]{40}$",
           "type": "string"
         },
         "version": {
@@ -418,7 +437,7 @@
     "hayes_side_changes_needed",
     "classification_prerequisites_gap_untouched",
     "live_resolved_count_stays_zero",
-    "disclosure",
+    "history_note",
     "send_condition"
   ],
   "title": "EMS reply to Hayes Verify request DEMO3-W1-REQ-001",

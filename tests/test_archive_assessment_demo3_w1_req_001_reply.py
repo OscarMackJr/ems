@@ -1,7 +1,6 @@
 import copy
 import hashlib
 import importlib.util
-import json
 import re
 import subprocess
 import tempfile
@@ -30,7 +29,7 @@ TMP = Path(_TMP.name)
 
 
 def inputs():
-    return V2.load(V2.AUTHORITY), V2.load(V2.PUBLICATION_RECORD), V2.load(V2.SIGNOFF), V2.load(V2.GOVERNANCE_DECISIONS), V2.load(V2.OUT / V2.N_MANIFEST)
+    return V2.load(V2.AUTHORITY), V2.load(V2.PUBLICATION_RECORD), V2.load(V2.SIGNOFF), V2.load(V2.GOVERNANCE_DECISIONS)
 
 
 def build():
@@ -44,7 +43,10 @@ def entry(reply, cid):
 def run_validate_reply(reply, monkeypatch):
     p = TMP / 'reply.json'
     V2.dump(p, reply)
+    md = TMP / 'reply.md'
+    V2.write_text(md, MODULE.render_markdown(build()))
     monkeypatch.setattr(MODULE, 'REPLY_JSON', p)
+    monkeypatch.setattr(MODULE, 'REPLY_MD', md)
     MODULE.validate_reply()
 
 
@@ -65,6 +67,11 @@ def test_validate_reply_rejects_loosened_schema_file(monkeypatch):
     p = TMP / 'reply.schema.json'
     V2.dump(p, s)
     monkeypatch.setattr(MODULE, 'REPLY_SCHEMA', p)
+    pj, md = TMP / 'reply_s.json', TMP / 'reply_s.md'
+    V2.dump(pj, build())
+    V2.write_text(md, MODULE.render_markdown(build()))
+    monkeypatch.setattr(MODULE, 'REPLY_JSON', pj)
+    monkeypatch.setattr(MODULE, 'REPLY_MD', md)
     with pytest.raises(AuthorityError, match='reply schema differs'):
         MODULE.validate_reply()
 
@@ -104,7 +111,7 @@ def test_built_reply_counts():
 
 
 def test_each_entry_matches_authority_and_decision_record():
-    authority, _, _, decisions, _ = inputs()
+    authority, _, _, decisions = inputs()
     rows = {c['control_id']: c for c in authority['controls']}
     latest = {x['control_id']: x for x in V2.latest_records(decisions)}
     for c in build()['controls']:
@@ -122,7 +129,7 @@ def test_the_three_rules():
 
 
 def test_first_sentence_for_all_records():
-    _, _, _, decisions, _ = inputs()
+    _, _, _, decisions = inputs()
     latest = {x['control_id']: x for x in V2.latest_records(decisions)}
     r = build()
     for cid in V2.REQUEST_CONTROL_IDS:
@@ -227,9 +234,12 @@ def test_markdown_content():
     text = MODULE.render_markdown(r)
     assert '\r' not in text
     pin = r['pin']
-    for needle in (pin['publication_commit'], pin['authority_id'], pin['version'], pin['authority_sha256'], pin['manifest_sha256'], r['dual_role_statement'], 'WR-01', '04-VERIFICATION', 'NOT_YET_DECIDED', 'v2.0.1'):
+    for needle in (pin['publication_commit'], pin['authority_id'], pin['version'], pin['authority_sha256'], pin['manifest_sha256'], r['dual_role_statement'], 'NOT_YET_DECIDED', '54a7fd0'):
         assert needle in text
     assert 'No control resolves until' not in text
+    for gone in ('WR-01', '04-VERIFICATION', 'independent evidence'):
+        assert gone not in text
+    assert not re.search(r'rules? (use|uses|carry|carries) (the )?eight', text)
     assert "Hayes's resolver resolves no control until the target description carries the eight classification facts" in text
     reasons = {c['reason'] for c in r['controls']}
     prose = '\n'.join(line for line in text.split('\n') if not (line.startswith('  Reason: ') and line[len('  Reason: '):] in reasons))
@@ -249,8 +259,8 @@ def test_publisher_still_valid_and_digest_matches_manifest():
     V2.validate_published()
     manifest = V2.load(V2.OUT / V2.N_MANIFEST)
     rel = V2.rel(V2.SCRIPT)
-    recorded = next(a['sha256'] for a in manifest['artifacts'] if a['relative_path'] == rel)
-    assert V2.lf_digest(V2.SCRIPT) == recorded
+    assert manifest['publisher_script']['relative_path'] == rel
+    assert V2.lf_digest(V2.SCRIPT) == manifest['publisher_script']['sha256']
 
 
 def fake_git(ls_remote_rc=0, cat_file_rc=0, merge_base_rc=0):
@@ -319,13 +329,105 @@ def test_publication_sha_is_ancestor_and_holds_authority():
     assert lf_sha(git('show', f'{sha}:{auth_rel}').stdout) == rec['authority_sha256']
 
 
-def test_record_commit_added_the_publication_record():
+def test_record_commit_is_last_change_of_the_record():
     reason = git_ready()
     if reason:
         pytest.skip(reason)
     sha = V2.load(V2.PUBLICATION_RECORD)['publication_commit']
     rec_rel = V2.rel(V2.PUBLICATION_RECORD)
-    added = git('log', '--diff-filter=A', '--format=%H', '--', rec_rel).stdout.decode().split()
-    assert added and added[0].startswith(MODULE.RECORD_COMMIT_ABBREV)
-    assert added[0] != sha
-    assert git('merge-base', '--is-ancestor', sha, added[0]).returncode == 0
+    last = git('log', '-n1', '--format=%H', '--', rec_rel).stdout.decode().strip()
+    assert re.fullmatch(r'[0-9a-f]{40}', last)
+    assert last != sha
+    assert git('merge-base', '--is-ancestor', sha, last).returncode == 0
+    changed = git('diff-tree', '--no-commit-id', '--name-only', '-r', last).stdout.decode().split()
+    assert changed == [rec_rel]
+    assert MODULE.resolve_record_commit() == last
+    assert build()['pin']['publication_record_commit'] == last
+
+
+def test_history_note_binds_to_supersedes_and_decisions():
+    authority, _, _, _ = inputs()
+    sup = authority['source_lineage']['supersedes']
+    r = build()
+    assert 'disclosure' not in r
+    h = r['history_note']
+    assert (h['supersedes_authority_id'], h['supersedes_version'], h['supersedes_commit']) == (sup['authority_id'], sup['version'], sup['commit'])
+    assert sup['commit'] == '54a7fd09114704a97a7a48fce5f89aebeb48c90a'
+    assert h['governance_decisions_sha256'] == sup['governance_decisions_sha256'] == V2.lf_digest(V2.GOVERNANCE_DECISIONS)
+    assert h['decisions_changed'] is False and len(h['enforced_gates']) == 4
+    for k in ('review_path', 'verification_path', 'wr_01', 'v2_0_1_possible', 'v2_0_1_date'):
+        assert k not in h and k not in MODULE.schema()['properties']
+    assert r['pin']['authority_id'].endswith('2.0.1') and r['pin']['version'] == '2.0.1'
+    MODULE.validate_reply_object(r)
+
+
+def test_history_note_fails_when_decisions_differ(monkeypatch):
+    doc = V2.load(V2.GOVERNANCE_DECISIONS)
+    doc['records'][0]['decided']['rationale'] += ' Edited.'
+    p = TMP / 'decisions_hist.json'
+    V2.dump(p, doc)
+    monkeypatch.setattr(V2, 'GOVERNANCE_DECISIONS', p)
+    with pytest.raises(AuthorityError, match='differ from the superseded'):
+        MODULE.build_reply(*inputs())
+
+
+def test_date_comes_from_signoff():
+    _, _, signoff, _ = inputs()
+    assert build()['reply_date'] == signoff['approval']['date']
+    assert not hasattr(MODULE, 'REPLY_DATE')
+
+
+def test_build_reply_takes_four_inputs():
+    with pytest.raises(TypeError):
+        MODULE.build_reply(*inputs(), {})
+
+
+def test_no_rule_published_row_raises_authority_error():
+    authority, record, signoff, decisions = inputs()
+    for row in authority['controls']:
+        if row['not_applicable_decision_state'] == 'RULE_PUBLISHED':
+            row['not_applicable_decision_state'] = 'NO_RULE_WILL_BE_PUBLISHED'
+            row['not_applicable_rule'] = None
+    with pytest.raises(AuthorityError):
+        MODULE.build_reply(authority, record, signoff, decisions)
+
+
+@pytest.mark.parametrize('mutate', [
+    lambda a: a.pop('applicability_decision_ids'),
+    lambda a: a.pop('not_applicable_semantics'),
+    lambda a: a['controls'][0].pop('not_applicable_rule'),
+    lambda a: a['controls'][0].pop('not_applicable_authority'),
+    lambda a: a['controls'][5].__setitem__('decision_ids', a['controls'][5]['decision_ids'][:-1]),
+])
+def test_shape_names_validated_against_authority(mutate):
+    authority, record, signoff, decisions = inputs()
+    mutate(authority)
+    with pytest.raises(AuthorityError):
+        MODULE.build_reply(authority, record, signoff, decisions)
+
+
+def test_record_commit_format_checked_by_schema_only():
+    r = build()
+    assert re.fullmatch(r'[0-9a-f]{40}', r['pin']['publication_record_commit'])
+    r['pin']['publication_record_commit'] = '0ce89f2'
+    with pytest.raises(REJECTS):
+        MODULE.validate_reply_object(r)
+
+
+def test_hayes_side_list_and_send_condition_name_publication_sha():
+    reason = git_ready()
+    if reason:
+        pytest.skip(reason)
+    r = build()
+    sha = r['pin']['publication_commit']
+    assert any(sha in item for item in r['hayes_side_changes_needed'])
+    assert sha in r['send_condition'] and MODULE.REMOTE_BRANCH in r['send_condition']
+    assert git('merge-base', '--is-ancestor', sha, 'HEAD').returncode == 0
+
+
+@pytest.mark.parametrize('argv', [[], ['--build', '--validate'], ['--emit-schema', '--push-check']])
+def test_cli_flags_mutually_exclusive(monkeypatch, argv):
+    monkeypatch.setattr('sys.argv', ['x', *argv])
+    with pytest.raises(SystemExit) as e:
+        MODULE.main()
+    assert e.value.code != 0
