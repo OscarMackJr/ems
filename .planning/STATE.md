@@ -91,6 +91,7 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 261014-vau | Fix reply gate wording (audit AUDIT-W1, AUDIT-W2) | 2026-10-15 | 258875d | [261014-vau-fix-reply-gate-wording](./quick/261014-vau-fix-reply-gate-wording/) |
+| 261015-ci1 | Run archive-assessment tests and validators in CI | 2026-10-15 | f767c64 | [261015-ci1-ci-archive-assessment-gates](./quick/261015-ci1-ci-archive-assessment-gates/) |
 
 ## Deferred Items
 
