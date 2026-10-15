@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-15)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Planning next milestone (v1.0.0 shipped; reply send is the authority's action)
+**Current focus:** Planning next milestone (v1.0.0 shipped; reply sent 2026-10-15 by Oscar Mack by email to omack@twgglobal.com, and delivered to the hayes-verify session; branch pushed at 1ed5bd8)
 
 ## Current Position
 
