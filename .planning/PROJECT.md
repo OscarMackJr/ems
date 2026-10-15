@@ -130,4 +130,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-14 after Phase 5 (reply to Hayes) — reply committed (`7623f73`, `5f2e36c`; review fixes `ad46d43`..`c3dad63`, line-68 reword approved), `--validate` PASS. Open: push `feature/ems-aa3-archive-applicability-authority` so `54a7fd0` is on the remote before sending; 04-REVIEW.md hardening may lead to a v2.0.1 republish with fresh sign-off*
+*Last updated: 2026-10-15 after Phase 6 (publication gate hardening, 2.0.1) — authority 2.0.1 published at `31addfa` with sign-off by Oscar Mack (2026-10-14), no decision changed; record `4d9b7c1`; reply regenerated to cite 2.0.1 (`fe9d50d`) and approved. Open: push `feature/ems-aa3-archive-applicability-authority` so `31addfa` is on the remote before sending; Hayes re-pins to `31addfa`. Follow-up advisories: 06-REVIEW.md WR-02, WR-04*
