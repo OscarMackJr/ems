@@ -1,8 +1,8 @@
 {
-  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0",
-  "authority_sha256": "de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353",
+  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1",
+  "authority_sha256": "7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f",
   "digest_normalisation": "CRLF_TO_LF",
-  "manifest_sha256": "64c6c0e0dc216ed157962e2bab804e1b6f252fe25838efd76ed98e935b0e1680",
-  "publication_commit": "54a7fd09114704a97a7a48fce5f89aebeb48c90a",
-  "version": "2.0.0"
+  "manifest_sha256": "c8a3ca0cc1a51e5cf75a15c4055bb51551de7f51ad133b97f93378da16abf51b",
+  "publication_commit": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb",
+  "version": "2.0.1"
 }
