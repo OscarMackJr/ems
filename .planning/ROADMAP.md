@@ -166,7 +166,7 @@ Facts read from the repository on 2026-10-13 that the phase plans must account f
 **Goal:** Harden the gates guarding the AA3 v2 applicability authority (Phase 4 review CR-01, CR-02, WR-01..WR-10, IN-01, IN-07; Phase 2 WR-01; Phase 5 reply IN-01..IN-06; vocabulary wording), republish it as `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1` with a fresh sign-off by Oscar Mack and a new publication commit, with none of the 21 decisions changed, then regenerate the unsent `DEMO3-W1-REQ-001` reply to cite 2.0.1. Nothing is pushed or sent.
 **Requirements**: none mapped; scope is 06-CONTEXT.md decisions D-01..D-22
 **Depends on:** Phase 5
-**Plans:** 7/9 plans executed
+**Plans:** 8/9 plans executed
 
 Plans:
 
@@ -188,7 +188,7 @@ Wave 5 *(blocked on Wave 4 completion)*
 - [x] 06-07-PLAN.md — 2.0.1 publication record commit (D-07, D-21)
 
 Wave 6 *(blocked on Wave 5 completion)*
-- [ ] 06-08-PLAN.md — Reply script fixes and history note, then regenerated reply citing 2.0.1 (D-05, D-14..D-16)
+- [x] 06-08-PLAN.md — Reply script fixes and history note, then regenerated reply citing 2.0.1 (D-05, D-14..D-16)
 
 Wave 7 *(blocked on Wave 6 completion)*
 - [ ] 06-09-PLAN.md — BLOCKING reply read-through; push commands reported, not run (D-16)
