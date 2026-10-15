@@ -173,13 +173,6 @@
       "rule": null
     }
   ],
-  "disclosure": {
-    "review_path": ".planning/phases/04-certified-publication/04-REVIEW.md",
-    "v2_0_1_date": null,
-    "v2_0_1_possible": true,
-    "verification_path": ".planning/phases/04-certified-publication/04-VERIFICATION.md",
-    "wr_01": "WR-01: the semantic, negative-invariant and certification outputs record PASS and REJECTED_FAIL_CLOSED for checks the publisher does not run."
-  },
   "document_id": "EMS-DEMO3-W1-REQ-001-REPLY",
   "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
   "from_authority": {
@@ -193,8 +186,22 @@
   "hayes_side_changes_needed": [
     "The target description must carry the eight classification facts.",
     "Hayes must read the published v2 shape.",
-    "Hayes must re-pin to 54a7fd09114704a97a7a48fce5f89aebeb48c90a."
+    "Hayes must re-pin to 31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb."
   ],
+  "history_note": {
+    "decisions_changed": false,
+    "enforced_gates": [
+      "The sign-off approver role is checked against the permitted roles.",
+      "The governance decisions are validated against their schema and invariants.",
+      "The certification results are computed from the checks that run, not recorded as constants.",
+      "The authority schema is stricter and rejects unknown fields."
+    ],
+    "governance_decisions_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+    "purpose": "Hardens the publication checks.",
+    "supersedes_authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0",
+    "supersedes_commit": "54a7fd09114704a97a7a48fce5f89aebeb48c90a",
+    "supersedes_version": "2.0.0"
+  },
   "live_resolved_count_stays_zero": true,
   "not_yet_decided": {
     "count": 59,
@@ -202,13 +209,13 @@
     "state": "NOT_YET_DECIDED"
   },
   "pin": {
-    "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0",
-    "authority_sha256": "de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353",
+    "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1",
+    "authority_sha256": "7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f",
     "digest_normalisation": "CRLF_TO_LF",
-    "manifest_sha256": "64c6c0e0dc216ed157962e2bab804e1b6f252fe25838efd76ed98e935b0e1680",
-    "publication_commit": "54a7fd09114704a97a7a48fce5f89aebeb48c90a",
-    "publication_record_commit": "0ce89f2",
-    "version": "2.0.0"
+    "manifest_sha256": "c8a3ca0cc1a51e5cf75a15c4055bb51551de7f51ad133b97f93378da16abf51b",
+    "publication_commit": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb",
+    "publication_record_commit": "4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b",
+    "version": "2.0.1"
   },
   "published_shape": {
     "authority_path": "registry/archive_assessment_applicability_authority_v2.json",
@@ -288,5 +295,5 @@
   "reply_date": "2026-10-14",
   "request_id": "DEMO3-W1-REQ-001",
   "request_label": "EMSREQ-APPLIC-RULES",
-  "send_condition": "Do not send this reply until commit 54a7fd09114704a97a7a48fce5f89aebeb48c90a is on the remote branch feature/ems-aa3-archive-applicability-authority."
+  "send_condition": "Do not send this reply until commit 31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb is on the remote branch feature/ems-aa3-archive-applicability-authority."
 }

@@ -69,15 +69,15 @@ Hayes's resolver resolves no control until the target description carries the ei
 
 ## The pin
 
-Cite this commit: 54a7fd09114704a97a7a48fce5f89aebeb48c90a
+Cite this commit: 31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb
 
-- Authority id: EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0
-- Version: 2.0.0
-- Authority sha256: de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353
-- Publication manifest sha256: 64c6c0e0dc216ed157962e2bab804e1b6f252fe25838efd76ed98e935b0e1680
+- Authority id: EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1
+- Version: 2.0.1
+- Authority sha256: 7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f
+- Publication manifest sha256: c8a3ca0cc1a51e5cf75a15c4055bb51551de7f51ad133b97f93378da16abf51b
 - Digest normalisation: CRLF_TO_LF (both digests are computed over bytes with CRLF replaced by LF)
 
-The commit 0ce89f2 records the publication commit in a publication record, and this reply has its own commit. Neither changes the authority.
+The commit 4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b records the publication commit in a publication record, and this reply has its own commit. Neither changes the authority.
 
 ## The published shape
 
@@ -151,20 +151,23 @@ Three changes on the Hayes side are still needed before any control resolves:
 
 1. The target description must carry the eight classification facts.
 2. Hayes must read the published v2 shape.
-3. Hayes must re-pin to 54a7fd09114704a97a7a48fce5f89aebeb48c90a.
+3. Hayes must re-pin to 31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb.
 
 The classification-prerequisites gap is untouched by this publication. The live count of resolved controls stays at zero until those changes land.
 
 A Hayes test that expects all 21 controls to refuse is expected to fail after the re-pin.
 
-## Disclosure
+## History
 
-The published data was checked independently and is correct; see .planning/phases/04-certified-publication/04-VERIFICATION.md. The checks that guard publication have known gaps, listed in .planning/phases/04-certified-publication/04-REVIEW.md. None of them changes any of the 21 decisions. The list of findings is not repeated here.
+EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1 supersedes EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0 (commit 54a7fd0). Hardens the publication checks. The publisher now enforces these gates:
 
-WR-01: the semantic, negative-invariant and certification outputs record PASS and REJECTED_FAIL_CLOSED for checks the publisher does not run. Do not cite those fields as independent evidence.
+- The sign-off approver role is checked against the permitted roles.
+- The governance decisions are validated against their schema and invariants.
+- The certification results are computed from the checks that run, not recorded as constants.
+- The authority schema is stricter and rejects unknown fields.
 
-A hardening release, v2.0.1, may follow. EMS gives no date. It would need a new sign-off and a new pin, and it is not intended to change any of the 21 decisions.
+None of the 21 decisions changed. The governance decisions file has the same LF sha256 as at 2.0.0: 4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f.
 
 ## Sending
 
-Do not send this reply until commit 54a7fd09114704a97a7a48fce5f89aebeb48c90a is on the remote branch feature/ems-aa3-archive-applicability-authority.
+Do not send this reply until commit 31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb is on the remote branch feature/ems-aa3-archive-applicability-authority.
