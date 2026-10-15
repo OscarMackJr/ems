@@ -103,12 +103,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | REPLY-01 | Phase 5 | Complete |
 | REPLY-02 | Phase 5 | Complete |
 | REPLY-03 | Phase 5 | Complete |
+| V2-01 | Next milestone | Deferred |
+| V2-02 | Next milestone (Hayes-side re-run) | Deferred |
 
 **Coverage:**
 - v1 requirements: 22 total
 - Mapped to phases: 22
 - Unmapped: 0
+- v2 requirements: 2 total, deferred to the next milestone (Phase 6 scope boundary)
 
 ---
 *Requirements defined: 2026-10-13*
-*Last updated: 2026-10-13 after roadmap creation (traceability)*
+*Last updated: 2026-10-15 after Phase 6 (v2 rows added to traceability)*
