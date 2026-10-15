@@ -84,6 +84,10 @@ None yet.
 - [All phases]: Working tree holds three modified files (`registry/adjudication_rules.json`, `registry/policy_decisions.json`, `schemas/archive_assessment_governance_answers.schema.json`) and about 60 untracked files from unrelated work; stage by explicit path only
 - [Next milestone]: Any publisher, schema or authority edit turns real-file tests red until the next publication commit (hash certification); plan republication explicitly
 - [Next milestone]: Audit tech debt carried forward — see `.planning/milestones/v1.0.0-MILESTONE-AUDIT.md`
+- [Next milestone]: 2.0.1 `source_lineage` says `digest_normalisation: CRLF_TO_LF`, but `aa1_manifest_sha256`, `aa2_closure_sha256` and `aa2_approval_sha256` are raw-byte; fix the scope in the next authority version (Hayes told 2026-10-15)
+- [Next milestone]: AA1 manifest (`aa1_manifest_sha256` f0da8e2e…) is not in the repo; AA2 approval outputs were committed in 35bfc08 (`-text`, raw hashes verified)
+- [CI]: `archive-assessment` job (261015-ci1) green on ubuntu-latest, run 38744767442: 492 passed, 5 validators PASS; runs on PRs, pushes to main, and `workflow_dispatch`
+- [Environment]: `git push` via the credential manager fails in this session (sh.exe crash); pushing with the GitHub CLI token as a one-command `http.extraheader` (env `GIT_CONFIG_*`, credential.helper cleared) works
 - [Environment]: Bash fails on this machine (cygwin `add_item` fatal error); GSD subagents have no PowerShell tool, so they cannot run tests or validators — run those from the orchestrator
 
 ### Quick Tasks Completed
