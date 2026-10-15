@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   validate:
@@ -65,3 +66,31 @@ jobs:
             echo "Potential secret detected."
             exit 1
           fi
+
+  archive-assessment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt jsonschema pytest
+
+      - name: Archive-assessment tests
+        run: python -m pytest tests -k archive_assessment -p no:cacheprovider -q
+
+      - name: Archive-assessment validators
+        run: |
+          python scripts/publish_archive_assessment_applicability_authority_v2.py --validate
+          python scripts/build_archive_assessment_governance_decisions.py --validate
+          python scripts/validate_archive_assessment_rule_proposals.py --validate
+          python scripts/validate_archive_assessment_rule_proposals.py --validate-record
+          python scripts/build_archive_assessment_demo3_w1_req_001_reply.py --validate
