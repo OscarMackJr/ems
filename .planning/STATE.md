@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 Phase: 06
 Plan: Not started
 Status: Milestone complete
-Last activity: 2026-10-15
+Last activity: 2026-10-15 - Completed quick task 261014-vau: Fix reply gate wording
 
 Progress: [█████████░] 94%
 
@@ -90,6 +90,12 @@ None yet.
 - [Phase 4, prerequisite]: Phase 3 code review CR-01 — `proposals_sha256` and `drafting_record_sha256` hash raw bytes; with `core.autocrlf=true` and no `.gitattributes`, a fresh Windows clone fails `--validate` and 6 tests. Normalise input hashing and pin line endings before certifying hashes or publishing the commit Hayes re-pins to (see 03-REVIEW.md)
 - [Phase 4, prerequisite]: Phase 3 code review CR-02 — `validate_decisions` does not tie records to the answers file (forged `answers_sha256` or edited record passes `--validate`); fix before `--validate` is used as a publication gate. CR-03 (superseding entries skip strict checks) and the 9 warnings ride along
 - [All phases]: Working tree holds two modified registry files and about 60 untracked files from unrelated work; stage by explicit path only
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 261014-vau | Fix reply gate wording (audit AUDIT-W1, AUDIT-W2) | 2026-10-15 | 258875d | [261014-vau-fix-reply-gate-wording](./quick/261014-vau-fix-reply-gate-wording/) |
 
 ## Deferred Items
 
