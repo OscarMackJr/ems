@@ -96,6 +96,7 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 261014-vau | Fix reply gate wording (audit AUDIT-W1, AUDIT-W2) | 2026-10-15 | 258875d | [261014-vau-fix-reply-gate-wording](./quick/261014-vau-fix-reply-gate-wording/) |
 | 261015-ci1 | Run archive-assessment tests and validators in CI | 2026-10-15 | f767c64 | [261015-ci1-ci-archive-assessment-gates](./quick/261015-ci1-ci-archive-assessment-gates/) |
+| 261019-st1 | Record EMS 2.0.1 status paragraph | 2026-10-19 | 3131e6e | [261019-st1-ems-2-0-1-status-paragraph](./quick/261019-st1-ems-2-0-1-status-paragraph/) |
 
 ## Deferred Items
 
