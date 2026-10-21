@@ -28,3 +28,9 @@ Orchestrator must run in PowerShell (scratch = C:\Users\OMack\AppData\Local\Temp
 If any claim test fails, stop and raise to the user (D-13); do not edit digests.
 
 ## Self-Check: PASSED (file exists, commit cb8f6fb exists; tests not run by executor)
+
+## Orchestrator Test Run (2026-10-20)
+
+- `pytest tests -k normalisation_claim`: 7 passed. Every D-13 claim holds; no claim is false.
+- `pytest tests -k archive_assessment`: 499 passed, 0 failed. The red window is not open yet, because 07-02 has not run.
+
