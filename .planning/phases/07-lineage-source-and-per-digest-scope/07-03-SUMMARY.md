@@ -40,3 +40,9 @@ Tasks 1 and 2 both modify the same new file and were written together; committed
 Executor did not run python/pytest per instructions.
 
 ## Self-Check: PASSED (file exists; commit recorded below by orchestrator log)
+
+## Orchestrator Test Run (2026-10-20)
+
+- `tests/test_archive_assessment_lineage_validation.py`: 39 passed, 0 skipped. The real-repo positive test ran; it was not skipped.
+- `pytest tests -k archive_assessment`: 538 passed, 3 failed. The red set is unchanged and exactly the accepted window.
+
