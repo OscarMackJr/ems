@@ -43,7 +43,6 @@ def git_ready():
 
 # Files with eol=lf in .gitattributes have raw == LF bytes; the claim string and the LF recompute are still both asserted.
 
-@pytest.mark.skipif(not RECORD.exists(), reason='publication record not written yet')
 def test_publication_record_normalisation_claim():
     rec = read(RECORD)
     assert rec['digest_normalisation'] == CLAIM
@@ -51,7 +50,6 @@ def test_publication_record_normalisation_claim():
     assert rec['manifest_sha256'] == lf_digest(MANIFEST)
 
 
-@pytest.mark.skipif(not CERT.exists(), reason='certification not written yet')
 def test_certification_normalisation_claim():
     cert = read(CERT)
     assert cert['digest_normalisation'] == CLAIM
@@ -61,7 +59,6 @@ def test_certification_normalisation_claim():
     assert cert['signoff_sha256'] == lf_digest(SIGNOFF)
 
 
-@pytest.mark.skipif(not MANIFEST.exists(), reason='manifest not written yet')
 def test_manifest_artifacts_normalisation_claim():
     manifest = read(MANIFEST)
     assert manifest['digest_normalisation'] == CLAIM
@@ -70,7 +67,6 @@ def test_manifest_artifacts_normalisation_claim():
         assert lf_digest(ROOT / art['relative_path']) == art['sha256'], art['relative_path']
 
 
-@pytest.mark.skipif(not (MANIFEST.exists() and RECORD.exists()), reason='manifest or record not written yet')
 def test_manifest_publisher_script_normalisation_claim():
     reason = git_ready()
     if reason: pytest.skip(reason)
@@ -82,7 +78,6 @@ def test_manifest_publisher_script_normalisation_claim():
     assert lf_sha(shown.stdout) == manifest['publisher_script']['sha256']
 
 
-@pytest.mark.skipif(not TRACE.exists(), reason='traceability not written yet')
 def test_traceability_decision_record_normalisation_claim():
     trace = read(TRACE)
     expected = lf_digest(MODULE.GOVERNANCE_DECISIONS)
@@ -92,14 +87,12 @@ def test_traceability_decision_record_normalisation_claim():
         assert rec['decision_record_sha256'] == expected
 
 
-@pytest.mark.skipif(not SIGNOFF.exists(), reason='sign-off not written yet')
 def test_signoff_authority_normalisation_claim():
     signoff = read(SIGNOFF)
     assert signoff['authority_sha256_normalisation'] == CLAIM
     assert signoff['authority_sha256'] == lf_digest(MODULE.AUTHORITY)
 
 
-@pytest.mark.skipif(not (REPLY.exists() and REPLY_DOC.exists()), reason='reply artifacts absent')
 def test_reply_pin_normalisation_claim():
     # Read only: the sent 2.0.1 reply and its builder are never regenerated here (D-14).
     pin = read(REPLY)['pin']
