@@ -315,7 +315,7 @@ def validate_publication(a: dict) -> None:
 COMMIT_PINNED = {'supersedes', 'supersedes_governance_decisions', 'v1_baseline'}
 
 def git_show(commit: str, relative_path: str) -> bytes:
-    if not re.fullmatch(r'[0-9a-f]{40}', commit or ''): raise AuthorityError(f'{relative_path}: commit must be a 40-character lowercase hex SHA')
+    if not isinstance(commit, str) or not re.fullmatch(r'[0-9a-f]{40}', commit): raise AuthorityError(f'{relative_path}: commit must be a 40-character lowercase hex SHA')
     if not isinstance(relative_path, str) or not relative_path or contains_absolute(relative_path) or '..' in relative_path.replace('\\', '/').split('/'): raise AuthorityError(f'{relative_path}: path must be repo-relative without ..')
     try: r = subprocess.run(['git', 'show', f'{commit}:{relative_path}'], cwd=ROOT, capture_output=True)
     except OSError as e: raise AuthorityError(f'{relative_path}@{commit[:7]}: git unavailable: {e}') from e
@@ -333,7 +333,7 @@ def validate_lineage(lin: dict) -> None:
     checks.append(('supersedes', sup.get('relative_path'), sup.get('sha256'), sup.get('normalisation'), sup.get('commit')))
     checks.append(('supersedes_governance_decisions', sup.get('governance_decisions_relative_path'), sup.get('governance_decisions_sha256'), sup.get('governance_decisions_normalisation'), sup.get('commit')))
     for label, path, want, norm, commit in checks:
-        if norm not in NORMALISERS: errors.append(f'{label}: unknown normalisation {norm!r}'); continue
+        if not isinstance(norm, str) or norm not in NORMALISERS: errors.append(f'{label}: unknown normalisation {norm!r}'); continue
         if norm != EXPECTED_NORMALISATION[label]: errors.append(f'{label}: normalisation {norm} differs from {EXPECTED_NORMALISATION[label]}'); continue
         if not isinstance(path, str) or not path or contains_absolute(path) or '..' in path.replace('\\', '/').split('/'): errors.append(f'{label}: relative_path missing or invalid'); continue
         if label in COMMIT_PINNED and not commit: errors.append(f'{label}: commit-pinned entry must carry a commit'); continue

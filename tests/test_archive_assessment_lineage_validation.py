@@ -161,6 +161,29 @@ def test_wr01_commit_pinned_entry_without_commit_raises(fx, label, missing):
         MODULE.validate_lineage(lin)
 
 
+@pytest.mark.parametrize('label', ['v1_baseline', 'supersedes', 'catalog_reference'])
+@pytest.mark.parametrize('bad', [5, ['a' * 40], {'k': 'v'}, True])
+def test_wr02_non_string_commit_raises_authority_error(fx, label, bad):
+    _, lin = fx
+    lin[label]['commit'] = bad
+    with pytest.raises(AuthorityError):
+        MODULE.validate_lineage(lin)
+
+
+@pytest.mark.parametrize('bad', [['CRLF_TO_LF'], {'k': 'v'}, 5])
+def test_wr02_unhashable_or_non_string_normalisation_raises_authority_error(fx, bad):
+    _, lin = fx
+    lin['catalog_reference']['normalisation'] = bad
+    with pytest.raises(AuthorityError):
+        MODULE.validate_lineage(lin)
+
+
+@pytest.mark.parametrize('bad', [5, ['a' * 40], None])
+def test_wr02_git_show_non_string_commit_raises_authority_error(bad):
+    with pytest.raises(AuthorityError):
+        MODULE.git_show(bad, 'registry/x.json')
+
+
 @pytest.mark.parametrize('label', ['v1_baseline', 'supersedes'])
 def test_d10_short_commit_raises(fx, label):
     _, lin = fx
