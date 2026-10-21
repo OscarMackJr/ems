@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1.0
 milestone_name: Authority 2.0.2 Lineage Correction
-status: ready_to_plan
-last_updated: 2026-10-21T03:09:13.824Z
-last_activity: 2026-10-21 -- Phase 7 execution started
+status: planning
+last_updated: "2026-10-21T03:40:45.866Z"
+last_activity: 2026-10-21
 progress:
   total_phases: 4
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 4
-  completed_plans: 35
-  percent: 0
+  completed_plans: 4
+  percent: 25
 stopped_at: Phase 7 complete (4/4) — ready to discuss Phase 8
 ---
 
@@ -116,9 +116,9 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-10-21T01:17:00.284Z
-Stopped at: Phase 7 context gathered
-Resume file: .planning/phases/07-lineage-source-and-per-digest-scope/07-CONTEXT.md
+Last session: 2026-10-21T03:40:45.827Z
+Stopped at: Phase 8 context gathered
+Resume file: .planning/phases/08-gate-and-schema-hardening/08-CONTEXT.md
 
 ## Operator Next Steps
 
