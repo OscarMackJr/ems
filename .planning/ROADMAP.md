@@ -33,7 +33,7 @@
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 7: Lineage Source and Per-Digest Scope** - The AA1 manifest is committed and every `source_lineage` digest declares and is recomputed under its own normalisation
+- [x] **Phase 7: Lineage Source and Per-Digest Scope** - The AA1 manifest is committed and every `source_lineage` digest declares and is recomputed under its own normalisation (completed 2026-10-21)
 - [ ] **Phase 8: Gate and Schema Hardening** - The remaining audit gates fail closed, `--validate` uses a frozen catalog reference, and the v2 schema rejects extra fields
 - [ ] **Phase 9: Certified Republication 2.0.2** - `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` is signed off, published and certified in a clean commit with no decision changed, and CI is green on it
 - [ ] **Phase 10: Notice to Hayes** - A generated, validated notice cites 2.0.2 and its commit, names the 2.0.1 digest-scope error, and asks Hayes to re-pin
@@ -119,7 +119,7 @@ Phases execute in numeric order: 7 → 8 → 9 → 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 7. Lineage Source and Per-Digest Scope | 3/4 | In Progress|  |
+| 7. Lineage Source and Per-Digest Scope | 4/4 | Complete   | 2026-10-21 |
 | 8. Gate and Schema Hardening | 0/TBD | Not started | - |
 | 9. Certified Republication 2.0.2 | 0/TBD | Not started | - |
 | 10. Notice to Hayes | 0/TBD | Not started | - |
