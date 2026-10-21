@@ -10,11 +10,21 @@ The consumer is Hayes Verify, an external assessor that reads EMS at a pinned co
 
 **Shipped:** v1.0.0 Not-Applicable Rule Publication (2026-10-15). `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1` is published at `31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb` (pushed to `origin/feature/ems-aa3-archive-applicability-authority`): 21 controls decided (3 rules, 18 no-rule, `AA4-GOV-001`..`021`), 59 `NOT_YET_DECIDED`. The DEMO3-W1-REQ-001 reply cites 2.0.1; its gate wording was corrected and approved (`258875d`). The send condition is met; sending the reply is the authority's action. Archive: `.planning/milestones/v1.0.0-*`.
 
-## Next Milestone Goals
+## Current Milestone: v1.1.0 Authority 2.0.2 Lineage Correction
 
-- Candidate: rule-or-no-rule decisions for some or all of the other 59 controls (V2-01)
-- Candidate: confirm from a Hayes re-run that the 21 resolve at `31addfa` (V2-02, Hayes-side)
-- Candidate: close the audit tech debt — 06-REVIEW WR-02 (record check skipped when absent), WR-04 (mutation gate counts crashes), catalog live coupling, CI execution of the archive-assessment tests and validators
+**Goal:** Republish the AA3 authority as 2.0.2 so that the `source_lineage` digest scope matches how each digest is actually computed, the AA1 manifest is committed and verifiable, and the remaining audit gate debt is closed, with no applicability decision changed.
+
+**Target features:**
+- Per-digest normalisation scope in `source_lineage`: 2.0.1 declares `CRLF_TO_LF`, but `aa1_manifest_sha256`, `aa2_closure_sha256` and `aa2_approval_sha256` are raw-byte
+- AA1 manifest (`f0da8e2e…`) committed from the authority's own copy, with its raw-byte hash verified
+- Gates fail closed: WR-02 (the publication-record cross-check is no longer skipped) and WR-04 (the mutation gate counts only real rejections)
+- Catalog decoupling: `--validate` checks against a frozen catalog reference, not the live shared `registry/control_catalog.yaml`
+- Schema strictness: `additionalProperties: false` at the top level, on control rows and on `not_applicable_semantics`
+- Minor fixes: WR-05 (shallow-clone-aware commit lookup) and Phase 3 WR-01 (`norm_templated` uniqueness)
+- `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` certified republication, with the decisions digest unchanged from 2.0.0
+- A generated, validated notice to Hayes citing 2.0.2 and its commit, stating that no decision changed
+
+**Deferred:** rule-or-no-rule decisions for the other 59 controls (V2-01); Hayes re-run confirmation (V2-02, Hayes-side); WR-01 and WR-03 stay by design (D-09, D-03).
 
 ## Core Value
 
@@ -52,7 +62,7 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 
 <!-- Hypotheses until shipped and validated. -->
 
-(none — v1.0.0 shipped; next milestone requirements are defined by `/gsd-new-milestone`, see Next Milestone Goals)
+See `.planning/REQUIREMENTS.md` for milestone v1.1.0 (Authority 2.0.2 Lineage Correction).
 
 ### Out of Scope
 
@@ -143,4 +153,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-15 after v1.0.0 milestone — authority 2.0.1 at `31addfa` pushed; reply gate wording corrected (`258875d`); milestone archived to `.planning/milestones/`*
+*Last updated: 2026-10-20 — milestone v1.1.0 (Authority 2.0.2 Lineage Correction) started*
