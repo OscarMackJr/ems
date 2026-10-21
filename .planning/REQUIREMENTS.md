@@ -54,25 +54,26 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LIN-01 | — | Pending |
-| LIN-02 | — | Pending |
-| LIN-03 | — | Pending |
-| GATE-01 | — | Pending |
-| GATE-02 | — | Pending |
-| GATE-03 | — | Pending |
-| GATE-04 | — | Pending |
-| GATE-05 | — | Pending |
-| SCHEMA-07 | — | Pending |
-| PUB-07 | — | Pending |
-| PUB-08 | — | Pending |
-| PUB-09 | — | Pending |
-| NOTICE-01 | — | Pending |
-| NOTICE-02 | — | Pending |
+| LIN-01 | Phase 7 | Pending |
+| LIN-02 | Phase 7 | Pending |
+| LIN-03 | Phase 7 | Pending |
+| GATE-01 | Phase 8 | Pending |
+| GATE-02 | Phase 8 | Pending |
+| GATE-03 | Phase 8 | Pending |
+| GATE-04 | Phase 8 | Pending |
+| GATE-05 | Phase 8 | Pending |
+| SCHEMA-07 | Phase 8 | Pending |
+| PUB-07 | Phase 9 | Pending |
+| PUB-08 | Phase 9 | Pending |
+| PUB-09 | Phase 9 | Pending |
+| NOTICE-01 | Phase 10 | Pending |
+| NOTICE-02 | Phase 10 | Pending |
 
 **Coverage:**
 - v1.1.0 requirements: 14 total
-- Mapped to phases: 0
-- Unmapped: 14 ⚠️
+- Mapped to phases: 14
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-10-20*
+*Traceability updated: 2026-10-20 — roadmap v1.1.0 (Phases 7-10)*

@@ -6,7 +6,7 @@ status: planning
 last_updated: "2026-10-21T01:00:57.650Z"
 last_activity: 2026-10-21
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -17,17 +17,19 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-10-15)
+See: .planning/PROJECT.md (updated 2026-10-20)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Planning next milestone (v1.0.0 shipped; reply sent 2026-10-15 by Oscar Mack by email to omack@twgglobal.com, and delivered to the hayes-verify session; branch pushed at 1ed5bd8)
+**Current focus:** Milestone v1.1.0 — republish AA3 as 2.0.2 with per-digest lineage scope, committed AA1 manifest, fail-closed gates and stricter schema, no decision changed. Phase 7: Lineage Source and Per-Digest Scope.
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-10-21 — Milestone v1.1.0 started
+Phase: 7 of 10 (Lineage Source and Per-Digest Scope) — milestone phases 7-10
+Plan: Not planned yet
+Status: Ready to plan
+Last activity: 2026-10-21 — Roadmap v1.1.0 created (Phases 7-10, 14/14 requirements mapped)
+
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -60,6 +62,7 @@ Last activity: 2026-10-21 — Milestone v1.1.0 started
 ### Roadmap Evolution
 
 - Phase 6 added: Address tech debt: publication gate hardening (2.0.1)
+- v1.1.0 roadmap created 2026-10-20: Phase 7 Lineage Source and Per-Digest Scope (LIN-01..03), Phase 8 Gate and Schema Hardening (GATE-01..05, SCHEMA-07), Phase 9 Certified Republication 2.0.2 (PUB-07..09), Phase 10 Notice to Hayes (NOTICE-01..02)
 
 ### Decisions
 
@@ -73,10 +76,14 @@ Recent decisions affecting current work:
 - [Roadmap]: No phase carries a UI hint; the project is registry JSON, schema, publisher script, pytest and generated outputs
 - [Phase 3]: 21 governance answers typed by authority, committed unchanged (cc74445); records AA4-GOV-001..021 published (eed4a5f)
 - [Phase 06]: 06-05: accepted 18-item red window until plans 06-06 and 06-08; 2.0.0 constants held in code
+- [v1.1.0 Roadmap]: All code and schema changes (Phases 7-8) precede one republication (Phase 9); the notice (Phase 10) follows because it cites the publication commit
+- [v1.1.0 Roadmap]: Accepted red window opens at the first publisher/validator edit in Phase 7 and closes at the 2.0.2 publication commit
+- [v1.1.0 Roadmap]: AA1 manifest commit (LIN-03) lands first in Phase 7, before LIN-02 recomputation is verified; the file is supplied by the user (path asked at Phase 7 start)
+- [v1.1.0 Roadmap]: 2.0.2 publication requires sign-off by Oscar Mack as EMS governance authority (human gate in Phase 9)
 
 ### Pending Todos
 
-None yet.
+- [Phase 7]: Ask the user for the path of the AA1 manifest (authority's own copy) before planning LIN-03
 
 ### Blockers/Concerns
 
@@ -107,10 +114,10 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-10-15
-Stopped at: Milestone v1.0.0 completed and archived (no tag, phase dirs kept in place)
+Last session: 2026-10-21
+Stopped at: v1.1.0 roadmap created (Phases 7-10); ready to plan Phase 7
 Resume file: None
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Provide the AA1 manifest path, then run /gsd-plan-phase 7
