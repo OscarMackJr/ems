@@ -6,6 +6,7 @@ import hashlib
 import importlib.util
 import json
 import re
+import subprocess
 from datetime import date
 from pathlib import Path
 from typing import Callable, NamedTuple
@@ -38,6 +39,9 @@ SUPERSEDED_V2_0_0 = {
     'relative_path': 'registry/archive_assessment_applicability_authority_v2.json',
     'sha256': 'de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353',
     'governance_decisions_sha256': '4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f',
+    'normalisation': 'CRLF_TO_LF',
+    'governance_decisions_relative_path': 'registry/archive_assessment_governance_decisions.json',
+    'governance_decisions_normalisation': 'CRLF_TO_LF',
 }
 V1_BASELINE_COMMIT = '62a8955dc28d9458cd1167fad314926e057c31fc'
 V1_BASELINE_ID = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0'
@@ -62,6 +66,17 @@ class AuthorityError(ValueError): pass
 def digest(p: Path) -> str: return hashlib.sha256(p.read_bytes()).hexdigest()
 def lf_bytes(b: bytes) -> bytes: return b.replace(b'\r\n', b'\n')
 def lf_digest(p: Path) -> str: return hashlib.sha256(lf_bytes(p.read_bytes())).hexdigest()
+NORMALISATIONS = ['RAW_BYTES', 'CRLF_TO_LF']
+NORMALISERS = {'RAW_BYTES': lambda b: b, 'CRLF_TO_LF': lf_bytes}
+AA1_MANIFEST_REL = 'generated/archive-assessment/ems-aa1/ems_aa1_analysis_artifact_manifest.json'
+AA2_CLOSURE_REL = 'generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_closure.json'
+AA2_APPROVAL_REL = 'generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_approval.json'
+CATALOG_REL = 'registry/control_catalog.yaml'
+EXPECTED_NORMALISATION = {'aa1_manifest': 'RAW_BYTES', 'aa2_closure': 'RAW_BYTES', 'aa2_approval': 'RAW_BYTES', 'catalog_reference': 'CRLF_TO_LF', 'governance_decisions': 'CRLF_TO_LF', 'supersedes': 'CRLF_TO_LF', 'supersedes_governance_decisions': 'CRLF_TO_LF', 'v1_baseline': 'CRLF_TO_LF'}
+def digest_entry(rel_path: str, sha: str, norm: str, commit: str | None = None) -> dict:
+    e = {'relative_path': rel_path, 'sha256': sha, 'normalisation': norm}
+    if commit: e['commit'] = commit
+    return e
 def dump(p: Path, value: object) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     with open(p, 'w', encoding='utf-8', newline='\n') as f: f.write(json.dumps(value, indent=2, sort_keys=True) + '\n')
@@ -112,7 +127,7 @@ def semantics() -> dict:
     }
 
 def v1_baseline_entry() -> dict:
-    return {'authority_id': V1_BASELINE_ID, 'version': '1.0.0', 'commit': V1_BASELINE_COMMIT, 'relative_path': V1_BASELINE_REL, 'sha256': lf_digest(V1_AUTHORITY)}
+    return {'authority_id': V1_BASELINE_ID, 'version': '1.0.0', 'commit': V1_BASELINE_COMMIT, 'relative_path': V1_BASELINE_REL, 'sha256': lf_digest(V1_AUTHORITY), 'normalisation': 'CRLF_TO_LF'}
 
 def build_authority() -> dict:
     catalog = catalog_controls()
@@ -149,11 +164,12 @@ def build_authority() -> dict:
         'not_applicable_semantics': semantics(),
         'evidence_boundary': {'archive_content_establishes': ['REPOSITORY_CONTENT_FACTS_ONLY'], 'archive_content_does_not_establish': ['LIVE_REPOSITORY_STATE','ORGANIZATION_AUTHORITY','SERVICE_STATE','PLATFORM_STATE','CURRENT_CICD_STATE','RUNTIME_STATE','EXTERNAL_SYSTEM_STATE','CURRENT_DEPLOYMENT_STATE','VENDOR_SERVICE_EVIDENCE']},
         'source_lineage': {
-            'aa1_manifest_sha256': lin['aa1_manifest_sha256'], 'aa2_closure_sha256': lin['aa2_closure_sha256'], 'aa2_approval_sha256': lin['aa2_approval_sha256'],
-            'catalog_reference': {'relative_path': 'registry/control_catalog.yaml', 'sha256': lf_digest(CATALOG), 'required_for_deterministic_compilation': False},
+            'aa1_manifest': digest_entry(AA1_MANIFEST_REL, lin['aa1_manifest_sha256'], 'RAW_BYTES'),
+            'aa2_closure': digest_entry(AA2_CLOSURE_REL, lin['aa2_closure_sha256'], 'RAW_BYTES'),
+            'aa2_approval': digest_entry(AA2_APPROVAL_REL, lin['aa2_approval_sha256'], 'RAW_BYTES'),
+            'catalog_reference': {'relative_path': CATALOG_REL, 'sha256': lf_digest(CATALOG), 'normalisation': 'CRLF_TO_LF', 'required_for_deterministic_compilation': False},
             'supersedes': dict(SUPERSEDED_V2_0_0),
             'v1_baseline': v1_baseline_entry(),
-            'digest_normalisation': 'CRLF_TO_LF',
         },
         'approved_governance_decision_ids': list(DECISIONS), 'applicability_decision_ids': [], 'controls': controls,
     }
@@ -179,7 +195,7 @@ def build_published_authority() -> dict:
         if cid not in rows: raise AuthorityError(f'{cid}: decision record for unknown control')
         rows[cid].update({'not_applicable_decision_state': r['decided_outcome'], 'not_applicable_rule': r['decided']['rule'], 'not_applicable_authority': r['decision_id']})
     a['applicability_decision_ids'] = sorted(r['decision_id'] for r in by_control.values())
-    a['source_lineage']['governance_decisions'] = {'relative_path': GOVERNANCE_DECISIONS_REL, 'sha256': lf_digest(GOVERNANCE_DECISIONS), 'record_count': len(doc['records']), 'drafting_commit': doc['drafting_commit']}
+    a['source_lineage']['governance_decisions'] = {'relative_path': GOVERNANCE_DECISIONS_REL, 'sha256': lf_digest(GOVERNANCE_DECISIONS), 'normalisation': 'CRLF_TO_LF', 'record_count': len(doc['records']), 'drafting_commit': doc['drafting_commit']}
     return a
 
 def validate_rule(cid: str, rule: object, errors: list) -> None:
@@ -288,6 +304,39 @@ def validate_publication(a: dict) -> None:
     if lin.get('v1_baseline') != v1_baseline_entry(): errors.append('lineage v1_baseline must record v1.0.0 with the live v1 digest')
     cat = lin.get('catalog_reference')
     if not isinstance(cat, dict) or cat.get('sha256') != lf_digest(CATALOG): errors.append('lineage catalog digest does not match')
+    if 'digest_normalisation' in lin: errors.append('source_lineage must not carry a global digest_normalisation')
+    for label, want_rel in (('aa1_manifest', AA1_MANIFEST_REL), ('aa2_closure', AA2_CLOSURE_REL), ('aa2_approval', AA2_APPROVAL_REL)):
+        e = lin.get(label)
+        if not isinstance(e, dict) or e.get('relative_path') != want_rel: errors.append(f'{label}: lineage entry missing or relative_path invalid')
+    for label, e, key in (('aa1_manifest', lin.get('aa1_manifest'), 'normalisation'), ('aa2_closure', lin.get('aa2_closure'), 'normalisation'), ('aa2_approval', lin.get('aa2_approval'), 'normalisation'), ('catalog_reference', cat, 'normalisation'), ('governance_decisions', gd, 'normalisation'), ('supersedes', lin.get('supersedes'), 'normalisation'), ('supersedes_governance_decisions', lin.get('supersedes'), 'governance_decisions_normalisation'), ('v1_baseline', lin.get('v1_baseline'), 'normalisation')):
+        if not isinstance(e, dict) or e.get(key) != EXPECTED_NORMALISATION[label]: errors.append(f'{label}: normalisation must be {EXPECTED_NORMALISATION[label]}')
+    if errors: raise AuthorityError('; '.join(errors))
+
+def git_show(commit: str, relative_path: str) -> bytes:
+    if not re.fullmatch(r'[0-9a-f]{40}', commit or ''): raise AuthorityError(f'{relative_path}: commit must be a 40-character lowercase hex SHA')
+    if not isinstance(relative_path, str) or not relative_path or contains_absolute(relative_path) or '..' in relative_path.replace('\\', '/').split('/'): raise AuthorityError(f'{relative_path}: path must be repo-relative without ..')
+    try: r = subprocess.run(['git', 'show', f'{commit}:{relative_path}'], cwd=ROOT, capture_output=True)
+    except OSError as e: raise AuthorityError(f'{relative_path}@{commit[:7]}: git unavailable: {e}') from e
+    if r.returncode != 0: raise AuthorityError(f'{relative_path}@{commit[:7]}: git show failed: {r.stderr.decode("utf-8", "replace").strip()}')
+    return r.stdout
+
+def validate_lineage(lin: dict) -> None:
+    errors = []
+    checks = []
+    sup = lin.get('supersedes') if isinstance(lin.get('supersedes'), dict) else {}
+    for label in ('aa1_manifest', 'aa2_closure', 'aa2_approval', 'catalog_reference', 'governance_decisions', 'v1_baseline'):
+        e = lin.get(label)
+        e = e if isinstance(e, dict) else {}
+        checks.append((label, e.get('relative_path'), e.get('sha256'), e.get('normalisation'), e.get('commit')))
+    checks.append(('supersedes', sup.get('relative_path'), sup.get('sha256'), sup.get('normalisation'), sup.get('commit')))
+    checks.append(('supersedes_governance_decisions', sup.get('governance_decisions_relative_path'), sup.get('governance_decisions_sha256'), sup.get('governance_decisions_normalisation'), sup.get('commit')))
+    for label, path, want, norm, commit in checks:
+        if norm not in NORMALISERS: errors.append(f'{label}: unknown normalisation {norm!r}'); continue
+        if norm != EXPECTED_NORMALISATION[label]: errors.append(f'{label}: normalisation {norm} differs from {EXPECTED_NORMALISATION[label]}'); continue
+        if not isinstance(path, str) or not path or contains_absolute(path) or '..' in path.replace('\\', '/').split('/'): errors.append(f'{label}: relative_path missing or invalid'); continue
+        try: data = git_show(commit, path) if commit else (ROOT / path).read_bytes()
+        except (OSError, AuthorityError) as e: errors.append(f'{label}: {e}'); continue
+        if hashlib.sha256(NORMALISERS[norm](data)).hexdigest() != want: errors.append(f'{label}: recomputed sha256 does not match the recorded digest')
     if errors: raise AuthorityError('; '.join(errors))
 
 def schema() -> dict:
@@ -298,14 +347,16 @@ def schema() -> dict:
     def pinned(entry, sha_keys):
         props = {k: ({'type':'string','pattern':'^[0-9a-f]{64}$'} if k in sha_keys else {'const':v}) for k, v in entry.items()}
         return {'type':'object','additionalProperties':False,'required':list(entry),'properties':props}
+    def norm_schema(label): return {'enum':list(NORMALISATIONS),'const':EXPECTED_NORMALISATION[label]}
+    def entry_schema(label, rel_path): return {'type':'object','additionalProperties':False,'required':['relative_path','sha256','normalisation'],'properties':{'relative_path':{'const':rel_path},'sha256':sha,'normalisation':norm_schema(label)}}
     lineage = {'type':'object','additionalProperties':False,
-        'required':['governance_decisions','supersedes','v1_baseline','catalog_reference','digest_normalisation','aa1_manifest_sha256','aa2_closure_sha256','aa2_approval_sha256'],
+        'required':['governance_decisions','supersedes','v1_baseline','catalog_reference','aa1_manifest','aa2_closure','aa2_approval'],
         'properties':{
             'supersedes':pinned(SUPERSEDED_V2_0_0, {'sha256','governance_decisions_sha256'}),
-            'v1_baseline':pinned({'authority_id':V1_BASELINE_ID,'version':'1.0.0','commit':V1_BASELINE_COMMIT,'relative_path':V1_BASELINE_REL,'sha256':None}, {'sha256'}),
-            'governance_decisions':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','record_count','drafting_commit'],'properties':{'relative_path':{'const':GOVERNANCE_DECISIONS_REL},'sha256':sha,'record_count':{'const':21},'drafting_commit':{'type':'string','pattern':'^[0-9a-f]{40}$'}}},
-            'catalog_reference':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','required_for_deterministic_compilation'],'properties':{'relative_path':{'const':'registry/control_catalog.yaml'},'sha256':sha,'required_for_deterministic_compilation':{'const':False}}},
-            'digest_normalisation':{'const':'CRLF_TO_LF'},'aa1_manifest_sha256':sha,'aa2_closure_sha256':sha,'aa2_approval_sha256':sha}}
+            'v1_baseline':pinned({'authority_id':V1_BASELINE_ID,'version':'1.0.0','commit':V1_BASELINE_COMMIT,'relative_path':V1_BASELINE_REL,'sha256':None,'normalisation':'CRLF_TO_LF'}, {'sha256'}),
+            'governance_decisions':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','normalisation','record_count','drafting_commit'],'properties':{'relative_path':{'const':GOVERNANCE_DECISIONS_REL},'sha256':sha,'normalisation':norm_schema('governance_decisions'),'record_count':{'const':21},'drafting_commit':{'type':'string','pattern':'^[0-9a-f]{40}$'}}},
+            'catalog_reference':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','normalisation','required_for_deterministic_compilation'],'properties':{'relative_path':{'const':CATALOG_REL},'sha256':sha,'normalisation':norm_schema('catalog_reference'),'required_for_deterministic_compilation':{'const':False}}},
+            'aa1_manifest':entry_schema('aa1_manifest', AA1_MANIFEST_REL),'aa2_closure':entry_schema('aa2_closure', AA2_CLOSURE_REL),'aa2_approval':entry_schema('aa2_approval', AA2_APPROVAL_REL)}}
     auth = {'type':'string','pattern':AUTHORITY_ID_RE}
     def branch(state, rule_s, auth_s):
         return {'if':{'properties':{'not_applicable_decision_state':{'const':state}},'required':['not_applicable_decision_state']},'then':{'properties':{'not_applicable_rule':rule_s,'not_applicable_authority':auth_s}}}
@@ -601,7 +652,8 @@ def validate_published() -> None:
     if not AUTHORITY.exists(): raise AuthorityError('v2 registry authority file is not published')
     a = load(AUTHORITY)
     validate_publication(a); jsonschema.Draft202012Validator(load(SCHEMA)).validate(a)
-    if a != build_published_authority(): raise AuthorityError('published authority differs from a fresh build')
+    validate_lineage(a['source_lineage'])
+    if a !=build_published_authority(): raise AuthorityError('published authority differs from a fresh build')
     if lf_bytes(AUTHORITY.read_bytes()) != jtext(a).encode('utf-8'): raise AuthorityError('published authority bytes differ from canonical serialisation')
     if not SIGNOFF.exists(): raise AuthorityError('publication sign-off record is absent')
     signoff = load(SIGNOFF); validate_signoff(signoff, lf_digest(AUTHORITY))
