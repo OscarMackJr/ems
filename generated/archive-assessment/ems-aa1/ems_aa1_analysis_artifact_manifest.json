@@ -1,0 +1,87 @@
+{
+  "analysis_baseline": {
+    "ems_commit": "53234bbb9546ad37a691b67a2b509951512a79fc",
+    "hayes_commit": "19e7188c12dd888fa7646d6032abdf4e2bd20620"
+  },
+  "analysis_only": true,
+  "artifacts": [
+    {
+      "artifact": "archive_assessment_applicability_authority_matrix.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "2bb8313f0b1cf3bbb8044a594ccb805b8681a0651902398ea70e81a17f9494b6"
+    },
+    {
+      "artifact": "archive_assessment_applicability_authority_source_inventory.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "ed00606c1bbbf1c5e2e713866ae0dc04902bd0070848f954dbe5dfed56aacdd7"
+    },
+    {
+      "artifact": "archive_assessment_applicability_governance_decision_register.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "0bda24b4b5854f38b5581e2995cacdd977984b3a556e681f75f71c42d7c60c1f"
+    },
+    {
+      "artifact": "archive_assessment_classification_input_authority_analysis.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "83ccb934f5614c2480e338d12a853dea01e7fd17ec6d7a37b63973ba5799d1e4"
+    },
+    {
+      "artifact": "archive_assessment_control_population_analysis.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "d2923612608bbc0bc07c0a9f613cde25fce2fd83ee8ccf18f7f612e5a0031f71"
+    },
+    {
+      "artifact": "archive_assessment_not_applicable_semantics_analysis.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "ef79fbfacb1175e23c38b73ed795f5213176ae10d845d8b60dea90bf6c747131"
+    },
+    {
+      "artifact": "archive_assessment_policy_time_analysis.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "63a9a522e5b7618e1c3b8713953d8761d795b8dcaaa5ab92d364e588dcbcc1f3"
+    },
+    {
+      "artifact": "archive_assessment_rp1b_snapshot_requirements.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "6378af54e9e91220f32ec206739924876f4b3900d2451510487a015722af705c"
+    },
+    {
+      "artifact": "archive_assessment_rp1c_reentry_criteria.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "112684aad6b9878f6286c250aeff861eb767dd01a2dccdd23d0b054c96512b38"
+    },
+    {
+      "artifact": "archive_assessment_target_authority_model.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "f5b9bc00cd5b5c9a1d4f88735a4c57c0376b0dcf076c1659084fc4db6bf8a1bf"
+    },
+    {
+      "artifact": "archive_assessment_unknown_semantics_analysis.json",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "a695d054546b5b990aa2598c221c6153d419ded4e34256820bd4cb25f94daf18"
+    },
+    {
+      "artifact": "EMS_AA1_ARCHIVE_APPLICABILITY_AUTHORITY_GAP_ANALYSIS.md",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "47a07c10ffdd51eda17576a449ab950a0057fb9a5d608cf09d1576e455f11c0c"
+    },
+    {
+      "artifact": "EMS_AA1_FASTEST_PATH.md",
+      "generated_at": "2026-08-17T14:18:43Z",
+      "role": "analysis_only",
+      "sha256": "f0e4c92cb4779602fd06726c895494539129fe8c480dd84d4a7850d1360ad8e7"
+    }
+  ]
+}

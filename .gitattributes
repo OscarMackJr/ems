@@ -17,3 +17,4 @@ docs/DEMO3_W1_REQ_001_REPLY.md text eol=lf
 registry/archive_assessment_demo3_w1_req_001_reply.json text eol=lf
 schemas/archive_assessment_demo3_w1_req_001_reply.schema.json text eol=lf
 generated/archive-assessment/ems-aa2/approval/** -text
+generated/archive-assessment/ems-aa1/ems_aa1_analysis_artifact_manifest.json -text
