@@ -222,7 +222,7 @@ def test_unknown_normalisation_raises(fx, bad):
         MODULE.validate_lineage(lin)
 
 
-@pytest.mark.parametrize('bad', ['/etc/passwd', 'C:\\Windows\\x', '../outside.txt', 'a/../../b', ''])
+@pytest.mark.parametrize('bad', ['/etc/passwd', 'C:\\Windows\\x', '../outside.txt', 'a/../../b', '', 'C:foo', 'c:foo/bar.json', '\\rooted\\x.json', 5])
 def test_bad_relative_path_raises(fx, bad):
     _, lin = fx
     lin['aa1_manifest']['relative_path'] = bad
@@ -235,6 +235,15 @@ def test_missing_lineage_label_raises(fx):
     del lin['aa2_approval']
     with pytest.raises(AuthorityError):
         MODULE.validate_lineage(lin)
+
+
+@pytest.mark.parametrize('bad', ['C:foo', '\\rooted\\x.json', '/abs/x.json', 'a/../b'])
+def test_wr03_git_show_rejects_bad_relative_path_before_subprocess(monkeypatch, bad):
+    def boom(*a, **k):
+        raise AssertionError('subprocess must not be called')
+    monkeypatch.setattr(MODULE.subprocess, 'run', boom)
+    with pytest.raises(AuthorityError):
+        MODULE.git_show('a' * 40, bad)
 
 
 def test_git_show_git_unavailable_raises(monkeypatch):
