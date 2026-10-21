@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.1.0
 milestone_name: Authority 2.0.2 Lineage Correction
-status: executing
-last_updated: "2026-10-21T02:35:48.218Z"
+status: ready_to_plan
+last_updated: 2026-10-21T03:09:13.824Z
 last_activity: 2026-10-21 -- Phase 7 execution started
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 4
-  completed_plans: 0
+  completed_plans: 35
   percent: 0
+stopped_at: Phase 7 complete (4/4) — ready to discuss Phase 8
 ---
 
 # Project State
@@ -20,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-20)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Phase 7 — Lineage Source and Per-Digest Scope
+**Current focus:** Phase 8 — gate and schema hardening
 
 ## Current Position
 
-Phase: 7 (Lineage Source and Per-Digest Scope) — EXECUTING
-Plan: 1 of 4
-Status: Executing Phase 7
-Last activity: 2026-10-21 -- Phase 7 execution started
+Phase: 8
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-10-21
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -35,7 +36,7 @@ Progress: [░░░░░░░░░░] 0%
 
 **Velocity:**
 
-- Total plans completed: 31
+- Total plans completed: 35
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -48,6 +49,7 @@ Progress: [░░░░░░░░░░] 0%
 | 04 | 7 | - | - |
 | 05 | 3 | - | - |
 | 06 | 9 | - | - |
+| 7 | 4 | - | - |
 
 **Recent Trend:**
 

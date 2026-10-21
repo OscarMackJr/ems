@@ -119,7 +119,7 @@ Phases execute in numeric order: 7 → 8 → 9 → 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 7. Lineage Source and Per-Digest Scope | 4/4 | Complete   | 2026-10-21 |
+| 7. Lineage Source and Per-Digest Scope | 4/4 | Complete    | 2026-10-21 |
 | 8. Gate and Schema Hardening | 0/TBD | Not started | - |
 | 9. Certified Republication 2.0.2 | 0/TBD | Not started | - |
 | 10. Notice to Hayes | 0/TBD | Not started | - |

@@ -7,9 +7,9 @@
 
 ### Lineage
 
-- [ ] **LIN-01**: Each digest in `source_lineage` declares its own normalisation (`RAW_BYTES` or `CRLF_TO_LF`); no single global field contradicts any digest
-- [ ] **LIN-02**: Each lineage digest can be recomputed from a file at a cited repo path (and commit where relevant) using the normalisation it declares; a validator does this recomputation and fails on any mismatch
-- [ ] **LIN-03**: The AA1 manifest is committed at a repo-relative path, protected with `-text` the same way as the AA2 outputs, and its raw-byte SHA-256 equals `f0da8e2e45c306ccc42ae96f25a19922668f3eedecdb26006f13514e24ad9b4b`
+- [x] **LIN-01**: Each digest in `source_lineage` declares its own normalisation (`RAW_BYTES` or `CRLF_TO_LF`); no single global field contradicts any digest
+- [x] **LIN-02**: Each lineage digest can be recomputed from a file at a cited repo path (and commit where relevant) using the normalisation it declares; a validator does this recomputation and fails on any mismatch
+- [x] **LIN-03**: The AA1 manifest is committed at a repo-relative path, protected with `-text` the same way as the AA2 outputs, and its raw-byte SHA-256 equals `f0da8e2e45c306ccc42ae96f25a19922668f3eedecdb26006f13514e24ad9b4b`
 
 ### Gates
 
@@ -54,9 +54,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LIN-01 | Phase 7 | Pending |
-| LIN-02 | Phase 7 | Pending |
-| LIN-03 | Phase 7 | Pending |
+| LIN-01 | Phase 7 | Complete |
+| LIN-02 | Phase 7 | Complete |
+| LIN-03 | Phase 7 | Complete |
 | GATE-01 | Phase 8 | Pending |
 | GATE-02 | Phase 8 | Pending |
 | GATE-03 | Phase 8 | Pending |
