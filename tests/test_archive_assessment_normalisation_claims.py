@@ -97,6 +97,11 @@ def test_reply_pin_normalisation_claim():
     # Read only: the sent 2.0.1 reply and its builder are never regenerated here (D-14).
     pin = read(REPLY)['pin']
     assert pin['digest_normalisation'] == CLAIM
-    assert pin['authority_sha256'] == lf_digest(MODULE.AUTHORITY)
-    assert pin['manifest_sha256'] == lf_digest(MANIFEST)
+    # Compare against the 2.0.1 blobs at the pinned publication commit, not the working files, so a later republication does not break the claim.
+    reason = git_ready()
+    if reason: pytest.skip(reason)
+    for key, path in (('authority_sha256', MODULE.AUTHORITY), ('manifest_sha256', MANIFEST)):
+        shown = git('show', f"{pin['publication_commit']}:{MODULE.rel(path)}")
+        assert shown.returncode == 0, shown.stderr
+        assert pin[key] == lf_sha(shown.stdout), key
     assert REPLY_PROSE in REPLY_DOC.read_bytes().decode('utf-8')
