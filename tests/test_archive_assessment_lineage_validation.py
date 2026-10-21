@@ -150,6 +150,18 @@ def test_d10_nonexistent_commit_raises(fx, label):
 
 
 @pytest.mark.parametrize('label', ['v1_baseline', 'supersedes'])
+@pytest.mark.parametrize('missing', ['absent', 'empty', 'none'])
+def test_wr01_commit_pinned_entry_without_commit_raises(fx, label, missing):
+    _, lin = fx
+    if missing == 'absent':
+        del lin[label]['commit']
+    else:
+        lin[label]['commit'] = '' if missing == 'empty' else None
+    with pytest.raises(AuthorityError):
+        MODULE.validate_lineage(lin)
+
+
+@pytest.mark.parametrize('label', ['v1_baseline', 'supersedes'])
 def test_d10_short_commit_raises(fx, label):
     _, lin = fx
     lin[label]['commit'] = 'abcdef0'

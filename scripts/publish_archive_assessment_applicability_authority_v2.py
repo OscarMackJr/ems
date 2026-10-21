@@ -312,6 +312,8 @@ def validate_publication(a: dict) -> None:
         if not isinstance(e, dict) or e.get(key) != EXPECTED_NORMALISATION[label]: errors.append(f'{label}: normalisation must be {EXPECTED_NORMALISATION[label]}')
     if errors: raise AuthorityError('; '.join(errors))
 
+COMMIT_PINNED = {'supersedes', 'supersedes_governance_decisions', 'v1_baseline'}
+
 def git_show(commit: str, relative_path: str) -> bytes:
     if not re.fullmatch(r'[0-9a-f]{40}', commit or ''): raise AuthorityError(f'{relative_path}: commit must be a 40-character lowercase hex SHA')
     if not isinstance(relative_path, str) or not relative_path or contains_absolute(relative_path) or '..' in relative_path.replace('\\', '/').split('/'): raise AuthorityError(f'{relative_path}: path must be repo-relative without ..')
@@ -334,6 +336,7 @@ def validate_lineage(lin: dict) -> None:
         if norm not in NORMALISERS: errors.append(f'{label}: unknown normalisation {norm!r}'); continue
         if norm != EXPECTED_NORMALISATION[label]: errors.append(f'{label}: normalisation {norm} differs from {EXPECTED_NORMALISATION[label]}'); continue
         if not isinstance(path, str) or not path or contains_absolute(path) or '..' in path.replace('\\', '/').split('/'): errors.append(f'{label}: relative_path missing or invalid'); continue
+        if label in COMMIT_PINNED and not commit: errors.append(f'{label}: commit-pinned entry must carry a commit'); continue
         try: data = git_show(commit, path) if commit else (ROOT / path).read_bytes()
         except (OSError, AuthorityError) as e: errors.append(f'{label}: {e}'); continue
         if hashlib.sha256(NORMALISERS[norm](data)).hexdigest() != want: errors.append(f'{label}: recomputed sha256 does not match the recorded digest')
