@@ -56,3 +56,12 @@ None.
 ## Self-Check
 
 Files exist and commits recorded by git; test results pending orchestrator run.
+
+## Orchestrator Test Run (2026-10-20)
+
+- py_compile: OK
+- `pytest tests -k archive_assessment`: 499 passed, 3 failed. The red set is exactly `test_committed_schema_equals_schema_function`, `test_real_published_files_validate` and `test_publisher_still_valid_and_digest_matches_manifest` (the accepted red window).
+- `--publish --dry-run`: no writes to registry/, schemas/ or generated/.
+- `--validate`: fails with `AuthorityError` because the committed 2.0.1 file has the old lineage shape (expected until Phase 9).
+- `validate_lineage` on the freshly built lineage against the real repo: PASS. aa1/aa2_closure/aa2_approval are RAW_BYTES. catalog, supersedes (git show 54a7fd0), v1_baseline (git show 62a8955) and governance_decisions are CRLF_TO_LF.
+
