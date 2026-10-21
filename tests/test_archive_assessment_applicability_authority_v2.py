@@ -29,7 +29,7 @@ def rule(*pairs): return {'combination': 'ALL_CONDITIONS_MUST_MATCH', 'condition
 def decide(c, state, r, a): c.update({'not_applicable_decision_state': state, 'not_applicable_rule': r, 'not_applicable_authority': a})
 
 def with_decisions_lineage(value):
-    value['source_lineage']['governance_decisions'] = {'relative_path': MODULE.GOVERNANCE_DECISIONS_REL, 'sha256': 'a' * 64, 'record_count': 21, 'drafting_commit': 'b' * 40}
+    value['source_lineage']['governance_decisions'] = {'relative_path': MODULE.GOVERNANCE_DECISIONS_REL, 'sha256': 'a' * 64, 'normalisation': 'CRLF_TO_LF', 'record_count': 21, 'drafting_commit': 'b' * 40}
     return value
 
 def ok(mutator):
@@ -141,9 +141,18 @@ def test_non_rule_fields_declared_but_unusable():
     assert all(isinstance(v, str) and v.strip() for v in sem(a)['field_definitions'].values())
 
 def test_lineage_keys_are_required_and_closed():
-    for key in ('governance_decisions', 'supersedes', 'v1_baseline', 'catalog_reference', 'digest_normalisation', 'aa1_manifest_sha256', 'aa2_closure_sha256', 'aa2_approval_sha256'):
+    for key in ('aa1_manifest', 'aa2_closure', 'aa2_approval', 'catalog_reference', 'governance_decisions', 'supersedes', 'v1_baseline'):
         schema_rejects(lambda a, k=key: a['source_lineage'].pop(k))
     schema_rejects(lambda a: a['source_lineage'].__setitem__('extra', 'x'))
+
+def test_global_digest_normalisation_is_rejected():
+    schema_rejects(lambda a: a['source_lineage'].__setitem__('digest_normalisation', 'CRLF_TO_LF'))
+
+def test_normalisation_outside_enum_or_wrong_value_is_rejected():
+    schema_rejects(lambda a: a['source_lineage']['aa1_manifest'].__setitem__('normalisation', 'LF'))
+    schema_rejects(lambda a: a['source_lineage']['aa1_manifest'].__setitem__('normalisation', 'CRLF_TO_LF'))
+    schema_rejects(lambda a: a['source_lineage']['catalog_reference'].__setitem__('normalisation', 'RAW_BYTES'))
+    schema_rejects(lambda a: a['source_lineage']['aa2_closure'].pop('normalisation'))
 
 def test_lineage_pins_are_enforced_by_schema():
     schema_rejects(lambda a: a['source_lineage']['supersedes'].__setitem__('version', '9.9.9'))
@@ -161,6 +170,7 @@ def test_supersedes_and_v1_baseline_follow_constants():
 
 def test_distinct_fields_in_one_rule_pass(): ok(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', rule(('production', 'KNOWN_FALSE'), ('ai_enabled', 'KNOWN_TRUE')), 'AA4-GOV-001'))
 
+# red until Phase 9 regenerates the committed schema (accepted window)
 def test_committed_schema_equals_schema_function(): assert json.loads(MODULE.SCHEMA.read_text(encoding='utf-8')) == schema()
 def test_v2_builder_does_not_use_generated_dir():
     src = inspect.getsource(MODULE.build_authority) + inspect.getsource(MODULE.build_published_authority)

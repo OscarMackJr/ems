@@ -1,5 +1,6 @@
 import copy
 import importlib.util
+import inspect
 from pathlib import Path
 
 import jsonschema
@@ -75,11 +76,21 @@ def test_lineage_records_governance_decisions_and_v1():
     assert lin['v1_baseline']['sha256'] == MODULE.lf_digest(MODULE.V1_AUTHORITY)
     assert gd['sha256'] == MODULE.SUPERSEDED_V2_0_0['governance_decisions_sha256']
     assert lin['catalog_reference']['sha256'] == MODULE.lf_digest(MODULE.CATALOG)
-    assert lin['digest_normalisation'] == 'CRLF_TO_LF'
+    assert 'digest_normalisation' not in lin
+    for k in ('aa1_manifest', 'aa2_closure', 'aa2_approval'): assert lin[k]['normalisation'] == 'RAW_BYTES'
+    for k in ('catalog_reference', 'v1_baseline', 'supersedes'): assert lin[k]['normalisation'] == 'CRLF_TO_LF'
+    assert lin['supersedes']['governance_decisions_normalisation'] == 'CRLF_TO_LF'
+    for k in ('aa1_manifest', 'aa2_closure', 'aa2_approval', 'catalog_reference', 'governance_decisions', 'supersedes', 'v1_baseline'): assert lin[k]['relative_path']
+    for k in ('supersedes', 'v1_baseline'): assert len(lin[k]['commit']) == 40 and set(lin[k]['commit']) <= set('0123456789abcdef')
+
+def source_without_git_show():
+    # D-10: subprocess is confined to git_show (and its import line)
+    src = inspect.getsource(MODULE).replace('import subprocess\n', '', 1)
+    return src.replace(inspect.getsource(MODULE.git_show), '', 1)
 
 def test_module_does_not_call_git():
-    src = SCRIPT.read_text(encoding='utf-8')
-    assert 'subprocess' not in src and 'import git' not in src
+    assert 'subprocess' not in source_without_git_show() and 'import git' not in source_without_git_show()
+    assert 'subprocess.run' in inspect.getsource(MODULE.git_show)
 
 def test_swapped_authority_fails():
     def m(a):
@@ -198,7 +209,13 @@ def valid_signoff(authority_digest, on='2026-10-14'):
     return {'status': 'PUBLICATION_SIGNOFF', 'approval': {'approver': 'Oscar Mack', 'role': 'EMS_GOVERNANCE_AUTHORITY', 'date': on, 'scope': 'Publish v2 authority'}, 'dual_role_statement': DUAL, 'authority_id': MODULE.AUTHORITY_ID, 'version': MODULE.VERSION, 'authority_sha256': authority_digest, 'authority_sha256_normalisation': 'CRLF_TO_LF'}
 
 @pytest.fixture
-def env(monkeypatch):
+def lineage_calls():
+    return []
+
+@pytest.fixture
+def env(monkeypatch, lineage_calls):
+    # validate_lineage reads git history and the real tree; under the empty temp ROOT it is a recorder
+    monkeypatch.setattr(MODULE, 'validate_lineage', lambda lin: lineage_calls.append(lin))
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
         for name, value in {'ROOT': root, 'AUTHORITY': root / 'registry' / 'a.json', 'SCHEMA': root / 'schemas' / 's.json', 'SIGNOFF': root / 'registry' / 'signoff.json', 'PUBLICATION_RECORD': root / 'registry' / 'record.json', 'OUT': root / 'generated' / 'out', 'SCRIPT': root / 'scripts' / 'pub.py'}.items():
@@ -359,6 +376,13 @@ def test_publish_writes_all_and_is_byte_identical(env):
     MODULE.publish(False)
     assert snapshot() == first
     MODULE.validate_published()
+
+def test_validate_published_calls_validate_lineage(env, lineage_calls):
+    published(env)
+    lineage_calls.clear()
+    MODULE.validate_published()
+    a = MODULE.load(MODULE.AUTHORITY)
+    assert lineage_calls == [a['source_lineage']]
 
 def test_validate_published_rejects_absent_authority(env):
     with pytest.raises(AuthorityError, match='not published'):
@@ -555,7 +579,9 @@ def test_rows_equal_2_0_0_rows_and_only_identity_and_lineage_differ():
     differing = {k for k in set(old) | set(new) if old.get(k) != new.get(k)}
     assert differing <= {'authority_id', 'version', 'source_lineage'}
     ol, nl = old['source_lineage'], new['source_lineage']
-    assert {k for k in set(ol) | set(nl) if ol.get(k) != nl.get(k)} == {'supersedes', 'v1_baseline'}
+    assert nl['aa1_manifest']['sha256'] == ol['aa1_manifest_sha256']
+    assert nl['aa2_closure']['sha256'] == ol['aa2_closure_sha256']
+    assert nl['aa2_approval']['sha256'] == ol['aa2_approval_sha256']
 
 def test_version_constants_and_published_on_removed():
     assert MODULE.VERSION == '2.0.1' and MODULE.AUTHORITY_ID.endswith('-2.0.1')
@@ -674,8 +700,9 @@ def test_certification_and_semantic_files_are_derived(env):
     assert cert['prohibitions'] == {'evaluator_executions': 0, 'hayes_modifications': 0, 'target_comparisons': 0}
 
 def test_publisher_source_runs_no_subprocess_or_evaluator():
-    src = SCRIPT.read_text(encoding='utf-8')
+    src = source_without_git_show()
     for banned in ('subprocess', 'os.system', 'Evaluate-', 'Popen'): assert banned not in src
+    assert 'subprocess.run' in inspect.getsource(MODULE.git_show)
 
 def test_published_negative_file_equals_observed_outcomes(env):
     published(env)
