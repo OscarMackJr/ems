@@ -57,6 +57,7 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - ✓ `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0` published with certification, traceability and passing tests at commit `54a7fd0` (signed off by Oscar Mack as EMS governance authority; SHA recorded in `0ce89f2`) — Validated in Phase 4: Certified Publication
 - ✓ A written reply to request `DEMO3-W1-REQ-001` (`docs/DEMO3_W1_REQ_001_REPLY.md`, `registry/archive_assessment_demo3_w1_req_001_reply.json`, generated and `--validate`-checked by `scripts/build_archive_assessment_demo3_w1_req_001_reply.py`) cites authority `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0`, version 2.0.0 and commit `54a7fd0`, and states what EMS did and did not publish; unsigned and not sent until the pin is on the remote — Validated in Phase 5: Reply to Hayes
 - ✓ Publication gates hardened and the authority republished as `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1` at `31addfa` with no decision changed; reply regenerated to cite 2.0.1 — Validated in Phase 6; shipped v1.0.0
+- ✓ Every `source_lineage` digest declares its own normalisation (`RAW_BYTES` for aa1/aa2_closure/aa2_approval, `CRLF_TO_LF` otherwise) and is recomputed by `validate_lineage` from the working tree or by `git show` at its pinned commit, failing closed. The AA1 manifest is committed under `-text` (`bb7c067`, raw sha256 `f0da8e2e…`). LIN-01..03 — Validated in Phase 7. The publisher change opened the accepted red window, which closes at the Phase 9 republication.
 
 ### Active
 
@@ -153,4 +154,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-20 — milestone v1.1.0 (Authority 2.0.2 Lineage Correction) started*
+*Last updated: 2026-10-20 — Phase 7 (Lineage Source and Per-Digest Scope) complete*
