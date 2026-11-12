@@ -40,11 +40,13 @@ def load(p): return json.loads(p.read_text(encoding='utf-8'))
 
 def kind(cid): return BY_ID[cid]['proposed_outcome']
 
+WORDS = ['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'hotel', 'india', 'juliet', 'kilo', 'lima', 'mike', 'november', 'oscar', 'papa', 'quebec', 'romeo', 'sierra', 'tango', 'uniform']
+
 def filled():
     entries = []
-    for c in MODULE.CONTROL_IDS:
+    for i, c in enumerate(MODULE.CONTROL_IDS):
         e = MODULE.blank_entry(c)
-        e.update(disposition='APPROVED_AS_DRAFTED', note=f'Test-only note for {c}, reviewed on its own.', decided_on='2026-10-14')
+        e.update(disposition='APPROVED_AS_DRAFTED', note=f'Test-only note, the {WORDS[i]} review, kept on its own.', decided_on='2026-10-14')
         if c in MODULE.SCOPE_NOTE_IDS: e['scope_note_ruling'] = 'ACCEPTED_AS_TRUE_LIMITATION'
         entries.append(e)
     a = {'status': MODULE.STATUS, 'entries': entries}
@@ -331,7 +333,7 @@ def test_records_unchanged_since_eed4a5f():
 
 def extra_entry(a, cid=NO_RULE_ID, **changes):
     e = copy.deepcopy(ent(a, cid))
-    e.update(note=f'Superseding review of {cid}, reconsidered after a second reading of the catalog.', supersedes=f'AA4-GOV-{MODULE.CONTROL_IDS.index(cid) + 1:03d}')
+    e.update(note=f'Superseding {WORDS[MODULE.CONTROL_IDS.index(cid)]} review, reconsidered after a second reading of the catalog.', supersedes=f'AA4-GOV-{MODULE.CONTROL_IDS.index(cid) + 1:03d}')
     e.update(changes)
     a['entries'].append(e)
     return e

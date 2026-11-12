@@ -27,11 +27,13 @@ def scan(text): return [t for t in TERMS if re.search(re.escape(t), text, re.IGN
 
 def rule(*pairs): return {'combination': 'ALL_CONDITIONS_MUST_MATCH', 'conditions': [{'field': f, 'state': s} for f, s in pairs]}
 
+WORDS = ['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'hotel', 'india', 'juliet', 'kilo', 'lima', 'mike', 'november', 'oscar', 'papa', 'quebec', 'romeo', 'sierra', 'tango', 'uniform']
+
 def filled():
     entries = []
-    for c in MODULE.CONTROL_IDS:
+    for i, c in enumerate(MODULE.CONTROL_IDS):
         e = MODULE.blank_entry(c)
-        e.update(disposition='APPROVED_AS_DRAFTED', note=f'Reviewed {c} individually and kept the draft.', decided_on='2026-10-14')
+        e.update(disposition='APPROVED_AS_DRAFTED', note=f'Reviewed the {WORDS[i]} item individually and kept the draft.', decided_on='2026-10-14')
         if c in MODULE.SCOPE_NOTE_IDS: e['scope_note_ruling'] = 'ACCEPTED_AS_TRUE_LIMITATION'
         entries.append(e)
     return {'status': MODULE.STATUS, 'entries': entries}
@@ -58,7 +60,7 @@ def test_committed_answers_lenient_and_schema():
 def test_committed_answers_strict_when_filled():
     a = load(MODULE.ANSWERS)
     if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
-    MODULE.validate_answers(a, PROPOSALS, strict=True)
+    MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=MODULE.answers_digest(MODULE.ANSWERS))
 
 def test_scope_note_ids_equal_proposals_with_shape_limitation():
     assert set(MODULE.SCOPE_NOTE_IDS) == {p['control_id'] for p in PROPOSALS['proposals'] if p['shape_limitation'] is not None}
@@ -102,6 +104,32 @@ def test_strict_matrix_base_passes():
     a = filled()
     MODULE.validate_answers(a, PROPOSALS, strict=True)
     jsonschema.Draft202012Validator(MODULE.answers_schema()).validate(a)
+
+def test_notes_differing_only_in_templated_values_fail():
+    a = filled()
+    ent(a, 'EMS-CTRL-010')['note'] = 'Reviewed item 10 under EMS-CTRL-010 and kept the draft.'
+    ent(a, NO_RULE_ID)['note'] = 'Reviewed item 77 under EMS-CTRL-077 and kept the draft.'
+    with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.validate_answers(a, PROPOSALS, strict=True)
+
+def test_certified_digest_grandfathers_committed_answers():
+    a = load(MODULE.ANSWERS)
+    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    assert MODULE.CERTIFIED_ANSWERS_SHA256 == MODULE.answers_digest(MODULE.ANSWERS)
+    MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=MODULE.CERTIFIED_ANSWERS_SHA256)
+
+def test_changed_answers_bytes_remove_exemption():
+    a = load(MODULE.ANSWERS)
+    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    changed = MODULE.V2.sha_text(MODULE.ANSWERS.read_text(encoding='utf-8') + ' ')
+    for digest in (None, changed):
+        with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=digest)
+
+def test_exemption_is_the_exact_constant():
+    a = load(MODULE.ANSWERS)
+    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    c = MODULE.CERTIFIED_ANSWERS_SHA256
+    flipped = c[:-1] + ('0' if c[-1] != '0' else '1')
+    with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=flipped)
 
 def test_empty_note_fails(): strict_invalid(lambda a: ent(a, NO_RULE_ID).__setitem__('note', ''))
 def test_identical_notes_fail():
