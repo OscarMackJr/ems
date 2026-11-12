@@ -47,6 +47,8 @@ CATALOG_COMMIT = V1_BASELINE_COMMIT
 V1_BASELINE_ID ='EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0'
 V1_BASELINE_REL = 'registry/archive_assessment_applicability_authority.json'
 RESULTS = ['APPLICABLE','NOT_APPLICABLE','APPLICABILITY_UNRESOLVED']
+ATTESTATION_KEYS = ['historical_compliance_attestation','current_repository_attestation','production_readiness_attestation']
+LIVE_BOUNDARY = ['LIVE_REPOSITORY_STATE','ORGANIZATION_AUTHORITY','SERVICE_STATE','PLATFORM_STATE','CURRENT_CICD_STATE','RUNTIME_STATE']
 FIELD_DEFINITIONS = {
     'production': 'KNOWN_TRUE asserts that the target is used as, or supports, a production system, so production-data, recovery and release controls are in play.',
     'internet_exposed': 'KNOWN_TRUE asserts that the target, or a service it provides, is reachable from the public internet.',
@@ -255,7 +257,7 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
     if not isinstance(eb, dict): errors.append('evidence_boundary must be an object'); eb = {}
     dne = eb.get('archive_content_does_not_establish', [])
     forbidden = {x for x in dne if isinstance(x, str)} if isinstance(dne, list) else set()
-    if not {'LIVE_REPOSITORY_STATE','ORGANIZATION_AUTHORITY','SERVICE_STATE','PLATFORM_STATE','CURRENT_CICD_STATE','RUNTIME_STATE'} <= forbidden: errors.append('live authority evidence boundary incomplete')
+    if not set(LIVE_BOUNDARY) <= forbidden: errors.append('live authority evidence boundary incomplete')
     for i, r in enumerate(rows):
         if not isinstance(r, dict): errors.append(f'control row {i} must be an object'); continue
         cid = r.get('control_id')
@@ -273,7 +275,7 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
         elif known_decision_ids is not None and auth not in known_decision_ids: errors.append(f'{cid}: authority {auth} is not an approved decision id')
     att = a.get('attestation_prohibitions', {})
     if not isinstance(att, dict): att = {}
-    if any(att.get(k) is not False for k in ['historical_compliance_attestation','current_repository_attestation','production_readiness_attestation']): errors.append('attestation leakage')
+    if any(att.get(k) is not False for k in ATTESTATION_KEYS): errors.append('attestation leakage')
     if errors: raise AuthorityError('; '.join(errors))
 
 def validate_publication(a: dict) -> None:
@@ -383,16 +385,20 @@ def schema() -> dict:
     def branch(state, rule_s, auth_s):
         return {'if':{'properties':{'not_applicable_decision_state':{'const':state}},'required':['not_applicable_decision_state']},'then':{'properties':{'not_applicable_rule':rule_s,'not_applicable_authority':auth_s}}}
     sem = {'type':'object','additionalProperties':False,'required':['requires_explicit_controlled_rule','absence_of_evidence_is_not_not_applicable','unknown_is_not_not_applicable','decision_states','condition_states','condition_combination','min_conditions','field_may_appear_once','rule_condition_fields','fields_not_usable_in_rules','fields_not_usable_in_rules_statement','field_definitions','resolution','no_short_circuit','decision_state_governs_resolved_result','per_control_default_describes_result_absent_a_decision','unknown_is_never_not_applicable','statements'],
-        'properties':{'requires_explicit_controlled_rule':{'const':True},'absence_of_evidence_is_not_not_applicable':{'const':True},'unknown_is_not_not_applicable':{'const':True},'decision_states':{'const':list(DECISION_STATES)},'condition_states':{'const':list(CONDITION_STATES)},'condition_combination':{'const':COMBINATION},'min_conditions':{'const':1},'field_may_appear_once':{'const':True},'rule_condition_fields':{'const':list(RULE_FIELDS)},'fields_not_usable_in_rules':{'const':list(NON_RULE_FIELDS)},'field_definitions':{'type':'object','additionalProperties':False,'required':list(RULE_FIELDS),'properties':{f:{'type':'string','minLength':1} for f in RULE_FIELDS}},'resolution':{'const':[dict(r) for r in RESOLUTION]},'no_short_circuit':{'const':True},'decision_state_governs_resolved_result':{'const':True},'per_control_default_describes_result_absent_a_decision':{'const':True},'unknown_is_never_not_applicable':{'const':True},'fields_not_usable_in_rules_statement':{'type':'string'},'statements':{'type':'array','items':{'type':'string'}}}}
+        'properties':{'requires_explicit_controlled_rule':{'const':True},'absence_of_evidence_is_not_not_applicable':{'const':True},'unknown_is_not_not_applicable':{'const':True},'decision_states':{'const':list(DECISION_STATES)},'condition_states':{'const':list(CONDITION_STATES)},'condition_combination':{'const':COMBINATION},'min_conditions':{'const':1},'field_may_appear_once':{'const':True},'rule_condition_fields':{'const':list(RULE_FIELDS)},'fields_not_usable_in_rules':{'const':list(NON_RULE_FIELDS)},'field_definitions':{'type':'object','additionalProperties':False,'required':list(RULE_FIELDS),'properties':{f:{'type':'string','minLength':1} for f in RULE_FIELDS}},'resolution':{'const':[dict(r) for r in RESOLUTION]},'no_short_circuit':{'const':True},'decision_state_governs_resolved_result':{'const':True},'per_control_default_describes_result_absent_a_decision':{'const':True},'unknown_is_never_not_applicable':{'const':True},'fields_not_usable_in_rules_statement':{'const':semantics()['fields_not_usable_in_rules_statement']},'statements':{'const':list(semantics()['statements'])}}}
+    truthy = {'not':{'enum':[False,None,0,'',[],{}]}}
+    attest = {'type':'object','required':list(ATTESTATION_KEYS),'properties':{k:{'const':False} for k in ATTESTATION_KEYS}}
+    vocab = {'type':'object','required':['states','unknown_is_not_false','unknown_is_not_not_applicable'],'properties':{'states':{'const':['KNOWN_TRUE','KNOWN_FALSE','UNKNOWN']},'unknown_is_not_false':truthy,'unknown_is_not_not_applicable':truthy}}
+    boundary = {'type':'object','required':['archive_content_does_not_establish'],'properties':{'archive_content_does_not_establish':{'type':'array','allOf':[{'contains':{'const':s}} for s in LIVE_BOUNDARY]}}}
     return {'$schema':'https://json-schema.org/draft/2020-12/schema','title':'EMS AA3 Archive Assessment Applicability Authority v2','type':'object','additionalProperties':False,
-        'required':['document_id','version','status','authority_id','target_type','assessment_semantics','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','applicability_decision_ids','controls'],
-        'properties':{'$schema':{'type':'string'},'applicability_vocabulary':{'type':'array'},'attestation_prohibitions':{'type':'object'},'classification_vocabulary':{'type':'object'},'evidence_boundary':{'type':'object'},'document_id':{'const':'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY'},'version':{'const':VERSION},'status':{'const':'CONTROLLED'},'authority_id':{'const':AUTHORITY_ID},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},
+        'required':['document_id','version','status','authority_id','target_type','assessment_semantics','attestation_prohibitions','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','applicability_decision_ids','controls'],
+        'properties':{'$schema':{'type':'string'},'applicability_vocabulary':{'type':'array'},'attestation_prohibitions':attest,'classification_vocabulary':vocab,'evidence_boundary':boundary,'document_id':{'const':'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY'},'version':{'const':VERSION},'status':{'const':'CONTROLLED'},'authority_id':{'const':AUTHORITY_ID},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},
             'approved_governance_decision_ids':{'type':'array','minItems':8,'maxItems':8,'items':{'type':'string','pattern':'^AA1-GOV-00[1-8]$'},'uniqueItems':True},
             'applicability_decision_ids':{'type':'array','minItems':0,'maxItems':21,'items':{'type':'string','pattern':AUTHORITY_ID_RE},'uniqueItems':True},
             'source_lineage':lineage,
             'not_applicable_semantics':sem,
             'controls':{'type':'array','minItems':80,'maxItems':80,'items':{'type':'object','additionalProperties':False,
-                'required':['control_id','archive_population_membership','target_type','assessment_semantics','classification_prerequisites','classification_unknown_treatment','archive_evidence_capability','required_non_repository_authority','default_applicability_result','unresolved_reason','not_applicable_decision_state','not_applicable_rule','not_applicable_authority','decision_ids'],
+                'required':['control_id','control_name','catalog_scope','archive_population_membership','target_type','assessment_semantics','classification_prerequisites','classification_unknown_treatment','archive_evidence_capability','required_non_repository_authority','default_applicability_result','unresolved_reason','not_applicable_decision_state','not_applicable_rule','not_applicable_authority','decision_ids'],
                 'properties':{'archive_evidence_capability':{'type':'string'},'catalog_scope':{'type':'string'},'classification_prerequisites':{'type':'array','items':{'type':'string'}},'control_name':{'type':'string'},'required_non_repository_authority':{'type':'string'},'unresolved_reason':{'type':'string'},'control_id':{'type':'string','pattern':'^EMS-CTRL-[0-9]{3}$'},'archive_population_membership':{'const':'IN_ARCHIVE_CONTROL_POPULATION'},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},'classification_unknown_treatment':{'const':'APPLICABILITY_UNRESOLVED'},'default_applicability_result':{'const':'APPLICABILITY_UNRESOLVED'},
                     'not_applicable_decision_state':{'enum':list(DECISION_STATES)},'not_applicable_rule':{'anyOf':[rule,{'type':'null'}]},'not_applicable_authority':{'anyOf':[auth,{'type':'null'}]},
                     'decision_ids':{'type':'array','minItems':8,'maxItems':8,'uniqueItems':True}},

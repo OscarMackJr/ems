@@ -66,6 +66,23 @@ def both_reject(mutator):
     invalid(mutator)
     schema_rejects(mutator)
 
+WR04_MUTATIONS = {
+    'missing_attestation_prohibitions': lambda a: a.pop('attestation_prohibitions'),
+    'historical_compliance_attestation_true': lambda a: a['attestation_prohibitions'].__setitem__('historical_compliance_attestation', True),
+    'unknown_is_not_false_false': lambda a: a['classification_vocabulary'].__setitem__('unknown_is_not_false', False),
+    'unknown_is_not_not_applicable_missing': lambda a: a['classification_vocabulary'].pop('unknown_is_not_not_applicable'),
+    'classification_states_changed': lambda a: a['classification_vocabulary'].__setitem__('states', ['KNOWN_TRUE', 'KNOWN_FALSE']),
+    'live_boundary_entry_removed': lambda a: a['evidence_boundary']['archive_content_does_not_establish'].remove('LIVE_REPOSITORY_STATE'),
+    'statements_altered': lambda a: a['not_applicable_semantics']['statements'].append('Extra statement.'),
+    'fields_statement_altered': lambda a: a['not_applicable_semantics'].__setitem__('fields_not_usable_in_rules_statement', 'changed'),
+}
+
+@pytest.mark.parametrize('name', sorted(WR04_MUTATIONS))
+def test_schema_and_validator_both_reject_states_python_forbids(name): both_reject(WR04_MUTATIONS[name])
+
+@pytest.mark.parametrize('key', ['control_name', 'catalog_scope'])
+def test_schema_requires_control_name_and_catalog_scope(key): schema_rejects(lambda a: a['controls'][0].pop(key))
+
 PROD_INET = (('production', 'KNOWN_FALSE'), ('internet_exposed', 'KNOWN_FALSE'))
 
 def test_rule_published_state_passes(): ok(lambda a: decide(a['controls'][0], 'RULE_PUBLISHED', rule(*PROD_INET), 'AA4-GOV-001'))
