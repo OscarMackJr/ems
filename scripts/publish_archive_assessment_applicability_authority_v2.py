@@ -280,6 +280,22 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
 
 PREV_COMPARED_KEYS = ('not_applicable_decision_state', 'not_applicable_rule', 'not_applicable_authority', 'decision_ids')
 
+def rows_differing_from_previous(a: dict) -> tuple[list, bool]:
+    prev = json.loads(git_show(SUPERSEDED_V2_0_1['commit'], SUPERSEDED_V2_0_1['relative_path']).decode('utf-8'))
+    prev_rows = {r.get('control_id'): r for r in prev.get('controls', [])}
+    rows = a.get('controls', [])
+    diff = [r.get('control_id') for r in rows if prev_rows.get(r.get('control_id')) is None or any(r.get(k) != prev_rows[r.get('control_id')].get(k) for k in PREV_COMPARED_KEYS)]
+    return diff, set(prev_rows) != {r.get('control_id') for r in rows} or a.get('applicability_decision_ids') != prev.get('applicability_decision_ids')
+
+def closed_schema_levels(node: object, path: str = '$') -> list:
+    out = []
+    if isinstance(node, dict):
+        if node.get('additionalProperties') is False: out.append(path)
+        for k, v in node.items(): out += closed_schema_levels(v, f'{path}.{k}')
+    elif isinstance(node, list):
+        for i, v in enumerate(node): out += closed_schema_levels(v, f'{path}[{i}]')
+    return out
+
 def validate_publication(a: dict) -> None:
     doc = load(GOVERNANCE_DECISIONS)
     validate_authority(a, known_decision_ids={r['decision_id'] for r in doc['records']})
@@ -306,12 +322,9 @@ def validate_publication(a: dict) -> None:
         rec0 = latest.get(r.get('control_id'))
         want = (rec0['decided_outcome'], rec0['decided']['rule'], rec0['decision_id']) if rec0 else ('NOT_YET_DECIDED', None, None)
         if (r.get('not_applicable_decision_state'), r.get('not_applicable_rule'), r.get('not_applicable_authority')) != want: errors.append(f"{r.get('control_id')}: decision fields differ from the decision records")
-    prev = json.loads(git_show(SUPERSEDED_V2_0_1['commit'], SUPERSEDED_V2_0_1['relative_path']).decode('utf-8'))
-    prev_rows = {r.get('control_id'): r for r in prev.get('controls', [])}
-    for r in rows:
-        p = prev_rows.get(r.get('control_id'))
-        if p is None or any(r.get(k) != p.get(k) for k in PREV_COMPARED_KEYS): errors.append(f"{r.get('control_id')}: decision content differs from 2.0.1")
-    if set(prev_rows) != {r.get('control_id') for r in rows} or a.get('applicability_decision_ids') != prev.get('applicability_decision_ids'): errors.append('decision set differs from 2.0.1')
+    diff_ids, set_differs = rows_differing_from_previous(a)
+    for cid in diff_ids: errors.append(f"{cid}: decision content differs from 2.0.1")
+    if set_differs: errors.append('decision set differs from 2.0.1')
     for r in rows:
         auth = r.get('not_applicable_authority')
         if auth is None: continue
@@ -554,6 +567,13 @@ def dry_run_summary(authority: dict) -> str:
     lines += ['', f'Authority LF sha256: {sha_text(jtext(authority))}', 'Digest normalisation: CRLF_TO_LF']
     same = 'equals' if dsha == sup['governance_decisions_sha256'] else 'DIFFERS FROM'
     lines += ['', f'Version {authority["version"]} supersedes {sup["authority_id"]} version {sup["version"]} (commit {sup["commit"][:7]}). No decision changed: the governance decisions LF sha256 {dsha} {same} the {sup["version"]} value.']
+    diff_ids, set_differs = rows_differing_from_previous(authority)
+    same_rows = f'{len(rows) - len(diff_ids)} controls identical to {sup["version"]}' if not diff_ids and not set_differs else f'{len(diff_ids)} controls DIFFER from {sup["version"]}' + ('; decision set differs' if set_differs else '')
+    levels = closed_schema_levels(schema())
+    lines += ['', f'What changed in {authority["version"]}:']
+    for label, e in authority['source_lineage'].items():
+        if isinstance(e, dict) and 'relative_path' in e: lines.append(f"  lineage {label}: {e['relative_path']} ({e.get('normalisation', 'n/a')})")
+    lines += [f'  negative mutations: {len(NEGATIVE_MUTATIONS)}', f'  schema levels with additionalProperties false: {len(levels)} ({", ".join(levels)})', f'  row comparison {sup["version"]} -> {authority["version"]}: {same_rows}', '  Gates GATE-01 to GATE-05: publication-record check and pre-publication mode; domain-error-only mutation gate; frozen catalog reference; shallow-clone record lookup; norm_templated uniqueness.']
     return '\n'.join(lines) + '\n'
 
 def build_all_outputs(authority: dict, signoff: dict, script_sha256: str | None = None) -> dict:

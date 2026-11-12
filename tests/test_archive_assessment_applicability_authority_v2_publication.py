@@ -800,6 +800,16 @@ def test_dry_run_summary_lists_decisions_rules_and_supersession(env, capsys):
     assert f"supersedes {sup['authority_id']} version 2.0.1 (commit 31addfa). No decision changed" in out
     assert f"{sup['governance_decisions_sha256']} equals the 2.0.1 value" in out
     for word in ('best', 'critical', 'important', 'recommended', 'highest'): assert word not in out.lower()
+    assert 'What changed in 2.0.2' in out
+    for label, e in build()['source_lineage'].items():
+        if isinstance(e, dict) and 'relative_path' in e: assert f"lineage {label}: {e['relative_path']} ({e['normalisation']})" in out
+    assert 'lineage aa1_manifest: ' in out and '(RAW_BYTES)' in out
+    assert f'negative mutations: {len(MODULE.NEGATIVE_MUTATIONS)}' in out
+    levels = MODULE.closed_schema_levels(MODULE.schema())
+    assert levels and f'additionalProperties false: {len(levels)} (' in out
+    assert 'row comparison 2.0.1 -> 2.0.2: 80 controls identical to 2.0.1' in out
+    assert 'GATE-01 to GATE-05' in out
+    assert 'Decided controls: 21' in out and 'Undecided controls: 59' in out
 
 def test_mutation_records_shape():
     ids = [m.id for m in MODULE.NEGATIVE_MUTATIONS]
