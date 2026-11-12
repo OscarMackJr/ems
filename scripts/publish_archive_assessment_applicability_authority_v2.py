@@ -218,6 +218,7 @@ def validate_rule(cid: str, rule: object, errors: list) -> None:
         seen.append(cond['field'])
 
 def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
+    if not isinstance(a, dict): raise AuthorityError('authority must be an object')
     errors = []
     req = {'document_id','version','status','authority_id','target_type','assessment_semantics','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','controls'}
     if not req <= set(a): errors.append('missing required top-level authority fields')
@@ -225,6 +226,7 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
     if a.get('target_type') != 'ARCHIVED_REPOSITORY_SNAPSHOT' or a.get('assessment_semantics') != 'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT': errors.append('unauthorized target or assessment semantics')
     if a.get('approved_governance_decision_ids') != DECISIONS: errors.append('AA2 decision provenance is incomplete or contains an unapproved decision')
     cv = a.get('classification_vocabulary', {})
+    if not isinstance(cv, dict): errors.append('classification_vocabulary must be an object'); cv = {}
     if cv.get('states') != ['KNOWN_TRUE','KNOWN_FALSE','UNKNOWN'] or not cv.get('unknown_is_not_false') or not cv.get('unknown_is_not_not_applicable'): errors.append('UNKNOWN semantics collapse or vocabulary invalid')
     sem = a.get('not_applicable_semantics', {})
     if not isinstance(sem, dict): sem = {}
@@ -239,14 +241,23 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
     if sup != SUPERSEDED_V2_0_0: errors.append('source_lineage supersedes does not name the 2.0.0 publication')
     if not isinstance(v1b, dict) or {k: v for k, v in v1b.items() if k != 'sha256'} != {k: v for k, v in v1_baseline_entry().items() if k != 'sha256'}: errors.append('source_lineage v1_baseline entry missing or invalid')
     if contains_absolute(a): errors.append('absolute local path used as authority identity')
-    for dependency in a.get('dependencies', []):
+    deps = a.get('dependencies', [])
+    if not isinstance(deps, list): errors.append('dependencies must be a list'); deps = []
+    for dependency in deps:
+        if not isinstance(dependency, dict): errors.append('dependency must be an object'); continue
         if dependency.get('required_for_deterministic_compilation') and (not dependency.get('relative_path') or not dependency.get('sha256')): errors.append('required authority dependency cannot be deterministically frozen')
-    catalog_ids = {c['control_id'] for c in catalog_controls()}; rows = a.get('controls', []); ids = [r.get('control_id') for r in rows]
+    catalog_ids = {c['control_id'] for c in catalog_controls()}; rows = a.get('controls', [])
+    if not isinstance(rows, list): errors.append('controls must be a list'); rows = []
+    ids = [r.get('control_id') if isinstance(r, dict) and isinstance(r.get('control_id'), str) else None for r in rows]
     if len(ids) != 80 or len(set(ids)) != 80: errors.append('duplicate or incorrect control population count')
     if set(ids) != catalog_ids: errors.append('missing or unknown control ID')
-    forbidden = set(a.get('evidence_boundary', {}).get('archive_content_does_not_establish', []))
+    eb = a.get('evidence_boundary', {})
+    if not isinstance(eb, dict): errors.append('evidence_boundary must be an object'); eb = {}
+    dne = eb.get('archive_content_does_not_establish', [])
+    forbidden = {x for x in dne if isinstance(x, str)} if isinstance(dne, list) else set()
     if not {'LIVE_REPOSITORY_STATE','ORGANIZATION_AUTHORITY','SERVICE_STATE','PLATFORM_STATE','CURRENT_CICD_STATE','RUNTIME_STATE'} <= forbidden: errors.append('live authority evidence boundary incomplete')
-    for r in rows:
+    for i, r in enumerate(rows):
+        if not isinstance(r, dict): errors.append(f'control row {i} must be an object'); continue
         cid = r.get('control_id')
         if r.get('archive_population_membership') != 'IN_ARCHIVE_CONTROL_POPULATION': errors.append(f'{cid}: population membership not explicit')
         if r.get('default_applicability_result') != 'APPLICABILITY_UNRESOLVED' or r.get('classification_unknown_treatment') != 'APPLICABILITY_UNRESOLVED': errors.append(f'{cid}: UNKNOWN/missing input is not fail-closed unresolved')
@@ -261,6 +272,7 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
         if not isinstance(auth, str) or not re.match(AUTHORITY_ID_RE, auth): errors.append(f'{cid}: decided control needs an AA4-GOV-NNN authority')
         elif known_decision_ids is not None and auth not in known_decision_ids: errors.append(f'{cid}: authority {auth} is not an approved decision id')
     att = a.get('attestation_prohibitions', {})
+    if not isinstance(att, dict): att = {}
     if any(att.get(k) is not False for k in ['historical_compliance_attestation','current_repository_attestation','production_readiness_attestation']): errors.append('attestation leakage')
     if errors: raise AuthorityError('; '.join(errors))
 
@@ -273,7 +285,7 @@ def validate_publication(a: dict) -> None:
     if decided != set(REQUEST_CONTROL_IDS): errors.append('decided control set is not exactly the 21 requested controls')
     auths = [r.get('not_applicable_authority') for r in rows if r.get('not_applicable_authority') is not None]
     ids = a.get('applicability_decision_ids')
-    if not isinstance(ids, list) or len(set(ids)) != len(ids) or set(ids) != set(auths) or len(auths) != len(set(auths)): errors.append('applicability_decision_ids must list each cited authority exactly once')
+    if not isinstance(ids, list) or not all(isinstance(x, str) for x in ids) or len(set(ids)) != len(ids) or set(ids) != set(auths) or len(auths) != len(set(auths)): errors.append('applicability_decision_ids must list each cited authority exactly once')
     lin = a.get('source_lineage') if isinstance(a.get('source_lineage'), dict) else {}
     gd = lin.get('governance_decisions')
     if not isinstance(gd, dict): errors.append('governance_decisions lineage missing')

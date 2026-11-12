@@ -843,6 +843,29 @@ def test_python_validators_raise_only_domain_errors(m):
     except (KeyError, TypeError, AttributeError) as e:
         pytest.fail(f'{m.id}: validator crashed with {type(e).__name__}')
 
+MALFORMED_SHAPES = {
+    'classification_vocabulary_is_a_list': lambda a: a.__setitem__('classification_vocabulary', ['KNOWN_TRUE']),
+    'control_row_is_a_string': lambda a: a['controls'].__setitem__(0, 'EMS-CTRL-001'),
+    'controls_is_an_object': lambda a: a.__setitem__('controls', {'EMS-CTRL-001': {}}),
+    'control_id_is_a_list': lambda a: a['controls'][0].__setitem__('control_id', ['EMS-CTRL-001']),
+    'evidence_boundary_is_a_string': lambda a: a.__setitem__('evidence_boundary', 'none'),
+    'evidence_boundary_list_holds_objects': lambda a: a['evidence_boundary'].__setitem__('archive_content_does_not_establish', [{'x': 1}]),
+    'attestation_prohibitions_is_a_list': lambda a: a.__setitem__('attestation_prohibitions', []),
+    'dependencies_holds_a_string': lambda a: a.__setitem__('dependencies', ['x']),
+    'applicability_decision_ids_holds_an_object': lambda a: a['applicability_decision_ids'].__setitem__(0, {'id': 'AA4-GOV-001'}),
+}
+
+@pytest.mark.parametrize('name', sorted(MALFORMED_SHAPES))
+def test_malformed_authority_shapes_raise_domain_error(name):
+    a = copy.deepcopy(build()); MALFORMED_SHAPES[name](a)
+    with pytest.raises(AuthorityError):
+        validate_publication(a)
+
+@pytest.mark.parametrize('value', [[], 'text', 7, None])
+def test_non_object_authority_raises_domain_error(value):
+    with pytest.raises(AuthorityError, match='authority must be an object'):
+        validate_publication(value)
+
 def test_run_mutations_outcomes_shape():
     docs, _ = mutation_inputs()
     out = MODULE.run_mutations(docs['AUTHORITY'], docs['SIGNOFF'], docs['DECISIONS'])
