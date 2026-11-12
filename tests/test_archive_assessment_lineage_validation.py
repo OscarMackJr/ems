@@ -348,6 +348,27 @@ def test_d10_live_catalog_edit_does_not_change_catalog_reads(tmp_path, monkeypat
     assert hashlib.sha256(MODULE.lf_bytes(MODULE.catalog_bytes())).hexdigest() == hashlib.sha256(MODULE.lf_bytes(pinned)).hexdigest()
 
 
+def test_d10_live_catalog_edit_or_delete_does_not_change_build_or_validation(tmp_path, monkeypatch):
+    if not shutil.which('git'):
+        pytest.skip('git unavailable')
+    reason = git_ready()
+    if reason:
+        pytest.skip(reason)
+    pinned = git('show', f'{MODULE.CATALOG_COMMIT}:{MODULE.CATALOG_REL}').stdout
+    catalog_repo(tmp_path, monkeypatch, pinned)
+    before_build = MODULE.jtext(MODULE.build_authority())
+    before_published = MODULE.build_published_authority()
+    MODULE.validate_publication(before_published)
+    live = tmp_path / MODULE.CATALOG_REL
+    for change in (lambda: live.write_bytes(b'controls: []\n'), live.unlink):
+        change()
+        assert MODULE.jtext(MODULE.build_authority()) == before_build
+        after = MODULE.build_published_authority()
+        assert after == before_published
+        MODULE.validate_publication(after)
+    assert not live.exists()
+
+
 def test_d09_catalog_read_without_history_raises(tmp_path, monkeypatch):
     if not shutil.which('git'):
         pytest.skip('git unavailable')
