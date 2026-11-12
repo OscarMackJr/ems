@@ -36,3 +36,18 @@ Totals: **376 passed, 2 failed**
 - tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate (baseline red; now `authority identity/version/status invalid; source_lineage supersedes does not name the 2.0.1 publication` because the committed artifacts are still 2.0.1 until 09-04)
 
 No new failing ids. The three new behavior tests pass. The reply test red is outside these modules (plan 09-02).
+
+## After Task 2b (commit 23cfad6) and fixture fix
+
+First run after 23cfad6: **383 passed, 3 failed**. The new id was
+tests/test_archive_assessment_lineage_validation.py::test_d10_live_catalog_edit_or_delete_does_not_change_build_or_validation,
+a fixture defect: it points ROOT at a throwaway repo with no 2.0.1 history, so the D-08 comparison
+correctly failed closed with GitHistoryError. Fixed in the test by serving the real 2.0.1 blob through git_show
+(same approach as the publication `env` fixture).
+
+After the fix, same three modules: **384 passed, 2 failed** — the "after plan 01" set equals the "after 2a" set:
+
+- tests/test_archive_assessment_applicability_authority_v2.py::test_committed_schema_equals_schema_function
+- tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate
+
+The D-04 byte-identity test skips until the real 2.0.2 record exists (plan 09-05).
