@@ -535,6 +535,16 @@ def test_record_non_object_raises_authority_error(env, fake_git_show, value):
     with pytest.raises(AuthorityError, match='exactly the six'):
         MODULE.validate_published()
 
+@pytest.mark.parametrize('value', ['RAW_BYTES', 7, None, 'crlf_to_lf'])
+def test_record_digest_normalisation_must_be_crlf_to_lf(env, fake_git_show, value):
+    published_recorded(env, fake_git_show)
+    rec = MODULE.load(MODULE.PUBLICATION_RECORD)
+    rec['digest_normalisation'] = value
+    MODULE.dump(MODULE.PUBLICATION_RECORD, rec)
+    for mode in (False, True):
+        with pytest.raises(AuthorityError, match='digest_normalisation must be CRLF_TO_LF'):
+            MODULE.validate_published(mode)
+
 @pytest.mark.parametrize('key', ['authority_sha256', 'manifest_sha256'])
 def test_validate_record_digest_mismatch_fails(env, fake_git_show, key):
     published_recorded(env, fake_git_show)

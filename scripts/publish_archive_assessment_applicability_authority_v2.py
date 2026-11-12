@@ -692,6 +692,7 @@ def check_publication_record(a: dict, pre_publication: bool = False) -> None:
     if not PUBLICATION_RECORD.exists(): raise AuthorityError('publication record is absent')
     record = load(PUBLICATION_RECORD)
     if not isinstance(record, dict) or set(record) != RECORD_KEYS: raise AuthorityError('publication record must be an object with exactly the six record keys')
+    if record['digest_normalisation'] != 'CRLF_TO_LF': raise AuthorityError('publication record digest_normalisation must be CRLF_TO_LF')
     if pre_publication:
         want_id, want_version = SUPERSEDED_V2_0_0['authority_id'], SUPERSEDED_V2_0_0['version']
         if record['publication_commit'] != SUPERSEDED_V2_0_0['commit']: raise AuthorityError('pre-publication record must name the 2.0.0 publication commit')
