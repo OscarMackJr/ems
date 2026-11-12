@@ -25,3 +25,14 @@ Matches the 3 reds accepted in 08-VERIFICATION. The second and third fail with
 `git status --short scripts tests` at the time of writing shows only pre-existing untracked
 files unrelated to this project (Wave 2D / test-quality scripts); no tracked file under
 scripts/ or tests/ is modified.
+
+## After Task 2a (commit 69ea357)
+
+Command: `python -m pytest tests/test_archive_assessment_applicability_authority_v2.py tests/test_archive_assessment_applicability_authority_v2_publication.py tests/test_archive_assessment_lineage_validation.py -p no:cacheprovider -q -rf --basetemp=<scratchpad>\p9-01a`
+
+Totals: **376 passed, 2 failed**
+
+- tests/test_archive_assessment_applicability_authority_v2.py::test_committed_schema_equals_schema_function (baseline red; committed schema predates 2.0.2, re-emitted in 09-04)
+- tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate (baseline red; now `authority identity/version/status invalid; source_lineage supersedes does not name the 2.0.1 publication` because the committed artifacts are still 2.0.1 until 09-04)
+
+No new failing ids. The three new behavior tests pass. The reply test red is outside these modules (plan 09-02).
