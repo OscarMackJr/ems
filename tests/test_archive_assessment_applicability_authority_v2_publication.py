@@ -490,13 +490,14 @@ def superseded_record(blobs, **over):
     blobs[(s['commit'], MODULE.rel(MODULE.OUT / MODULE.N_MANIFEST))] = (MODULE.OUT / MODULE.N_MANIFEST).read_bytes()
     return rec
 
-def test_pre_publication_mode_accepts_only_superseded_record(env, fake_git_show, monkeypatch):
+def test_pre_publication_mode_accepts_only_superseded_record(env, fake_git_show):
     published(env)
     s = MODULE.SUPERSEDED_V2_0_0
-    # the fake 2.0.0 blob must hash to the pinned sha for D-03 to hold
-    blob = b'superseded 2.0.0 authority bytes\n'
-    monkeypatch.setitem(MODULE.SUPERSEDED_V2_0_0, 'sha256', hashlib.sha256(blob).hexdigest())
+    # D-03 needs the real 2.0.0 authority blob; patching the pinned sha would break source_lineage.supersedes
+    blob = subprocess.run(['git', 'show', f"{s['commit']}:{s['relative_path']}"], cwd=SCRIPT.parents[1], capture_output=True, check=True).stdout
+    assert hashlib.sha256(MODULE.lf_bytes(blob)).hexdigest() == s['sha256']
     superseded_record(fake_git_show)
+    fake_git_show[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = blob
     MODULE.validate_published(True)
     with pytest.raises(AuthorityError, match='must name'):
         MODULE.validate_published()
