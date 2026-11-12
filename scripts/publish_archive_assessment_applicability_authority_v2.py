@@ -365,18 +365,18 @@ def schema() -> dict:
     auth = {'type':'string','pattern':AUTHORITY_ID_RE}
     def branch(state, rule_s, auth_s):
         return {'if':{'properties':{'not_applicable_decision_state':{'const':state}},'required':['not_applicable_decision_state']},'then':{'properties':{'not_applicable_rule':rule_s,'not_applicable_authority':auth_s}}}
-    sem = {'type':'object','required':['requires_explicit_controlled_rule','absence_of_evidence_is_not_not_applicable','unknown_is_not_not_applicable','decision_states','condition_states','condition_combination','min_conditions','field_may_appear_once','rule_condition_fields','fields_not_usable_in_rules','fields_not_usable_in_rules_statement','field_definitions','resolution','no_short_circuit','decision_state_governs_resolved_result','per_control_default_describes_result_absent_a_decision','unknown_is_never_not_applicable','statements'],
-        'properties':{'requires_explicit_controlled_rule':{'const':True},'absence_of_evidence_is_not_not_applicable':{'const':True},'unknown_is_not_not_applicable':{'const':True},'decision_states':{'const':list(DECISION_STATES)},'condition_states':{'const':list(CONDITION_STATES)},'condition_combination':{'const':COMBINATION},'min_conditions':{'const':1},'field_may_appear_once':{'const':True},'rule_condition_fields':{'const':list(RULE_FIELDS)},'fields_not_usable_in_rules':{'const':list(NON_RULE_FIELDS)},'field_definitions':{'type':'object','additionalProperties':False,'required':list(RULE_FIELDS),'properties':{f:{'type':'string','minLength':1} for f in RULE_FIELDS}},'resolution':{'const':[dict(r) for r in RESOLUTION]},'no_short_circuit':{'const':True},'decision_state_governs_resolved_result':{'const':True},'per_control_default_describes_result_absent_a_decision':{'const':True},'unknown_is_never_not_applicable':{'const':True}}}
-    return {'$schema':'https://json-schema.org/draft/2020-12/schema','title':'EMS AA3 Archive Assessment Applicability Authority v2','type':'object',
+    sem = {'type':'object','additionalProperties':False,'required':['requires_explicit_controlled_rule','absence_of_evidence_is_not_not_applicable','unknown_is_not_not_applicable','decision_states','condition_states','condition_combination','min_conditions','field_may_appear_once','rule_condition_fields','fields_not_usable_in_rules','fields_not_usable_in_rules_statement','field_definitions','resolution','no_short_circuit','decision_state_governs_resolved_result','per_control_default_describes_result_absent_a_decision','unknown_is_never_not_applicable','statements'],
+        'properties':{'requires_explicit_controlled_rule':{'const':True},'absence_of_evidence_is_not_not_applicable':{'const':True},'unknown_is_not_not_applicable':{'const':True},'decision_states':{'const':list(DECISION_STATES)},'condition_states':{'const':list(CONDITION_STATES)},'condition_combination':{'const':COMBINATION},'min_conditions':{'const':1},'field_may_appear_once':{'const':True},'rule_condition_fields':{'const':list(RULE_FIELDS)},'fields_not_usable_in_rules':{'const':list(NON_RULE_FIELDS)},'field_definitions':{'type':'object','additionalProperties':False,'required':list(RULE_FIELDS),'properties':{f:{'type':'string','minLength':1} for f in RULE_FIELDS}},'resolution':{'const':[dict(r) for r in RESOLUTION]},'no_short_circuit':{'const':True},'decision_state_governs_resolved_result':{'const':True},'per_control_default_describes_result_absent_a_decision':{'const':True},'unknown_is_never_not_applicable':{'const':True},'fields_not_usable_in_rules_statement':{'type':'string'},'statements':{'type':'array','items':{'type':'string'}}}}
+    return {'$schema':'https://json-schema.org/draft/2020-12/schema','title':'EMS AA3 Archive Assessment Applicability Authority v2','type':'object','additionalProperties':False,
         'required':['document_id','version','status','authority_id','target_type','assessment_semantics','classification_vocabulary','applicability_vocabulary','not_applicable_semantics','evidence_boundary','source_lineage','approved_governance_decision_ids','applicability_decision_ids','controls'],
-        'properties':{'document_id':{'const':'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY'},'version':{'const':VERSION},'status':{'const':'CONTROLLED'},'authority_id':{'const':AUTHORITY_ID},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},
+        'properties':{'$schema':{'type':'string'},'applicability_vocabulary':{'type':'array'},'attestation_prohibitions':{'type':'object'},'classification_vocabulary':{'type':'object'},'evidence_boundary':{'type':'object'},'document_id':{'const':'EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY'},'version':{'const':VERSION},'status':{'const':'CONTROLLED'},'authority_id':{'const':AUTHORITY_ID},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},
             'approved_governance_decision_ids':{'type':'array','minItems':8,'maxItems':8,'items':{'type':'string','pattern':'^AA1-GOV-00[1-8]$'},'uniqueItems':True},
             'applicability_decision_ids':{'type':'array','minItems':0,'maxItems':21,'items':{'type':'string','pattern':AUTHORITY_ID_RE},'uniqueItems':True},
             'source_lineage':lineage,
             'not_applicable_semantics':sem,
-            'controls':{'type':'array','minItems':80,'maxItems':80,'items':{'type':'object',
+            'controls':{'type':'array','minItems':80,'maxItems':80,'items':{'type':'object','additionalProperties':False,
                 'required':['control_id','archive_population_membership','target_type','assessment_semantics','classification_prerequisites','classification_unknown_treatment','archive_evidence_capability','required_non_repository_authority','default_applicability_result','unresolved_reason','not_applicable_decision_state','not_applicable_rule','not_applicable_authority','decision_ids'],
-                'properties':{'control_id':{'type':'string','pattern':'^EMS-CTRL-[0-9]{3}$'},'archive_population_membership':{'const':'IN_ARCHIVE_CONTROL_POPULATION'},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},'classification_unknown_treatment':{'const':'APPLICABILITY_UNRESOLVED'},'default_applicability_result':{'const':'APPLICABILITY_UNRESOLVED'},
+                'properties':{'archive_evidence_capability':{'type':'string'},'catalog_scope':{'type':'string'},'classification_prerequisites':{'type':'array','items':{'type':'string'}},'control_name':{'type':'string'},'required_non_repository_authority':{'type':'string'},'unresolved_reason':{'type':'string'},'control_id':{'type':'string','pattern':'^EMS-CTRL-[0-9]{3}$'},'archive_population_membership':{'const':'IN_ARCHIVE_CONTROL_POPULATION'},'target_type':{'const':'ARCHIVED_REPOSITORY_SNAPSHOT'},'assessment_semantics':{'const':'CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT'},'classification_unknown_treatment':{'const':'APPLICABILITY_UNRESOLVED'},'default_applicability_result':{'const':'APPLICABILITY_UNRESOLVED'},
                     'not_applicable_decision_state':{'enum':list(DECISION_STATES)},'not_applicable_rule':{'anyOf':[rule,{'type':'null'}]},'not_applicable_authority':{'anyOf':[auth,{'type':'null'}]},
                     'decision_ids':{'type':'array','minItems':8,'maxItems':8,'uniqueItems':True}},
                 'allOf':[branch('RULE_PUBLISHED',rule,auth),branch('NO_RULE_WILL_BE_PUBLISHED',{'type':'null'},auth),branch('NOT_YET_DECIDED',{'type':'null'},{'type':'null'})]}}}}
@@ -465,6 +465,9 @@ NEGATIVE_MUTATIONS = [
     Mutation('decision_record_bogus_disposition', 'A decision record carries an unknown disposition.', 'DECISIONS', _m_decision_disposition, True),
     Mutation('rule_same_field_twice_opposite_states', 'A rule names the same field twice with opposite states.', 'AUTHORITY', _m_dup_field, True),
     Mutation('supersedes_governance_digest_differs', 'The supersedes governance decisions digest differs from the 2.0.0 value.', 'AUTHORITY', lambda a: a['source_lineage']['supersedes'].__setitem__('governance_decisions_sha256', '0' * 64)),
+    Mutation('extra_top_level_field', 'An extra field is added at the top level of the authority.', 'AUTHORITY', lambda a: a.__setitem__('rationale', 'copied'), True),
+    Mutation('extra_field_on_undecided_row', 'An extra field is added to an undecided row.', 'AUTHORITY', lambda a: _row(a, 'EMS-CTRL-001').__setitem__('rationale', 'copied'), True),
+    Mutation('extra_field_in_semantics', 'An extra field is added to the not-applicable semantics.', 'AUTHORITY', lambda a: a['not_applicable_semantics'].__setitem__('extra', 'x'), True),
 ]
 
 def jtext(value: object) -> str: return json.dumps(value, indent=2, sort_keys=True) + '\n'
@@ -585,16 +588,16 @@ def mutation_gates(target: str, doc: object, authority_digest: str) -> list[str]
     gates = []
     if target == 'AUTHORITY':
         try: validate_publication(doc)
-        except (AuthorityError, KeyError, TypeError, AttributeError): gates.append('PYTHON_VALIDATOR')
+        except AuthorityError: gates.append('PYTHON_VALIDATOR')
         try: jsonschema.Draft202012Validator(schema()).validate(doc)
         except jsonschema.ValidationError: gates.append('SCHEMA')
     elif target == 'SIGNOFF':
         try: validate_signoff(doc, authority_digest)
-        except (AuthorityError, KeyError, TypeError, AttributeError): gates.append('PYTHON_VALIDATOR')
+        except AuthorityError: gates.append('PYTHON_VALIDATOR')
     elif target == 'DECISIONS':
         b = decisions_builder()
         try: b.validate_decisions(doc)
-        except (ValueError, KeyError, TypeError, AttributeError): gates.append('PYTHON_VALIDATOR')
+        except ValueError: gates.append('PYTHON_VALIDATOR')
         try: jsonschema.Draft202012Validator(load(b.DECISIONS_SCHEMA)).validate(doc)
         except jsonschema.ValidationError: gates.append('SCHEMA')
     else: raise AuthorityError(f'unknown mutation target {target}')
