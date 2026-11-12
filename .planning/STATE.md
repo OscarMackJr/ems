@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1.0
 milestone_name: Authority 2.0.2 Lineage Correction
-status: executing
-last_updated: "2026-11-12T23:03:28.631Z"
+status: verifying
+last_updated: "2026-11-12T23:56:48.121Z"
 last_activity: 2026-11-12
 progress:
   total_phases: 4
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 14
-  completed_plans: 13
-  percent: 50
+  completed_plans: 14
+  percent: 75
 stopped_at: Phase 08 complete (5/5) — ready to discuss Phase 9
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-10-20)
 
 Phase: 09 (certified-republication-2-0-2) — EXECUTING
 Plan: 5 of 5
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-11-12
 
 Progress: [█████████░] 89%
@@ -96,6 +96,7 @@ Recent decisions affecting current work:
 - [Next milestone]: 2.0.1 `source_lineage` says `digest_normalisation: CRLF_TO_LF`, but `aa1_manifest_sha256`, `aa2_closure_sha256` and `aa2_approval_sha256` are raw-byte; fix the scope in the next authority version (Hayes told 2026-10-15)
 - [Next milestone]: AA1 manifest (`aa1_manifest_sha256` f0da8e2e…) is not in the repo; AA2 approval outputs were committed in 35bfc08 (`-text`, raw hashes verified)
 - [CI]: `archive-assessment` job (261015-ci1) green on ubuntu-latest, run 38744767442: 492 passed, 5 validators PASS; runs on PRs, pushes to main, and `workflow_dispatch`
+- [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
 - [Environment]: `git push` via the credential manager fails in this session (sh.exe crash); pushing with the GitHub CLI token as a one-command `http.extraheader` (env `GIT_CONFIG_*`, credential.helper cleared) works
 - [Environment]: Bash fails on this machine (cygwin `add_item` fatal error); GSD subagents have no PowerShell tool, so they cannot run tests or validators — run those from the orchestrator
 
