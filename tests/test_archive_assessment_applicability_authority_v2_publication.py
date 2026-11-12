@@ -199,6 +199,7 @@ def test_resolver_for_rule_controls():
 
 import hashlib
 import json
+import re
 import subprocess
 import tempfile
 
@@ -210,6 +211,12 @@ def sha_text(t): return hashlib.sha256(t.encode('utf-8')).hexdigest()
 def valid_signoff(authority_digest, on='2026-10-14'):
     return {'status': 'PUBLICATION_SIGNOFF', 'approval': {'approver': 'Oscar Mack', 'role': 'EMS_GOVERNANCE_AUTHORITY', 'date': on, 'scope': 'Publish v2 authority'}, 'dual_role_statement': DUAL, 'authority_id': MODULE.AUTHORITY_ID, 'version': MODULE.VERSION, 'authority_sha256': authority_digest, 'authority_sha256_normalisation': 'CRLF_TO_LF'}
 
+def prev_201_authority_bytes():
+    sup = MODULE.SUPERSEDED_V2_0_1
+    r = subprocess.run(['git', 'show', f"{sup['commit']}:{sup['relative_path']}"], cwd=ROOT, capture_output=True)
+    if r.returncode != 0: pytest.skip('2.0.1 authority blob is not reachable in this clone')
+    return r.stdout
+
 @pytest.fixture
 def lineage_calls():
     return []
@@ -220,6 +227,9 @@ def env(monkeypatch, lineage_calls):
     monkeypatch.setattr(MODULE, 'catalog_bytes', lambda: real_catalog)
     # validate_lineage reads git history and the real tree; under the empty temp ROOT it is a recorder
     monkeypatch.setattr(MODULE, 'validate_lineage', lambda lin: lineage_calls.append(lin))
+    prev_blob, real_git_show, sup = prev_201_authority_bytes(), MODULE.git_show, MODULE.SUPERSEDED_V2_0_1
+    # validate_publication compares against the 2.0.1 authority in git history; serve it under the empty temp ROOT
+    monkeypatch.setattr(MODULE, 'git_show', lambda commit, path: prev_blob if (commit, path) == (sup['commit'], sup['relative_path']) else real_git_show(commit, path))
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
         for name, value in {'ROOT': root, 'AUTHORITY': root / 'registry' / 'a.json', 'SCHEMA': root / 'schemas' / 's.json', 'SIGNOFF': root / 'registry' / 'signoff.json', 'PUBLICATION_RECORD': root / 'registry' / 'record.json', 'OUT': root / 'generated' / 'out', 'SCRIPT': root / 'scripts' / 'pub.py'}.items():
@@ -376,7 +386,7 @@ RECORD_COMMIT = 'a' * 40
 
 @pytest.fixture
 def fake_git_show(monkeypatch):
-    blobs = {}
+    blobs = {(MODULE.SUPERSEDED_V2_0_1['commit'], MODULE.SUPERSEDED_V2_0_1['relative_path']): prev_201_authority_bytes()}
     def fake(commit, path):
         if (commit, path) not in blobs: raise AuthorityError(f'{path}@{commit[:7]}: git show failed: unknown object')
         return blobs[(commit, path)]
@@ -985,3 +995,67 @@ def test_catalog_commit_is_v1_baseline_and_in_commit_pinned():
     assert MODULE.CATALOG_COMMIT == '62a8955dc28d9458cd1167fad314926e057c31fc' == MODULE.V1_BASELINE_COMMIT
     assert 'catalog_reference' in MODULE.COMMIT_PINNED
     assert not hasattr(MODULE, 'CATALOG')
+
+
+# ---- 09-01 Task 2b: D-08 comparison with 2.0.1, D-04 byte identity ----
+
+DECISION_FIELDS = ('not_applicable_decision_state', 'not_applicable_rule', 'not_applicable_authority', 'decision_ids')
+
+def prev_201_rows():
+    return {c['control_id']: c for c in json.loads(prev_201_authority_bytes().decode('utf-8'))['controls']}
+
+def test_built_rows_equal_2_0_1_rows_on_the_four_decision_fields():
+    a = build(); prev = prev_201_rows()
+    assert len(a['controls']) == 80 and set(prev) == {c['control_id'] for c in a['controls']}
+    for c in a['controls']:
+        assert all(c[k] == prev[c['control_id']][k] for k in DECISION_FIELDS), c['control_id']
+    assert a['applicability_decision_ids'] == json.loads(prev_201_authority_bytes().decode('utf-8'))['applicability_decision_ids']
+    MODULE.validate_publication(a)
+
+def tamper_state(c): c['not_applicable_decision_state'] = 'NO_RULE_WILL_BE_PUBLISHED' if c['not_applicable_decision_state'] != 'NO_RULE_WILL_BE_PUBLISHED' else 'NOT_YET_DECIDED'
+def tamper_rule(c): c['not_applicable_rule'] = None if c['not_applicable_rule'] else {'combination': 'ALL_CONDITIONS_MUST_MATCH', 'conditions': [{'field': 'production', 'state': 'KNOWN_FALSE'}]}
+def tamper_authority(c): c['not_applicable_authority'] = 'AA4-GOV-999' if c['not_applicable_authority'] != 'AA4-GOV-999' else None
+def tamper_decision_ids(c): c['decision_ids'] = c['decision_ids'][:-1]
+
+@pytest.mark.parametrize('tamper', [tamper_state, tamper_rule, tamper_authority, tamper_decision_ids], ids=lambda f: f.__name__)
+def test_row_tamper_against_2_0_1_raises_authority_error(monkeypatch, tamper):
+    a = build(); tamper(a['controls'][0])
+    with pytest.raises(AuthorityError):
+        MODULE.validate_publication(a)
+    # isolate the D-08 comparison from the earlier checks
+    monkeypatch.setattr(MODULE, 'validate_authority', lambda *args, **kwargs: None)
+    with pytest.raises(AuthorityError, match='EMS-CTRL-001: decision content differs from 2.0.1'):
+        MODULE.validate_publication(a)
+
+def test_applicability_decision_ids_tamper_against_2_0_1_raises_authority_error(monkeypatch):
+    a = build(); a['applicability_decision_ids'] = a['applicability_decision_ids'][:-1]
+    monkeypatch.setattr(MODULE, 'validate_authority', lambda *args, **kwargs: None)
+    with pytest.raises(AuthorityError, match='decision set differs from 2.0.1'):
+        MODULE.validate_publication(a)
+
+def test_missing_2_0_1_history_raises_git_history_error_through_mutation_gates(monkeypatch):
+    docs, ash = mutation_inputs()
+    def boom(commit, path): raise MODULE.GitHistoryError(f'{path}@{commit[:7]}: git show failed: shallow clone')
+    monkeypatch.setattr(MODULE, 'git_show', boom)
+    with pytest.raises(MODULE.GitHistoryError):
+        MODULE.validate_publication(docs['AUTHORITY'])
+    with pytest.raises(MODULE.GitHistoryError):
+        MODULE.mutation_gates('AUTHORITY', docs['AUTHORITY'], ash)
+
+PUBLICATION_PATHS = ['schemas/archive_assessment_applicability_authority_v2.schema.json', 'registry/archive_assessment_applicability_authority_v2.json', 'registry/archive_assessment_applicability_authority_v2_signoff.json']
+
+@pytest.mark.skipif(not REAL_RECORD.exists(), reason='publication record not written yet')
+def test_publication_files_byte_identical_between_publication_and_record_commit():
+    reason = git_ready()
+    if reason: pytest.skip(reason)
+    pub = MODULE.load(REAL_RECORD)['publication_commit']
+    rec_rel = REAL_RECORD.relative_to(ROOT).as_posix()
+    out_rel = REAL_OUT.relative_to(ROOT).as_posix()
+    paths = PUBLICATION_PATHS + [f'{out_rel}/{p.name}' for p in sorted(REAL_OUT.iterdir())]
+    assert len(paths) >= 10
+    rec_commit = git('log', '-n1', '--format=%H', '--', rec_rel).stdout.decode().strip()
+    assert re.fullmatch(r'[0-9a-f]{40}', rec_commit)
+    assert git('diff', '--quiet', pub, rec_commit, '--', *paths).returncode == 0
+    assert git('diff-tree', '--no-commit-id', '--name-only', '-r', rec_commit).stdout.decode().split() == [rec_rel]
+    between = git('diff', '--name-only', pub, f'{rec_commit}^').stdout.decode().split()
+    assert all(f.startswith('.planning/') for f in between), between

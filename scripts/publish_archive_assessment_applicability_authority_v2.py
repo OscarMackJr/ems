@@ -278,6 +278,8 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
     if any(att.get(k) is not False for k in ATTESTATION_KEYS): errors.append('attestation leakage')
     if errors: raise AuthorityError('; '.join(errors))
 
+PREV_COMPARED_KEYS = ('not_applicable_decision_state', 'not_applicable_rule', 'not_applicable_authority', 'decision_ids')
+
 def validate_publication(a: dict) -> None:
     doc = load(GOVERNANCE_DECISIONS)
     validate_authority(a, known_decision_ids={r['decision_id'] for r in doc['records']})
@@ -304,6 +306,12 @@ def validate_publication(a: dict) -> None:
         rec0 = latest.get(r.get('control_id'))
         want = (rec0['decided_outcome'], rec0['decided']['rule'], rec0['decision_id']) if rec0 else ('NOT_YET_DECIDED', None, None)
         if (r.get('not_applicable_decision_state'), r.get('not_applicable_rule'), r.get('not_applicable_authority')) != want: errors.append(f"{r.get('control_id')}: decision fields differ from the decision records")
+    prev = json.loads(git_show(SUPERSEDED_V2_0_1['commit'], SUPERSEDED_V2_0_1['relative_path']).decode('utf-8'))
+    prev_rows = {r.get('control_id'): r for r in prev.get('controls', [])}
+    for r in rows:
+        p = prev_rows.get(r.get('control_id'))
+        if p is None or any(r.get(k) != p.get(k) for k in PREV_COMPARED_KEYS): errors.append(f"{r.get('control_id')}: decision content differs from 2.0.1")
+    if set(prev_rows) != {r.get('control_id') for r in rows} or a.get('applicability_decision_ids') != prev.get('applicability_decision_ids'): errors.append('decision set differs from 2.0.1')
     for r in rows:
         auth = r.get('not_applicable_authority')
         if auth is None: continue
