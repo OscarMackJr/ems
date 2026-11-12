@@ -177,6 +177,9 @@ def test_lineage_pins_are_enforced_by_schema():
     schema_rejects(lambda a: a['source_lineage']['supersedes'].__setitem__('commit', 'abcdef0'))
     schema_rejects(lambda a: a['source_lineage']['v1_baseline'].__setitem__('commit', '62a8955'))
     schema_rejects(lambda a: a['source_lineage']['v1_baseline'].__setitem__('sha256', 'xyz'))
+    schema_rejects(lambda a: a['source_lineage']['catalog_reference'].__setitem__('commit', 'abcdef0'))
+    schema_rejects(lambda a: a['source_lineage']['catalog_reference'].__setitem__('commit', 'a' * 40))
+    schema_rejects(lambda a: a['source_lineage']['catalog_reference'].pop('commit'))
     schema_rejects(lambda a: a['source_lineage']['supersedes'].__setitem__('sha256', 'A' * 64))
 
 def test_supersedes_and_v1_baseline_follow_constants():

@@ -75,7 +75,8 @@ def test_lineage_records_governance_decisions_and_v1():
     assert lin['v1_baseline']['commit'] == MODULE.V1_BASELINE_COMMIT and len(lin['v1_baseline']['commit']) == 40 and lin['v1_baseline']['version'] == '1.0.0'
     assert lin['v1_baseline']['sha256'] == MODULE.lf_digest(MODULE.V1_AUTHORITY)
     assert gd['sha256'] == MODULE.SUPERSEDED_V2_0_0['governance_decisions_sha256']
-    assert lin['catalog_reference']['sha256'] == MODULE.lf_digest(MODULE.CATALOG)
+    assert lin['catalog_reference']['sha256'] == hashlib.sha256(MODULE.lf_bytes(MODULE.catalog_bytes())).hexdigest()
+    assert lin['catalog_reference']['commit'] == MODULE.CATALOG_COMMIT
     assert 'digest_normalisation' not in lin
     for k in ('aa1_manifest', 'aa2_closure', 'aa2_approval'): assert lin[k]['normalisation'] == 'RAW_BYTES'
     for k in ('catalog_reference', 'v1_baseline', 'supersedes'): assert lin[k]['normalisation'] == 'CRLF_TO_LF'
@@ -214,6 +215,8 @@ def lineage_calls():
 
 @pytest.fixture
 def env(monkeypatch, lineage_calls):
+    real_catalog = MODULE.catalog_bytes()
+    monkeypatch.setattr(MODULE, 'catalog_bytes', lambda: real_catalog)
     # validate_lineage reads git history and the real tree; under the empty temp ROOT it is a recorder
     monkeypatch.setattr(MODULE, 'validate_lineage', lambda lin: lineage_calls.append(lin))
     with tempfile.TemporaryDirectory() as d:
@@ -754,3 +757,29 @@ def test_published_negative_file_equals_observed_outcomes(env):
     observed = MODULE.run_mutations(a, MODULE.load(MODULE.SIGNOFF), MODULE.load(MODULE.GOVERNANCE_DECISIONS))
     neg = MODULE.load(MODULE.OUT / MODULE.N_NEGATIVE)
     assert neg['negative_invariant_tests'] == observed
+
+@pytest.mark.parametrize('field,value', [('commit', '0' * 40), ('relative_path', 'registry/other.yaml'), ('sha256', '0' * 64)])
+def test_catalog_reference_tamper_fails_validation(env, field, value):
+    a = copy.deepcopy(build())
+    a['source_lineage']['catalog_reference'][field] = value
+    with pytest.raises(AuthorityError):
+        validate_publication(a)
+
+def test_catalog_reference_commit_change_fails_schema(env):
+    a = copy.deepcopy(build())
+    a['source_lineage']['catalog_reference']['commit'] = 'a' * 40
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.Draft202012Validator(MODULE.schema()).validate(a)
+
+def test_catalog_reference_commit_missing_fails_schema_and_validation(env):
+    a = copy.deepcopy(build())
+    del a['source_lineage']['catalog_reference']['commit']
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.Draft202012Validator(MODULE.schema()).validate(a)
+    with pytest.raises(AuthorityError):
+        validate_publication(a)
+
+def test_catalog_commit_is_v1_baseline_and_in_commit_pinned():
+    assert MODULE.CATALOG_COMMIT == '62a8955dc28d9458cd1167fad314926e057c31fc' == MODULE.V1_BASELINE_COMMIT
+    assert 'catalog_reference' in MODULE.COMMIT_PINNED
+    assert not hasattr(MODULE, 'CATALOG')
