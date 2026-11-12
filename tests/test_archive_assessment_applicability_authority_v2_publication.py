@@ -632,8 +632,9 @@ def test_dry_run_summary_lists_decisions_rules_and_supersession(env, capsys):
 
 def test_mutation_records_shape():
     ids = [m.id for m in MODULE.NEGATIVE_MUTATIONS]
-    assert len(ids) == 26 and len(set(ids)) == 26
-    assert ids[:17] == PREVIOUS_17 and set(ids[17:]) == set(NEW_9)
+    assert len(ids) == 29 and len(set(ids)) == 29
+    assert ids[:17] == PREVIOUS_17 and set(ids[17:26]) == set(NEW_9)
+    assert ids[26:] == ['extra_top_level_field', 'extra_field_on_undecided_row', 'extra_field_in_semantics']
     assert all(m.description and m.target in ('AUTHORITY', 'SIGNOFF', 'DECISIONS') for m in MODULE.NEGATIVE_MUTATIONS)
     assert next(m for m in MODULE.NEGATIVE_MUTATIONS if m.id == 'missing_governance_lineage').schema_must_reject
 
@@ -653,6 +654,49 @@ def test_each_mutation_is_rejected_by_its_gates(m):
     if m.target == 'DECISIONS': assert gates == ['PYTHON_VALIDATOR', 'SCHEMA']
     if m.id == 'rule_same_field_twice_opposite_states': assert gates == ['PYTHON_VALIDATOR', 'SCHEMA']
     if m.id == 'supersedes_governance_digest_differs': assert gates == ['PYTHON_VALIDATOR']
+
+NEW_SCHEMA_07 = ['extra_top_level_field', 'extra_field_on_undecided_row', 'extra_field_in_semantics']
+
+@pytest.mark.parametrize('mid', NEW_SCHEMA_07)
+def test_schema_07_mutations_rejected_by_schema(mid):
+    docs, ash = mutation_inputs()
+    m = next(x for x in MODULE.NEGATIVE_MUTATIONS if x.id == mid)
+    doc = copy.deepcopy(docs['AUTHORITY']); m.apply(doc)
+    gates = MODULE.mutation_gates('AUTHORITY', doc, ash)
+    assert 'SCHEMA' in gates
+    if mid == 'extra_top_level_field': assert gates == ['SCHEMA']
+
+@pytest.mark.parametrize('exc', [KeyError, TypeError, AttributeError])
+@pytest.mark.parametrize('target,name', [('AUTHORITY', 'validate_publication'), ('SIGNOFF', 'validate_signoff'), ('DECISIONS', 'validate_decisions')])
+def test_non_domain_exceptions_propagate_from_mutation_gates(monkeypatch, exc, target, name):
+    docs, ash = mutation_inputs()
+    def boom(*args, **kwargs): raise exc('crash')
+    owner = MODULE.decisions_builder() if name == 'validate_decisions' else MODULE
+    monkeypatch.setattr(owner, name, boom)
+    with pytest.raises(exc):
+        MODULE.mutation_gates(target, docs[target], ash)
+
+def test_non_domain_exception_aborts_publish_and_writes_nothing(env, monkeypatch):
+    def boom(*args, **kwargs): raise KeyError('crash')
+    monkeypatch.setattr(MODULE, 'validate_publication', boom)
+    write_signoff()
+    with pytest.raises(KeyError):
+        MODULE.publish(False)
+    assert not MODULE.AUTHORITY.exists() and not MODULE.OUT.exists()
+
+@pytest.mark.parametrize('m', MODULE.NEGATIVE_MUTATIONS, ids=lambda m: m.id)
+def test_python_validators_raise_only_domain_errors(m):
+    docs, ash = mutation_inputs()
+    doc = copy.deepcopy(docs[m.target]); m.apply(doc)
+    domain = ValueError if m.target == 'DECISIONS' else AuthorityError
+    try:
+        if m.target == 'AUTHORITY': MODULE.validate_publication(doc)
+        elif m.target == 'SIGNOFF': MODULE.validate_signoff(doc, ash)
+        else: MODULE.decisions_builder().validate_decisions(doc)
+    except domain:
+        pass
+    except (KeyError, TypeError, AttributeError) as e:
+        pytest.fail(f'{m.id}: validator crashed with {type(e).__name__}')
 
 def test_run_mutations_outcomes_shape():
     docs, _ = mutation_inputs()
@@ -696,7 +740,7 @@ def test_certification_and_semantic_files_are_derived(env):
     cert, sem, neg = (json.loads(outs[n]) for n in (MODULE.N_CERT, MODULE.N_SEMANTIC, MODULE.N_NEGATIVE))
     assert cert['semantic_conflicts'] == sem['semantic_conflict_count'] == 0 and sem['controls_checked'] == 80
     assert cert['negative_invariants'] == neg['result'] == 'PASS'
-    assert len(neg['negative_invariant_tests']) == 26
+    assert len(neg['negative_invariant_tests']) == 29
     assert cert['prohibitions'] == {'evaluator_executions': 0, 'hayes_modifications': 0, 'target_comparisons': 0}
 
 def test_publisher_source_runs_no_subprocess_or_evaluator():

@@ -44,6 +44,24 @@ def schema_rejects(mutator):
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.Draft202012Validator(schema()).validate(value)
 
+def test_schema_closed_at_three_levels():
+    s = schema()
+    assert s['additionalProperties'] is False
+    assert s['properties']['controls']['items']['additionalProperties'] is False
+    assert s['properties']['not_applicable_semantics']['additionalProperties'] is False
+
+def test_schema_rejects_extra_top_level_key(): schema_rejects(lambda a: a.__setitem__('extra', 'x'))
+def test_schema_rejects_extra_control_row_key(): schema_rejects(lambda a: a['controls'][0].__setitem__('extra', 'x'))
+def test_schema_rejects_extra_semantics_key(): schema_rejects(lambda a: a['not_applicable_semantics'].__setitem__('extra', 'x'))
+
+def test_schema_declares_every_built_property():
+    a = MODULE.build_published_authority()
+    s = schema()
+    assert set(a) <= set(s['properties'])
+    assert set().union(*(set(r) for r in a['controls'])) <= set(s['properties']['controls']['items']['properties'])
+    assert set(a['not_applicable_semantics']) <= set(s['properties']['not_applicable_semantics']['properties'])
+    jsonschema.Draft202012Validator(s).validate(a)
+
 def both_reject(mutator):
     invalid(mutator)
     schema_rejects(mutator)
