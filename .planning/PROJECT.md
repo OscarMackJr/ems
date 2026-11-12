@@ -58,6 +58,15 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 - ✓ A written reply to request `DEMO3-W1-REQ-001` (`docs/DEMO3_W1_REQ_001_REPLY.md`, `registry/archive_assessment_demo3_w1_req_001_reply.json`, generated and `--validate`-checked by `scripts/build_archive_assessment_demo3_w1_req_001_reply.py`) cites authority `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0`, version 2.0.0 and commit `54a7fd0`, and states what EMS did and did not publish; unsigned and not sent until the pin is on the remote — Validated in Phase 5: Reply to Hayes
 - ✓ Publication gates hardened and the authority republished as `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1` at `31addfa` with no decision changed; reply regenerated to cite 2.0.1 — Validated in Phase 6; shipped v1.0.0
 - ✓ Every `source_lineage` digest declares its own normalisation (`RAW_BYTES` for aa1/aa2_closure/aa2_approval, `CRLF_TO_LF` otherwise) and is recomputed by `validate_lineage` from the working tree or by `git show` at its pinned commit, failing closed. The AA1 manifest is committed under `-text` (`bb7c067`, raw sha256 `f0da8e2e…`). LIN-01..03 — Validated in Phase 7. The publisher change opened the accepted red window, which closes at the Phase 9 republication.
+- ✓ Gates and schema hardened in the v2 publisher, with no committed registry, schema or generated file regenerated:
+  - The publication record is mandatory and commit-verified, with an explicit `--validate --pre-publication` mode (GATE-01).
+  - Mutation gates count only domain-error rejections (GATE-02).
+  - The catalog is read at the pinned v1 commit `62a8955` (GATE-03).
+  - The reply's record-commit lookup fails explicitly in a shallow clone (GATE-04).
+  - Cross-note uniqueness uses `norm_templated`, with the certified answers digest grandfathered (GATE-05).
+  - The schema is closed at the top level, on rows and on `not_applicable_semantics`, with 29 mutations (SCHEMA-07).
+
+  Validated in Phase 8: Gate and Schema Hardening. The red set is still the 3 accepted tests until Phase 9. Review follow-up: CR-01, the record's `digest_normalisation` value is not checked.
 
 ### Active
 
@@ -154,4 +163,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-20 — Phase 7 (Lineage Source and Per-Digest Scope) complete*
+*Last updated: 2026-11-12 — Phase 8 (Gate and Schema Hardening) complete*
