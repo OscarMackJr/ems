@@ -3,6 +3,7 @@ import hashlib
 import importlib.util
 import json
 import re
+import sys
 import tempfile
 from pathlib import Path
 
@@ -123,6 +124,30 @@ def test_changed_answers_bytes_remove_exemption():
     changed = MODULE.V2.sha_text(MODULE.ANSWERS.read_text(encoding='utf-8') + ' ')
     for digest in (None, changed):
         with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=digest)
+
+def answers_copy(tmp_path, monkeypatch, extra=b''):
+    p = tmp_path / 'archive_assessment_governance_answers.json'
+    p.write_bytes(MODULE.ANSWERS.read_bytes() + extra)
+    monkeypatch.setattr(MODULE, 'ANSWERS', p)
+    return p
+
+def test_untouched_answers_copy_builds_through_real_paths(tmp_path, monkeypatch):
+    a = load(MODULE.ANSWERS)
+    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    p = answers_copy(tmp_path, monkeypatch)
+    assert MODULE.answers_digest(p) == MODULE.CERTIFIED_ANSWERS_SHA256
+    assert MODULE.build_from_files()['answers_sha256'] == MODULE.CERTIFIED_ANSWERS_SHA256
+    monkeypatch.setattr(sys, 'argv', ['x', '--validate-answers'])
+    MODULE.main()
+
+def test_appended_answers_byte_removes_exemption_through_real_paths(tmp_path, monkeypatch):
+    a = load(MODULE.ANSWERS)
+    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    p = answers_copy(tmp_path, monkeypatch, extra=b'\n')
+    assert MODULE.answers_digest(p) != MODULE.CERTIFIED_ANSWERS_SHA256
+    with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.build_from_files()
+    monkeypatch.setattr(sys, 'argv', ['x', '--validate-answers'])
+    with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.main()
 
 def test_exemption_is_the_exact_constant():
     a = load(MODULE.ANSWERS)
