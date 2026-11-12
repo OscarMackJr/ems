@@ -659,7 +659,7 @@ def publish(dry_run: bool) -> None:
     for n, t in outs.items(): write_text(OUT / n, t)
     print(json.dumps({'status': 'PASS', 'authority_sha256': ash, 'manifest_sha256': sha_text(outs[N_MANIFEST])}))
 
-def validate_published() -> None:
+def validate_published(pre_publication: bool = False) -> None:
     validate_governance_decisions()
     if not AUTHORITY.exists(): raise AuthorityError('v2 registry authority file is not published')
     a = load(AUTHORITY)
@@ -683,12 +683,26 @@ def validate_published() -> None:
         rp = art['relative_path']
         if not isinstance(rp, str) or contains_absolute(rp) or '..' in rp.replace('\\', '/').split('/'): raise AuthorityError(f'{rp}: manifest path must be repo-relative without ..')
         if lf_digest(ROOT / art['relative_path']) != art['sha256']: raise AuthorityError(f"{art['relative_path']}: manifest digest differs")
-    if PUBLICATION_RECORD.exists():
-        record = load(PUBLICATION_RECORD)
-        if record.get('authority_id') == a['authority_id']:
-            if record.get('authority_sha256') != lf_digest(AUTHORITY): raise AuthorityError('publication record authority_sha256 does not match the committed authority')
-            if record.get('manifest_sha256') != lf_digest(OUT / N_MANIFEST): raise AuthorityError('publication record manifest_sha256 does not match the committed manifest')
+    check_publication_record(a, pre_publication)
     print('PASS')
+
+RECORD_KEYS = {'publication_commit', 'authority_id', 'version', 'authority_sha256', 'manifest_sha256', 'digest_normalisation'}
+
+def check_publication_record(a: dict, pre_publication: bool = False) -> None:
+    if not PUBLICATION_RECORD.exists(): raise AuthorityError('publication record is absent')
+    record = load(PUBLICATION_RECORD)
+    if not isinstance(record, dict) or set(record) != RECORD_KEYS: raise AuthorityError('publication record must be an object with exactly the six record keys')
+    if pre_publication:
+        want_id, want_version = SUPERSEDED_V2_0_0['authority_id'], SUPERSEDED_V2_0_0['version']
+        if record['publication_commit'] != SUPERSEDED_V2_0_0['commit']: raise AuthorityError('pre-publication record must name the 2.0.0 publication commit')
+        if record['authority_sha256'] != SUPERSEDED_V2_0_0['sha256']: raise AuthorityError('pre-publication record authority_sha256 must equal the 2.0.0 digest')
+    else: want_id, want_version = a['authority_id'], a['version']
+    if record['authority_id'] != want_id or record['version'] != want_version: raise AuthorityError(f'publication record must name {want_id} version {want_version}')
+    if not pre_publication:
+        if record['authority_sha256'] != lf_digest(AUTHORITY): raise AuthorityError('publication record authority_sha256 does not match the committed authority')
+        if record['manifest_sha256'] != lf_digest(OUT / N_MANIFEST): raise AuthorityError('publication record manifest_sha256 does not match the committed manifest')
+    if hashlib.sha256(lf_bytes(git_show(record['publication_commit'], rel(AUTHORITY)))).hexdigest() != record['authority_sha256']: raise AuthorityError('publication record authority_sha256 does not match the authority at the publication commit')
+    if hashlib.sha256(lf_bytes(git_show(record['publication_commit'], rel(OUT / N_MANIFEST)))).hexdigest() != record['manifest_sha256']: raise AuthorityError('publication record manifest_sha256 does not match the manifest at the publication commit')
 
 def write_publication_record(sha: str) -> None:
     if not re.fullmatch(r'[0-9a-f]{40}', sha or ''): raise AuthorityError('publication commit must be a 40-character lowercase hex SHA')
@@ -698,8 +712,9 @@ def write_publication_record(sha: str) -> None:
     dump(PUBLICATION_RECORD, record)
 
 def main() -> None:
-    parser = argparse.ArgumentParser(); parser.add_argument('--validate', action='store_true'); parser.add_argument('--emit-schema', action='store_true'); parser.add_argument('--publish', action='store_true'); parser.add_argument('--dry-run', action='store_true'); parser.add_argument('--validate-signoff', action='store_true'); parser.add_argument('--record-publication', metavar='SHA'); args = parser.parse_args()
-    if args.validate: validate_published()
+    parser = argparse.ArgumentParser(); parser.add_argument('--validate', action='store_true'); parser.add_argument('--emit-schema', action='store_true'); parser.add_argument('--publish', action='store_true'); parser.add_argument('--dry-run', action='store_true'); parser.add_argument('--validate-signoff', action='store_true'); parser.add_argument('--record-publication', metavar='SHA'); parser.add_argument('--pre-publication', action='store_true'); args = parser.parse_args()
+    if args.pre_publication and not args.validate: parser.error('--pre-publication requires --validate')
+    if args.validate: validate_published(args.pre_publication)
     elif args.emit_schema: dump(SCHEMA, schema())
     elif args.validate_signoff:
         validate_signoff(load(SIGNOFF), sha_text(jtext(published_authority_checked()))); print('PASS')
