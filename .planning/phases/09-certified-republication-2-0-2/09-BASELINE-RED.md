@@ -51,3 +51,22 @@ After the fix, same three modules: **384 passed, 2 failed** — the "after plan 
 - tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate
 
 The D-04 byte-identity test skips until the real 2.0.2 record exists (plan 09-05).
+
+## After plan 02 (commits 82cff90, 02a4ea3)
+
+`python scripts/build_archive_assessment_demo3_w1_req_001_reply.py --validate` -> PASS (frozen on 2.0.1 @ 31addfa / record @ 4d9b7c1).
+
+Command: `python -m pytest tests/test_archive_assessment_demo3_w1_req_001_reply.py -p no:cacheprovider -q -rf --basetemp=<scratchpad>\p9-02`
+
+Totals: **63 passed, 1 failed**
+
+- tests/test_archive_assessment_demo3_w1_req_001_reply.py::test_publisher_still_valid_and_digest_matches_manifest
+
+This is the baseline red unchanged. It calls the live `V2.validate_published()` and compares the live publisher
+script digest to the live manifest, so it tests the live publication, not the frozen reply validator. It
+goes green only when 2.0.2 is published (09-04). Every reply-validator test is green.
+
+Accepted red set now (all clear at 09-04 publication):
+- tests/test_archive_assessment_applicability_authority_v2.py::test_committed_schema_equals_schema_function
+- tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate
+- tests/test_archive_assessment_demo3_w1_req_001_reply.py::test_publisher_still_valid_and_digest_matches_manifest
