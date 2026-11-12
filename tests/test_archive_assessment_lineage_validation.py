@@ -355,6 +355,12 @@ def test_d10_live_catalog_edit_or_delete_does_not_change_build_or_validation(tmp
     if reason:
         pytest.skip(reason)
     pinned = git('show', f'{MODULE.CATALOG_COMMIT}:{MODULE.CATALOG_REL}').stdout
+    sup, real_git_show = MODULE.SUPERSEDED_V2_0_1, MODULE.git_show
+    prev = git('show', f"{sup['commit']}:{sup['relative_path']}")
+    if prev.returncode != 0:
+        pytest.skip('2.0.1 authority blob is not reachable in this clone')
+    # the fixture repo has no 2.0.1 history; validate_publication's D-08 comparison reads it from the real repo
+    monkeypatch.setattr(MODULE, 'git_show', lambda commit, path: prev.stdout if (commit, path) == (sup['commit'], sup['relative_path']) else real_git_show(commit, path))
     catalog_repo(tmp_path, monkeypatch, pinned)
     before_build = MODULE.jtext(MODULE.build_authority())
     before_published = MODULE.build_published_authority()
