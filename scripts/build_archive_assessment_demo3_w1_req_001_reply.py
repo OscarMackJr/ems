@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
+import json
 import re
 import subprocess
 import sys
@@ -17,6 +19,8 @@ _spec.loader.exec_module(V2)
 REPLY_JSON = ROOT / 'registry' / 'archive_assessment_demo3_w1_req_001_reply.json'
 REPLY_MD = ROOT / 'docs' / 'DEMO3_W1_REQ_001_REPLY.md'
 REPLY_SCHEMA = ROOT / 'schemas' / 'archive_assessment_demo3_w1_req_001_reply.schema.json'
+REPLY_PUBLICATION_COMMIT = '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb'
+REPLY_RECORD_COMMIT = '4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b'
 REQUEST_ID = 'DEMO3-W1-REQ-001'
 REQUEST_LABEL = 'EMSREQ-APPLIC-RULES'
 DOCUMENT_ID = 'EMS-DEMO3-W1-REQ-001-REPLY'
@@ -29,6 +33,18 @@ PIN_KEYS = ['publication_commit', 'authority_id', 'version', 'authority_sha256',
 DIGEST_RE = r'^[0-9a-f]{64}$'
 ENFORCED_GATES = ['The sign-off approver role must be EMS_GOVERNANCE_AUTHORITY; the Hayes Verify developer role is rejected.', 'The governance decisions are validated against their schema and invariants.', 'The certification results are computed from the checks that run, not recorded as constants.', 'The authority schema is stricter: it rejects unknown fields in a rule, a condition and the source lineage, and a field repeated within one rule; an extra field on a decided control row is rejected by the Python validator.']
 FORBIDDEN_WORDS = ('best', 'critical', 'important', 'recommended', 'highest')
+
+
+def pinned_bytes(commit: str, path: Path) -> bytes:
+    return V2.git_show(commit, V2.rel(path))
+
+
+def pinned_json(commit: str, path: Path) -> dict:
+    return json.loads(pinned_bytes(commit, path).decode('utf-8'))
+
+
+def pinned_digest(commit: str, path: Path) -> str:
+    return hashlib.sha256(V2.lf_bytes(pinned_bytes(commit, path))).hexdigest()
 
 
 def first_sentence(text: str) -> str:
@@ -69,17 +85,18 @@ def build_reply(authority: dict, record: dict, signoff: dict, decisions: dict) -
     undecided = [r for r in authority['controls'] if r['not_applicable_decision_state'] == 'NOT_YET_DECIDED']
     if len(undecided) + len(controls) != len(rows):
         raise V2.AuthorityError('control counts do not add up')
-    V2.validate_signoff(signoff, record['authority_sha256'])
+    V2.validate_signoff(signoff, record['authority_sha256'], authority_id=record['authority_id'], version=record['version'])
     appr = signoff['approval']
     if record['authority_id'] != authority['authority_id'] or record['version'] != authority['version']:
         raise V2.AuthorityError('publication record does not match the authority')
     sup = authority['source_lineage']['supersedes']
-    if V2.lf_digest(V2.GOVERNANCE_DECISIONS) != sup['governance_decisions_sha256']:
+    decisions_sha = pinned_digest(REPLY_PUBLICATION_COMMIT, V2.GOVERNANCE_DECISIONS)
+    if decisions_sha != sup['governance_decisions_sha256']:
         raise V2.AuthorityError('governance decisions differ from the superseded version, so no-decision-changed cannot be stated')
     record_commit = resolve_record_commit()
     if record_commit == record['publication_commit']:
         raise V2.AuthorityError('record commit equals the publication commit')
-    history_note = {'supersedes_authority_id': sup['authority_id'], 'supersedes_version': sup['version'], 'supersedes_commit': sup['commit'], 'purpose': 'Hardens the publication checks.', 'enforced_gates': list(ENFORCED_GATES), 'decisions_changed': False, 'governance_decisions_sha256': V2.lf_digest(V2.GOVERNANCE_DECISIONS)}
+    history_note = {'supersedes_authority_id': sup['authority_id'], 'supersedes_version': sup['version'], 'supersedes_commit': sup['commit'], 'purpose': 'Hardens the publication checks.', 'enforced_gates': list(ENFORCED_GATES), 'decisions_changed': False, 'governance_decisions_sha256': decisions_sha}
     return {
         'document_id': DOCUMENT_ID, 'request_id': REQUEST_ID, 'request_label': REQUEST_LABEL, 'reply_date': appr['date'],
         'from_authority': {'approver': appr['approver'], 'role': appr['role'], 'roles': list(V2.APPROVER_ROLES)},
@@ -217,20 +234,22 @@ def validate_reply_object(reply: dict) -> None:
 
 def check_inputs_bound(manifest: dict) -> None:
     man = {a['relative_path']: a['sha256'] for a in manifest['artifacts']}
-    if man.get(V2.rel(V2.SIGNOFF)) != V2.lf_digest(V2.SIGNOFF):
+    if man.get(V2.rel(V2.SIGNOFF)) != pinned_digest(REPLY_PUBLICATION_COMMIT, V2.SIGNOFF):
         raise V2.AuthorityError('sign-off differs from the published manifest')
-    trace = V2.load(V2.OUT / V2.N_TRACE)
-    if man.get(f'{V2.rel(V2.OUT)}/{V2.N_TRACE}') != V2.lf_digest(V2.OUT / V2.N_TRACE):
+    trace_path = V2.OUT / V2.N_TRACE
+    trace = pinned_json(REPLY_PUBLICATION_COMMIT, trace_path)
+    if man.get(V2.rel(trace_path)) != pinned_digest(REPLY_PUBLICATION_COMMIT, trace_path):
         raise V2.AuthorityError('decision traceability differs from the published manifest')
-    doc_sha = V2.lf_digest(V2.GOVERNANCE_DECISIONS)
+    doc_sha = pinned_digest(REPLY_PUBLICATION_COMMIT, V2.GOVERNANCE_DECISIONS)
     if not trace['decision_records'] or any(r['decision_record_sha256'] != doc_sha for r in trace['decision_records']):
         raise V2.AuthorityError('decision records differ from the published traceability')
 
 
 def load_inputs() -> tuple:
-    authority, record, signoff = V2.load(V2.AUTHORITY), V2.load(V2.PUBLICATION_RECORD), V2.load(V2.SIGNOFF)
-    decisions, manifest = V2.load(V2.GOVERNANCE_DECISIONS), V2.load(V2.OUT / V2.N_MANIFEST)
-    if record['manifest_sha256'] != V2.lf_digest(V2.OUT / V2.N_MANIFEST):
+    authority, signoff = pinned_json(REPLY_PUBLICATION_COMMIT, V2.AUTHORITY), pinned_json(REPLY_PUBLICATION_COMMIT, V2.SIGNOFF)
+    decisions, manifest = pinned_json(REPLY_PUBLICATION_COMMIT, V2.GOVERNANCE_DECISIONS), pinned_json(REPLY_PUBLICATION_COMMIT, V2.OUT / V2.N_MANIFEST)
+    record = pinned_json(REPLY_RECORD_COMMIT, V2.PUBLICATION_RECORD)
+    if record['manifest_sha256'] != pinned_digest(REPLY_PUBLICATION_COMMIT, V2.OUT / V2.N_MANIFEST):
         raise V2.AuthorityError('publication record manifest digest differs from the published manifest')
     check_inputs_bound(manifest)
     return authority, record, signoff, decisions
@@ -250,7 +269,7 @@ def validate_reply() -> None:
         raise V2.AuthorityError('reply schema differs from a fresh build')
     validate_reply_object(V2.load(REPLY_JSON))
     jsonschema.Draft202012Validator(V2.load(REPLY_SCHEMA)).validate(V2.load(REPLY_JSON))
-    if record['authority_sha256'] != V2.lf_digest(V2.AUTHORITY) or record['manifest_sha256'] != V2.lf_digest(V2.OUT / V2.N_MANIFEST):
+    if record['authority_sha256'] != pinned_digest(REPLY_PUBLICATION_COMMIT, V2.AUTHORITY) or record['manifest_sha256'] != pinned_digest(REPLY_PUBLICATION_COMMIT, V2.OUT / V2.N_MANIFEST):
         raise V2.AuthorityError('publication record digests differ from the published files')
     print('PASS')
 
@@ -266,10 +285,11 @@ def resolve_record_commit() -> str:
         raise V2.AuthorityError(f'cannot check whether the clone is shallow: {e}') from e
     if s.returncode != 0 or s.stdout.strip() != 'false':
         raise V2.AuthorityError('shallow clone or unreadable repository: cannot resolve the publication record commit; fetch full history')
-    r = git('log', '-n1', '--format=%H', '--', V2.rel(V2.PUBLICATION_RECORD))
-    sha = r.stdout.strip()
-    if r.returncode != 0 or not re.fullmatch(r'[0-9a-f]{40}', sha):
-        raise V2.AuthorityError('cannot resolve the publication record commit from git')
+    sha = REPLY_RECORD_COMMIT
+    if not re.fullmatch(r'[0-9a-f]{40}', sha) or git('cat-file', '-e', f'{sha}^{{commit}}').returncode != 0:
+        raise V2.AuthorityError('the frozen publication record commit is not in the repository history')
+    if git('merge-base', '--is-ancestor', sha, 'HEAD').returncode != 0:
+        raise V2.AuthorityError('the frozen publication record commit is not an ancestor of HEAD')
     return sha
 
 
@@ -277,7 +297,7 @@ PUSH_ON, PUSH_NOT_ON, PUSH_UNKNOWN = 0, 1, 2
 
 
 def push_check() -> int:
-    sha = V2.load(V2.PUBLICATION_RECORD)['publication_commit']
+    sha = REPLY_PUBLICATION_COMMIT
     ref = f'refs/heads/{REMOTE_BRANCH}'
     r = git('ls-remote', 'origin', ref)
     tip = r.stdout.split()[0] if r.returncode == 0 and r.stdout.strip() else None
