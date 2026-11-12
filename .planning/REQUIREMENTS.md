@@ -14,14 +14,14 @@
 ### Gates
 
 - [x] **GATE-01**: (06-REVIEW WR-02) The publication-record cross-check fails when the record is absent or names a different authority; the only exception is an explicitly named pre-publication mode
-- [ ] **GATE-02**: (06-REVIEW WR-04) The mutation gate counts a mutation as rejected only when the validator raises its domain error; any other exception fails the gate
+- [x] **GATE-02**: (06-REVIEW WR-04) The mutation gate counts a mutation as rejected only when the validator raises its domain error; any other exception fails the gate
 - [x] **GATE-03**: (catalog decoupling) `--validate` checks the catalog against a frozen reference (the pinned digest or commit), so edits to the live `registry/control_catalog.yaml` don't turn it red
 - [x] **GATE-04**: (06-REVIEW WR-05) The reply's record-commit lookup either works in a shallow clone or fails with an explicit message there; it never passes silently
 - [x] **GATE-05**: (03-REVIEW WR-01) Cross-note uniqueness compares notes using `norm_templated`
 
 ### Schema
 
-- [ ] **SCHEMA-07**: The v2 schema sets `additionalProperties: false` at the top level, on control rows and on `not_applicable_semantics`; the negative-invariant file records extra fields as rejected by the schema itself
+- [x] **SCHEMA-07**: The v2 schema sets `additionalProperties: false` at the top level, on control rows and on `not_applicable_semantics`; the negative-invariant file records extra fields as rejected by the schema itself
 
 ### Publication
 
@@ -58,11 +58,11 @@
 | LIN-02 | Phase 7 | Complete |
 | LIN-03 | Phase 7 | Complete |
 | GATE-01 | Phase 8 | Complete |
-| GATE-02 | Phase 8 | Pending |
+| GATE-02 | Phase 8 | Complete |
 | GATE-03 | Phase 8 | Complete |
 | GATE-04 | Phase 8 | Complete |
 | GATE-05 | Phase 8 | Complete |
-| SCHEMA-07 | Phase 8 | Pending |
+| SCHEMA-07 | Phase 8 | Complete |
 | PUB-07 | Phase 9 | Pending |
 | PUB-08 | Phase 9 | Pending |
 | PUB-09 | Phase 9 | Pending |

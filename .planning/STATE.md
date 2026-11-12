@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.1.0
 milestone_name: Authority 2.0.2 Lineage Correction
-status: verifying
-last_updated: "2026-11-12T13:35:22.924Z"
+status: ready_to_plan
+last_updated: 2026-11-12T13:48:31.607Z
 last_activity: 2026-11-12
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 9
-  completed_plans: 9
+  completed_plans: 40
   percent: 50
-stopped_at: Phase 7 complete (4/4) — ready to discuss Phase 8
+stopped_at: Phase 08 complete (5/5) — ready to discuss Phase 9
 ---
 
 # Project State
@@ -21,13 +21,13 @@ stopped_at: Phase 7 complete (4/4) — ready to discuss Phase 8
 See: .planning/PROJECT.md (updated 2026-10-20)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Phase 08 — gate-and-schema-hardening
+**Current focus:** Phase 9 — certified republication 2.0.2
 
 ## Current Position
 
-Phase: 08 (gate-and-schema-hardening) — EXECUTING
-Plan: 5 of 5
-Status: Phase complete — ready for verification
+Phase: 9
+Plan: Not started
+Status: Ready to plan
 Last activity: 2026-11-12
 
 Progress: [█████████░] 89%
@@ -36,7 +36,7 @@ Progress: [█████████░] 89%
 
 **Velocity:**
 
-- Total plans completed: 35
+- Total plans completed: 40
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -50,6 +50,7 @@ Progress: [█████████░] 89%
 | 05 | 3 | - | - |
 | 06 | 9 | - | - |
 | 7 | 4 | - | - |
+| 08 | 5 | - | - |
 
 **Recent Trend:**
 
