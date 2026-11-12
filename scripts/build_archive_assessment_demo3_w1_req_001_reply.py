@@ -260,6 +260,12 @@ def git(*args: str) -> subprocess.CompletedProcess:
 
 
 def resolve_record_commit() -> str:
+    try:
+        s = git('rev-parse', '--is-shallow-repository')
+    except OSError as e:
+        raise V2.AuthorityError(f'cannot check whether the clone is shallow: {e}') from e
+    if s.returncode != 0 or s.stdout.strip() != 'false':
+        raise V2.AuthorityError('shallow clone or unreadable repository: cannot resolve the publication record commit; fetch full history')
     r = git('log', '-n1', '--format=%H', '--', V2.rel(V2.PUBLICATION_RECORD))
     sha = r.stdout.strip()
     if r.returncode != 0 or not re.fullmatch(r'[0-9a-f]{40}', sha):
