@@ -17,7 +17,7 @@
 - [ ] **GATE-02**: (06-REVIEW WR-04) The mutation gate counts a mutation as rejected only when the validator raises its domain error; any other exception fails the gate
 - [ ] **GATE-03**: (catalog decoupling) `--validate` checks the catalog against a frozen reference (the pinned digest or commit), so edits to the live `registry/control_catalog.yaml` don't turn it red
 - [ ] **GATE-04**: (06-REVIEW WR-05) The reply's record-commit lookup either works in a shallow clone or fails with an explicit message there; it never passes silently
-- [ ] **GATE-05**: (03-REVIEW WR-01) Cross-note uniqueness compares notes using `norm_templated`
+- [x] **GATE-05**: (03-REVIEW WR-01) Cross-note uniqueness compares notes using `norm_templated`
 
 ### Schema
 
@@ -61,7 +61,7 @@
 | GATE-02 | Phase 8 | Pending |
 | GATE-03 | Phase 8 | Pending |
 | GATE-04 | Phase 8 | Pending |
-| GATE-05 | Phase 8 | Pending |
+| GATE-05 | Phase 8 | Complete |
 | SCHEMA-07 | Phase 8 | Pending |
 | PUB-07 | Phase 9 | Pending |
 | PUB-08 | Phase 9 | Pending |
