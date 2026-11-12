@@ -17,7 +17,6 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / 'registry'
 SCHEMAS = ROOT / 'schemas'
-CATALOG = REGISTRY / 'control_catalog.yaml'
 AUTHORITY = REGISTRY / 'archive_assessment_applicability_authority_v2.json'
 SCHEMA = SCHEMAS / 'archive_assessment_applicability_authority_v2.schema.json'
 V1_AUTHORITY = REGISTRY / 'archive_assessment_applicability_authority.json'
@@ -44,7 +43,8 @@ SUPERSEDED_V2_0_0 = {
     'governance_decisions_normalisation': 'CRLF_TO_LF',
 }
 V1_BASELINE_COMMIT = '62a8955dc28d9458cd1167fad314926e057c31fc'
-V1_BASELINE_ID = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0'
+CATALOG_COMMIT = V1_BASELINE_COMMIT
+V1_BASELINE_ID ='EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0'
 V1_BASELINE_REL = 'registry/archive_assessment_applicability_authority.json'
 RESULTS = ['APPLICABLE','NOT_APPLICABLE','APPLICABILITY_UNRESOLVED']
 FIELD_DEFINITIONS = {
@@ -87,8 +87,10 @@ def contains_absolute(value: object) -> bool:
     if isinstance(value, list): return any(contains_absolute(v) for v in value)
     return False
 
+def catalog_bytes() -> bytes: return git_show(CATALOG_COMMIT, CATALOG_REL)
+
 def catalog_controls() -> list[dict]:
-    data = yaml.safe_load(CATALOG.read_text(encoding='utf-8'))
+    data = yaml.safe_load(lf_bytes(catalog_bytes()).decode('utf-8'))
     controls = data.get('controls', [])
     ids = [c.get('control_id') for c in controls]
     if len(controls) != 80 or len(set(ids)) != 80 or any(not x for x in ids):
@@ -167,7 +169,7 @@ def build_authority() -> dict:
             'aa1_manifest': digest_entry(AA1_MANIFEST_REL, lin['aa1_manifest_sha256'], 'RAW_BYTES'),
             'aa2_closure': digest_entry(AA2_CLOSURE_REL, lin['aa2_closure_sha256'], 'RAW_BYTES'),
             'aa2_approval': digest_entry(AA2_APPROVAL_REL, lin['aa2_approval_sha256'], 'RAW_BYTES'),
-            'catalog_reference': {'relative_path': CATALOG_REL, 'sha256': lf_digest(CATALOG), 'normalisation': 'CRLF_TO_LF', 'required_for_deterministic_compilation': False},
+            'catalog_reference': {'relative_path': CATALOG_REL, 'sha256': hashlib.sha256(lf_bytes(catalog_bytes())).hexdigest(), 'normalisation': 'CRLF_TO_LF', 'commit': CATALOG_COMMIT, 'required_for_deterministic_compilation': False},
             'supersedes': dict(SUPERSEDED_V2_0_0),
             'v1_baseline': v1_baseline_entry(),
         },
@@ -303,7 +305,9 @@ def validate_publication(a: dict) -> None:
     if lin.get('supersedes') != SUPERSEDED_V2_0_0: errors.append('lineage must record the 2.0.0 publication it supersedes')
     if lin.get('v1_baseline') != v1_baseline_entry(): errors.append('lineage v1_baseline must record v1.0.0 with the live v1 digest')
     cat = lin.get('catalog_reference')
-    if not isinstance(cat, dict) or cat.get('sha256') != lf_digest(CATALOG): errors.append('lineage catalog digest does not match')
+    if not isinstance(cat, dict) or cat.get('sha256') != hashlib.sha256(lf_bytes(catalog_bytes())).hexdigest(): errors.append('lineage catalog digest does not match')
+    if not isinstance(cat, dict) or cat.get('commit') != CATALOG_COMMIT: errors.append('lineage catalog commit does not match the pinned catalog commit')
+    if not isinstance(cat, dict) or cat.get('relative_path') != CATALOG_REL: errors.append('lineage catalog relative_path invalid')
     if 'digest_normalisation' in lin: errors.append('source_lineage must not carry a global digest_normalisation')
     for label, want_rel in (('aa1_manifest', AA1_MANIFEST_REL), ('aa2_closure', AA2_CLOSURE_REL), ('aa2_approval', AA2_APPROVAL_REL)):
         e = lin.get(label)
@@ -314,7 +318,7 @@ def validate_publication(a: dict) -> None:
 
 def bad_rel(p: object) -> bool: return not isinstance(p, str) or not p or contains_absolute(p) or p.startswith('\\') or re.match(r'[A-Za-z]:', p) is not None or '..' in p.replace('\\', '/').split('/')
 
-COMMIT_PINNED = {'supersedes', 'supersedes_governance_decisions', 'v1_baseline'}
+COMMIT_PINNED = {'catalog_reference', 'supersedes','supersedes_governance_decisions', 'v1_baseline'}
 
 def git_show(commit: str, relative_path: str) -> bytes:
     if not isinstance(commit, str) or not re.fullmatch(r'[0-9a-f]{40}', commit): raise AuthorityError(f'{relative_path}: commit must be a 40-character lowercase hex SHA')
@@ -360,7 +364,7 @@ def schema() -> dict:
             'supersedes':pinned(SUPERSEDED_V2_0_0, {'sha256','governance_decisions_sha256'}),
             'v1_baseline':pinned({'authority_id':V1_BASELINE_ID,'version':'1.0.0','commit':V1_BASELINE_COMMIT,'relative_path':V1_BASELINE_REL,'sha256':None,'normalisation':'CRLF_TO_LF'}, {'sha256'}),
             'governance_decisions':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','normalisation','record_count','drafting_commit'],'properties':{'relative_path':{'const':GOVERNANCE_DECISIONS_REL},'sha256':sha,'normalisation':norm_schema('governance_decisions'),'record_count':{'const':21},'drafting_commit':{'type':'string','pattern':'^[0-9a-f]{40}$'}}},
-            'catalog_reference':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','normalisation','required_for_deterministic_compilation'],'properties':{'relative_path':{'const':CATALOG_REL},'sha256':sha,'normalisation':norm_schema('catalog_reference'),'required_for_deterministic_compilation':{'const':False}}},
+            'catalog_reference':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','normalisation','commit','required_for_deterministic_compilation'],'properties':{'relative_path':{'const':CATALOG_REL},'sha256':sha,'normalisation':norm_schema('catalog_reference'),'commit':{'const':CATALOG_COMMIT},'required_for_deterministic_compilation':{'const':False}}},
             'aa1_manifest':entry_schema('aa1_manifest', AA1_MANIFEST_REL),'aa2_closure':entry_schema('aa2_closure', AA2_CLOSURE_REL),'aa2_approval':entry_schema('aa2_approval', AA2_APPROVAL_REL)}}
     auth = {'type':'string','pattern':AUTHORITY_ID_RE}
     def branch(state, rule_s, auth_s):
