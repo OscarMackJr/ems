@@ -1,5 +1,5 @@
 {
-  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1",
+  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2",
   "control_population": 80,
   "controls": [
     {
@@ -2908,8 +2908,8 @@
     }
   ],
   "decided_control_count": 21,
-  "published_on": "2026-10-14",
+  "published_on": "2026-11-12",
   "undecided_control_count": 59,
   "unique_control_count": 80,
-  "version": "2.0.1"
+  "version": "2.0.2"
 }

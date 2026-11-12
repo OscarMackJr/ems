@@ -1,6 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string"
+    },
     "applicability_decision_ids": {
       "items": {
         "pattern": "^AA4-GOV-[0-9]{3}$",
@@ -10,6 +14,9 @@
       "minItems": 0,
       "type": "array",
       "uniqueItems": true
+    },
+    "applicability_vocabulary": {
+      "type": "array"
     },
     "approved_governance_decision_ids": {
       "items": {
@@ -24,11 +31,72 @@
     "assessment_semantics": {
       "const": "CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT"
     },
+    "attestation_prohibitions": {
+      "properties": {
+        "current_repository_attestation": {
+          "const": false
+        },
+        "historical_compliance_attestation": {
+          "const": false
+        },
+        "production_readiness_attestation": {
+          "const": false
+        }
+      },
+      "required": [
+        "historical_compliance_attestation",
+        "current_repository_attestation",
+        "production_readiness_attestation"
+      ],
+      "type": "object"
+    },
     "authority_id": {
-      "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1"
+      "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2"
+    },
+    "classification_vocabulary": {
+      "properties": {
+        "states": {
+          "const": [
+            "KNOWN_TRUE",
+            "KNOWN_FALSE",
+            "UNKNOWN"
+          ]
+        },
+        "unknown_is_not_false": {
+          "not": {
+            "enum": [
+              false,
+              null,
+              0,
+              "",
+              [],
+              {}
+            ]
+          }
+        },
+        "unknown_is_not_not_applicable": {
+          "not": {
+            "enum": [
+              false,
+              null,
+              0,
+              "",
+              [],
+              {}
+            ]
+          }
+        }
+      },
+      "required": [
+        "states",
+        "unknown_is_not_false",
+        "unknown_is_not_not_applicable"
+      ],
+      "type": "object"
     },
     "controls": {
       "items": {
+        "additionalProperties": false,
         "allOf": [
           {
             "if": {
@@ -201,17 +269,32 @@
           }
         ],
         "properties": {
+          "archive_evidence_capability": {
+            "type": "string"
+          },
           "archive_population_membership": {
             "const": "IN_ARCHIVE_CONTROL_POPULATION"
           },
           "assessment_semantics": {
             "const": "CURRENT_POLICY_AGAINST_HISTORICAL_SNAPSHOT"
           },
+          "catalog_scope": {
+            "type": "string"
+          },
+          "classification_prerequisites": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "classification_unknown_treatment": {
             "const": "APPLICABILITY_UNRESOLVED"
           },
           "control_id": {
             "pattern": "^EMS-CTRL-[0-9]{3}$",
+            "type": "string"
+          },
+          "control_name": {
             "type": "string"
           },
           "decision_ids": {
@@ -352,12 +435,20 @@
               }
             ]
           },
+          "required_non_repository_authority": {
+            "type": "string"
+          },
           "target_type": {
             "const": "ARCHIVED_REPOSITORY_SNAPSHOT"
+          },
+          "unresolved_reason": {
+            "type": "string"
           }
         },
         "required": [
           "control_id",
+          "control_name",
+          "catalog_scope",
           "archive_population_membership",
           "target_type",
           "assessment_semantics",
@@ -381,7 +472,51 @@
     "document_id": {
       "const": "EMS-ARCHIVE-ASSESSMENT-APPLICABILITY-AUTHORITY"
     },
+    "evidence_boundary": {
+      "properties": {
+        "archive_content_does_not_establish": {
+          "allOf": [
+            {
+              "contains": {
+                "const": "LIVE_REPOSITORY_STATE"
+              }
+            },
+            {
+              "contains": {
+                "const": "ORGANIZATION_AUTHORITY"
+              }
+            },
+            {
+              "contains": {
+                "const": "SERVICE_STATE"
+              }
+            },
+            {
+              "contains": {
+                "const": "PLATFORM_STATE"
+              }
+            },
+            {
+              "contains": {
+                "const": "CURRENT_CICD_STATE"
+              }
+            },
+            {
+              "contains": {
+                "const": "RUNTIME_STATE"
+              }
+            }
+          ],
+          "type": "array"
+        }
+      },
+      "required": [
+        "archive_content_does_not_establish"
+      ],
+      "type": "object"
+    },
     "not_applicable_semantics": {
+      "additionalProperties": false,
       "properties": {
         "absence_of_evidence_is_not_not_applicable": {
           "const": true
@@ -444,6 +579,9 @@
             "data_classification"
           ]
         },
+        "fields_not_usable_in_rules_statement": {
+          "const": "owner, tier, service_criticality and data_classification are declared classification fields that are not usable in rules in this version."
+        },
         "min_conditions": {
           "const": 1
         },
@@ -493,6 +631,18 @@
             "ai_enabled"
           ]
         },
+        "statements": {
+          "const": [
+            "A not_applicable_rule is a flat list of conditions and all conditions must match.",
+            "When every field named by a published rule is known and every condition is met, the result is NOT_APPLICABLE.",
+            "When every field named by a published rule is known and not every condition is met, the result is APPLICABLE.",
+            "NO_RULE_WILL_BE_PUBLISHED resolves to APPLICABLE for every target whatever the facts.",
+            "NOT_YET_DECIDED resolves to APPLICABILITY_UNRESOLVED.",
+            "When any field named by a published rule is UNKNOWN the result is APPLICABILITY_UNRESOLVED, even when another named field already fails its condition.",
+            "UNKNOWN never yields NOT_APPLICABLE.",
+            "The not_applicable_decision_state governs the resolved result; default_applicability_result describes the result absent a decision."
+          ]
+        },
         "unknown_is_never_not_applicable": {
           "const": true
         },
@@ -525,21 +675,94 @@
     "source_lineage": {
       "additionalProperties": false,
       "properties": {
-        "aa1_manifest_sha256": {
-          "pattern": "^[0-9a-f]{64}$",
-          "type": "string"
+        "aa1_manifest": {
+          "additionalProperties": false,
+          "properties": {
+            "normalisation": {
+              "const": "RAW_BYTES",
+              "enum": [
+                "RAW_BYTES",
+                "CRLF_TO_LF"
+              ]
+            },
+            "relative_path": {
+              "const": "generated/archive-assessment/ems-aa1/ems_aa1_analysis_artifact_manifest.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "relative_path",
+            "sha256",
+            "normalisation"
+          ],
+          "type": "object"
         },
-        "aa2_approval_sha256": {
-          "pattern": "^[0-9a-f]{64}$",
-          "type": "string"
+        "aa2_approval": {
+          "additionalProperties": false,
+          "properties": {
+            "normalisation": {
+              "const": "RAW_BYTES",
+              "enum": [
+                "RAW_BYTES",
+                "CRLF_TO_LF"
+              ]
+            },
+            "relative_path": {
+              "const": "generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_approval.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "relative_path",
+            "sha256",
+            "normalisation"
+          ],
+          "type": "object"
         },
-        "aa2_closure_sha256": {
-          "pattern": "^[0-9a-f]{64}$",
-          "type": "string"
+        "aa2_closure": {
+          "additionalProperties": false,
+          "properties": {
+            "normalisation": {
+              "const": "RAW_BYTES",
+              "enum": [
+                "RAW_BYTES",
+                "CRLF_TO_LF"
+              ]
+            },
+            "relative_path": {
+              "const": "generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_closure.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "relative_path",
+            "sha256",
+            "normalisation"
+          ],
+          "type": "object"
         },
         "catalog_reference": {
           "additionalProperties": false,
           "properties": {
+            "commit": {
+              "const": "62a8955dc28d9458cd1167fad314926e057c31fc"
+            },
+            "normalisation": {
+              "const": "CRLF_TO_LF",
+              "enum": [
+                "RAW_BYTES",
+                "CRLF_TO_LF"
+              ]
+            },
             "relative_path": {
               "const": "registry/control_catalog.yaml"
             },
@@ -554,12 +777,11 @@
           "required": [
             "relative_path",
             "sha256",
+            "normalisation",
+            "commit",
             "required_for_deterministic_compilation"
           ],
           "type": "object"
-        },
-        "digest_normalisation": {
-          "const": "CRLF_TO_LF"
         },
         "governance_decisions": {
           "additionalProperties": false,
@@ -567,6 +789,13 @@
             "drafting_commit": {
               "pattern": "^[0-9a-f]{40}$",
               "type": "string"
+            },
+            "normalisation": {
+              "const": "CRLF_TO_LF",
+              "enum": [
+                "RAW_BYTES",
+                "CRLF_TO_LF"
+              ]
             },
             "record_count": {
               "const": 21
@@ -582,6 +811,7 @@
           "required": [
             "relative_path",
             "sha256",
+            "normalisation",
             "record_count",
             "drafting_commit"
           ],
@@ -591,14 +821,23 @@
           "additionalProperties": false,
           "properties": {
             "authority_id": {
-              "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0"
+              "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1"
             },
             "commit": {
-              "const": "54a7fd09114704a97a7a48fce5f89aebeb48c90a"
+              "const": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb"
+            },
+            "governance_decisions_normalisation": {
+              "const": "CRLF_TO_LF"
+            },
+            "governance_decisions_relative_path": {
+              "const": "registry/archive_assessment_governance_decisions.json"
             },
             "governance_decisions_sha256": {
               "pattern": "^[0-9a-f]{64}$",
               "type": "string"
+            },
+            "normalisation": {
+              "const": "CRLF_TO_LF"
             },
             "relative_path": {
               "const": "registry/archive_assessment_applicability_authority_v2.json"
@@ -608,7 +847,7 @@
               "type": "string"
             },
             "version": {
-              "const": "2.0.0"
+              "const": "2.0.1"
             }
           },
           "required": [
@@ -617,7 +856,10 @@
             "commit",
             "relative_path",
             "sha256",
-            "governance_decisions_sha256"
+            "governance_decisions_sha256",
+            "normalisation",
+            "governance_decisions_relative_path",
+            "governance_decisions_normalisation"
           ],
           "type": "object"
         },
@@ -629,6 +871,9 @@
             },
             "commit": {
               "const": "62a8955dc28d9458cd1167fad314926e057c31fc"
+            },
+            "normalisation": {
+              "const": "CRLF_TO_LF"
             },
             "relative_path": {
               "const": "registry/archive_assessment_applicability_authority.json"
@@ -646,7 +891,8 @@
             "version",
             "commit",
             "relative_path",
-            "sha256"
+            "sha256",
+            "normalisation"
           ],
           "type": "object"
         }
@@ -656,10 +902,9 @@
         "supersedes",
         "v1_baseline",
         "catalog_reference",
-        "digest_normalisation",
-        "aa1_manifest_sha256",
-        "aa2_closure_sha256",
-        "aa2_approval_sha256"
+        "aa1_manifest",
+        "aa2_closure",
+        "aa2_approval"
       ],
       "type": "object"
     },
@@ -670,7 +915,7 @@
       "const": "ARCHIVED_REPOSITORY_SNAPSHOT"
     },
     "version": {
-      "const": "2.0.1"
+      "const": "2.0.2"
     }
   },
   "required": [
@@ -680,6 +925,7 @@
     "authority_id",
     "target_type",
     "assessment_semantics",
+    "attestation_prohibitions",
     "classification_vocabulary",
     "applicability_vocabulary",
     "not_applicable_semantics",

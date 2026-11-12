@@ -80,7 +80,8 @@
       "id": "extra_field_on_decided_row",
       "mutation": "extra_field_on_decided_row",
       "rejected_by": [
-        "PYTHON_VALIDATOR"
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
       ],
       "result": "REJECTED_FAIL_CLOSED"
     },
@@ -237,15 +238,44 @@
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
-      "description": "The supersedes governance decisions digest differs from the 2.0.0 value.",
+      "description": "The supersedes governance decisions digest differs from the 2.0.1 value.",
       "id": "supersedes_governance_digest_differs",
       "mutation": "supersedes_governance_digest_differs",
       "rejected_by": [
         "PYTHON_VALIDATOR"
       ],
       "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "An extra field is added at the top level of the authority.",
+      "id": "extra_top_level_field",
+      "mutation": "extra_top_level_field",
+      "rejected_by": [
+        "SCHEMA"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "An extra field is added to an undecided row.",
+      "id": "extra_field_on_undecided_row",
+      "mutation": "extra_field_on_undecided_row",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
+    },
+    {
+      "description": "An extra field is added to the not-applicable semantics.",
+      "id": "extra_field_in_semantics",
+      "mutation": "extra_field_in_semantics",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ],
+      "result": "REJECTED_FAIL_CLOSED"
     }
   ],
-  "published_on": "2026-10-14",
+  "published_on": "2026-11-12",
   "result": "PASS"
 }
