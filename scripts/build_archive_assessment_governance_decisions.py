@@ -318,6 +318,13 @@ def validate_decisions(d: object, proposals: dict | None = None, drafting_record
             elif sup not in index: errors.append(f'{rid}: supersedes an id that is not an earlier record')
             elif index[sup][1] != cid: errors.append(f'{rid}: supersedes a record for another control')
             else: superseded.add(sup)
+    key = norm if d.get('answers_sha256') == CERTIFIED_ANSWERS_SHA256 else norm_templated
+    seen_notes: dict = {}
+    for rid, (i, cid) in index.items():
+        n = records[i].get('note')
+        if rid in superseded or not nonempty(n): continue
+        if key(n) in seen_notes: errors.append(f'{rid}: note repeats the note of {seen_notes[key(n)]}')
+        seen_notes.setdefault(key(n), rid)
     counts: dict = {}
     for rid, (i, cid) in index.items():
         if rid not in superseded: counts[cid] = counts.get(cid, 0) + 1

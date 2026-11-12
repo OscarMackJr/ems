@@ -187,6 +187,30 @@ def test_supersession_self_rejected():
         n = supersede(d, 0); n['supersedes'] = n['decision_id']
     validator_rejects(m)
 
+def templated_twins(d):
+    d['records'][0]['note'] = 'Test-only note 9, the shared review text.'
+    d['records'][1]['note'] = 'Test-only note 10, the shared review text.'
+
+def test_validate_decisions_rejects_templated_note_collision_for_uncertified_answers(monkeypatch):
+    monkeypatch.setattr(MODULE, 'CERTIFIED_ANSWERS_SHA256', 'f' * 64)
+    d = built(); templated_twins(d)
+    with pytest.raises(AuthorityError, match='repeats the note of AA4-GOV-001'): MODULE.validate_decisions(d)
+
+def test_validate_decisions_grandfathers_templated_notes_for_certified_answers():
+    assert built()['answers_sha256'] == MODULE.CERTIFIED_ANSWERS_SHA256
+    d = built(); templated_twins(d)
+    MODULE.validate_decisions(d)
+
+def test_validate_decisions_rejects_exact_note_repeat_for_certified_answers():
+    def m(d): d['records'][1]['note'] = d['records'][0]['note']
+    with pytest.raises(AuthorityError, match='repeats the note of AA4-GOV-001'):
+        d = built(); m(d); MODULE.validate_decisions(d)
+
+def test_validate_decisions_ignores_superseded_note_repeat(monkeypatch):
+    monkeypatch.setattr(MODULE, 'CERTIFIED_ANSWERS_SHA256', 'f' * 64)
+    d = built(); supersede(d, 0)
+    MODULE.validate_decisions(d)
+
 def test_two_unsuperseded_for_one_control_rejected():
     def m(d): supersede(d, 0)['supersedes'] = None
     validator_rejects(m)
