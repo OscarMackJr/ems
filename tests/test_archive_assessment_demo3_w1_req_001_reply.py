@@ -345,6 +345,44 @@ def test_record_commit_is_last_change_of_the_record():
     assert build()['pin']['publication_record_commit'] == last
 
 
+def fake_shallow_git(rc, out, log_sha=None, exc=None):
+    seen = []
+    def run(*args):
+        seen.append(args)
+        if args[0] == 'rev-parse' and args[1] == '--is-shallow-repository':
+            if exc:
+                raise exc
+            return subprocess.CompletedProcess(args, rc, out, '')
+        if args[0] == 'log':
+            return subprocess.CompletedProcess(args, 0, (log_sha or '') + '
+', '')
+        raise AssertionError(f'unexpected git command: {args}')
+    run.seen = seen
+    return run
+
+
+@pytest.mark.parametrize('rc, out, exc', [
+    (0, 'true
+', None),
+    (128, '', None),
+    (0, 'maybe
+', None),
+    (0, '', OSError('git missing')),
+])
+def test_resolve_record_commit_fails_when_shallow_or_unknown(monkeypatch, rc, out, exc):
+    fake = fake_shallow_git(rc, out, 'c' * 40, exc)
+    monkeypatch.setattr(MODULE, 'git', fake)
+    with pytest.raises(MODULE.V2.AuthorityError, match='shallow'):
+        MODULE.resolve_record_commit()
+    assert not any(a[0] == 'log' for a in fake.seen)
+
+
+def test_resolve_record_commit_full_clone_passes_through(monkeypatch):
+    monkeypatch.setattr(MODULE, 'git', fake_shallow_git(0, 'false
+', 'd' * 40))
+    assert MODULE.resolve_record_commit() == 'd' * 40
+
+
 def test_history_note_binds_to_supersedes_and_decisions():
     authority, _, _, _ = inputs()
     sup = authority['source_lineage']['supersedes']
