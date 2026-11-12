@@ -121,7 +121,7 @@ Phases execute in numeric order: 7 → 8 → 9 → 10
 |-------|----------------|--------|-----------|
 | 7. Lineage Source and Per-Digest Scope | 4/4 | Complete    | 2026-10-21 |
 | 8. Gate and Schema Hardening | 5/5 | Complete    | 2026-11-12 |
-| 9. Certified Republication 2.0.2 | 2/5 | In Progress|  |
+| 9. Certified Republication 2.0.2 | 3/5 | In Progress|  |
 | 10. Notice to Hayes | 0/TBD | Not started | - |
 
 ## Coverage

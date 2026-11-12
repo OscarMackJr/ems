@@ -70,3 +70,9 @@ Accepted red set now (all clear at 09-04 publication):
 - tests/test_archive_assessment_applicability_authority_v2.py::test_committed_schema_equals_schema_function
 - tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate
 - tests/test_archive_assessment_demo3_w1_req_001_reply.py::test_publisher_still_valid_and_digest_matches_manifest
+
+## After plan 03 (commit 251cb30) — pre-publication freeze point
+
+Command: `python -m pytest tests -k archive_assessment -p no:cacheprovider -q -rf --basetemp=<scratchpad>\p9-03`
+
+Totals: **717 passed, 3 failed, 7 deselected** — exactly the accepted red set above, no new ids. Publisher and tests are frozen from here until 09-04 publishes.
