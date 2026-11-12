@@ -1,6 +1,7 @@
 import copy
 import importlib.util
 import inspect
+import sys
 from pathlib import Path
 
 import jsonschema
@@ -371,17 +372,38 @@ def published(env):
     write_signoff()
     MODULE.publish(False)
 
-def test_publish_writes_all_and_is_byte_identical(env):
+RECORD_COMMIT = 'a' * 40
+
+@pytest.fixture
+def fake_git_show(monkeypatch):
+    blobs = {}
+    def fake(commit, path):
+        if (commit, path) not in blobs: raise AuthorityError(f'{path}@{commit[:7]}: git show failed: unknown object')
+        return blobs[(commit, path)]
+    monkeypatch.setattr(MODULE, 'git_show', fake)
+    return blobs
+
+def register_blobs(blobs, commit=RECORD_COMMIT):
+    blobs[(commit, MODULE.rel(MODULE.AUTHORITY))] = MODULE.AUTHORITY.read_bytes()
+    blobs[(commit, MODULE.rel(MODULE.OUT / MODULE.N_MANIFEST))] = (MODULE.OUT / MODULE.N_MANIFEST).read_bytes()
+
+def published_recorded(env, blobs):
+    published(env)
+    MODULE.write_publication_record(RECORD_COMMIT)
+    register_blobs(blobs)
+
+def test_publish_writes_all_and_is_byte_identical(env, fake_git_show):
     published(env)
     first = snapshot()
     assert len(first) == 8
     assert all(b'\r' not in v for v in first.values())
     MODULE.publish(False)
     assert snapshot() == first
+    MODULE.write_publication_record(RECORD_COMMIT); register_blobs(fake_git_show)
     MODULE.validate_published()
 
-def test_validate_published_calls_validate_lineage(env, lineage_calls):
-    published(env)
+def test_validate_published_calls_validate_lineage(env, lineage_calls, fake_git_show):
+    published_recorded(env, fake_git_show)
     lineage_calls.clear()
     MODULE.validate_published()
     a = MODULE.load(MODULE.AUTHORITY)
@@ -436,7 +458,7 @@ def test_validate_rejects_extra_or_missing_file(env):
     with pytest.raises(AuthorityError):
         MODULE.validate_published()
 
-def test_write_publication_record(env):
+def test_write_publication_record(env, fake_git_show):
     published(env)
     MODULE.write_publication_record('a' * 40)
     rec = MODULE.load(MODULE.PUBLICATION_RECORD)
@@ -447,34 +469,122 @@ def test_write_publication_record(env):
         with pytest.raises(AuthorityError):
             MODULE.write_publication_record(bad)
 
-def test_validate_record_absent_passes(env):
+def test_validate_record_absent_fails(env, fake_git_show):
     published(env)
     assert not MODULE.PUBLICATION_RECORD.exists()
+    with pytest.raises(AuthorityError, match='absent'):
+        MODULE.validate_published()
+    with pytest.raises(AuthorityError, match='absent'):
+        MODULE.validate_published(True)
+
+def test_validate_record_matching_passes(env, fake_git_show):
+    published_recorded(env, fake_git_show)
     MODULE.validate_published()
 
-def test_validate_record_matching_passes(env):
-    published(env)
-    MODULE.write_publication_record('a' * 40)
-    MODULE.validate_published()
-
-def test_validate_record_other_authority_id_is_pending(env):
-    published(env)
-    MODULE.write_publication_record('a' * 40)
-    rec = MODULE.load(MODULE.PUBLICATION_RECORD)
-    rec['authority_id'] = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-9.9.9'
-    rec['authority_sha256'] = '0' * 64; rec['manifest_sha256'] = '0' * 64
+def superseded_record(blobs, **over):
+    s = MODULE.SUPERSEDED_V2_0_0
+    rec = {'publication_commit': s['commit'], 'authority_id': s['authority_id'], 'version': s['version'], 'authority_sha256': s['sha256'], 'manifest_sha256': MODULE.lf_digest(MODULE.OUT / MODULE.N_MANIFEST), 'digest_normalisation': 'CRLF_TO_LF'}
+    rec.update(over)
     MODULE.dump(MODULE.PUBLICATION_RECORD, rec)
-    MODULE.validate_published()
+    blobs[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = b'superseded 2.0.0 authority bytes\n'
+    blobs[(s['commit'], MODULE.rel(MODULE.OUT / MODULE.N_MANIFEST))] = (MODULE.OUT / MODULE.N_MANIFEST).read_bytes()
+    return rec
+
+def test_pre_publication_mode_accepts_only_superseded_record(env, fake_git_show, monkeypatch):
+    published(env)
+    s = MODULE.SUPERSEDED_V2_0_0
+    # the fake 2.0.0 blob must hash to the pinned sha for D-03 to hold
+    blob = b'superseded 2.0.0 authority bytes\n'
+    monkeypatch.setitem(MODULE.SUPERSEDED_V2_0_0, 'sha256', hashlib.sha256(blob).hexdigest())
+    superseded_record(fake_git_show)
+    MODULE.validate_published(True)
+    with pytest.raises(AuthorityError, match='must name'):
+        MODULE.validate_published()
+
+def test_other_authority_record_fails_in_both_modes(env, fake_git_show):
+    published_recorded(env, fake_git_show)
+    rec = MODULE.load(MODULE.PUBLICATION_RECORD)
+    rec['authority_id'] = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-9.9.9'; rec['version'] = '9.9.9'
+    MODULE.dump(MODULE.PUBLICATION_RECORD, rec)
+    for mode in (False, True):
+        with pytest.raises(AuthorityError):
+            MODULE.validate_published(mode)
+
+def test_pre_publication_wrong_commit_or_digest_fails(env, fake_git_show):
+    published_recorded(env, fake_git_show)
+    superseded_record(fake_git_show, publication_commit='b' * 40)
+    with pytest.raises(AuthorityError, match='2.0.0 publication commit'):
+        MODULE.validate_published(True)
+    superseded_record(fake_git_show, authority_sha256='0' * 64)
+    with pytest.raises(AuthorityError, match='2.0.0 digest'):
+        MODULE.validate_published(True)
+
+@pytest.mark.parametrize('mutate', [lambda r: r.pop('version'), lambda r: r.__setitem__('extra', 1)], ids=['missing_key', 'extra_key'])
+def test_record_shape_violation_raises_authority_error(env, fake_git_show, mutate):
+    published_recorded(env, fake_git_show)
+    rec = MODULE.load(MODULE.PUBLICATION_RECORD); mutate(rec)
+    MODULE.dump(MODULE.PUBLICATION_RECORD, rec)
+    with pytest.raises(AuthorityError, match='exactly the six'):
+        MODULE.validate_published()
+
+@pytest.mark.parametrize('value', [[], 'text', 7])
+def test_record_non_object_raises_authority_error(env, fake_git_show, value):
+    published_recorded(env, fake_git_show)
+    MODULE.dump(MODULE.PUBLICATION_RECORD, value)
+    with pytest.raises(AuthorityError, match='exactly the six'):
+        MODULE.validate_published()
 
 @pytest.mark.parametrize('key', ['authority_sha256', 'manifest_sha256'])
-def test_validate_record_digest_mismatch_fails(env, key):
-    published(env)
-    MODULE.write_publication_record('a' * 40)
+def test_validate_record_digest_mismatch_fails(env, fake_git_show, key):
+    published_recorded(env, fake_git_show)
     rec = MODULE.load(MODULE.PUBLICATION_RECORD)
     rec[key] = '0' * 64
     MODULE.dump(MODULE.PUBLICATION_RECORD, rec)
     with pytest.raises(AuthorityError, match=key):
         MODULE.validate_published()
+
+@pytest.mark.parametrize('rel_name', ['authority', 'manifest'])
+def test_commit_blob_digest_differs_fails(env, fake_git_show, rel_name):
+    published_recorded(env, fake_git_show)
+    path = MODULE.AUTHORITY if rel_name == 'authority' else MODULE.OUT / MODULE.N_MANIFEST
+    fake_git_show[(RECORD_COMMIT, MODULE.rel(path))] = b'different bytes\n'
+    with pytest.raises(AuthorityError, match='publication commit'):
+        MODULE.validate_published()
+
+def test_unreachable_publication_commit_fails_closed(env, fake_git_show):
+    published_recorded(env, fake_git_show)
+    fake_git_show.clear()
+    with pytest.raises(AuthorityError, match='git show failed'):
+        MODULE.validate_published()
+
+def test_real_git_repo_record_passes_plain_mode(env):
+    def run(*args): return subprocess.run(['git', *args], cwd=MODULE.ROOT, capture_output=True)
+    try:
+        ok = run('init', '-q').returncode == 0
+    except OSError:
+        ok = False
+    if not ok: pytest.skip('git unavailable')
+    run('config', 'user.email', 't@example.com'); run('config', 'user.name', 't'); run('config', 'commit.gpgsign', 'false')
+    published(env)
+    run('add', '-A')
+    if run('commit', '-q', '-m', 'publish').returncode != 0: pytest.skip('git commit unavailable')
+    sha = run('rev-parse', 'HEAD').stdout.decode().strip()
+    MODULE.write_publication_record(sha)
+    MODULE.validate_published()
+
+def test_cli_pre_publication_requires_validate(monkeypatch):
+    monkeypatch.setattr(sys, 'argv', ['x', '--pre-publication'])
+    with pytest.raises(SystemExit):
+        MODULE.main()
+
+def test_cli_validate_pre_publication_passes_true(monkeypatch):
+    seen = []
+    monkeypatch.setattr(MODULE, 'validate_published', lambda pre=False: seen.append(pre))
+    monkeypatch.setattr(sys, 'argv', ['x', '--validate', '--pre-publication'])
+    MODULE.main()
+    monkeypatch.setattr(sys, 'argv', ['x', '--validate'])
+    MODULE.main()
+    assert seen == [True, False]
 
 @pytest.mark.parametrize('bad', ['/etc/passwd', 'C:\\Windows\\x', '../outside.txt', 'a/../../b'])
 def test_validate_rejects_manifest_path_traversal(env, bad):
@@ -607,8 +717,8 @@ def test_manifest_records_publisher_script(env):
     assert all(a['relative_path'] != ps['relative_path'] for a in m['artifacts'])
     assert {a['relative_path'] for a in m['artifacts']} >= {MODULE.rel(MODULE.SCHEMA), MODULE.rel(MODULE.AUTHORITY), MODULE.rel(MODULE.SIGNOFF)}
 
-def test_script_edit_after_publication_does_not_break_validate(env):
-    published(env)
+def test_script_edit_after_publication_does_not_break_validate(env, fake_git_show):
+    published_recorded(env, fake_git_show)
     MODULE.write_text(MODULE.SCRIPT, 'print(2)\n')
     MODULE.validate_published()
 
