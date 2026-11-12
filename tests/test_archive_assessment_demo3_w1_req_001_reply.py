@@ -354,8 +354,7 @@ def fake_shallow_git(rc, out, log_sha=None, exc=None):
                 raise exc
             return subprocess.CompletedProcess(args, rc, out, '')
         if args[0] == 'log':
-            return subprocess.CompletedProcess(args, 0, (log_sha or '') + '
-', '')
+            return subprocess.CompletedProcess(args, 0, (log_sha or '') + '\n', '')
         raise AssertionError(f'unexpected git command: {args}')
     run.seen = seen
     return run
