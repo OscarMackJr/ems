@@ -31,12 +31,12 @@ CONDITION_STATES = ['KNOWN_TRUE','KNOWN_FALSE']
 DECISION_STATES = ['RULE_PUBLISHED','NO_RULE_WILL_BE_PUBLISHED','NOT_YET_DECIDED']
 COMBINATION = 'ALL_CONDITIONS_MUST_MATCH'
 AUTHORITY_ID_RE = r'^AA4-GOV-[0-9]{3}$'
-VERSION = '2.0.1'
+VERSION = '2.0.2'
 AUTHORITY_ID = 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-' + VERSION
-SUPERSEDED_V2_0_0 = {
-    'authority_id': 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0', 'version': '2.0.0', 'commit': '54a7fd09114704a97a7a48fce5f89aebeb48c90a',
+SUPERSEDED_V2_0_1 = {
+    'authority_id': 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1', 'version': '2.0.1', 'commit': '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb',
     'relative_path': 'registry/archive_assessment_applicability_authority_v2.json',
-    'sha256': 'de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353',
+    'sha256': '7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f',
     'governance_decisions_sha256': '4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f',
     'normalisation': 'CRLF_TO_LF',
     'governance_decisions_relative_path': 'registry/archive_assessment_governance_decisions.json',
@@ -173,7 +173,7 @@ def build_authority() -> dict:
             'aa2_closure': digest_entry(AA2_CLOSURE_REL, lin['aa2_closure_sha256'], 'RAW_BYTES'),
             'aa2_approval': digest_entry(AA2_APPROVAL_REL, lin['aa2_approval_sha256'], 'RAW_BYTES'),
             'catalog_reference': {'relative_path': CATALOG_REL, 'sha256': hashlib.sha256(lf_bytes(catalog_bytes())).hexdigest(), 'normalisation': 'CRLF_TO_LF', 'commit': CATALOG_COMMIT, 'required_for_deterministic_compilation': False},
-            'supersedes': dict(SUPERSEDED_V2_0_0),
+            'supersedes': dict(SUPERSEDED_V2_0_1),
             'v1_baseline': v1_baseline_entry(),
         },
         'approved_governance_decision_ids': list(DECISIONS), 'applicability_decision_ids': [], 'controls': controls,
@@ -240,7 +240,7 @@ def validate_authority(a: dict, known_decision_ids: set | None = None) -> None:
     if not isinstance(fd, dict) or set(fd) != set(RULE_FIELDS) or any(not isinstance(v, str) or not v.strip() for v in fd.values()): errors.append('field_definitions must define exactly the four rule fields with non-empty text')
     lin0 = a.get('source_lineage') if isinstance(a.get('source_lineage'), dict) else {}
     sup = lin0.get('supersedes'); v1b = lin0.get('v1_baseline')
-    if sup != SUPERSEDED_V2_0_0: errors.append('source_lineage supersedes does not name the 2.0.0 publication')
+    if sup != SUPERSEDED_V2_0_1: errors.append('source_lineage supersedes does not name the 2.0.1 publication')
     if not isinstance(v1b, dict) or {k: v for k, v in v1b.items() if k != 'sha256'} != {k: v for k, v in v1_baseline_entry().items() if k != 'sha256'}: errors.append('source_lineage v1_baseline entry missing or invalid')
     if contains_absolute(a): errors.append('absolute local path used as authority identity')
     deps = a.get('dependencies', [])
@@ -294,10 +294,10 @@ def validate_publication(a: dict) -> None:
     else:
         if gd.get('relative_path') != GOVERNANCE_DECISIONS_REL: errors.append('governance_decisions relative_path invalid')
         if gd.get('sha256') != lf_digest(GOVERNANCE_DECISIONS): errors.append('governance_decisions sha256 does not match the live decisions file')
-        if gd.get('sha256') != SUPERSEDED_V2_0_0['governance_decisions_sha256']: errors.append('governance_decisions sha256 does not equal the 2.0.0 decisions digest')
+        if gd.get('sha256') != SUPERSEDED_V2_0_1['governance_decisions_sha256']: errors.append('governance_decisions sha256 does not equal the 2.0.1 decisions digest')
         if gd.get('record_count') != len(doc['records']): errors.append('governance_decisions record_count does not match the live decisions file')
         if gd.get('drafting_commit') != doc.get('drafting_commit'): errors.append('governance_decisions drafting_commit does not match the live decisions file')
-    if lf_digest(GOVERNANCE_DECISIONS) != SUPERSEDED_V2_0_0['governance_decisions_sha256']: errors.append('decisions file differs from the 2.0.0 decisions; 2.0.1 may not change any decision')
+    if lf_digest(GOVERNANCE_DECISIONS) != SUPERSEDED_V2_0_1['governance_decisions_sha256']: errors.append('decisions file differs from the 2.0.1 decisions (unchanged since 2.0.0); 2.0.2 may not change any decision')
     latest = {r['control_id']: r for r in latest_records(doc)}
     if a.get('applicability_decision_ids') != sorted(r['decision_id'] for r in latest.values()): errors.append('applicability_decision_ids does not equal the decision ids derived from the decision records')
     for r in rows:
@@ -317,7 +317,7 @@ def validate_publication(a: dict) -> None:
         keep = {'not_applicable_decision_state', 'not_applicable_rule', 'not_applicable_authority'} if r['control_id'] in REQUEST_CONTROL_IDS else {'not_applicable_decision_state'}
         if {k: v for k, v in r.items() if k not in keep} != {k: v for k, v in base.items() if k not in keep}: errors.append(f"{r['control_id']}: differs from v1.0.0 beyond the decision fields")
         if r['control_id'] not in REQUEST_CONTROL_IDS and (r.get('not_applicable_rule') is not None or r.get('not_applicable_authority') is not None): errors.append(f"{r['control_id']}: undecided control carries a rule or authority")
-    if lin.get('supersedes') != SUPERSEDED_V2_0_0: errors.append('lineage must record the 2.0.0 publication it supersedes')
+    if lin.get('supersedes') != SUPERSEDED_V2_0_1: errors.append('lineage must record the 2.0.1 publication it supersedes')
     if lin.get('v1_baseline') != v1_baseline_entry(): errors.append('lineage v1_baseline must record v1.0.0 with the live v1 digest')
     cat = lin.get('catalog_reference')
     if not isinstance(cat, dict) or cat.get('sha256') != hashlib.sha256(lf_bytes(catalog_bytes())).hexdigest(): errors.append('lineage catalog digest does not match')
@@ -376,7 +376,7 @@ def schema() -> dict:
     lineage = {'type':'object','additionalProperties':False,
         'required':['governance_decisions','supersedes','v1_baseline','catalog_reference','aa1_manifest','aa2_closure','aa2_approval'],
         'properties':{
-            'supersedes':pinned(SUPERSEDED_V2_0_0, {'sha256','governance_decisions_sha256'}),
+            'supersedes':pinned(SUPERSEDED_V2_0_1, {'sha256','governance_decisions_sha256'}),
             'v1_baseline':pinned({'authority_id':V1_BASELINE_ID,'version':'1.0.0','commit':V1_BASELINE_COMMIT,'relative_path':V1_BASELINE_REL,'sha256':None,'normalisation':'CRLF_TO_LF'}, {'sha256'}),
             'governance_decisions':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','normalisation','record_count','drafting_commit'],'properties':{'relative_path':{'const':GOVERNANCE_DECISIONS_REL},'sha256':sha,'normalisation':norm_schema('governance_decisions'),'record_count':{'const':21},'drafting_commit':{'type':'string','pattern':'^[0-9a-f]{40}$'}}},
             'catalog_reference':{'type':'object','additionalProperties':False,'required':['relative_path','sha256','normalisation','commit','required_for_deterministic_compilation'],'properties':{'relative_path':{'const':CATALOG_REL},'sha256':sha,'normalisation':norm_schema('catalog_reference'),'commit':{'const':CATALOG_COMMIT},'required_for_deterministic_compilation':{'const':False}}},
@@ -487,7 +487,7 @@ NEGATIVE_MUTATIONS = [
     Mutation('decision_record_empty_dual_role_statement', 'A decision record carries an empty dual-role statement.', 'DECISIONS', _m_decision_dual, True),
     Mutation('decision_record_bogus_disposition', 'A decision record carries an unknown disposition.', 'DECISIONS', _m_decision_disposition, True),
     Mutation('rule_same_field_twice_opposite_states', 'A rule names the same field twice with opposite states.', 'AUTHORITY', _m_dup_field, True),
-    Mutation('supersedes_governance_digest_differs', 'The supersedes governance decisions digest differs from the 2.0.0 value.', 'AUTHORITY', lambda a: a['source_lineage']['supersedes'].__setitem__('governance_decisions_sha256', '0' * 64)),
+    Mutation('supersedes_governance_digest_differs', 'The supersedes governance decisions digest differs from the 2.0.1 value.', 'AUTHORITY', lambda a: a['source_lineage']['supersedes'].__setitem__('governance_decisions_sha256', '0' * 64)),
     Mutation('extra_top_level_field', 'An extra field is added at the top level of the authority.', 'AUTHORITY', lambda a: a.__setitem__('rationale', 'copied'), True),
     Mutation('extra_field_on_undecided_row', 'An extra field is added to an undecided row.', 'AUTHORITY', lambda a: _row(a, 'EMS-CTRL-001').__setitem__('rationale', 'copied'), True),
     Mutation('extra_field_in_semantics', 'An extra field is added to the not-applicable semantics.', 'AUTHORITY', lambda a: a['not_applicable_semantics'].__setitem__('extra', 'x'), True),
@@ -506,8 +506,9 @@ def is_date(value: object) -> bool:
     except ValueError: return False
     return True
 
-def validate_signoff(record: object, authority_lf_digest: str) -> None:
+def validate_signoff(record: object, authority_lf_digest: str, authority_id: str | None = None, version: str | None = None) -> None:
     errors = []
+    want_id = AUTHORITY_ID if authority_id is None else authority_id; want_version = VERSION if version is None else version
     if not isinstance(record, dict): raise AuthorityError('sign-off record must be an object')
     record_keys = {'status', 'approval', 'dual_role_statement', 'authority_id', 'version', 'authority_sha256', 'authority_sha256_normalisation'}
     if set(record) != record_keys: errors.append(f'sign-off keys must be exactly {sorted(record_keys)}')
@@ -521,8 +522,8 @@ def validate_signoff(record: object, authority_lf_digest: str) -> None:
     scope = appr.get('scope')
     if not isinstance(scope, str) or not scope.strip(): errors.append('sign-off scope must be a non-empty string')
     if record.get('dual_role_statement') != DUAL_ROLE_STATEMENT: errors.append('sign-off dual_role_statement missing or altered')
-    if 'authority_id' in record and record['authority_id'] != AUTHORITY_ID: errors.append('sign-off authority_id does not match')
-    if 'version' in record and record['version'] != VERSION: errors.append('sign-off version does not match')
+    if 'authority_id' in record and record['authority_id'] != want_id: errors.append('sign-off authority_id does not match')
+    if 'version' in record and record['version'] != want_version: errors.append('sign-off version does not match')
     if 'authority_sha256' in record and record['authority_sha256'] != authority_lf_digest: errors.append('sign-off authority_sha256 does not match the rebuilt authority')
     if 'authority_sha256_normalisation' in record and record['authority_sha256_normalisation'] != 'CRLF_TO_LF': errors.append('sign-off authority_sha256_normalisation must be CRLF_TO_LF')
     if errors: raise AuthorityError('; '.join(errors))
@@ -534,7 +535,7 @@ def dry_run_summary(authority: dict) -> str:
     rows = authority['controls']
     decided = [r for r in rows if r['not_applicable_decision_state'] != 'NOT_YET_DECIDED']
     undecided = [r for r in rows if r['not_applicable_decision_state'] == 'NOT_YET_DECIDED']
-    dsha = lf_digest(GOVERNANCE_DECISIONS); sup = SUPERSEDED_V2_0_0
+    dsha = lf_digest(GOVERNANCE_DECISIONS); sup = SUPERSEDED_V2_0_1
     lines = [f'Publication sign-off summary for {authority["authority_id"]}', f'Decided controls: {len(decided)}', f'Undecided controls: {len(undecided)}', '', 'Decisions:']
     for r in decided: lines.append(f"  {r['control_id']}  {r['not_applicable_authority']}  {r['not_applicable_decision_state']}")
     lines += ['', 'Undecided:']
@@ -716,9 +717,9 @@ def check_publication_record(a: dict, pre_publication: bool = False) -> None:
     if not isinstance(record, dict) or set(record) != RECORD_KEYS: raise AuthorityError('publication record must be an object with exactly the six record keys')
     if record['digest_normalisation'] != 'CRLF_TO_LF': raise AuthorityError('publication record digest_normalisation must be CRLF_TO_LF')
     if pre_publication:
-        want_id, want_version = SUPERSEDED_V2_0_0['authority_id'], SUPERSEDED_V2_0_0['version']
-        if record['publication_commit'] != SUPERSEDED_V2_0_0['commit']: raise AuthorityError('pre-publication record must name the 2.0.0 publication commit')
-        if record['authority_sha256'] != SUPERSEDED_V2_0_0['sha256']: raise AuthorityError('pre-publication record authority_sha256 must equal the 2.0.0 digest')
+        want_id, want_version = SUPERSEDED_V2_0_1['authority_id'], SUPERSEDED_V2_0_1['version']
+        if record['publication_commit'] != SUPERSEDED_V2_0_1['commit']: raise AuthorityError('pre-publication record must name the 2.0.1 publication commit')
+        if record['authority_sha256'] != SUPERSEDED_V2_0_1['sha256']: raise AuthorityError('pre-publication record authority_sha256 must equal the 2.0.1 digest')
     else: want_id, want_version = a['authority_id'], a['version']
     if record['authority_id'] != want_id or record['version'] != want_version: raise AuthorityError(f'publication record must name {want_id} version {want_version}')
     if not pre_publication:

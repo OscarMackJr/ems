@@ -72,10 +72,10 @@ def test_lineage_records_governance_decisions_and_v1():
     assert gd['relative_path'] == 'registry/archive_assessment_governance_decisions.json'
     assert gd['record_count'] == 21 and len(gd['drafting_commit']) == 40
     assert gd['sha256'] == MODULE.lf_digest(MODULE.GOVERNANCE_DECISIONS)
-    assert lin['supersedes'] == MODULE.SUPERSEDED_V2_0_0
+    assert lin['supersedes'] == MODULE.SUPERSEDED_V2_0_1
     assert lin['v1_baseline']['commit'] == MODULE.V1_BASELINE_COMMIT and len(lin['v1_baseline']['commit']) == 40 and lin['v1_baseline']['version'] == '1.0.0'
     assert lin['v1_baseline']['sha256'] == MODULE.lf_digest(MODULE.V1_AUTHORITY)
-    assert gd['sha256'] == MODULE.SUPERSEDED_V2_0_0['governance_decisions_sha256']
+    assert gd['sha256'] == MODULE.SUPERSEDED_V2_0_1['governance_decisions_sha256']
     assert lin['catalog_reference']['sha256'] == hashlib.sha256(MODULE.lf_bytes(MODULE.catalog_bytes())).hexdigest()
     assert lin['catalog_reference']['commit'] == MODULE.CATALOG_COMMIT
     assert 'digest_normalisation' not in lin
@@ -179,7 +179,7 @@ def test_decisions_digest_bound_to_2_0_0_constant(monkeypatch, tmp_path):
     monkeypatch.setattr(MODULE, 'GOVERNANCE_DECISIONS', p)
     a = build()
     a['source_lineage']['governance_decisions']['sha256'] = MODULE.lf_digest(p)
-    with pytest.raises(AuthorityError, match='2.0.0'):
+    with pytest.raises(AuthorityError, match='2.0.1'):
         validate_publication(a)
 
 def test_row_decision_fields_are_rederived_from_records():
@@ -482,18 +482,18 @@ def test_validate_record_matching_passes(env, fake_git_show):
     MODULE.validate_published()
 
 def superseded_record(blobs, **over):
-    s = MODULE.SUPERSEDED_V2_0_0
+    s = MODULE.SUPERSEDED_V2_0_1
     rec = {'publication_commit': s['commit'], 'authority_id': s['authority_id'], 'version': s['version'], 'authority_sha256': s['sha256'], 'manifest_sha256': MODULE.lf_digest(MODULE.OUT / MODULE.N_MANIFEST), 'digest_normalisation': 'CRLF_TO_LF'}
     rec.update(over)
     MODULE.dump(MODULE.PUBLICATION_RECORD, rec)
-    blobs[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = b'superseded 2.0.0 authority bytes\n'
+    blobs[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = b'superseded 2.0.1 authority bytes\n'
     blobs[(s['commit'], MODULE.rel(MODULE.OUT / MODULE.N_MANIFEST))] = (MODULE.OUT / MODULE.N_MANIFEST).read_bytes()
     return rec
 
 def test_pre_publication_mode_accepts_only_superseded_record(env, fake_git_show):
     published(env)
-    s = MODULE.SUPERSEDED_V2_0_0
-    # D-03 needs the real 2.0.0 authority blob; patching the pinned sha would break source_lineage.supersedes
+    s = MODULE.SUPERSEDED_V2_0_1
+    # D-03 needs the real 2.0.1 authority blob; patching the pinned sha would break source_lineage.supersedes
     blob = subprocess.run(['git', 'show', f"{s['commit']}:{s['relative_path']}"], cwd=SCRIPT.parents[1], capture_output=True, check=True).stdout
     assert hashlib.sha256(MODULE.lf_bytes(blob)).hexdigest() == s['sha256']
     superseded_record(fake_git_show)
@@ -501,6 +501,17 @@ def test_pre_publication_mode_accepts_only_superseded_record(env, fake_git_show)
     MODULE.validate_published(True)
     with pytest.raises(AuthorityError, match='must name'):
         MODULE.validate_published()
+
+def test_pre_publication_binding_names_2_0_1_literals(env, fake_git_show):
+    published_recorded(env, fake_git_show)
+    s = MODULE.SUPERSEDED_V2_0_1
+    assert (s['commit'], s['sha256'], s['version']) == ('31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb', '7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f', '2.0.1')
+    superseded_record(fake_git_show, publication_commit='54a7fd09114704a97a7a48fce5f89aebeb48c90a')
+    with pytest.raises(AuthorityError, match='must name the 2.0.1 publication commit'):
+        MODULE.validate_published(True)
+    superseded_record(fake_git_show, authority_sha256='de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353')
+    with pytest.raises(AuthorityError, match='must equal the 2.0.1 digest'):
+        MODULE.validate_published(True)
 
 def test_other_authority_record_fails_in_both_modes(env, fake_git_show):
     published_recorded(env, fake_git_show)
@@ -514,10 +525,10 @@ def test_other_authority_record_fails_in_both_modes(env, fake_git_show):
 def test_pre_publication_wrong_commit_or_digest_fails(env, fake_git_show):
     published_recorded(env, fake_git_show)
     superseded_record(fake_git_show, publication_commit='b' * 40)
-    with pytest.raises(AuthorityError, match='2.0.0 publication commit'):
+    with pytest.raises(AuthorityError, match='2.0.1 publication commit'):
         MODULE.validate_published(True)
     superseded_record(fake_git_show, authority_sha256='0' * 64)
-    with pytest.raises(AuthorityError, match='2.0.0 digest'):
+    with pytest.raises(AuthorityError, match='2.0.1 digest'):
         MODULE.validate_published(True)
 
 @pytest.mark.parametrize('mutate', [lambda r: r.pop('version'), lambda r: r.__setitem__('extra', 1)], ids=['missing_key', 'extra_key'])
@@ -647,7 +658,7 @@ def test_publication_commit_ancestor_and_file_set():
     assert git('merge-base', '--is-ancestor', sha, 'HEAD').returncode == 0
     files = git('diff-tree', '--no-commit-id', '--name-only', '-r', sha).stdout.decode().split()
     out_rel = REAL_OUT.relative_to(ROOT).as_posix()
-    expected = {REAL_AUTHORITY.relative_to(ROOT).as_posix(), REAL_SIGNOFF.relative_to(ROOT).as_posix(), *(f'{out_rel}/{p.name}' for p in REAL_OUT.iterdir())}
+    expected = {REAL_AUTHORITY.relative_to(ROOT).as_posix(), 'schemas/archive_assessment_applicability_authority_v2.schema.json', REAL_SIGNOFF.relative_to(ROOT).as_posix(), *(f'{out_rel}/{p.name}' for p in REAL_OUT.iterdir())}
     # Outputs byte-identical to the previous version are not re-committed, so the commit may hold a subset of the expected set.
     auth_rel = REAL_AUTHORITY.relative_to(ROOT).as_posix()
     signoff_rel = REAL_SIGNOFF.relative_to(ROOT).as_posix()
@@ -682,7 +693,7 @@ NEW_9 = ['signoff_role_hayes_developer', 'signoff_invalid_date', 'signoff_dual_r
 def test_superseded_constants_match_git_history():
     reason = git_ready()
     if reason: pytest.skip(reason)
-    sup = MODULE.SUPERSEDED_V2_0_0
+    sup = {'authority_id': 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0', 'version': '2.0.0', 'commit': '54a7fd09114704a97a7a48fce5f89aebeb48c90a', 'sha256': 'de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353', 'governance_decisions_sha256': '4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f'}
     auth_bytes = git('show', '54a7fd0:registry/archive_assessment_applicability_authority_v2.json').stdout
     dec_bytes = git('show', '54a7fd0:registry/archive_assessment_governance_decisions.json').stdout
     old = json.loads(auth_bytes.decode('utf-8'))
@@ -692,6 +703,32 @@ def test_superseded_constants_match_git_history():
     assert sup['commit'] == rec['publication_commit'] and sup['sha256'] == rec['authority_sha256']
     assert git('rev-parse', '54a7fd0').stdout.decode().strip() == sup['commit']
     assert git('rev-parse', '62a8955').stdout.decode().strip() == MODULE.V1_BASELINE_COMMIT
+
+def test_superseded_v2_0_1_constants_match_git_history():
+    reason = git_ready()
+    if reason: pytest.skip(reason)
+    sup = MODULE.SUPERSEDED_V2_0_1
+    auth_bytes = git('show', f"{sup['commit']}:{sup['relative_path']}").stdout
+    dec_bytes = git('show', f"{sup['commit']}:{sup['governance_decisions_relative_path']}").stdout
+    old = json.loads(auth_bytes.decode('utf-8'))
+    assert sup['authority_id'] == old['authority_id'] and sup['version'] == old['version'] == '2.0.1'
+    assert sup['sha256'] == lf_sha(auth_bytes) and sup['governance_decisions_sha256'] == lf_sha(dec_bytes) == '4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f'
+    rec = json.loads(git('show', '4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b:registry/archive_assessment_applicability_authority_v2_publication_record.json').stdout.decode('utf-8'))
+    assert sup['commit'] == rec['publication_commit'] and sup['sha256'] == rec['authority_sha256']
+    assert git('rev-parse', '31addfa').stdout.decode().strip() == sup['commit']
+
+def test_validate_signoff_accepts_frozen_2_0_1_signoff_with_explicit_identity():
+    reason = git_ready()
+    if reason: pytest.skip(reason)
+    sup = MODULE.SUPERSEDED_V2_0_1
+    record = json.loads(git('show', f"{sup['commit']}:registry/archive_assessment_applicability_authority_v2_signoff.json").stdout.decode('utf-8'))
+    MODULE.validate_signoff(record, sup['sha256'], sup['authority_id'], sup['version'])
+    with pytest.raises(AuthorityError):
+        MODULE.validate_signoff(record, sup['sha256'])
+    with pytest.raises(AuthorityError, match='authority_id'):
+        MODULE.validate_signoff(record, sup['sha256'], 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-9.9.9', sup['version'])
+    live = dict(record, authority_id=MODULE.AUTHORITY_ID, version=MODULE.VERSION)
+    MODULE.validate_signoff(live, sup['sha256'])
 
 def test_rows_equal_2_0_0_rows_and_only_identity_and_lineage_differ():
     reason = git_ready()
@@ -708,7 +745,7 @@ def test_rows_equal_2_0_0_rows_and_only_identity_and_lineage_differ():
     assert nl['aa2_approval']['sha256'] == ol['aa2_approval_sha256']
 
 def test_version_constants_and_published_on_removed():
-    assert MODULE.VERSION == '2.0.1' and MODULE.AUTHORITY_ID.endswith('-2.0.1')
+    assert MODULE.VERSION == '2.0.2' and MODULE.AUTHORITY_ID.endswith('-2.0.2')
     assert not hasattr(MODULE, 'PUBLISHED_ON')
 
 def test_build_all_outputs_requires_signoff_and_uses_its_date(env):
@@ -749,9 +786,9 @@ def test_dry_run_summary_lists_decisions_rules_and_supersession(env, capsys):
             assert f"{r['control_id']}  {r['not_applicable_authority']}  {r['not_applicable_decision_state']}" in out
     assert 'EMS-CTRL-039: ALL_CONDITIONS_MUST_MATCH: production = KNOWN_FALSE' in out
     assert 'Published on' not in out and 'PUBLISHED_ON' not in out
-    sup = MODULE.SUPERSEDED_V2_0_0
-    assert f"supersedes {sup['authority_id']} version 2.0.0 (commit 54a7fd0). No decision changed" in out
-    assert f"{sup['governance_decisions_sha256']} equals the 2.0.0 value" in out
+    sup = MODULE.SUPERSEDED_V2_0_1
+    assert f"supersedes {sup['authority_id']} version 2.0.1 (commit 31addfa). No decision changed" in out
+    assert f"{sup['governance_decisions_sha256']} equals the 2.0.1 value" in out
     for word in ('best', 'critical', 'important', 'recommended', 'highest'): assert word not in out.lower()
 
 def test_mutation_records_shape():

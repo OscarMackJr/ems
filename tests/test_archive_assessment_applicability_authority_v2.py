@@ -141,7 +141,7 @@ def test_absolute_path_fails_closed(): invalid(lambda a: a['source_lineage'].__s
 def test_unfreezable_dependency_fails_closed(): invalid(lambda a: a.__setitem__('dependencies', [{'required_for_deterministic_compilation': True, 'relative_path': 'registry/other.json'}]))
 def test_version_and_authority_id_come_from_constants():
     a = build_authority()
-    assert MODULE.VERSION == '2.0.1' and a['version'] == MODULE.VERSION
+    assert MODULE.VERSION == '2.0.2' and a['version'] == MODULE.VERSION
     assert a['authority_id'] == MODULE.AUTHORITY_ID == 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-' + MODULE.VERSION
 def test_default_applicability_and_decision_ids_kept():
     a = build_authority()
@@ -201,7 +201,7 @@ def test_lineage_pins_are_enforced_by_schema():
 
 def test_supersedes_and_v1_baseline_follow_constants():
     lin = build_authority()['source_lineage']
-    assert lin['supersedes'] == MODULE.SUPERSEDED_V2_0_0
+    assert lin['supersedes'] == MODULE.SUPERSEDED_V2_0_1
     assert lin['v1_baseline']['commit'] == MODULE.V1_BASELINE_COMMIT and len(MODULE.V1_BASELINE_COMMIT) == 40
     invalid(lambda a: a['source_lineage']['supersedes'].__setitem__('version', '9.9.9'))
     invalid(lambda a: a['source_lineage']['v1_baseline'].__setitem__('commit', '62a8955'))

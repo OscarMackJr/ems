@@ -31,7 +31,7 @@ def git_ready():
     shallow = git('rev-parse', '--is-shallow-repository')
     if shallow.returncode != 0 or shallow.stdout.strip() != b'false':
         return 'shallow or unreadable repository'
-    for commit in (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_0['commit']):
+    for commit in (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_1['commit']):
         if git('cat-file', '-e', f'{commit}^{{commit}}').returncode != 0:
             return f'commit {commit[:7]} not available'
     return None
@@ -52,7 +52,7 @@ def fx(tmp_path, monkeypatch):
     if not shutil.which('git'):
         pytest.skip('git unavailable')
     monkeypatch.setattr(MODULE, 'ROOT', tmp_path)
-    sup = MODULE.SUPERSEDED_V2_0_0
+    sup = MODULE.SUPERSEDED_V2_0_1
     rels = [MODULE.AA1_MANIFEST_REL, MODULE.AA2_CLOSURE_REL, MODULE.AA2_APPROVAL_REL, MODULE.CATALOG_REL,
             MODULE.GOVERNANCE_DECISIONS_REL, MODULE.V1_BASELINE_REL, sup['relative_path']]
     for i, rel in enumerate(rels):
