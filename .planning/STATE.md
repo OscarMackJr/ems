@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1.0
 milestone_name: Authority 2.0.2 Lineage Correction
 status: executing
-last_updated: "2026-11-12T22:27:29.413Z"
-last_activity: 2026-11-12 -- Phase 09 planning complete
+last_updated: "2026-11-12T22:49:28.064Z"
+last_activity: 2026-11-12
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 14
-  completed_plans: 9
+  completed_plans: 10
   percent: 50
 stopped_at: Phase 08 complete (5/5) — ready to discuss Phase 9
 ---
@@ -21,14 +21,14 @@ stopped_at: Phase 08 complete (5/5) — ready to discuss Phase 9
 See: .planning/PROJECT.md (updated 2026-10-20)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Phase 9 — certified republication 2.0.2
+**Current focus:** Phase 09 — certified-republication-2-0-2
 
 ## Current Position
 
-Phase: 9
-Plan: Not started
+Phase: 09 (certified-republication-2-0-2) — EXECUTING
+Plan: 2 of 5
 Status: Ready to execute
-Last activity: 2026-11-12 -- Phase 09 planning complete
+Last activity: 2026-11-12
 
 Progress: [█████████░] 89%
 
