@@ -42,8 +42,16 @@ This phase changes the v2 publisher, the reply builder's commit lookup and the g
 - **D-11:** `resolve_record_commit` in `scripts/build_archive_assessment_demo3_w1_req_001_reply.py` first runs `git rev-parse --is-shallow-repository`. If the answer is `true`, or the command fails, it raises `AuthorityError` with an explicit message along the lines of "shallow clone: cannot resolve the publication record commit; fetch full history". A full clone behaves as before.
 - **D-12:** GATE-04 is output-neutral. The reply JSON and MD stay byte-identical and nothing is regenerated in Phase 8. Phase 7 D-14 still holds for reply content.
 
+### Cross-note uniqueness (GATE-05)
+- **D-13:** (User decision at plan-phase, 2026-11-11.) The committed `registry/archive_assessment_governance_answers.json` gives every control the same note sentence, made unique only by a numeric prefix (`009-Frozen nature of snapshot…`). Under `norm_templated`, 20 of the 21 notes collide, as the research probe and a manual check confirm. Resolution: **grandfather by digest.** The cross-note check at decisions builder L162 compares `norm_templated` forms for every answers file except the certified one. The builder carries an explicit named constant: the SHA-256 of the committed answers file, as already recorded in the decisions' `answers_sha256`. For that exact digest, the check falls back to `norm` comparison, so the build stays output-neutral. Any other digest, including any edit to the answers, gets the strict `norm_templated` check. Tests prove three things:
+  - a synthetic answers file with two notes that differ only in templated values fails;
+  - the committed answers still pass strict validation;
+  - changing the answers bytes removes the exemption.
+
+  The answers file and the committed decisions are not edited.
+
 ### Claude's Discretion
-- **GATE-05:** cross-note uniqueness in `scripts/build_archive_assessment_governance_decisions.py` compares `norm_templated` forms on both sides, and at every comparison site rather than only L161. Add a test with two notes that differ only in templated values. The change must be output-neutral, so the committed decisions do not change.
+- **GATE-05 (superseded in part by D-13):** cross-note uniqueness in `scripts/build_archive_assessment_governance_decisions.py` compares `norm_templated` forms on both sides, and at every comparison site rather than only L161. Add a test with two notes that differ only in templated values. The change must be output-neutral, so the committed decisions do not change.
 - **SCHEMA-07:** `schema()` sets `additionalProperties: false` at the top level, on control rows and on `not_applicable_semantics`. Add three negative mutations (an extra field at each level) with `schema_must_reject=True`, so the negative-invariant output records each as rejected by `SCHEMA`. The mutation count grows from 26 to 29, and the certified outputs pick this up at the Phase 9 republication.
 - **Keep the flag minimal:** the exact flag name is `--pre-publication`; the helper names are up to the planner. Match the publisher's compact single-quote style.
 
