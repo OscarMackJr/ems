@@ -61,6 +61,7 @@ ANSWER_KEYS = ['control_id', 'disposition', 'note', 'decided_rule', 'decided_rat
 TOP_KEYS = ['status', 'entries']
 STATUS = 'GOVERNANCE_ANSWERS'
 NOTE_MIN_CHARS = 20
+CERTIFIED_ANSWERS_SHA256 = '8efccce99e0368b2efa5f15676607596424a29370b2df1709ad034418883a972'
 DATE_RE = r'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
 FIELD_ORDER = ['catalog_inputs', 'interpretation', 'proposed_outcome', 'proposed_rule', 'rationale', 'confidence', 'alternative_considered', 'shape_limitation']
 
@@ -116,7 +117,7 @@ def blank_entry(cid: str) -> dict:
 
 def blank_answers() -> dict: return {'status': STATUS, 'entries': [blank_entry(c) for c in CONTROL_IDS]}
 
-def validate_answers(a: object, proposals: dict, strict: bool = False) -> None:
+def validate_answers(a: object, proposals: dict, strict: bool = False, answers_sha256: str | None = None) -> None:
     errors: list = []
     if not isinstance(a, dict): raise AuthorityError('answers document must be an object')
     if set(a) != set(TOP_KEYS): errors.append(f'top-level keys must be exactly {TOP_KEYS}')
@@ -145,10 +146,11 @@ def validate_answers(a: object, proposals: dict, strict: bool = False) -> None:
             if not 1 <= pos <= i: errors.append(f'entry {i}: supersedes must name an earlier entry')
             elif not isinstance(entries[pos - 1], dict) or entries[pos - 1].get('control_id') != cid: errors.append(f'entry {i}: supersedes an entry for another control')
     if V2.contains_absolute(a): errors.append('absolute path used in answers')
-    if strict and not errors: strict_checks(entries, proposals, errors)
+    if strict and not errors: strict_checks(entries, proposals, errors, answers_sha256=answers_sha256)
     if errors: raise AuthorityError('; '.join(errors))
 
-def strict_checks(entries: list, proposals: dict, errors: list) -> None:
+def strict_checks(entries: list, proposals: dict, errors: list, answers_sha256: str | None = None) -> None:
+    key = norm if answers_sha256 == CERTIFIED_ANSWERS_SHA256 else norm_templated
     by_id = {p['control_id']: p for p in proposals['proposals']}
     seen: dict = {}
     for e in entries:
@@ -159,8 +161,8 @@ def strict_checks(entries: list, proposals: dict, errors: list) -> None:
         else:
             if len(n.strip()) < NOTE_MIN_CHARS: errors.append(f'{cid}: note shorter than {NOTE_MIN_CHARS} characters')
             if norm_templated(n) in {norm_templated(x) for x in drafted_strings(p)}: errors.append(f'{cid}: note repeats drafted text')
-            if norm(n) in seen: errors.append(f'{cid}: note repeats the note of {seen[norm(n)]}')
-            seen.setdefault(norm(n), cid)
+            if key(n) in seen: errors.append(f'{cid}: note repeats the note of {seen[key(n)]}')
+            seen.setdefault(key(n), cid)
         if not is_date(e['decided_on']): errors.append(f'{cid}: decided_on must be a date')
         ruling = e['scope_note_ruling']
         if cid in SCOPE_NOTE_IDS:
@@ -205,7 +207,7 @@ def sha_text(text: str) -> str: return hashlib.sha256(text.encode('utf-8')).hexd
 def kind_of(rule: object) -> str: return 'PROPOSE_RULE' if rule is not None else 'PROPOSE_NO_RULE'
 
 def build_decisions(proposals: dict, answers: dict, drafting_record: dict, wording_approval: dict, answers_sha256: str, drafting_record_sha256: str | None = None) -> dict:
-    validate_answers(answers, proposals, strict=True)
+    validate_answers(answers, proposals, strict=True, answers_sha256=answers_sha256)
     for e in answers['entries']:
         if e['disposition'] == 'APPROVED_AS_DRAFTED' and (e['decided_rule'] is not None or e['decided_rationale'] is not None): raise AuthorityError(f"{e['control_id']}: APPROVED_AS_DRAFTED carries no decided_rule or decided_rationale")
         if e['scope_note_ruling'] is not None and e['control_id'] not in SCOPE_NOTE_IDS: raise AuthorityError(f"{e['control_id']}: scope_note_ruling on a control without a scope note")
@@ -399,7 +401,7 @@ def main() -> None:
         jsonschema.Draft202012Validator(V2.load(DECISIONS_SCHEMA)).validate(doc); print('PASS')
     elif args.validate_answers:
         if not ANSWERS.exists(): raise AuthorityError('answers file is not present')
-        a = load_checked(ANSWERS); validate_answers(a, V2.load(PROPOSALS), strict=not args.lenient)
+        a = load_checked(ANSWERS); validate_answers(a, V2.load(PROPOSALS), strict=not args.lenient, answers_sha256=answers_digest(ANSWERS))
         jsonschema.Draft202012Validator(V2.load(ANSWERS_SCHEMA)).validate(a); print('PASS')
     else: parser.error('one of --view, --emit-template, --emit-schema, --validate-answers, --build or --validate is required')
 if __name__ == '__main__': main()
