@@ -29,7 +29,13 @@ TMP = Path(_TMP.name)
 
 
 def inputs():
-    return V2.load(V2.AUTHORITY), V2.load(V2.PUBLICATION_RECORD), V2.load(V2.SIGNOFF), V2.load(V2.GOVERNANCE_DECISIONS)
+    return MODULE.load_inputs()
+
+
+def serve_edited(monkeypatch, path, obj):
+    rel_path, real = V2.rel(path), V2.git_show
+    data = V2.jtext(obj).encode('utf-8')
+    monkeypatch.setattr(V2, 'git_show', lambda commit, relative_path: data if relative_path == rel_path else real(commit, relative_path))
 
 
 def build():
@@ -77,25 +83,19 @@ def test_validate_reply_rejects_loosened_schema_file(monkeypatch):
 
 
 def test_validate_reply_rejects_edited_decision_rationale(monkeypatch):
-    doc = V2.load(V2.GOVERNANCE_DECISIONS)
+    doc = inputs()[3]
     rec = next(r for r in V2.latest_records(doc) if r['control_id'] == V2.REQUEST_CONTROL_IDS[0])
     rec['decided']['rationale'] = 'Edited reason. ' + rec['decided']['rationale']
-    assert doc != V2.load(V2.GOVERNANCE_DECISIONS)
-    p = TMP / 'decisions.json'
-    V2.dump(p, doc)
-    monkeypatch.setattr(V2, 'GOVERNANCE_DECISIONS', p)
+    assert doc != inputs()[3]
+    serve_edited(monkeypatch, V2.GOVERNANCE_DECISIONS, doc)
     with pytest.raises(AuthorityError, match='decision records differ'):
         MODULE.validate_reply()
 
 
 def test_validate_reply_rejects_edited_signoff(monkeypatch):
-    signoff = V2.load(V2.SIGNOFF)
+    signoff = inputs()[2]
     signoff['approval']['role'] = next(r for r in V2.APPROVER_ROLES if r != signoff['approval']['role'])
-    p = TMP / 'signoff.json'
-    V2.dump(p, signoff)
-    real_rel, orig_rel = V2.rel(V2.SIGNOFF), V2.rel
-    monkeypatch.setattr(V2, 'rel', lambda q: real_rel if q == p else orig_rel(q))
-    monkeypatch.setattr(V2, 'SIGNOFF', p)
+    serve_edited(monkeypatch, V2.SIGNOFF, signoff)
     with pytest.raises(AuthorityError, match='sign-off differs'):
         MODULE.validate_reply()
 
@@ -265,7 +265,9 @@ def test_publisher_still_valid_and_digest_matches_manifest():
 
 def fake_git(ls_remote_rc=0, cat_file_rc=0, merge_base_rc=0):
     tip = 'b' * 40
+    seen = []
     def run(*args):
+        seen.append(args)
         if args[0] == 'ls-remote':
             out = f'{tip}\trefs/heads/{MODULE.REMOTE_BRANCH}\n' if ls_remote_rc == 0 else ''
             return subprocess.CompletedProcess(args, ls_remote_rc, out, '')
@@ -274,6 +276,7 @@ def fake_git(ls_remote_rc=0, cat_file_rc=0, merge_base_rc=0):
         if args[0] == 'merge-base':
             return subprocess.CompletedProcess(args, merge_base_rc, '', '')
         raise AssertionError(f'push-check ran an unexpected git command: {args}')
+    run.seen = seen
     return run
 
 
@@ -288,6 +291,16 @@ def test_push_check_status(monkeypatch, capsys, kwargs, expected):
     monkeypatch.setattr(MODULE, 'git', fake_git(**kwargs))
     assert MODULE.push_check() == expected
     assert MODULE.PUSH_ON == 0 and MODULE.PUSH_NOT_ON != 0 and MODULE.PUSH_UNKNOWN != 0
+
+
+def test_push_check_binds_to_reply_publication_commit(monkeypatch, capsys):
+    fake = fake_git()
+    monkeypatch.setattr(MODULE, 'git', fake)
+    monkeypatch.setattr(V2, 'load', lambda *a, **k: (_ for _ in ()).throw(AssertionError('push-check read a live file')))
+    assert MODULE.push_check() == MODULE.PUSH_ON
+    merge_base = [a for a in fake.seen if a[0] == 'merge-base']
+    assert merge_base and merge_base[0][-2] == MODULE.REPLY_PUBLICATION_COMMIT
+    assert MODULE.REPLY_PUBLICATION_COMMIT in capsys.readouterr().out
 
 
 def test_push_check_cli_exit_code(monkeypatch):
@@ -322,30 +335,29 @@ def test_publication_sha_is_ancestor_and_holds_authority():
     reason = git_ready()
     if reason:
         pytest.skip(reason)
-    rec = V2.load(V2.PUBLICATION_RECORD)
-    sha = rec['publication_commit']
+    rec = inputs()[1]
+    sha = MODULE.REPLY_PUBLICATION_COMMIT
+    assert rec['publication_commit'] == sha
     assert git('merge-base', '--is-ancestor', sha, 'HEAD').returncode == 0
     auth_rel = V2.rel(V2.AUTHORITY)
     assert lf_sha(git('show', f'{sha}:{auth_rel}').stdout) == rec['authority_sha256']
 
 
-def test_record_commit_is_last_change_of_the_record():
+def test_frozen_constants_match_git():
     reason = git_ready()
     if reason:
         pytest.skip(reason)
-    sha = V2.load(V2.PUBLICATION_RECORD)['publication_commit']
+    assert git('rev-parse', '31addfa').stdout.decode().strip() == MODULE.REPLY_PUBLICATION_COMMIT
+    assert git('rev-parse', '4d9b7c1').stdout.decode().strip() == MODULE.REPLY_RECORD_COMMIT
     rec_rel = V2.rel(V2.PUBLICATION_RECORD)
-    last = git('log', '-n1', '--format=%H', '--', rec_rel).stdout.decode().strip()
-    assert re.fullmatch(r'[0-9a-f]{40}', last)
-    assert last != sha
-    assert git('merge-base', '--is-ancestor', sha, last).returncode == 0
-    changed = git('diff-tree', '--no-commit-id', '--name-only', '-r', last).stdout.decode().split()
+    changed = git('diff-tree', '--no-commit-id', '--name-only', '-r', MODULE.REPLY_RECORD_COMMIT).stdout.decode().split()
     assert changed == [rec_rel]
-    assert MODULE.resolve_record_commit() == last
-    assert build()['pin']['publication_record_commit'] == last
+    assert git('merge-base', '--is-ancestor', MODULE.REPLY_PUBLICATION_COMMIT, MODULE.REPLY_RECORD_COMMIT).returncode == 0
+    assert MODULE.resolve_record_commit() == MODULE.REPLY_RECORD_COMMIT
+    assert build()['pin']['publication_record_commit'] == MODULE.REPLY_RECORD_COMMIT
 
 
-def fake_shallow_git(rc, out, log_sha=None, exc=None):
+def fake_shallow_git(rc, out, log_sha=None, exc=None, cat_rc=0, mb_rc=0):
     seen = []
     def run(*args):
         seen.append(args)
@@ -355,6 +367,10 @@ def fake_shallow_git(rc, out, log_sha=None, exc=None):
             return subprocess.CompletedProcess(args, rc, out, '')
         if args[0] == 'log':
             return subprocess.CompletedProcess(args, 0, (log_sha or '') + '\n', '')
+        if args[0] == 'cat-file':
+            return subprocess.CompletedProcess(args, cat_rc, '', '')
+        if args[0] == 'merge-base':
+            return subprocess.CompletedProcess(args, mb_rc, '', '')
         raise AssertionError(f'unexpected git command: {args}')
     run.seen = seen
     return run
@@ -375,8 +391,68 @@ def test_resolve_record_commit_fails_when_shallow_or_unknown(monkeypatch, rc, ou
 
 
 def test_resolve_record_commit_full_clone_passes_through(monkeypatch):
-    monkeypatch.setattr(MODULE, 'git', fake_shallow_git(0, 'false\n', 'd' * 40))
-    assert MODULE.resolve_record_commit() == 'd' * 40
+    fake = fake_shallow_git(0, 'false\n', 'd' * 40)
+    monkeypatch.setattr(MODULE, 'git', fake)
+    assert MODULE.resolve_record_commit() == MODULE.REPLY_RECORD_COMMIT
+    assert not any(a[0] == 'log' for a in fake.seen)
+
+
+@pytest.mark.parametrize('kwargs', [{'cat_rc': 128}, {'mb_rc': 1}])
+def test_resolve_record_commit_fails_when_commit_missing_or_not_ancestor(monkeypatch, kwargs):
+    monkeypatch.setattr(MODULE, 'git', fake_shallow_git(0, 'false\n', **kwargs))
+    with pytest.raises(AuthorityError):
+        MODULE.resolve_record_commit()
+
+
+def test_validate_fails_closed_without_history_shallow(monkeypatch):
+    monkeypatch.setattr(MODULE, 'git', fake_shallow_git(0, 'true\n'))
+    with pytest.raises(AuthorityError, match='shallow'):
+        MODULE.validate_reply()
+
+
+def test_validate_fails_closed_without_history_git_show(monkeypatch):
+    def no_history(commit, relative_path):
+        raise V2.GitHistoryError(f'{relative_path}@{commit[:7]}: git show failed')
+    monkeypatch.setattr(V2, 'git_show', no_history)
+    with pytest.raises(V2.GitHistoryError):
+        MODULE.validate_reply()
+    with pytest.raises(AuthorityError):
+        MODULE.load_inputs()
+
+
+def test_validate_independent_of_live_version(monkeypatch):
+    def boom(*a, **k):
+        raise AssertionError('validator read a live file digest')
+    monkeypatch.setattr(V2, 'lf_digest', boom)
+    monkeypatch.setattr(V2, 'VERSION', '9.9.9')
+    monkeypatch.setattr(V2, 'AUTHORITY_ID', 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-9.9.9')
+    MODULE.validate_reply()
+
+
+@pytest.mark.parametrize('which', ['json', 'md'])
+def test_validate_rejects_tampered_reply_bytes(monkeypatch, which):
+    pj, md = TMP / f'tamper_{which}.json', TMP / f'tamper_{which}.md'
+    pj.write_bytes(REAL_JSON.read_bytes() + (b' ' if which == 'json' else b''))
+    md.write_bytes(REAL_MD.read_bytes() + (b' ' if which == 'md' else b''))
+    monkeypatch.setattr(MODULE, 'REPLY_JSON', pj)
+    monkeypatch.setattr(MODULE, 'REPLY_MD', md)
+    with pytest.raises(AuthorityError, match='differs from a fresh build'):
+        MODULE.validate_reply()
+
+
+@pytest.mark.parametrize('name, value', [
+    ('REPLY_PUBLICATION_COMMIT', 'd' * 40),
+    ('REPLY_PUBLICATION_COMMIT', '54a7fd09114704a97a7a48fce5f89aebeb48c90a'),
+    ('REPLY_RECORD_COMMIT', 'd' * 40),
+    ('REPLY_RECORD_COMMIT', '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb'),
+])
+def test_validate_rejects_tampered_constant(monkeypatch, name, value):
+    reason = git_ready()
+    if reason:
+        pytest.skip(reason)
+    monkeypatch.setattr(MODULE, name, value)
+    with pytest.raises(AuthorityError):
+        MODULE.validate_reply()
 
 
 def test_history_note_binds_to_supersedes_and_decisions():
@@ -387,7 +463,7 @@ def test_history_note_binds_to_supersedes_and_decisions():
     h = r['history_note']
     assert (h['supersedes_authority_id'], h['supersedes_version'], h['supersedes_commit']) == (sup['authority_id'], sup['version'], sup['commit'])
     assert sup['commit'] == '54a7fd09114704a97a7a48fce5f89aebeb48c90a'
-    assert h['governance_decisions_sha256'] == sup['governance_decisions_sha256'] == V2.lf_digest(V2.GOVERNANCE_DECISIONS)
+    assert h['governance_decisions_sha256'] == sup['governance_decisions_sha256'] == MODULE.pinned_digest(MODULE.REPLY_PUBLICATION_COMMIT, V2.GOVERNANCE_DECISIONS)
     assert h['decisions_changed'] is False and len(h['enforced_gates']) == 4
     for k in ('review_path', 'verification_path', 'wr_01', 'v2_0_1_possible', 'v2_0_1_date'):
         assert k not in h and k not in MODULE.schema()['properties']
@@ -396,13 +472,12 @@ def test_history_note_binds_to_supersedes_and_decisions():
 
 
 def test_history_note_fails_when_decisions_differ(monkeypatch):
-    doc = V2.load(V2.GOVERNANCE_DECISIONS)
+    args = inputs()
+    doc = copy.deepcopy(args[3])
     doc['records'][0]['decided']['rationale'] += ' Edited.'
-    p = TMP / 'decisions_hist.json'
-    V2.dump(p, doc)
-    monkeypatch.setattr(V2, 'GOVERNANCE_DECISIONS', p)
+    serve_edited(monkeypatch, V2.GOVERNANCE_DECISIONS, doc)
     with pytest.raises(AuthorityError, match='differ from the superseded'):
-        MODULE.build_reply(*inputs())
+        MODULE.build_reply(*args)
 
 
 def test_date_comes_from_signoff():
