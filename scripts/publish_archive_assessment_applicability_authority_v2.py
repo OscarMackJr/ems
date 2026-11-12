@@ -62,6 +62,7 @@ RESOLUTION = [
 ]
 
 class AuthorityError(ValueError): pass
+class GitHistoryError(AuthorityError): pass
 
 def digest(p: Path) -> str: return hashlib.sha256(p.read_bytes()).hexdigest()
 def lf_bytes(b: bytes) -> bytes: return b.replace(b'\r\n', b'\n')
@@ -324,8 +325,8 @@ def git_show(commit: str, relative_path: str) -> bytes:
     if not isinstance(commit, str) or not re.fullmatch(r'[0-9a-f]{40}', commit): raise AuthorityError(f'{relative_path}: commit must be a 40-character lowercase hex SHA')
     if bad_rel(relative_path): raise AuthorityError(f'{relative_path}: path must be repo-relative without ..')
     try: r = subprocess.run(['git', 'show', f'{commit}:{relative_path}'], cwd=ROOT, capture_output=True)
-    except OSError as e: raise AuthorityError(f'{relative_path}@{commit[:7]}: git unavailable: {e}') from e
-    if r.returncode != 0: raise AuthorityError(f'{relative_path}@{commit[:7]}: git show failed: {r.stderr.decode("utf-8", "replace").strip()}')
+    except OSError as e: raise GitHistoryError(f'{relative_path}@{commit[:7]}: git unavailable: {e}') from e
+    if r.returncode != 0: raise GitHistoryError(f'{relative_path}@{commit[:7]}: git show failed: {r.stderr.decode("utf-8", "replace").strip()}')
     return r.stdout
 
 def validate_lineage(lin: dict) -> None:
@@ -592,16 +593,19 @@ def mutation_gates(target: str, doc: object, authority_digest: str) -> list[str]
     gates = []
     if target == 'AUTHORITY':
         try: validate_publication(doc)
+        except GitHistoryError: raise
         except AuthorityError: gates.append('PYTHON_VALIDATOR')
         try: jsonschema.Draft202012Validator(schema()).validate(doc)
         except jsonschema.ValidationError: gates.append('SCHEMA')
     elif target == 'SIGNOFF':
         try: validate_signoff(doc, authority_digest)
+        except GitHistoryError: raise
         except AuthorityError: gates.append('PYTHON_VALIDATOR')
     elif target == 'DECISIONS':
         b = decisions_builder()
         try: b.validate_decisions(doc)
-        except ValueError: gates.append('PYTHON_VALIDATOR')
+        except b.V2.GitHistoryError: raise
+        except b.AuthorityError: gates.append('PYTHON_VALIDATOR')
         try: jsonschema.Draft202012Validator(load(b.DECISIONS_SCHEMA)).validate(doc)
         except jsonschema.ValidationError: gates.append('SCHEMA')
     else: raise AuthorityError(f'unknown mutation target {target}')

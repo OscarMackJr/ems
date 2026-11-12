@@ -800,6 +800,27 @@ def test_non_domain_exceptions_propagate_from_mutation_gates(monkeypatch, exc, t
     with pytest.raises(exc):
         MODULE.mutation_gates(target, docs[target], ash)
 
+def test_git_history_error_is_an_authority_error_subclass():
+    assert issubclass(MODULE.GitHistoryError, AuthorityError)
+
+def test_git_history_error_propagates_from_authority_gate(monkeypatch):
+    docs, ash = mutation_inputs()
+    def boom(commit, path): raise MODULE.GitHistoryError(f'{path}@{commit[:7]}: git show failed: shallow clone')
+    monkeypatch.setattr(MODULE, 'git_show', boom)
+    with pytest.raises(MODULE.GitHistoryError):
+        MODULE.mutation_gates('AUTHORITY', docs['AUTHORITY'], ash)
+
+def test_git_show_unknown_object_raises_git_history_error():
+    with pytest.raises(MODULE.GitHistoryError, match='git show failed'):
+        MODULE.git_show('f' * 40, MODULE.CATALOG_REL)
+
+def test_plain_value_error_propagates_from_decisions_gate(monkeypatch):
+    docs, ash = mutation_inputs()
+    def boom(*args, **kwargs): raise ValueError('not a domain error')
+    monkeypatch.setattr(MODULE.decisions_builder(), 'validate_decisions', boom)
+    with pytest.raises(ValueError, match='not a domain error'):
+        MODULE.mutation_gates('DECISIONS', docs['DECISIONS'], ash)
+
 def test_non_domain_exception_aborts_publish_and_writes_nothing(env, monkeypatch):
     def boom(*args, **kwargs): raise KeyError('crash')
     monkeypatch.setattr(MODULE, 'validate_publication', boom)
