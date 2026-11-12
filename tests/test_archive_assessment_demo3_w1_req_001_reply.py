@@ -361,11 +361,9 @@ def fake_shallow_git(rc, out, log_sha=None, exc=None):
 
 
 @pytest.mark.parametrize('rc, out, exc', [
-    (0, 'true
-', None),
+    (0, 'true\n', None),
     (128, '', None),
-    (0, 'maybe
-', None),
+    (0, 'maybe\n', None),
     (0, '', OSError('git missing')),
 ])
 def test_resolve_record_commit_fails_when_shallow_or_unknown(monkeypatch, rc, out, exc):
@@ -377,8 +375,7 @@ def test_resolve_record_commit_fails_when_shallow_or_unknown(monkeypatch, rc, ou
 
 
 def test_resolve_record_commit_full_clone_passes_through(monkeypatch):
-    monkeypatch.setattr(MODULE, 'git', fake_shallow_git(0, 'false
-', 'd' * 40))
+    monkeypatch.setattr(MODULE, 'git', fake_shallow_git(0, 'false\n', 'd' * 40))
     assert MODULE.resolve_record_commit() == 'd' * 40
 
 
