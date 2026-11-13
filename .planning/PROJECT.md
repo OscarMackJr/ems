@@ -8,23 +8,26 @@ The consumer is Hayes Verify, an external assessor that reads EMS at a pinned co
 
 ## Current State
 
-**Shipped:** v1.0.0 Not-Applicable Rule Publication (2026-10-15). `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1` is published at `31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb` (pushed to `origin/feature/ems-aa3-archive-applicability-authority`): 21 controls decided (3 rules, 18 no-rule, `AA4-GOV-001`..`021`), 59 `NOT_YET_DECIDED`. The DEMO3-W1-REQ-001 reply cites 2.0.1; its gate wording was corrected and approved (`258875d`). The send condition is met; sending the reply is the authority's action. Archive: `.planning/milestones/v1.0.0-*`.
+**Shipped:** v1.1.0 Authority 2.0.2 Lineage Correction (2026-11-13).
 
-## Current Milestone: v1.1.0 Authority 2.0.2 Lineage Correction
+`EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` is published at `ae15c7458e49c8f55cc58c61bab04bc716aa9892` (Hayes pins this commit). The record commit is `a71257e`, and CI run `43332405316` is green. It supersedes 2.0.1 at `31addfa`.
 
-**Goal:** Republish the AA3 authority as 2.0.2 so that the `source_lineage` digest scope matches how each digest is actually computed, the AA1 manifest is committed and verifiable, and the remaining audit gate debt is closed, with no applicability decision changed.
+- Lineage: each digest declares its own scope (`RAW_BYTES` or `CRLF_TO_LF`) and is recomputed from a committed file. The AA1 manifest is now committed.
+- Gates and schema: both fail closed.
+- Decisions: unchanged. There are 21 decided controls (3 rules and 18 no-rule, `AA4-GOV-001`..`021`) and 59 `NOT_YET_DECIDED`, and the decisions digest is still `4e746d1f…`.
+- Notice: a generated notice to Hayes (`docs/DEMO3_W1_REQ_001_NOTICE_2_0_2.md`, commit `052f0f1`) asks Hayes to re-pin. Sending it is the authority's action.
 
-**Target features:**
-- Per-digest normalisation scope in `source_lineage`: 2.0.1 declares `CRLF_TO_LF`, but `aa1_manifest_sha256`, `aa2_closure_sha256` and `aa2_approval_sha256` are raw-byte
-- AA1 manifest (`f0da8e2e…`) committed from the authority's own copy, with its raw-byte hash verified
-- Gates fail closed: WR-02 (the publication-record cross-check is no longer skipped) and WR-04 (the mutation gate counts only real rejections)
-- Catalog decoupling: `--validate` checks against a frozen catalog reference, not the live shared `registry/control_catalog.yaml`
-- Schema strictness: `additionalProperties: false` at the top level, on control rows and on `not_applicable_semantics`
-- Minor fixes: WR-05 (shallow-clone-aware commit lookup) and Phase 3 WR-01 (`norm_templated` uniqueness)
-- `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` certified republication, with the decisions digest unchanged from 2.0.0
-- A generated, validated notice to Hayes citing 2.0.2 and its commit, stating that no decision changed
+Archives: `.planning/milestones/v1.0.0-*` and `.planning/milestones/v1.1.0-*`.
 
-**Deferred:** rule-or-no-rule decisions for the other 59 controls (V2-01); Hayes re-run confirmation (V2-02, Hayes-side); WR-01 and WR-03 stay by design (D-09, D-03).
+**Previous:** v1.0.0 Not-Applicable Rule Publication (2026-10-15). It published 2.0.1 at `31addfa`, and the DEMO3-W1-REQ-001 reply cites it.
+
+## Next Milestone Goals
+
+Not yet defined. Candidates:
+
+- **v1.1.0 audit tech debt.** Plain `--validate` fails at the pin `ae15c74` by design, and the notice does not tell Hayes how to verify at the pin. Frozen reply and notice validators load live publisher constants. The publisher-script digest is checked only by pytest. The 10-REVIEW warnings are still open.
+- **Rule-or-no-rule decisions for the other 59 controls** (V2-01).
+- **Hayes re-run confirmation** (V2-02, Hayes-side).
 
 ## Core Value
 
@@ -74,12 +77,19 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
   - The red window is closed: 720 passed, 0 failed.
 
   Validated in Phase 9: Certified Republication 2.0.2. Carried to Phase 10: the notice should state that the AA1 manifest is committed and hashed as RAW_BYTES (review WR-03).
+- ✓ A generated, `--validate`-checked notice to Hayes (`docs/DEMO3_W1_REQ_001_NOTICE_2_0_2.md`, registry JSON and schema, commit `052f0f1`):
+  - cites authority 2.0.2, version 2.0.2 and commit `ae15c74`;
+  - lists the lineage, gate and schema changes;
+  - names the 2.0.1 error: a global `CRLF_TO_LF` was declared while three digests are raw-byte;
+  - states that no decision changed, and asks Hayes to re-pin.
+
+  NOTICE-01..02. Validated in Phase 10: Notice to Hayes; shipped v1.1.0.
 
 ### Active
 
 <!-- Hypotheses until shipped and validated. -->
 
-See `.planning/REQUIREMENTS.md` for milestone v1.1.0 (Authority 2.0.2 Lineage Correction).
+None. The next milestone's requirements are defined by `/gsd-new-milestone`.
 
 ### Out of Scope
 
@@ -150,7 +160,12 @@ See `.planning/REQUIREMENTS.md` for milestone v1.1.0 (Authority 2.0.2 Lineage Co
 | EMS chooses the rule shape; Hayes's placeholder shape is not adopted | Hayes stated the shape is EMS's to choose and its placeholder is a stand-in | ✓ Good |
 | Unrelated in-flight work left out of this project's commits | Assumed default, stated to the user before the PROJECT.md gate and not objected to | ✓ Good: staged by explicit path throughout |
 | Republish as 2.0.1 to harden gates instead of patching 2.0.0 (Phase 6) | Phase 4 review found fail-open gates; hash certification forbids hand edits | ✓ Good: no decision changed, decisions digest pinned to 2.0.0 |
-| No git tag for the milestone | Hayes pins by commit; a release-style tag could be cited by mistake | ✓ Good |
+| No git tag for the milestone | Hayes pins by commit; a release-style tag could be cited by mistake | ✓ Good (applied again at v1.1.0) |
+| v1.1.0: all code and schema changes before a single 2.0.2 republication, with an accepted red window | Hash certification turns real-file tests red on any publisher edit, and one publication keeps the history clean | ✓ Good: the window was closed at `ae15c74` (720 passed) |
+| v1.1.0: per-digest normalisation scope instead of one global field | 2.0.1's global `CRLF_TO_LF` contradicted three raw-byte digests | ✓ Good: each digest can be recomputed from a committed file |
+| v1.1.0: catalog read at the pinned commit `62a8955`, not the live `registry/control_catalog.yaml` | Shared catalog edits from unrelated work could change `--validate` results | ✓ Good |
+| v1.1.0: the DEMO3 reply validator is frozen on the 2.0.1 artifacts it was sent with | The reply is a historical document; it must not move with 2.0.2 | ⚠️ Revisit: frozen validators still load live publisher constants (audit WR-02) |
+| v1.1.0: plain `--validate` at the pin `ae15c74` fails by design (the record names 2.0.1 until `a71257e`) | A commit SHA cannot be recorded in the commit it names | ⚠️ Revisit: the notice does not tell Hayes how to verify at the pin |
 
 ## Evolution
 
@@ -170,4 +185,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-13 — Phase 9 (Certified Republication 2.0.2) complete*
+*Last updated: 2026-11-13 after v1.1.0 milestone*

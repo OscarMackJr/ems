@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1.0
 milestone_name: Authority 2.0.2 Lineage Correction
-status: milestone_complete
-last_updated: 2026-11-13T02:16:15.382Z
-last_activity: 2026-11-13 -- Phase 10 planning complete
+status: Awaiting next milestone
+last_updated: "2026-11-13T02:37:05.495Z"
+last_activity: 2026-11-13 — Milestone v1.1.0 completed and archived
 progress:
   total_phases: 4
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 17
-  completed_plans: 48
-  percent: 75
+  completed_plans: 17
+  percent: 100
 stopped_at: Milestone complete (Phase 10 was final phase)
 ---
 
@@ -18,19 +18,17 @@ stopped_at: Milestone complete (Phase 10 was final phase)
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-10-20)
+See: .planning/PROJECT.md (updated 2026-11-13)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Milestone complete
+**Current focus:** Planning next milestone (v1.1.0 shipped 2026-11-13)
 
 ## Current Position
 
-Phase: 10
-Plan: Not started
-Status: Milestone complete
-Last activity: 2026-11-13
-
-Progress: [█████████░] 89%
+Phase: Milestone v1.1.0 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-11-13 — Milestone v1.1.0 completed and archived
 
 ## Performance Metrics
 
@@ -88,15 +86,16 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- [Phase 7]: Ask the user for the path of the AA1 manifest (authority's own copy) before planning LIN-03
+- None
 
 ### Blockers/Concerns
 
-- [All phases]: Working tree holds three modified files (`registry/adjudication_rules.json`, `registry/policy_decisions.json`, `schemas/archive_assessment_governance_answers.schema.json`) and about 60 untracked files from unrelated work; stage by explicit path only
-- [Next milestone]: Any publisher, schema or authority edit turns real-file tests red until the next publication commit (hash certification); plan republication explicitly
-- [Next milestone]: Audit tech debt carried forward — see `.planning/milestones/v1.0.0-MILESTONE-AUDIT.md`
-- [Next milestone]: 2.0.1 `source_lineage` says `digest_normalisation: CRLF_TO_LF`, but `aa1_manifest_sha256`, `aa2_closure_sha256` and `aa2_approval_sha256` are raw-byte; fix the scope in the next authority version (Hayes told 2026-10-15)
-- [Next milestone]: AA1 manifest (`aa1_manifest_sha256` f0da8e2e…) is not in the repo; AA2 approval outputs were committed in 35bfc08 (`-text`, raw hashes verified)
+- [All phases]: The working tree holds unrelated modified files (`registry/adjudication_rules.json`, `registry/policy_decisions.json`, `.planning/config.json`) and about 60 untracked files from other work. Stage by explicit path only.
+- [Next milestone]: Any publisher, schema or authority edit turns the real-file tests red until the next publication commit (hash certification). Plan the republication explicitly.
+- [Next milestone]: v1.1.0 audit tech debt is carried forward; see `.planning/milestones/v1.1.0-MILESTONE-AUDIT.md`. The main items:
+  - plain `--validate` fails at the pin `ae15c74` by design;
+  - frozen validators load live publisher constants;
+  - the publisher-script digest is checked only by pytest.
 - [CI]: `archive-assessment` job (261015-ci1) green on ubuntu-latest, run 38744767442: 492 passed, 5 validators PASS; runs on PRs, pushes to main, and `workflow_dispatch`
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
 - [Environment]: `git push` via the credential manager fails in this session (sh.exe crash); pushing with the GitHub CLI token as a one-command `http.extraheader` (env `GIT_CONFIG_*`, credential.helper cleared) works
@@ -121,9 +120,9 @@ Items acknowledged and carried forward from previous milestone close:
 ## Session Continuity
 
 Last session: 2026-11-13T00:36:39.794Z
-Stopped at: Phase 10 context gathered
-Resume file: .planning/phases/10-notice-to-hayes/10-CONTEXT.md
+Stopped at: Milestone v1.1.0 completed and archived
+Resume file: None
 
 ## Operator Next Steps
 
-- Provide the AA1 manifest path, then run /gsd-plan-phase 7
+- Start the next milestone with /gsd-new-milestone
