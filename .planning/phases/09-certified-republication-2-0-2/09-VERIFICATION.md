@@ -1,15 +1,35 @@
 ---
 phase: 09-certified-republication-2-0-2
-status: passed
-verified: 2026-11-12
+verified: 2026-11-12T00:00:00Z
+status: gaps_found
+score: 8/9 must-haves verified
+overrides_applied: 0
 requirements: [PUB-07, PUB-08, PUB-09]
 publication_commit: ae15c7458e49c8f55cc58c61bab04bc716aa9892
 record_commit: a71257ed267410138a3c4daba412b00c116663d8
 ci_run_id: 43332405316
 ci_head_sha: a71257ed267410138a3c4daba412b00c116663d8
+re_verification: false
+gaps:
+  - truth: "09-02 must-have / D-02: reply validator fails when a constant (REPLY_PUBLICATION_COMMIT) is tampered, including re-pointing to a different valid commit"
+    status: partial
+    reason: "REPLY_PUBLICATION_COMMIT is never bound to record['publication_commit']. validate_reply() passes if the constant is set to any commit where the 2.0.1 files are byte-identical (reviewer reproduced with 4d9b7c1 and b3c0411). test_validate_rejects_tampered_constant only tries 'd'*40 and 54a7fd0, which fail for unrelated reasons. Reply bytes stay correct (pin comes from the record), so no roadmap success criterion is affected."
+    artifacts:
+      - path: "scripts/build_archive_assessment_demo3_w1_req_001_reply.py"
+        issue: "load_inputs (L248-255) lacks a record['publication_commit'] == REPLY_PUBLICATION_COMMIT check"
+      - path: "tests/test_archive_assessment_demo3_w1_req_001_reply.py"
+        issue: "tampered-constant test lacks a valid-but-wrong commit case"
+    missing:
+      - "Add the binding check in load_inputs (fix text in 09-REVIEW.md WR-01) and add REPLY_PUBLICATION_COMMIT=4d9b7c1... to the tamper parametrization"
+      - "No republication needed: the reply builder and tests are not in the publication manifest"
+human_verification: []
 ---
 
-# Phase 9 Verification — Certified republication 2.0.2
+# Phase 9 Verification: Certified republication 2.0.2
+
+**Phase goal:** Publish `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` at a commit Hayes can re-pin to, with the corrected lineage, gates and schema, and every applicability decision identical to 2.0.0 and 2.0.1.
+**Re-verification:** No. This is the initial authoritative verification. The orchestrator's draft was independently re-checked.
+**Status:** gaps_found. All four ROADMAP success criteria and all three requirements hold. One 09-02 plan must-have is only partly met (WR-01). It is minor and non-blocking for the goal.
 
 ## Key identifiers
 
@@ -20,50 +40,113 @@ ci_head_sha: a71257ed267410138a3c4daba412b00c116663d8
 | Authority | EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2 |
 | Authority LF sha256 | a44eea1f98ec361ab100c554eb3a8d3529cfeb1fec78ec6d38193a675f0b8beb |
 | Manifest sha256 | 9991228ab7ff0a0c52c61b77a4d4c0e58b56d68b0c382caa83496621f092bac2 |
-| Governance decisions LF sha256 | 4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f (unchanged from 2.0.0/2.0.1) |
+| Governance decisions LF sha256 | 4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f |
 | Supersedes | 2.0.1 @ 31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb |
-| Sign-off | Oscar Mack, EMS_GOVERNANCE_AUTHORITY, 2026-11-12, dual-role statement included |
-| CI run | 43332405316 (workflow_dispatch), conclusion success; jobs validate ✓, archive-assessment ✓ |
-| CI headSha | a71257ed267410138a3c4daba412b00c116663d8 (= pushed branch HEAD = record commit) |
+| Sign-off | Oscar Mack, EMS_GOVERNANCE_AUTHORITY, 2026-11-12, dual-role statement present |
+| CI run | 43332405316 (workflow_dispatch), success; jobs validate and archive-assessment both success |
 
-## Red window accounting
+## Independent checks run by the verifier (read-only git and `python -I`)
 
-See 09-BASELINE-RED.md.
-- **Baseline:** 3 accepted reds; `-k archive_assessment` gave 694 passed, 3 failed.
-- **Plans 01-04:** the same 3 reds throughout, with no new ids once the plan-01 fixture fix landed.
-- **At the record commit:** `-k archive_assessment` gives **720 passed, 0 failed, 0 skipped**. All three baseline reds are green, and the D-04 byte-identity test runs instead of skipping.
+- Both commits exist. Remote branch tip is `a71257e` (`git ls-remote`).
+- `gh run view 43332405316`: conclusion success, headSha is `a71257e...`, jobs `validate` and `archive-assessment` both success.
+- `git show --stat ae15c74`: exactly 10 files (schema, authority, sign-off, publication doc, certification, manifest, and 5 generated outputs: traceability, matrix, negative-invariant, semantic validation). No unrelated or untracked files.
+- `git show --stat a71257e`: only `registry/archive_assessment_applicability_authority_v2_publication_record.json`.
+- `git diff --name-only ae15c74 a71257e -- . ':(exclude).planning'` lists only the record file. The commit in between (06eb7aa) touches only `.planning`.
+- `git diff --name-only ae15c74~1 ae15c74 -- scripts tests` is empty, so no code changed in the publication commit.
+- No tag points at HEAD.
+- The authority at ae15c74 recomputes (CRLF_TO_LF) to `a44eea1f...`, which matches the record. The governance decisions file recomputes to `4e746d1f...`, which matches.
+- Authority content at ae15c74:
+  - id and version are 2.0.2.
+  - 80 controls: 3 RULE_PUBLISHED, 18 NO_RULE_WILL_BE_PUBLISHED, 59 NOT_YET_DECIDED.
+  - Rules: CTRL-030 production=KNOWN_FALSE, CTRL-039 production=KNOWN_FALSE, CTRL-052 ai_enabled=KNOWN_FALSE.
+  - `source_lineage.supersedes` names 2.0.1 at 31addfa with sha `7be5eb88...` and decisions sha `4e746d1f...`.
+  - `applicability_decision_ids` equal 2.0.1's.
+- All 80 control rows are fully identical to the 2.0.1 authority at 31addfa (0 rows differ on any field), so decision content is identical.
+- The reply artifacts (reply doc, JSON and schema) show an empty diff between e781f08 and HEAD (D-01).
 
-## Local validators at the record commit (all PASS, exit 0)
+Orchestrator-run evidence, not re-run here:
 
-- `publish_archive_assessment_applicability_authority_v2.py --validate`
-- `build_archive_assessment_governance_decisions.py --validate`
-- `validate_archive_assessment_rule_proposals.py --validate`
-- `validate_archive_assessment_rule_proposals.py --validate-record`
-- `build_archive_assessment_demo3_w1_req_001_reply.py --validate`
+- `-k archive_assessment` gives 720 passed, 0 failed, 0 skipped at the record commit.
+- All 5 CI validators PASS.
+- `--validate --pre-publication` passes at the publication commit.
 
-At the publication commit, `--validate --pre-publication` and the reply `--validate` passed. Plain `--validate` is red there by design (D-04).
+## Observable truths
 
-## Byte identity and scope (D-04, PUB-09)
+| # | Truth | Status | Evidence |
+|---|-------|--------|----------|
+| SC1 | After a dry run and Oscar Mack's sign-off, 2.0.2 is written with certification, manifest and traceability. Lineage supersedes 2.0.1 at 31addfa. `--validate` prints PASS and the full suite is green (red window closed). | VERIFIED | Sign-off file (approver, role, date, dual-role). Lineage `supersedes` is bound to 31addfa. The manifest, certification and traceability are in the ae15c74 stat. The orchestrator ran 720 passed, 0 failed, and validators PASS at a71257e. Baseline reds are listed in 09-BASELINE-RED.md and now green. |
+| SC2 | The decisions digest equals 2.0.0's (4e746d1f). 21 decided (3 rules, 18 no-rule) and 59 undecided. Per-control comparison with 2.0.1 is identical for all 80. | VERIFIED | Recomputed digest matches. Counters 3/18/59. 0 differing rows against 31addfa. |
+| SC3 | `git show --stat` on the publication commit lists only this milestone's files. The publication SHA is recorded in a later commit. | VERIFIED | The ae15c74 stat lists 10 intended paths. The record at a71257e names ae15c74. |
+| SC4 | The CI `archive-assessment` job passes on the publication commit (run id recorded). | VERIFIED (by D-04 reading) | The run is green on a71257e. The record file is the only non-.planning difference from ae15c74, so every publication file is byte-identical. Plain `--validate` is red at ae15c74 by design (the record still names 2.0.1). The literal CI-on-ae15c74 reading is not met, and no pre-publication CI mode was added. See Judgment calls. |
+| PUB-07 | 2.0.2 published with certification, manifest and traceability, superseding 2.0.1 at 31addfa. | VERIFIED | As SC1. |
+| PUB-08 | No decision change: digest equals 2.0.0's, counts 21/59, per-control content identical. | VERIFIED | As SC2. The comparison also runs in `validate_publication` and fails closed on missing history (GitHistoryError). |
+| PUB-09 | The publication commit contains only this milestone's changes, and CI `archive-assessment` passes on it. | VERIFIED (by D-04 reading) | As SC3 and SC4. |
+| 09-03 | The dry-run sign-off summary is complete per D-10. | VERIFIED with a WARNING | See WR-03 below. |
+| 09-02 | The frozen reply validator fails on a tampered reply or a tampered constant (D-02). | PARTIAL (gap) | See WR-01 below. |
 
-- `git diff --quiet ae15c74 a71257e --` over the 10 publication paths exits **0**. Those paths are the schema, authority, sign-off, and the 7 files under generated/archive-assessment/ems-aa3-v2/.
-- `git diff --name-only ae15c74 a71257e -- . ':(exclude).planning'` lists only `registry/archive_assessment_applicability_authority_v2_publication_record.json`. The one commit in between, 06eb7aa, touches only .planning/.
-- `git show --stat ae15c74`: exactly the 10 publication paths.
-- `git show --stat a71257e`: exactly the record file.
-- Neither commit includes `registry/adjudication_rules.json`, `registry/policy_decisions.json`, `.planning/config.json` or any untracked file.
-- `git diff --name-only ae15c74~1 ae15c74 -- scripts tests` is empty: no code changed in the publication commit.
-- Reply artifacts (`docs/DEMO3_W1_REQ_001_REPLY.md`, `registry/archive_assessment_demo3_w1_req_001_reply.json`, `schemas/archive_assessment_demo3_w1_req_001_reply.schema.json`): `git diff --stat e781f08 HEAD` is empty (D-01).
-- CI: `git merge-base --is-ancestor a71257e <headSha>` exits 0, because headSha is the record commit itself. So the record-to-headSha byte check holds trivially.
+**Score:** 8/9 must-haves fully verified. The partial item is the 09-02 constant-tamper must-have only.
 
-## Requirement evidence
+## Requirements coverage
 
-- **PUB-07** (republish 2.0.2 with no decision change): 21 controls decided. 3 have a rule: CTRL-030 production=KNOWN_FALSE, CTRL-039 production=KNOWN_FALSE, CTRL-052 ai_enabled=KNOWN_FALSE. 18 are NO_RULE_WILL_BE_PUBLISHED, and 59 are NOT_YET_DECIDED. The decisions digest is unchanged. Plain validate and CI are green at the record commit.
-- **PUB-08** (lineage and comparison with 2.0.1): SUPERSEDED_V2_0_1 is bound to 31addfa, 7be5eb88… and 4e746d1f…, and a git-history test checks the values. validate_publication compares all 80 rows on four decision fields, plus the control set and the top-level decision ids, against `git_show(31addfa)`; the result is "80 controls identical to 2.0.1". Tamper tests and a GitHistoryError fail-closed test pass.
-- **PUB-09** (clean, pinned publication commit): the scope checks are above. The branch was pushed only after Oscar Mack approved ("Push approved"). The remote ref is at a71257e. No PR, merge or tag was created: `gh pr list --head` is empty and no tag points at HEAD.
+Every ID in the PLAN frontmatter was cross-referenced against REQUIREMENTS.md. No requirement is orphaned. Phase 9 maps to PUB-07, PUB-08 and PUB-09 only, and all three are accounted for.
 
-## ROADMAP SC4: reading under D-04
+| ID | Status | Evidence |
+|----|--------|----------|
+| PUB-07 | SATISFIED | See truths above. |
+| PUB-08 | SATISFIED | See truths above. |
+| PUB-09 | SATISFIED | See truths above. |
 
-Hayes pins the publication commit ae15c74. At that commit the record still names 2.0.1, so plain `--validate` and CI are red there by design. The green `archive-assessment` run, 43332405316, ran on the record commit a71257e. Every publication file is byte-identical between the two commits, so the green run certifies exactly the bytes Hayes pins. No gate was weakened, and no pre-publication CI mode was added.
+Housekeeping: REQUIREMENTS.md still shows PUB-07, PUB-08 and PUB-09 as `[ ]` and "Pending" (L28-30, L66-68). The orchestrator should tick them in the phase-completion step. The ROADMAP row is already marked complete.
 
-## Secrets
+## Judgment calls on the code review
 
-The push used the normal credential helper; the token workaround was not needed. No token was written to any file.
+**WR-01 (reply validator accepts a tampered REPLY_PUBLICATION_COMMIT): a must-have gap.**
+- It is a real shortfall against the 09-02 plan must-have and D-02. The plan explicitly requires a "different valid commit" tamper to raise, and the reviewer reproduced it passing.
+- It is not a ROADMAP success-criterion gap and not a PUB-07/08/09 gap. The reply is a frozen 2.0.1 artifact, the reply bytes are unaffected (the pin comes from the record), and the reply builder is outside the publication manifest.
+- It needs no republication. It is a small fix: a one-line binding check plus one test parameter.
+- I recorded it as a `partial` gap because the decision tree makes any failed plan truth gaps_found. Severity is WARNING. It does not block Phase 10 or the pinned commit. The orchestrator may either run a short `--gaps` plan to close it, or accept it with an override. Override suggestion:
+
+```yaml
+overrides:
+  - must_have: "tampering with a reply constant fails (REPLY_PUBLICATION_COMMIT re-pointed to a different valid commit)"
+    reason: "Frozen 2.0.1 reply artifact; bytes unaffected; fix deferred, no republication needed"
+    accepted_by: "Oscar Mack"
+    accepted_at: "<ISO timestamp when accepted>"
+```
+
+**WR-03 (dry-run summary incomplete per D-10): not a gap that blocks. WARNING, accept.**
+- The summary omits the statement that the AA1 manifest is committed under RAW_BYTES and the commit pins, and it lists only one of the two supersedes normalisations.
+- The sign-off covered the authority bytes and the no-decision-change statement. The facts omitted are all verifiable in the authority's `source_lineage`, which I read.
+- Fixing the publisher would change its digest (`f6b51cca...` is in the manifest) and force a republication. That cost is not justified.
+- Carry the "AA1 manifest committed, RAW_BYTES" statement into the Phase 10 notice, as the reviewer recommends.
+
+**Other review items.**
+- WR-02 (frozen reply validator depends on live publisher code) and WR-04 (silent skips when the 2.0.1 blob is unreachable): non-blocking hardening. This clone has the blob, and the orchestrator run showed 0 skipped.
+- IN-05 is worth a follow-up: nothing in plain `--validate` guards the publisher script digest. Only the pytest in the reply test file does.
+
+## Judgment calls on the SC4 / PUB-09 reading (D-04)
+
+- Hayes pins ae15c74. At that commit the record file still names 2.0.1, so plain `--validate` and CI are red there. This is by design, because the commit that records the SHA cannot be the commit it names.
+- The green `archive-assessment` run covers a71257e. The 10 publication files are byte-identical between the two commits (the `git diff` above is empty apart from the record file). CI therefore certifies exactly the bytes Hayes pins. I accept this as satisfying SC4 and PUB-09 in substance.
+- A reader who requires CI to be green on the literal pinned SHA would see this as unmet. I judge that reading unsatisfiable under the self-referential record, and the documented trade-off is explicit and honest.
+
+## Anti-patterns
+
+No TBD, FIXME or XXX markers or stubs were found in the reviewed files. The review lists no critical findings. IN-01 notes a dead DIFFER branch in the publisher, which is deferred because it would need a republication.
+
+## Behavioral spot-checks and probes
+
+The verifier did not re-run pytest or validators, per instruction. The orchestrator's PowerShell results are cited above. Independent recomputation of the authority and decisions digests, the stat scopes, and the row-for-row comparison all passed. No phase probe scripts were declared.
+
+## Human verification
+
+None required. The sign-off by Oscar Mack is recorded in the committed sign-off file, and the push approval was given in-session per the 09-05 summary.
+
+## Gaps summary
+
+The phase goal is achieved. 2.0.2 is published at ae15c74 with every decision identical to 2.0.1 and 2.0.0. The record commit a71257e is pushed, and CI is green on a bytes-identical tree. The only open item is WR-01, a missing binding check in the frozen reply validator, which is fixable with no republication.
+
+---
+
+_Verified: 2026-11-12_
+_Verifier: Claude (gsd-verifier)_
