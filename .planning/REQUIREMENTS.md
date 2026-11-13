@@ -25,9 +25,9 @@
 
 ### Publication
 
-- [ ] **PUB-07**: `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` is published with certification, manifest and traceability, and its lineage records that it supersedes 2.0.1 at `31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb`
-- [ ] **PUB-08**: No decision changes: the decisions digest equals 2.0.0's (`4e746d1f…`), the counts stay at 21 decided and 59 undecided, and the per-control decision content is identical
-- [ ] **PUB-09**: The publication commit contains only this milestone's changes, and the CI `archive-assessment` job passes on it
+- [x] **PUB-07**: `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` is published with certification, manifest and traceability, and its lineage records that it supersedes 2.0.1 at `31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb`
+- [x] **PUB-08**: No decision changes: the decisions digest equals 2.0.0's (`4e746d1f…`), the counts stay at 21 decided and 59 undecided, and the per-control decision content is identical
+- [x] **PUB-09**: The publication commit contains only this milestone's changes, and the CI `archive-assessment` job passes on it
 
 ### Notice to Hayes
 
@@ -63,9 +63,9 @@
 | GATE-04 | Phase 8 | Complete |
 | GATE-05 | Phase 8 | Complete |
 | SCHEMA-07 | Phase 8 | Complete |
-| PUB-07 | Phase 9 | Pending |
-| PUB-08 | Phase 9 | Pending |
-| PUB-09 | Phase 9 | Pending |
+| PUB-07 | Phase 9 | Complete |
+| PUB-08 | Phase 9 | Complete |
+| PUB-09 | Phase 9 | Complete |
 | NOTICE-01 | Phase 10 | Pending |
 | NOTICE-02 | Phase 10 | Pending |
 

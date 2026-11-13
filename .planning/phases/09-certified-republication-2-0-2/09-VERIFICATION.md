@@ -1,18 +1,19 @@
 ---
 phase: 09-certified-republication-2-0-2
 verified: 2026-11-12T00:00:00Z
-status: gaps_found
-score: 8/9 must-haves verified
+status: passed
+score: 9/9 must-haves verified (WR-01 gap closed in 6e47a4f)
 overrides_applied: 0
 requirements: [PUB-07, PUB-08, PUB-09]
 publication_commit: ae15c7458e49c8f55cc58c61bab04bc716aa9892
 record_commit: a71257ed267410138a3c4daba412b00c116663d8
 ci_run_id: 43332405316
 ci_head_sha: a71257ed267410138a3c4daba412b00c116663d8
-re_verification: false
+re_verification: true
 gaps:
   - truth: "09-02 must-have / D-02: reply validator fails when a constant (REPLY_PUBLICATION_COMMIT) is tampered, including re-pointing to a different valid commit"
-    status: partial
+    status: closed
+    closed_by: "6e47a4f — load_inputs requires REPLY_PUBLICATION_COMMIT == record['publication_commit']; tamper test adds 4d9b7c1 and b3c0411; orchestrator run: reply --validate PASS, reply module 66 passed"
     reason: "REPLY_PUBLICATION_COMMIT is never bound to record['publication_commit']. validate_reply() passes if the constant is set to any commit where the 2.0.1 files are byte-identical (reviewer reproduced with 4d9b7c1 and b3c0411). test_validate_rejects_tampered_constant only tries 'd'*40 and 54a7fd0, which fail for unrelated reasons. Reply bytes stay correct (pin comes from the record), so no roadmap success criterion is affected."
     artifacts:
       - path: "scripts/build_archive_assessment_demo3_w1_req_001_reply.py"
@@ -29,7 +30,7 @@ human_verification: []
 
 **Phase goal:** Publish `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` at a commit Hayes can re-pin to, with the corrected lineage, gates and schema, and every applicability decision identical to 2.0.0 and 2.0.1.
 **Re-verification:** No. This is the initial authoritative verification. The orchestrator's draft was independently re-checked.
-**Status:** gaps_found. All four ROADMAP success criteria and all three requirements hold. One 09-02 plan must-have is only partly met (WR-01). It is minor and non-blocking for the goal.
+**Status:** passed. All four ROADMAP success criteria and all three requirements hold. The verifier found one 09-02 must-have only partly met (WR-01). It was closed in 6e47a4f without republication: the reply builder and its tests are not in the publication manifest.
 
 ## Key identifiers
 
@@ -82,7 +83,7 @@ Orchestrator-run evidence, not re-run here:
 | PUB-08 | No decision change: digest equals 2.0.0's, counts 21/59, per-control content identical. | VERIFIED | As SC2. The comparison also runs in `validate_publication` and fails closed on missing history (GitHistoryError). |
 | PUB-09 | The publication commit contains only this milestone's changes, and CI `archive-assessment` passes on it. | VERIFIED (by D-04 reading) | As SC3 and SC4. |
 | 09-03 | The dry-run sign-off summary is complete per D-10. | VERIFIED with a WARNING | See WR-03 below. |
-| 09-02 | The frozen reply validator fails on a tampered reply or a tampered constant (D-02). | PARTIAL (gap) | See WR-01 below. |
+| 09-02 | The frozen reply validator fails on a tampered reply or a tampered constant (D-02). | VERIFIED (gap closed in 6e47a4f) | See WR-01 below and the closure note in Gaps summary. |
 
 **Score:** 8/9 must-haves fully verified. The partial item is the 09-02 constant-tamper must-have only.
 
@@ -145,6 +146,12 @@ None required. The sign-off by Oscar Mack is recorded in the committed sign-off 
 ## Gaps summary
 
 The phase goal is achieved. 2.0.2 is published at ae15c74 with every decision identical to 2.0.1 and 2.0.0. The record commit a71257e is pushed, and CI is green on a bytes-identical tree. The only open item is WR-01, a missing binding check in the frozen reply validator, which is fixable with no republication.
+
+**WR-01 closure (orchestrator, 6e47a4f):** `load_inputs` now raises AuthorityError unless REPLY_PUBLICATION_COMMIT equals the frozen record's `publication_commit`. `test_validate_rejects_tampered_constant` adds 4d9b7c1 and b3c0411, the two valid-but-wrong commits the reviewer reproduced. Orchestrator PowerShell run: reply `--validate` PASS; `tests/test_archive_assessment_demo3_w1_req_001_reply.py` 66 passed, 0 failed. The reply artifacts and the certified publisher are unchanged. CI run 43332405316 predates this fix and covers HEAD a71257e; the fix is local and not pushed.
+
+**Carried forward (not gaps):**
+- WR-03: put the AA1-manifest "committed, RAW_BYTES" statement and the commit pins in the Phase 10 notice. Fixing the dry-run text would force a republication.
+- WR-02, WR-04 and IN-01..06: hardening notes, see 09-REVIEW.md.
 
 ---
 
