@@ -21,13 +21,29 @@ Archives: `.planning/milestones/v1.0.0-*` and `.planning/milestones/v1.1.0-*`.
 
 **Previous:** v1.0.0 Not-Applicable Rule Publication (2026-10-15). It published 2.0.1 at `31addfa`, and the DEMO3-W1-REQ-001 reply cites it.
 
-## Next Milestone Goals
+## Current Milestone: v1.2.0 Authority 2.0.3 Verification Hardening
 
-Not yet defined. Candidates:
+**Goal:** Close the v1.1.0 audit tech debt. When it is done, Hayes can verify EMS at the pinned commit, every claim a notice makes is enforced in code, and the frozen validators do not depend on the live publisher. The milestone ends with one certified 2.0.3 republication and a notice asking Hayes to re-pin.
 
-- **v1.1.0 audit tech debt.** Plain `--validate` fails at the pin `ae15c74` by design, and the notice does not tell Hayes how to verify at the pin. Frozen reply and notice validators load live publisher constants. The publisher-script digest is checked only by pytest. The 10-REVIEW warnings are still open.
-- **Rule-or-no-rule decisions for the other 59 controls** (V2-01).
-- **Hayes re-run confirmation** (V2-02, Hayes-side).
+**Target features:**
+- **Verify-at-pin.** A documented validation mode returns PASS at the pinned publication commit. The notice tells Hayes how to verify at the pin.
+- **Frozen validators.** The reply and notice validators read git-pinned constants, not the live publisher. A missing 2.0.1 blob fails closed. Pytest runs over the committed notice files.
+- **Notice claim enforcement.** Each of the 29 mutation rejections is asserted individually. All 7 lineage digests are re-hashed. The wrong-scope claim (raw ≠ LF) is computed.
+- **Gate and validator hardening.**
+  - `--validate` checks the publisher-script digest.
+  - Malformed shapes fail closed instead of crashing.
+  - `norm_templated` uniqueness is enforced in `validate_decisions`.
+  - The D-10 and D-13 tests are stronger.
+  - The dead DIFFER branch is removed, and IN-02, IN-03, IN-04 and IN-06 are cleaned up.
+- **2.0.3 republication.**
+  - Oscar Mack signs it off as EMS governance authority.
+  - No decision changes: 21 decided, 59 `NOT_YET_DECIDED`, decisions digest `4e746d1f…`.
+  - A new notice asks Hayes to re-pin.
+
+**Key context:**
+- An accepted red window opens at the first publisher edit and closes at the 2.0.3 publication commit.
+- Bookkeeping debt (the SUMMARY frontmatter keys) is out of scope.
+- Still deferred: V2-01 (decisions for the other 59 controls) and V2-02 (Hayes re-run).
 
 ## Core Value
 
@@ -89,7 +105,13 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 
 <!-- Hypotheses until shipped and validated. -->
 
-None. The next milestone's requirements are defined by `/gsd-new-milestone`.
+v1.2.0 requirements are listed in `.planning/REQUIREMENTS.md`. In outline:
+
+- verify-at-pin;
+- frozen validators;
+- notice claim enforcement;
+- gate and validator hardening;
+- the 2.0.3 republication and the re-pin notice.
 
 ### Out of Scope
 
@@ -185,4 +207,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-13 after v1.1.0 milestone*
+*Last updated: 2026-11-12 at start of v1.2.0 milestone*
