@@ -73,27 +73,27 @@ These apply to the notice builder and validator used for 2.0.3.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PIN-01 | — | Pending |
-| PIN-02 | — | Pending |
-| PIN-03 | — | Pending |
-| FROZEN-01 | — | Pending |
-| FROZEN-02 | — | Pending |
-| FROZEN-03 | — | Pending |
-| FROZEN-04 | — | Pending |
-| CLAIM-01 | — | Pending |
-| CLAIM-02 | — | Pending |
-| CLAIM-03 | — | Pending |
-| GATE-06 | — | Pending |
-| GATE-07 | — | Pending |
-| GATE-08 | — | Pending |
-| GATE-09 | — | Pending |
-| GATE-10 | — | Pending |
-| PUB-10 | — | Pending |
-| PUB-11 | — | Pending |
-| PUB-12 | — | Pending |
-| NOTICE-03 | — | Pending |
+| PIN-01 | Phase 12 | Pending |
+| PIN-02 | Phase 12 | Pending |
+| PIN-03 | Phase 14 | Pending |
+| FROZEN-01 | Phase 11 | Pending |
+| FROZEN-02 | Phase 11 | Pending |
+| FROZEN-03 | Phase 11 | Pending |
+| FROZEN-04 | Phase 11 | Pending |
+| CLAIM-01 | Phase 14 | Pending |
+| CLAIM-02 | Phase 14 | Pending |
+| CLAIM-03 | Phase 14 | Pending |
+| GATE-06 | Phase 12 | Pending |
+| GATE-07 | Phase 12 | Pending |
+| GATE-08 | Phase 12 | Pending |
+| GATE-09 | Phase 12 | Pending |
+| GATE-10 | Phase 12 | Pending |
+| PUB-10 | Phase 13 | Pending |
+| PUB-11 | Phase 13 | Pending |
+| PUB-12 | Phase 13 | Pending |
+| NOTICE-03 | Phase 14 | Pending |
 
-**Coverage:** 19 requirements, 0 mapped (the roadmap fills this in)
+**Coverage:** 19 requirements, 19 mapped (Phase 11: 4, Phase 12: 7, Phase 13: 3, Phase 14: 5)
 
 ---
 *Requirements defined: 2026-11-12*

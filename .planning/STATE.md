@@ -2,11 +2,11 @@
 gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
-status: planning
-last_updated: "2026-11-13T03:05:25.688Z"
+status: ready_to_plan
+last_updated: "2026-11-13T03:30:00.000Z"
 last_activity: 2026-11-13
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -20,14 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-11-13)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Planning next milestone (v1.1.0 shipped 2026-11-13)
+**Current focus:** v1.2.0 Phase 11 — Frozen Validators
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-11-13 — Milestone v1.2.0 started
+Phase: 11 of 14 (Frozen Validators)
+Plan: — (not yet planned)
+Status: Ready to plan
+Last activity: 2026-11-13 — v1.2.0 roadmap created (Phases 11-14, 19/19 requirements mapped)
+
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -65,6 +67,7 @@ Last activity: 2026-11-13 — Milestone v1.2.0 started
 
 - Phase 6 added: Address tech debt: publication gate hardening (2.0.1)
 - v1.1.0 roadmap created 2026-10-20: Phase 7 Lineage Source and Per-Digest Scope (LIN-01..03), Phase 8 Gate and Schema Hardening (GATE-01..05, SCHEMA-07), Phase 9 Certified Republication 2.0.2 (PUB-07..09), Phase 10 Notice to Hayes (NOTICE-01..02)
+- v1.2.0 roadmap created 2026-11-13: Phase 11 Frozen Validators (FROZEN-01..04), Phase 12 Verify-at-Pin and Gate Hardening (PIN-01..02, GATE-06..10), Phase 13 Certified Republication 2.0.3 (PUB-10..12), Phase 14 Notice to Hayes 2.0.3 (NOTICE-03, PIN-03, CLAIM-01..03)
 
 ### Decisions
 
@@ -82,6 +85,10 @@ Recent decisions affecting current work:
 - [v1.1.0 Roadmap]: Accepted red window opens at the first publisher/validator edit in Phase 7 and closes at the 2.0.2 publication commit
 - [v1.1.0 Roadmap]: AA1 manifest commit (LIN-03) lands first in Phase 7, before LIN-02 recomputation is verified; the file is supplied by the user (path asked at Phase 7 start)
 - [v1.1.0 Roadmap]: 2.0.2 publication requires sign-off by Oscar Mack as EMS governance authority (human gate in Phase 9)
+- [v1.2.0 Roadmap]: Frozen validators (Phase 11) land before any publisher edit so the historical reply and 2.0.2 notice stay green
+- [v1.2.0 Roadmap]: Accepted red window opens at the first publisher edit in Phase 12 and closes at the 2.0.3 publication commit (Phase 13)
+- [v1.2.0 Roadmap]: Verify-at-pin mechanics (PIN-01/02) are publisher/validator changes, so they land in Phase 12; PIN-03 guidance and CLAIM-01..03 belong to the notice in Phase 14, which cites the publication commit
+- [v1.2.0 Roadmap]: 2.0.3 publication requires sign-off by Oscar Mack as EMS governance authority with the dual-role statement (human gate in Phase 13)
 
 ### Pending Todos
 
@@ -90,11 +97,8 @@ Recent decisions affecting current work:
 ### Blockers/Concerns
 
 - [All phases]: The working tree holds unrelated modified files (`registry/adjudication_rules.json`, `registry/policy_decisions.json`, `.planning/config.json`) and about 60 untracked files from other work. Stage by explicit path only.
-- [Next milestone]: Any publisher, schema or authority edit turns the real-file tests red until the next publication commit (hash certification). Plan the republication explicitly.
-- [Next milestone]: v1.1.0 audit tech debt is carried forward; see `.planning/milestones/v1.1.0-MILESTONE-AUDIT.md`. The main items:
-  - plain `--validate` fails at the pin `ae15c74` by design;
-  - frozen validators load live publisher constants;
-  - the publisher-script digest is checked only by pytest.
+- [Phase 12]: Any publisher, schema or authority edit turns the real-file tests red until the 2.0.3 publication commit (hash certification). The red window is accepted and planned.
+- [v1.2.0]: Scope is the v1.1.0 audit tech debt (`.planning/milestones/v1.1.0-MILESTONE-AUDIT.md`); no decision content changes (decisions digest `4e746d1f…` is pinned).
 - [CI]: `archive-assessment` job (261015-ci1) green on ubuntu-latest, run 38744767442: 492 passed, 5 validators PASS; runs on PRs, pushes to main, and `workflow_dispatch`
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
 - [Environment]: `git push` via the credential manager fails in this session (sh.exe crash); pushing with the GitHub CLI token as a one-command `http.extraheader` (env `GIT_CONFIG_*`, credential.helper cleared) works
@@ -118,10 +122,10 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-11-13T00:36:39.794Z
-Stopped at: Milestone v1.1.0 completed and archived
+Last session: 2026-11-13T03:30:00.000Z
+Stopped at: v1.2.0 roadmap created
 Resume file: None
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Plan the first phase with /gsd-plan-phase 11
