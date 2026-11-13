@@ -443,6 +443,9 @@ def test_validate_rejects_tampered_reply_bytes(monkeypatch, which):
 @pytest.mark.parametrize('name, value', [
     ('REPLY_PUBLICATION_COMMIT', 'd' * 40),
     ('REPLY_PUBLICATION_COMMIT', '54a7fd09114704a97a7a48fce5f89aebeb48c90a'),
+    # valid commits holding the same 2.0.1 bytes or reachable history: only the record binding rejects these (WR-01)
+    ('REPLY_PUBLICATION_COMMIT', '4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b'),
+    ('REPLY_PUBLICATION_COMMIT', 'b3c041146a5360e582b0161183414ec70059919d'),
     ('REPLY_RECORD_COMMIT', 'd' * 40),
     ('REPLY_RECORD_COMMIT', '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb'),
 ])

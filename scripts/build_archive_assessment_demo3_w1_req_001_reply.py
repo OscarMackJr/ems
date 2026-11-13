@@ -249,6 +249,8 @@ def load_inputs() -> tuple:
     authority, signoff = pinned_json(REPLY_PUBLICATION_COMMIT, V2.AUTHORITY), pinned_json(REPLY_PUBLICATION_COMMIT, V2.SIGNOFF)
     decisions, manifest = pinned_json(REPLY_PUBLICATION_COMMIT, V2.GOVERNANCE_DECISIONS), pinned_json(REPLY_PUBLICATION_COMMIT, V2.OUT / V2.N_MANIFEST)
     record = pinned_json(REPLY_RECORD_COMMIT, V2.PUBLICATION_RECORD)
+    if record.get('publication_commit') != REPLY_PUBLICATION_COMMIT:
+        raise V2.AuthorityError('REPLY_PUBLICATION_COMMIT differs from the publication_commit named by the frozen publication record')
     if record['manifest_sha256'] != pinned_digest(REPLY_PUBLICATION_COMMIT, V2.OUT / V2.N_MANIFEST):
         raise V2.AuthorityError('publication record manifest digest differs from the published manifest')
     check_inputs_bound(manifest)
