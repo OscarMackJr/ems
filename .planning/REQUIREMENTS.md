@@ -31,8 +31,8 @@
 
 ### Notice to Hayes
 
-- [ ] **NOTICE-01**: A generated, `--validate`-checked notice cites the 2.0.2 authority id, its version and its commit, and lists what changed: the lineage scope, the gates and the schema
-- [ ] **NOTICE-02**: The notice names the 2.0.1 digest-scope error explicitly, states that no applicability decision changed, and asks Hayes to re-pin
+- [x] **NOTICE-01**: A generated, `--validate`-checked notice cites the 2.0.2 authority id, its version and its commit, and lists what changed: the lineage scope, the gates and the schema
+- [x] **NOTICE-02**: The notice names the 2.0.1 digest-scope error explicitly, states that no applicability decision changed, and asks Hayes to re-pin
 
 ## Future Requirements
 
@@ -66,8 +66,8 @@
 | PUB-07 | Phase 9 | Complete |
 | PUB-08 | Phase 9 | Complete |
 | PUB-09 | Phase 9 | Complete |
-| NOTICE-01 | Phase 10 | Pending |
-| NOTICE-02 | Phase 10 | Pending |
+| NOTICE-01 | Phase 10 | Complete |
+| NOTICE-02 | Phase 10 | Complete |
 
 **Coverage:**
 - v1.1.0 requirements: 14 total
