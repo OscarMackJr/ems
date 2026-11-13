@@ -67,6 +67,13 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
   - The schema is closed at the top level, on rows and on `not_applicable_semantics`, with 29 mutations (SCHEMA-07).
 
   Validated in Phase 8: Gate and Schema Hardening. The red set is still the 3 accepted tests until Phase 9. Review follow-up: CR-01, the record's `digest_normalisation` value is not checked.
+- ✓ `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` is published with certification, manifest and traceability at publication commit `ae15c74`. Oscar Mack signed it off as EMS governance authority on 2026-11-12, with the dual-role statement. It supersedes 2.0.1 at `31addfa`, and the record commit is `a71257e`. Authority LF sha256 is `a44eea1f…`.
+  - No decision changed (PUB-08): the decisions digest is still `4e746d1f…`, all 80 rows are identical to 2.0.1, and the counts stay at 21 decided and 59 undecided.
+  - The publication commit holds only the 10 publication files, which are byte-identical at the record commit. CI run `43332405316` is green at `a71257e`, the pushed branch head (PUB-09).
+  - The DEMO3 reply validator is frozen on the 2.0.1 artifacts it was sent with.
+  - The red window is closed: 720 passed, 0 failed.
+
+  Validated in Phase 9: Certified Republication 2.0.2. Carried to Phase 10: the notice should state that the AA1 manifest is committed and hashed as RAW_BYTES (review WR-03).
 
 ### Active
 
@@ -163,4 +170,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-12 — Phase 8 (Gate and Schema Hardening) complete*
+*Last updated: 2026-11-13 — Phase 9 (Certified Republication 2.0.2) complete*
