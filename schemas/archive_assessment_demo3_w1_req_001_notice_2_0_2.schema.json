@@ -1,0 +1,420 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "decisions": {
+      "additionalProperties": false,
+      "properties": {
+        "decided_count": {
+          "const": 21
+        },
+        "decisions_changed": {
+          "const": false
+        },
+        "governance_decisions_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "no_rule_count": {
+          "const": 18
+        },
+        "not_yet_decided_count": {
+          "const": 59
+        },
+        "rule_count": {
+          "const": 3
+        },
+        "rules": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "authority": {
+                "pattern": "^AA4-GOV-[0-9]{3}$",
+                "type": "string"
+              },
+              "control_id": {
+                "pattern": "^EMS-CTRL-[0-9]{3}$",
+                "type": "string"
+              },
+              "machine_form": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "rule": {
+                "additionalProperties": false,
+                "properties": {
+                  "combination": {
+                    "const": "ALL_CONDITIONS_MUST_MATCH"
+                  },
+                  "conditions": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "field": {
+                          "enum": [
+                            "production",
+                            "internet_exposed",
+                            "contains_customer_data",
+                            "ai_enabled"
+                          ]
+                        },
+                        "state": {
+                          "enum": [
+                            "KNOWN_TRUE",
+                            "KNOWN_FALSE"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "field",
+                        "state"
+                      ],
+                      "type": "object"
+                    },
+                    "maxItems": 4,
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "combination",
+                  "conditions"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "control_id",
+              "authority",
+              "rule",
+              "machine_form"
+            ],
+            "type": "object"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        }
+      },
+      "required": [
+        "decided_count",
+        "rule_count",
+        "no_rule_count",
+        "not_yet_decided_count",
+        "rules",
+        "governance_decisions_sha256",
+        "decisions_changed"
+      ],
+      "type": "object"
+    },
+    "digest_scope_error": {
+      "additionalProperties": false,
+      "properties": {
+        "digest_values_changed": {
+          "const": false
+        },
+        "digests": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "declared_scope": {
+                "const": "RAW_BYTES"
+              },
+              "key": {
+                "enum": [
+                  "aa1_manifest",
+                  "aa2_closure",
+                  "aa2_approval"
+                ]
+              },
+              "previous_declared_scope": {
+                "const": "CRLF_TO_LF"
+              },
+              "previous_key": {
+                "enum": [
+                  "aa1_manifest_sha256",
+                  "aa2_closure_sha256",
+                  "aa2_approval_sha256"
+                ]
+              },
+              "sha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "previous_key",
+              "key",
+              "sha256",
+              "previous_declared_scope",
+              "declared_scope"
+            ],
+            "type": "object"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "previous_commit": {
+          "const": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb"
+        },
+        "previous_declared_normalisation": {
+          "const": "CRLF_TO_LF"
+        },
+        "previous_version": {
+          "const": "2.0.1"
+        }
+      },
+      "required": [
+        "previous_version",
+        "previous_commit",
+        "previous_declared_normalisation",
+        "digests",
+        "digest_values_changed"
+      ],
+      "type": "object"
+    },
+    "document_id": {
+      "const": "EMS-DEMO3-W1-REQ-001-NOTICE-2.0.2"
+    },
+    "dual_role_statement": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "from_authority": {
+      "additionalProperties": false,
+      "properties": {
+        "approver": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "EMS_GOVERNANCE_AUTHORITY",
+            "HAYES_VERIFY_DEVELOPER"
+          ]
+        },
+        "roles": {
+          "items": {
+            "enum": [
+              "EMS_GOVERNANCE_AUTHORITY",
+              "HAYES_VERIFY_DEVELOPER"
+            ]
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "approver",
+        "role",
+        "roles"
+      ],
+      "type": "object"
+    },
+    "hayes_side_changes_needed": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+    },
+    "notice_date": {
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "type": "string"
+    },
+    "pin": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_id": {
+          "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2"
+        },
+        "authority_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "digest_normalisation": {
+          "const": "CRLF_TO_LF"
+        },
+        "manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "publication_commit": {
+          "const": "ae15c7458e49c8f55cc58c61bab04bc716aa9892"
+        },
+        "publication_record_commit": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "published_on": {
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "type": "string"
+        },
+        "version": {
+          "const": "2.0.2"
+        }
+      },
+      "required": [
+        "publication_commit",
+        "authority_id",
+        "version",
+        "authority_sha256",
+        "manifest_sha256",
+        "digest_normalisation",
+        "publication_record_commit",
+        "published_on"
+      ],
+      "type": "object"
+    },
+    "request_id": {
+      "const": "DEMO3-W1-REQ-001"
+    },
+    "request_label": {
+      "const": "EMSREQ-APPLIC-RULES"
+    },
+    "send_condition": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "supersedes": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_id": {
+          "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1"
+        },
+        "commit": {
+          "const": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb"
+        },
+        "version": {
+          "const": "2.0.1"
+        }
+      },
+      "required": [
+        "authority_id",
+        "version",
+        "commit"
+      ],
+      "type": "object"
+    },
+    "what_changed": {
+      "additionalProperties": false,
+      "properties": {
+        "closed_schema_levels": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "const": 16
+            },
+            "paths": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "maxItems": 16,
+              "minItems": 16,
+              "type": "array"
+            }
+          },
+          "required": [
+            "count",
+            "paths"
+          ],
+          "type": "object"
+        },
+        "gate_fix_line": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "lineage": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "key": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "normalisation": {
+                "enum": [
+                  "RAW_BYTES",
+                  "CRLF_TO_LF"
+                ]
+              },
+              "relative_path": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "key",
+              "relative_path",
+              "normalisation",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "maxItems": 7,
+          "minItems": 7,
+          "type": "array"
+        },
+        "negative_mutation_count": {
+          "const": 29
+        },
+        "row_comparison": {
+          "additionalProperties": false,
+          "properties": {
+            "compared_keys": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "rows_compared": {
+              "const": 80
+            },
+            "rows_differing": {
+              "const": 0
+            }
+          },
+          "required": [
+            "rows_compared",
+            "rows_differing",
+            "compared_keys"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "lineage",
+        "negative_mutation_count",
+        "closed_schema_levels",
+        "row_comparison",
+        "gate_fix_line"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "document_id",
+    "request_id",
+    "request_label",
+    "notice_date",
+    "from_authority",
+    "dual_role_statement",
+    "pin",
+    "supersedes",
+    "what_changed",
+    "digest_scope_error",
+    "decisions",
+    "hayes_side_changes_needed",
+    "send_condition"
+  ],
+  "title": "EMS notice to Hayes Verify for request DEMO3-W1-REQ-001, authority 2.0.2",
+  "type": "object"
+}

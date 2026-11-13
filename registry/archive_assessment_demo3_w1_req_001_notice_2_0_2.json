@@ -1,0 +1,196 @@
+{
+  "decisions": {
+    "decided_count": 21,
+    "decisions_changed": false,
+    "governance_decisions_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+    "no_rule_count": 18,
+    "not_yet_decided_count": 59,
+    "rule_count": 3,
+    "rules": [
+      {
+        "authority": "AA4-GOV-014",
+        "control_id": "EMS-CTRL-030",
+        "machine_form": "ALL_CONDITIONS_MUST_MATCH: production = KNOWN_FALSE",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "production",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      {
+        "authority": "AA4-GOV-016",
+        "control_id": "EMS-CTRL-039",
+        "machine_form": "ALL_CONDITIONS_MUST_MATCH: production = KNOWN_FALSE",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "production",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      {
+        "authority": "AA4-GOV-018",
+        "control_id": "EMS-CTRL-052",
+        "machine_form": "ALL_CONDITIONS_MUST_MATCH: ai_enabled = KNOWN_FALSE",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "ai_enabled",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "digest_scope_error": {
+    "digest_values_changed": false,
+    "digests": [
+      {
+        "declared_scope": "RAW_BYTES",
+        "key": "aa1_manifest",
+        "previous_declared_scope": "CRLF_TO_LF",
+        "previous_key": "aa1_manifest_sha256",
+        "sha256": "f0da8e2e45c306ccc42ae96f25a19922668f3eedecdb26006f13514e24ad9b4b"
+      },
+      {
+        "declared_scope": "RAW_BYTES",
+        "key": "aa2_closure",
+        "previous_declared_scope": "CRLF_TO_LF",
+        "previous_key": "aa2_closure_sha256",
+        "sha256": "ed589d76febe255665fd11697a9c0b9f8c7f036487e26b6f765ef8046c55887b"
+      },
+      {
+        "declared_scope": "RAW_BYTES",
+        "key": "aa2_approval",
+        "previous_declared_scope": "CRLF_TO_LF",
+        "previous_key": "aa2_approval_sha256",
+        "sha256": "de170ebcf60aabe593b3e9766c11170c3c597730ef0f342028c8f844614f745c"
+      }
+    ],
+    "previous_commit": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb",
+    "previous_declared_normalisation": "CRLF_TO_LF",
+    "previous_version": "2.0.1"
+  },
+  "document_id": "EMS-DEMO3-W1-REQ-001-NOTICE-2.0.2",
+  "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+  "from_authority": {
+    "approver": "Oscar Mack",
+    "role": "EMS_GOVERNANCE_AUTHORITY",
+    "roles": [
+      "EMS_GOVERNANCE_AUTHORITY",
+      "HAYES_VERIFY_DEVELOPER"
+    ]
+  },
+  "hayes_side_changes_needed": [
+    "Re-pin to ae15c7458e49c8f55cc58c61bab04bc716aa9892, replacing 31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb.",
+    "The target description must carry the eight classification facts.",
+    "Hayes must read the published v2 shape."
+  ],
+  "notice_date": "2026-11-12",
+  "pin": {
+    "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2",
+    "authority_sha256": "a44eea1f98ec361ab100c554eb3a8d3529cfeb1fec78ec6d38193a675f0b8beb",
+    "digest_normalisation": "CRLF_TO_LF",
+    "manifest_sha256": "9991228ab7ff0a0c52c61b77a4d4c0e58b56d68b0c382caa83496621f092bac2",
+    "publication_commit": "ae15c7458e49c8f55cc58c61bab04bc716aa9892",
+    "publication_record_commit": "a71257ed267410138a3c4daba412b00c116663d8",
+    "published_on": "2026-11-12",
+    "version": "2.0.2"
+  },
+  "request_id": "DEMO3-W1-REQ-001",
+  "request_label": "EMSREQ-APPLIC-RULES",
+  "send_condition": "Do not send this notice until the commit that adds it is on the remote branch feature/ems-aa3-archive-applicability-authority.",
+  "supersedes": {
+    "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1",
+    "commit": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb",
+    "version": "2.0.1"
+  },
+  "what_changed": {
+    "closed_schema_levels": {
+      "count": 16,
+      "paths": [
+        "$",
+        "$.properties.controls.items",
+        "$.properties.controls.items.allOf[0].then.properties.not_applicable_rule",
+        "$.properties.controls.items.allOf[0].then.properties.not_applicable_rule.properties.conditions.items",
+        "$.properties.controls.items.properties.not_applicable_rule.anyOf[0]",
+        "$.properties.controls.items.properties.not_applicable_rule.anyOf[0].properties.conditions.items",
+        "$.properties.not_applicable_semantics",
+        "$.properties.not_applicable_semantics.properties.field_definitions",
+        "$.properties.source_lineage",
+        "$.properties.source_lineage.properties.aa1_manifest",
+        "$.properties.source_lineage.properties.aa2_approval",
+        "$.properties.source_lineage.properties.aa2_closure",
+        "$.properties.source_lineage.properties.catalog_reference",
+        "$.properties.source_lineage.properties.governance_decisions",
+        "$.properties.source_lineage.properties.supersedes",
+        "$.properties.source_lineage.properties.v1_baseline"
+      ]
+    },
+    "gate_fix_line": "The publisher gates GATE-01 to GATE-05 were fixed, together with WR-02, WR-04, the catalog decoupling, WR-05 and the uniqueness check on norm_templated.",
+    "lineage": [
+      {
+        "key": "aa1_manifest",
+        "normalisation": "RAW_BYTES",
+        "relative_path": "generated/archive-assessment/ems-aa1/ems_aa1_analysis_artifact_manifest.json",
+        "sha256": "f0da8e2e45c306ccc42ae96f25a19922668f3eedecdb26006f13514e24ad9b4b"
+      },
+      {
+        "key": "aa2_approval",
+        "normalisation": "RAW_BYTES",
+        "relative_path": "generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_approval.json",
+        "sha256": "de170ebcf60aabe593b3e9766c11170c3c597730ef0f342028c8f844614f745c"
+      },
+      {
+        "key": "aa2_closure",
+        "normalisation": "RAW_BYTES",
+        "relative_path": "generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_closure.json",
+        "sha256": "ed589d76febe255665fd11697a9c0b9f8c7f036487e26b6f765ef8046c55887b"
+      },
+      {
+        "key": "catalog_reference",
+        "normalisation": "CRLF_TO_LF",
+        "relative_path": "registry/control_catalog.yaml",
+        "sha256": "12bb1a9d2476e4b0208ff51f9296f51462395f01af8d0543ad3c7eae9f039477"
+      },
+      {
+        "key": "governance_decisions",
+        "normalisation": "CRLF_TO_LF",
+        "relative_path": "registry/archive_assessment_governance_decisions.json",
+        "sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f"
+      },
+      {
+        "key": "supersedes",
+        "normalisation": "CRLF_TO_LF",
+        "relative_path": "registry/archive_assessment_applicability_authority_v2.json",
+        "sha256": "7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f"
+      },
+      {
+        "key": "v1_baseline",
+        "normalisation": "CRLF_TO_LF",
+        "relative_path": "registry/archive_assessment_applicability_authority.json",
+        "sha256": "f084607c28e5b223137af0e3e10dffd924f44593fbed6fef87ff801562b192aa"
+      }
+    ],
+    "negative_mutation_count": 29,
+    "row_comparison": {
+      "compared_keys": [
+        "not_applicable_decision_state",
+        "not_applicable_rule",
+        "not_applicable_authority",
+        "decision_ids"
+      ],
+      "rows_compared": 80,
+      "rows_differing": 0
+    }
+  }
+}
