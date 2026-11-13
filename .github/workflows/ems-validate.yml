@@ -94,3 +94,4 @@ jobs:
           python scripts/validate_archive_assessment_rule_proposals.py --validate
           python scripts/validate_archive_assessment_rule_proposals.py --validate-record
           python scripts/build_archive_assessment_demo3_w1_req_001_reply.py --validate
+          python scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py --validate
