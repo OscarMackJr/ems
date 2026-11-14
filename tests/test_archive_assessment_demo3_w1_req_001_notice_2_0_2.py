@@ -22,7 +22,6 @@ MODULE = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
 SPEC.loader.exec_module(MODULE)
 AuthorityError = MODULE.AuthorityError
-REJECTS = (AuthorityError, jsonschema.ValidationError)
 F = 'KNOWN_FALSE'
 PUB = MODULE.NOTICE_PUBLICATION_COMMIT
 REC = MODULE.NOTICE_RECORD_COMMIT
@@ -81,6 +80,17 @@ def test_validate_notice_accepts_unmutated_notice_from_temp_files(monkeypatch):
     MODULE.validate_notice()
 
 
+def test_committed_notice_files_validate(capsys):
+    # D-12 / FROZEN-04: the committed bytes themselves, with no monkeypatching.
+    require_history(ROOT, commits=FROZEN_COMMITS)
+    capsys.readouterr()
+    MODULE.validate_notice()
+    assert capsys.readouterr().out.strip() == 'PASS'
+    for p in (MODULE.NOTICE_JSON, MODULE.NOTICE_MD, MODULE.NOTICE_SCHEMA):
+        assert b'\r' not in p.read_bytes(), p
+    assert MODULE.contains_absolute(MODULE.load(MODULE.NOTICE_JSON)) is False
+
+
 def test_validate_notice_rejects_loosened_schema_file(monkeypatch):
     s = MODULE.frozen_notice_schema()
     s['additionalProperties'] = True
@@ -94,13 +104,25 @@ def test_validate_notice_rejects_loosened_schema_file(monkeypatch):
     ('version', '2.0.1'),
     ('publication_commit', SUP),
     ('publication_commit', REC),
-    ('authority_sha256', '0' * 64),
-    ('manifest_sha256', '0' * 64),
 ])
-def test_validate_rejects_tampered_cited_value(monkeypatch, key, value):
+def test_validate_rejects_tampered_cited_constant_by_schema(monkeypatch, key, value):
     notice = build()
     notice['pin'][key] = value
-    with pytest.raises(REJECTS):
+    with pytest.raises(jsonschema.ValidationError) as e:
+        MODULE.validate_notice_object(notice)
+    assert e.value.validator == 'const' and list(e.value.path) == ['pin', key]
+    write_set(monkeypatch, notice=notice)
+    with pytest.raises(AuthorityError, match='notice JSON differs from a fresh build'):
+        MODULE.validate_notice()
+
+
+@pytest.mark.parametrize('key', ['authority_sha256', 'manifest_sha256'])
+def test_validate_rejects_tampered_cited_digest_by_derivation(monkeypatch, key):
+    # A zeroed digest is valid to the schema, so only the derived-values comparison can reject it.
+    notice = build()
+    notice['pin'][key] = '0' * 64
+    jsonschema.Draft202012Validator(MODULE.frozen_notice_schema()).validate(notice)
+    with pytest.raises(AuthorityError, match='notice differs from the values derived from the frozen inputs'):
         MODULE.validate_notice_object(notice)
     write_set(monkeypatch, notice=notice)
     with pytest.raises(AuthorityError, match='notice JSON differs from a fresh build'):
@@ -122,23 +144,29 @@ def test_validate_reports_ungenerated_files(monkeypatch):
         MODULE.validate_notice()
 
 
-@pytest.mark.parametrize('name, value', [
-    ('NOTICE_PUBLICATION_COMMIT', 'd' * 40),
-    ('NOTICE_PUBLICATION_COMMIT', SUP),
-    # valid commits reachable in history: only the record binding or the schema constants reject these (WR-01)
-    ('NOTICE_PUBLICATION_COMMIT', '4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b'),
-    ('NOTICE_PUBLICATION_COMMIT', 'b3c041146a5360e582b0161183414ec70059919d'),
-    ('NOTICE_RECORD_COMMIT', 'd' * 40),
-    ('NOTICE_RECORD_COMMIT', 'ae15c7458e49c8f55cc58c61bab04bc716aa9892'),
-    ('NOTICE_SCHEMA_COMMIT', 'd' * 40),
+NOT_IN_HISTORY = 'the frozen commit d{40} is not in the repository history'
+RECORD_BINDING = 'NOTICE_PUBLICATION_COMMIT differs from the publication_commit named by the frozen publication record'
+
+
+@pytest.mark.parametrize('name, value, error, match', [
+    # an unknown commit: the history check in resolve_record_commit rejects it
+    ('NOTICE_PUBLICATION_COMMIT', 'd' * 40, AuthorityError, NOT_IN_HISTORY),
+    ('NOTICE_RECORD_COMMIT', 'd' * 40, AuthorityError, NOT_IN_HISTORY),
+    ('NOTICE_SCHEMA_COMMIT', 'd' * 40, AuthorityError, NOT_IN_HISTORY),
+    # valid commits reachable in history: only the record binding rejects these (WR-01)
+    ('NOTICE_PUBLICATION_COMMIT', SUP, AuthorityError, RECORD_BINDING),
+    ('NOTICE_PUBLICATION_COMMIT', '4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b', AuthorityError, RECORD_BINDING),
+    ('NOTICE_PUBLICATION_COMMIT', 'b3c041146a5360e582b0161183414ec70059919d', AuthorityError, RECORD_BINDING),
+    # the record read at the publication commit names the 2.0.1 publication, so the binding rejects it
+    ('NOTICE_RECORD_COMMIT', 'ae15c7458e49c8f55cc58c61bab04bc716aa9892', AuthorityError, RECORD_BINDING),
     # a real commit before the notice schema existed: the schema read itself fails
-    ('NOTICE_SCHEMA_COMMIT', 'ae15c7458e49c8f55cc58c61bab04bc716aa9892'),
+    ('NOTICE_SCHEMA_COMMIT', 'ae15c7458e49c8f55cc58c61bab04bc716aa9892', MODULE.GitHistoryError, 'notice_2_0_2.schema.json@ae15c7458e49c8f55cc58c61bab04bc716aa9892: git show failed'),
 ])
-def test_validate_rejects_tampered_constant(monkeypatch, name, value):
+def test_validate_rejects_tampered_constant(monkeypatch, name, value, error, match):
     require_history(ROOT, commits=FROZEN_COMMITS)
     write_set(monkeypatch)
     monkeypatch.setattr(MODULE, name, value)
-    with pytest.raises(REJECTS):
+    with pytest.raises(error, match=match):
         MODULE.validate_notice()
 
 
@@ -214,10 +242,24 @@ def test_resolve_record_commit_full_clone_passes_through(monkeypatch):
     assert [a[2:] for a in fake.seen if a[0] == 'merge-base' and a[-1] != 'HEAD'] == [(PUB, REC)]
 
 
-@pytest.mark.parametrize('kwargs', [{'cat_rc': 128}, {'mb_rc': 1}])
-def test_resolve_record_commit_fails_when_commit_missing_or_not_ancestor(monkeypatch, kwargs):
+@pytest.mark.parametrize('kwargs, match', [
+    ({'cat_rc': 128}, f'the frozen commit {PUB} is not in the repository history'),
+    ({'mb_rc': 1}, f'the frozen commit {PUB} is not an ancestor of HEAD'),
+])
+def test_resolve_record_commit_fails_when_commit_missing_or_not_ancestor(monkeypatch, kwargs, match):
     monkeypatch.setattr(MODULE, 'git', fake_shallow_git(0, 'false\n', **kwargs))
-    with pytest.raises(AuthorityError):
+    with pytest.raises(AuthorityError, match=match):
+        MODULE.resolve_record_commit()
+
+
+def test_resolve_record_commit_fails_when_publication_not_before_record(monkeypatch):
+    fake = fake_shallow_git(0, 'false\n')
+    def run(*args):
+        if args[0] == 'merge-base' and args[2] == PUB and args[-1] == REC:
+            return subprocess.CompletedProcess(args, 1, '', '')
+        return fake(*args)
+    monkeypatch.setattr(MODULE, 'git', run)
+    with pytest.raises(AuthorityError, match='the publication commit is not an ancestor of the record commit'):
         MODULE.resolve_record_commit()
 
 
@@ -234,9 +276,9 @@ def test_validate_fails_closed_without_history_git_show(monkeypatch):
     def no_history(commit, relative_path):
         raise MODULE.GitHistoryError(f'{relative_path}@{commit}: git show failed')
     monkeypatch.setattr(MODULE, 'git_show', no_history)
-    with pytest.raises(MODULE.GitHistoryError):
+    with pytest.raises(MODULE.GitHistoryError, match='git show failed'):
         MODULE.validate_notice()
-    with pytest.raises(AuthorityError):
+    with pytest.raises(MODULE.GitHistoryError, match='git show failed'):
         MODULE.load_inputs()
 
 
@@ -282,19 +324,29 @@ def test_digest_scope_names_exactly_the_three_digests():
     assert 'aa2_approval_sha256' in text and 'RAW_BYTES' in text and 'declared scope' in text
 
 
-@pytest.mark.parametrize('mutate', [
-    lambda p: p['source_lineage'].__setitem__('digest_normalisation', 'RAW_BYTES'),
-    lambda p: p['source_lineage'].__setitem__('aa2_closure_sha256', '0' * 64),
-    lambda p: p['source_lineage'].pop('aa1_manifest_sha256'),
+@pytest.mark.parametrize('mutate, match', [
+    (lambda p: p['source_lineage'].__setitem__('digest_normalisation', 'RAW_BYTES'), 'the superseded version does not declare the global CRLF_TO_LF claim'),
+    (lambda p: p['source_lineage'].__setitem__('aa2_closure_sha256', '0' * 64), 'aa2_closure_sha256 in 2.0.1 differs from aa2_closure in 2.0.2'),
+    (lambda p: p['source_lineage'].pop('aa1_manifest_sha256'), 'aa1_manifest_sha256 in 2.0.1 differs from aa1_manifest in 2.0.2'),
 ])
-def test_digest_scope_error_fails_when_previous_authority_edited(monkeypatch, mutate):
-    authority, previous = inputs()[:2]
+def test_digest_scope_error_fails_when_previous_authority_edited(mutate, match):
+    args = inputs()
+    authority, previous = args[:2]
     edited = copy.deepcopy(previous)
     mutate(edited)
-    with pytest.raises(AuthorityError):
+    with pytest.raises(AuthorityError, match=match):
         MODULE.digest_scope_error(authority, edited)
+    # Integration path: the edited previous is passed as an argument, so the supersedes digest (read from git)
+    # still holds and digest_scope_error is the guard that fires inside build_notice.
+    with pytest.raises(AuthorityError, match=match):
+        MODULE.build_notice(authority, edited, *args[2:])
+
+
+def test_supersedes_digest_rejects_an_edited_superseded_authority_in_git(monkeypatch):
+    edited = copy.deepcopy(inputs()[1])
+    edited['source_lineage']['digest_normalisation'] = 'RAW_BYTES'
     serve_edited(monkeypatch, SUP, MODULE.AUTHORITY, edited)
-    with pytest.raises(AuthorityError):
+    with pytest.raises(AuthorityError, match='the authority frozen at the superseded commit differs from the supersedes entry'):
         MODULE.build_notice(*inputs())
 
 
@@ -319,11 +371,30 @@ def test_lineage_lists_every_input_with_its_normalisation():
     assert all(lin[k]['normalisation'] == 'CRLF_TO_LF' for k in lin if k not in ('aa1_manifest', 'aa2_approval', 'aa2_closure'))
 
 
-def test_changed_row_blocks_no_decision_changed(monkeypatch):
-    authority, previous = inputs()[:2]
+def test_changed_row_blocks_no_decision_changed():
+    args = inputs()
+    authority, previous = args[:2]
     edited = copy.deepcopy(previous)
     edited['controls'][0]['not_applicable_decision_state'] = 'NO_RULE_WILL_BE_PUBLISHED' if edited['controls'][0]['not_applicable_decision_state'] != 'NO_RULE_WILL_BE_PUBLISHED' else 'NOT_YET_DECIDED'
-    assert MODULE.rows_differing(authority, edited)[0] == 1
+    assert MODULE.rows_differing(authority, edited) == (1, 80)
+    with pytest.raises(AuthorityError, match='1 of 80 control rows differ from the superseded version, so no-decision-changed cannot be stated'):
+        MODULE.build_notice(authority, edited, *args[2:])
+
+
+@pytest.mark.parametrize('mutate', [
+    lambda p: p['controls'].pop(),
+    lambda p: p['controls'][0].__setitem__('control_id', 'EMS-CTRL-999'),
+    lambda p: p.__setitem__('applicability_decision_ids', p['applicability_decision_ids'][:-1]),
+])
+def test_changed_control_set_or_decision_ids_block_no_decision_changed(mutate):
+    args = inputs()
+    authority, previous = args[:2]
+    edited = copy.deepcopy(previous)
+    mutate(edited)
+    with pytest.raises(AuthorityError, match='control set or cited decision ids differ from the superseded version'):
+        MODULE.rows_differing(authority, edited)
+    with pytest.raises(AuthorityError, match='control set or cited decision ids differ from the superseded version'):
+        MODULE.build_notice(authority, edited, *args[2:])
 
 
 def test_dual_role_statement_must_match_published_statement():
@@ -341,17 +412,25 @@ def test_no_forbidden_words_in_rendered_text():
     assert '\r' not in text
 
 
-def test_forbidden_word_is_rejected():
+def test_forbidden_words_are_the_five_declared():
+    assert MODULE.FORBIDDEN_WORDS == ('best', 'critical', 'important', 'recommended', 'highest')
+
+
+@pytest.mark.parametrize('word', MODULE.FORBIDDEN_WORDS)
+def test_forbidden_word_is_rejected(word):
     n = build()
-    n['what_changed']['gate_fix_line'] = 'This is the best fix.'
-    with pytest.raises(AuthorityError, match='best'):
+    n['what_changed']['gate_fix_line'] = f'This is the {word} fix.'
+    with pytest.raises(AuthorityError, match=f'notice uses the word {word}$'):
         MODULE.validate_notice_object(n)
 
 
-def test_absolute_path_is_rejected():
+@pytest.mark.parametrize('path', ['C:\\temp\\x.json', 'C:/temp/x.json', '/temp/x.json'])
+def test_absolute_path_is_rejected(path):
     n = build()
-    n['what_changed']['lineage'][0]['relative_path'] = 'C:\\temp\\x.json'
-    with pytest.raises(REJECTS):
+    n['what_changed']['lineage'][0]['relative_path'] = path
+    # The schema accepts any non-empty string here, so contains_absolute is the guard that must fire.
+    jsonschema.Draft202012Validator(MODULE.frozen_notice_schema()).validate(n)
+    with pytest.raises(AuthorityError, match='notice contains an absolute path'):
         MODULE.validate_notice_object(n)
 
 
@@ -578,7 +657,7 @@ def test_jtext_lf_bytes_load_and_rel_equal_publisher_blob():
 
 def test_git_show_error_names_full_sha_and_fetch_hint():
     missing = 'e' * 40
-    with pytest.raises(MODULE.GitHistoryError) as e:
+    with pytest.raises(MODULE.GitHistoryError, match='git show failed') as e:
         MODULE.git_show(missing, MODULE.NOTICE_SCHEMA_REL)
     assert 'git show failed' in str(e.value) and missing in str(e.value) and 'fetch full history (git fetch --unshallow)' in str(e.value)
     with pytest.raises(AuthorityError, match='40-character'):

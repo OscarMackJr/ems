@@ -23,7 +23,14 @@ MODULE = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
 SPEC.loader.exec_module(MODULE)
 AuthorityError = MODULE.AuthorityError
-REJECTS = (AuthorityError, jsonschema.ValidationError)
+
+
+def assert_schema_rejects(reply, validator, path):
+    # The frozen schema is the guard named by the test: assert the keyword and the instance path it failed on.
+    with pytest.raises(jsonschema.ValidationError) as e:
+        MODULE.validate_reply_object(reply)
+    assert e.value.validator == validator, e.value.message
+    assert list(e.value.absolute_path) == path, e.value.message
 F = 'KNOWN_FALSE'
 
 REAL_JSON = MODULE.REPLY_JSON
@@ -175,21 +182,18 @@ def test_mutation_swapped_aa4_id(monkeypatch):
 def test_mutation_bad_aa4_format():
     r = build()
     r['controls'][0]['authority'] = 'AA4-GOV-1'
-    with pytest.raises(REJECTS):
-        MODULE.validate_reply_object(r)
+    assert_schema_rejects(r, 'pattern', ['controls', 0, 'authority'])
 
 
 def test_mutation_flipped_state():
     r = build()
-    c = next(x for x in r['controls'] if x['decision_state'] == 'RULE_PUBLISHED')
+    i, c = next((i, x) for i, x in enumerate(r['controls']) if x['decision_state'] == 'RULE_PUBLISHED')
     c['decision_state'] = 'NO_RULE_WILL_BE_PUBLISHED'
-    with pytest.raises(REJECTS):
-        MODULE.validate_reply_object(r)
+    assert_schema_rejects(r, 'type', ['controls', i, 'rule'])
     r = build()
-    c = next(x for x in r['controls'] if x['decision_state'] == 'NO_RULE_WILL_BE_PUBLISHED')
+    i, c = next((i, x) for i, x in enumerate(r['controls']) if x['decision_state'] == 'NO_RULE_WILL_BE_PUBLISHED')
     c['decision_state'] = 'RULE_PUBLISHED'
-    with pytest.raises(REJECTS):
-        MODULE.validate_reply_object(r)
+    assert_schema_rejects(r, 'type', ['controls', i, 'rule'])
 
 
 def test_mutation_altered_rule(monkeypatch):
@@ -197,49 +201,70 @@ def test_mutation_altered_rule(monkeypatch):
     entry(r, 'EMS-CTRL-030')['rule']['conditions'][0]['state'] = 'KNOWN_TRUE'
     assert_validate_rejects(r, monkeypatch)
     r = build()
-    entry(r, 'EMS-CTRL-030')['rule']['conditions'][0]['state'] = 'UNKNOWN'
-    with pytest.raises(REJECTS):
-        MODULE.validate_reply_object(r)
+    i = next(i for i, c in enumerate(r['controls']) if c['control_id'] == 'EMS-CTRL-030')
+    r['controls'][i]['rule']['conditions'][0]['state'] = 'UNKNOWN'
+    assert_schema_rejects(r, 'enum', ['controls', i, 'rule', 'conditions', 0, 'state'])
 
 
 def test_mutation_removed_and_extra_control():
     r = build()
     r['controls'].pop()
-    with pytest.raises(REJECTS):
-        MODULE.validate_reply_object(r)
+    assert_schema_rejects(r, 'minItems', ['controls'])
     r = build()
     extra = copy.deepcopy(r['controls'][0])
     extra['control_id'] = 'EMS-CTRL-079'
     r['controls'].append(extra)
-    with pytest.raises(REJECTS):
+    assert_schema_rejects(r, 'maxItems', ['controls'])
+
+
+@pytest.mark.parametrize('mutate', [
+    lambda r: r['controls'][0].__setitem__('control_id', 'EMS-CTRL-001'),
+    lambda r: r['controls'].reverse(),
+])
+def test_mutation_swapped_control_id_with_21_controls(mutate):
+    # 21 schema-valid controls whose ids are not the requested ids in order: only the id-set guard rejects this.
+    r = build()
+    mutate(r)
+    assert len(r['controls']) == 21
+    jsonschema.Draft202012Validator(MODULE.frozen_schema()).validate(r)
+    with pytest.raises(AuthorityError, match='reply controls differ from the 21 requested controls'):
         MODULE.validate_reply_object(r)
 
 
 def test_mutation_sha_and_digest(monkeypatch):
     r = build()
     r['pin']['publication_commit'] = 'a' * 39
-    with pytest.raises(REJECTS):
-        MODULE.validate_reply_object(r)
-    r = build()
-    r['pin']['authority_sha256'] = '0' * 64
-    assert_validate_rejects(r, monkeypatch)
+    assert_schema_rejects(r, 'pattern', ['pin', 'publication_commit'])
     r = build()
     r['pin']['manifest_sha256'] = 'xyz'
-    with pytest.raises(REJECTS):
-        MODULE.validate_reply_object(r)
+    assert_schema_rejects(r, 'pattern', ['pin', 'manifest_sha256'])
+
+
+@pytest.mark.parametrize('key', ['authority_sha256', 'manifest_sha256'])
+def test_mutation_zeroed_digest_reaches_the_fresh_build_comparison(monkeypatch, key):
+    # A well-formed but wrong digest passes the schema and validate_reply_object; the reply has no separate
+    # derived-values check, so the fresh-build comparison in validate_reply() is the guard that rejects it.
+    r = build()
+    r['pin'][key] = '0' * 64
+    assert_validate_rejects(r, monkeypatch)
 
 
 def test_mutation_dual_role_text():
     r = build()
     r['dual_role_statement'] += ' Altered.'
-    with pytest.raises(REJECTS):
+    # dual_role_statement is only minLength 1 in the schema, so the dual role guard must be the one that fires.
+    jsonschema.Draft202012Validator(MODULE.frozen_schema()).validate(r)
+    with pytest.raises(AuthorityError, match='dual role statement differs from the published statement'):
         MODULE.validate_reply_object(r)
 
 
-def test_mutation_absolute_path():
+@pytest.mark.parametrize('path', ['C:/temp/standars/ems/registry/x.json', 'C:\\temp\\x.json', '/temp/x.json'])
+def test_mutation_absolute_path(path):
     r = build()
-    r['published_shape']['authority_path'] = 'C:/temp/standars/ems/registry/x.json'
-    with pytest.raises(REJECTS):
+    r['published_shape']['authority_path'] = path
+    # authority_path is any string in the schema, so contains_absolute must be the guard that fires.
+    jsonschema.Draft202012Validator(MODULE.frozen_schema()).validate(r)
+    with pytest.raises(AuthorityError, match='reply contains an absolute path'):
         MODULE.validate_reply_object(r)
 
 
@@ -262,8 +287,12 @@ def test_markdown_content():
         assert not re.search(rf'\b{word}\b', prose, re.IGNORECASE), word
 
 
-def test_real_reply_files_validate():
+def test_real_reply_files_validate(capsys):
+    # D-13 / FROZEN-04: the committed bytes themselves, with no monkeypatching.
+    require_history(ROOT, commits=FROZEN_COMMITS)
+    capsys.readouterr()
     MODULE.validate_reply()
+    assert capsys.readouterr().out.strip() == 'PASS'
     for p in (REAL_JSON, REAL_MD, MODULE.REPLY_SCHEMA):
         assert b'\r' not in p.read_bytes()
     assert not MODULE.contains_absolute(MODULE.load(REAL_JSON))
@@ -350,10 +379,13 @@ def test_resolve_record_commit_full_clone_passes_through(monkeypatch):
     assert not any(a[0] == 'log' for a in fake.seen)
 
 
-@pytest.mark.parametrize('kwargs', [{'cat_rc': 128}, {'mb_rc': 1}])
-def test_resolve_record_commit_fails_when_commit_missing_or_not_ancestor(monkeypatch, kwargs):
+@pytest.mark.parametrize('kwargs, match', [
+    ({'cat_rc': 128}, f'the frozen commit {MODULE.REPLY_RECORD_COMMIT} is not in the repository history'),
+    ({'mb_rc': 1}, f'the frozen commit {MODULE.REPLY_RECORD_COMMIT} is not an ancestor of HEAD'),
+])
+def test_resolve_record_commit_fails_when_commit_missing_or_not_ancestor(monkeypatch, kwargs, match):
     monkeypatch.setattr(MODULE, 'git', fake_shallow_git(0, 'false\n', **kwargs))
-    with pytest.raises(AuthorityError):
+    with pytest.raises(AuthorityError, match=match):
         MODULE.resolve_record_commit()
 
 
@@ -367,9 +399,9 @@ def test_validate_fails_closed_without_history_git_show(monkeypatch):
     def no_history(commit, relative_path):
         raise MODULE.GitHistoryError(f'{relative_path}@{commit[:7]}: git show failed')
     monkeypatch.setattr(MODULE, 'git_show', no_history)
-    with pytest.raises(MODULE.GitHistoryError):
+    with pytest.raises(MODULE.GitHistoryError, match='git show failed'):
         MODULE.validate_reply()
-    with pytest.raises(AuthorityError):
+    with pytest.raises(MODULE.GitHistoryError, match='git show failed'):
         MODULE.load_inputs()
 
 
@@ -384,19 +416,24 @@ def test_validate_rejects_tampered_reply_bytes(monkeypatch, which):
         MODULE.validate_reply()
 
 
-@pytest.mark.parametrize('name, value', [
-    ('REPLY_PUBLICATION_COMMIT', 'd' * 40),
-    ('REPLY_PUBLICATION_COMMIT', '54a7fd09114704a97a7a48fce5f89aebeb48c90a'),
+REPLY_RECORD_BINDING = 'REPLY_PUBLICATION_COMMIT differs from the publication_commit named by the frozen publication record'
+
+
+@pytest.mark.parametrize('name, value, error, match', [
+    # an unknown commit: validate_reply does not call resolve_record_commit, so the first pinned read fails
+    ('REPLY_PUBLICATION_COMMIT', 'd' * 40, MODULE.GitHistoryError, 'registry/archive_assessment_applicability_authority_v2.json@d{40}: git show failed'),
+    ('REPLY_PUBLICATION_COMMIT', '54a7fd09114704a97a7a48fce5f89aebeb48c90a', AuthorityError, REPLY_RECORD_BINDING),
     # valid commits holding the same 2.0.1 bytes or reachable history: only the record binding rejects these (WR-01)
-    ('REPLY_PUBLICATION_COMMIT', '4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b'),
-    ('REPLY_PUBLICATION_COMMIT', 'b3c041146a5360e582b0161183414ec70059919d'),
-    ('REPLY_RECORD_COMMIT', 'd' * 40),
-    ('REPLY_RECORD_COMMIT', '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb'),
+    ('REPLY_PUBLICATION_COMMIT', '4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b', AuthorityError, REPLY_RECORD_BINDING),
+    ('REPLY_PUBLICATION_COMMIT', 'b3c041146a5360e582b0161183414ec70059919d', AuthorityError, REPLY_RECORD_BINDING),
+    ('REPLY_RECORD_COMMIT', 'd' * 40, MODULE.GitHistoryError, 'registry/archive_assessment_applicability_authority_v2_publication_record.json@d{40}: git show failed'),
+    # the record read at that commit does not name the 2.0.1 publication commit, so the binding rejects it
+    ('REPLY_RECORD_COMMIT', '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb', AuthorityError, REPLY_RECORD_BINDING),
 ])
-def test_validate_rejects_tampered_constant(monkeypatch, name, value):
+def test_validate_rejects_tampered_constant(monkeypatch, name, value, error, match):
     require_history(ROOT, commits=FROZEN_COMMITS)
     monkeypatch.setattr(MODULE, name, value)
-    with pytest.raises(AuthorityError):
+    with pytest.raises(error, match=match):
         MODULE.validate_reply()
 
 
@@ -438,25 +475,38 @@ def test_build_reply_takes_four_inputs():
 
 def test_no_rule_published_row_raises_authority_error():
     authority, record, signoff, decisions = inputs()
+    latest = {r['control_id']: r for r in MODULE.latest_records(decisions)}
     for row in authority['controls']:
         if row['not_applicable_decision_state'] == 'RULE_PUBLISHED':
             row['not_applicable_decision_state'] = 'NO_RULE_WILL_BE_PUBLISHED'
             row['not_applicable_rule'] = None
-    with pytest.raises(AuthorityError):
+            # keep the decision record in step with the row, so the record-agreement guard does not mask this one
+            latest[row['control_id']]['decided_outcome'] = 'NO_RULE_WILL_BE_PUBLISHED'
+            latest[row['control_id']]['decided']['rule'] = None
+    with pytest.raises(AuthorityError, match='no RULE_PUBLISHED row for the example'):
         MODULE.build_reply(authority, record, signoff, decisions)
 
 
-@pytest.mark.parametrize('mutate', [
-    lambda a: a.pop('applicability_decision_ids'),
-    lambda a: a.pop('not_applicable_semantics'),
-    lambda a: a['controls'][0].pop('not_applicable_rule'),
-    lambda a: a['controls'][0].pop('not_applicable_authority'),
-    lambda a: a['controls'][5].__setitem__('decision_ids', a['controls'][5]['decision_ids'][:-1]),
+def test_decision_record_disagreeing_with_row_raises_authority_error():
+    authority, record, signoff, decisions = inputs()
+    row = next(r for r in authority['controls'] if r['not_applicable_decision_state'] == 'RULE_PUBLISHED')
+    row['not_applicable_decision_state'] = 'NO_RULE_WILL_BE_PUBLISHED'
+    row['not_applicable_rule'] = None
+    with pytest.raises(AuthorityError, match=f"{row['control_id']}: decision record disagrees with the authority row"):
+        MODULE.build_reply(authority, record, signoff, decisions)
+
+
+@pytest.mark.parametrize('mutate, match', [
+    (lambda a: a.pop('applicability_decision_ids'), 'authority lacks the top_level_field applicability_decision_ids'),
+    (lambda a: a.pop('not_applicable_semantics'), 'authority lacks the semantics_block not_applicable_semantics'),
+    (lambda a: a['controls'][0].pop('not_applicable_rule'), 'authority rows lack the field not_applicable_rule'),
+    (lambda a: a['controls'][0].pop('not_applicable_authority'), 'authority rows lack the field not_applicable_authority'),
+    (lambda a: a['controls'][5].__setitem__('decision_ids', a['controls'][5]['decision_ids'][:-1]), 'authority rows do not carry the eight AA1-GOV ids'),
 ])
-def test_shape_names_validated_against_authority(mutate):
+def test_shape_names_validated_against_authority(mutate, match):
     authority, record, signoff, decisions = inputs()
     mutate(authority)
-    with pytest.raises(AuthorityError):
+    with pytest.raises(AuthorityError, match=match):
         MODULE.build_reply(authority, record, signoff, decisions)
 
 
@@ -464,8 +514,7 @@ def test_record_commit_format_checked_by_schema_only():
     r = build()
     assert re.fullmatch(r'[0-9a-f]{40}', r['pin']['publication_record_commit'])
     r['pin']['publication_record_commit'] = '0ce89f2'
-    with pytest.raises(REJECTS):
-        MODULE.validate_reply_object(r)
+    assert_schema_rejects(r, 'pattern', ['pin', 'publication_record_commit'])
 
 
 def test_hayes_side_list_and_send_condition_name_publication_sha():
