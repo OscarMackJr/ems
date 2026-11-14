@@ -203,6 +203,8 @@ import re
 import subprocess
 import tempfile
 
+from aa_history import require_history
+
 ROOT = Path(__file__).parents[1]
 DUAL = MODULE.DUAL_ROLE_STATEMENT
 
@@ -214,7 +216,7 @@ def valid_signoff(authority_digest, on='2026-10-14'):
 def prev_201_authority_bytes():
     sup = MODULE.SUPERSEDED_V2_0_1
     r = subprocess.run(['git', 'show', f"{sup['commit']}:{sup['relative_path']}"], cwd=ROOT, capture_output=True)
-    if r.returncode != 0: pytest.skip('2.0.1 authority blob is not reachable in this clone')
+    if r.returncode != 0: pytest.fail(f"2.0.1 authority blob {sup['relative_path']} at commit {sup['commit']} is not reachable in {ROOT}; fetch full history (git fetch --unshallow)", pytrace=False)
     return r.stdout
 
 @pytest.fixture
@@ -591,15 +593,14 @@ def test_unreachable_publication_commit_fails_closed(env, fake_git_show):
 
 def test_real_git_repo_record_passes_plain_mode(env):
     def run(*args): return subprocess.run(['git', *args], cwd=MODULE.ROOT, capture_output=True)
-    try:
-        ok = run('init', '-q').returncode == 0
-    except OSError:
-        ok = False
-    if not ok: pytest.skip('git unavailable')
+    require_history(ROOT)
+    r = run('init', '-q')
+    if r.returncode != 0: pytest.fail(f"git init failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
     run('config', 'user.email', 't@example.com'); run('config', 'user.name', 't'); run('config', 'commit.gpgsign', 'false')
     published(env)
     run('add', '-A')
-    if run('commit', '-q', '-m', 'publish').returncode != 0: pytest.skip('git commit unavailable')
+    r = run('commit', '-q', '-m', 'publish')
+    if r.returncode != 0: pytest.fail(f"git commit failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
     sha = run('rev-parse', 'HEAD').stdout.decode().strip()
     MODULE.write_publication_record(sha)
     MODULE.validate_published()
@@ -633,8 +634,8 @@ REAL_RECORD = MODULE.PUBLICATION_RECORD
 REAL_OUT = MODULE.OUT
 REAL_SIGNOFF = MODULE.SIGNOFF
 
-@pytest.mark.skipif(not REAL_AUTHORITY.exists(), reason='v2 authority not published yet')
 def test_real_published_files_validate():
+    assert REAL_AUTHORITY.exists(), f'{REAL_AUTHORITY} must be committed'
     MODULE.validate_published()
     a = MODULE.load(REAL_AUTHORITY)
     assert sum(c['not_applicable_decision_state'] != 'NOT_YET_DECIDED' for c in a['controls']) == 21
@@ -657,19 +658,11 @@ def git(*args):
     r = subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
     return subprocess.CompletedProcess(r.args, r.returncode, r.stdout, r.stderr.decode('utf-8', 'replace').strip())
 
-def git_ready():
-    try: r = git('rev-parse', '--is-shallow-repository')
-    except OSError: return 'git is unavailable'
-    if r.returncode != 0: return 'not a git repository'
-    if r.stdout.decode().strip() == 'true': return 'shallow repository, history is incomplete'
-    return None
-
 def lf_sha(b): return hashlib.sha256(b.replace(b'\r\n', b'\n')).hexdigest()
 
-@pytest.mark.skipif(not REAL_RECORD.exists(), reason='publication record not written yet')
 def test_publication_commit_ancestor_and_file_set():
-    reason = git_ready()
-    if reason: pytest.skip(reason)
+    assert REAL_RECORD.exists(), f'{REAL_RECORD} must be committed'
+    require_history(ROOT, commits=(MODULE.load(REAL_RECORD)['publication_commit'],))
     rec = MODULE.load(REAL_RECORD)
     sha = rec['publication_commit']
     assert git('merge-base', '--is-ancestor', sha, 'HEAD').returncode == 0
@@ -690,10 +683,9 @@ def test_publication_commit_ancestor_and_file_set():
         assert lf_sha(git('show', f"{sha}:{art['relative_path']}").stdout) == art['sha256']
 
 
-@pytest.mark.skipif(not REAL_RECORD.exists(), reason='publication record not written yet')
 def test_manifest_publisher_script_digest_matches_publication_commit():
-    reason = git_ready()
-    if reason: pytest.skip(reason)
+    assert REAL_RECORD.exists(), f'{REAL_RECORD} must be committed'
+    require_history(ROOT, commits=(MODULE.load(REAL_RECORD)['publication_commit'],))
     sha = MODULE.load(REAL_RECORD)['publication_commit']
     manifest = MODULE.load(REAL_OUT / MODULE.N_MANIFEST)
     script_rel = MODULE.SCRIPT.relative_to(ROOT).as_posix()
@@ -708,8 +700,7 @@ PREVIOUS_17 = ['swapped_authority', 'rule_field_change', 'rule_state_unknown', '
 NEW_9 = ['signoff_role_hayes_developer', 'signoff_invalid_date', 'signoff_dual_role_text_appended', 'signoff_extra_keys', 'decision_record_tampered_approver', 'decision_record_empty_dual_role_statement', 'decision_record_bogus_disposition', 'rule_same_field_twice_opposite_states', 'supersedes_governance_digest_differs']
 
 def test_superseded_constants_match_git_history():
-    reason = git_ready()
-    if reason: pytest.skip(reason)
+    require_history(ROOT, commits=('54a7fd09114704a97a7a48fce5f89aebeb48c90a', MODULE.V1_BASELINE_COMMIT))
     sup = {'authority_id': 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0', 'version': '2.0.0', 'commit': '54a7fd09114704a97a7a48fce5f89aebeb48c90a', 'sha256': 'de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353', 'governance_decisions_sha256': '4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f'}
     auth_bytes = git('show', '54a7fd0:registry/archive_assessment_applicability_authority_v2.json').stdout
     dec_bytes = git('show', '54a7fd0:registry/archive_assessment_governance_decisions.json').stdout
@@ -722,8 +713,7 @@ def test_superseded_constants_match_git_history():
     assert git('rev-parse', '62a8955').stdout.decode().strip() == MODULE.V1_BASELINE_COMMIT
 
 def test_superseded_v2_0_1_constants_match_git_history():
-    reason = git_ready()
-    if reason: pytest.skip(reason)
+    require_history(ROOT, commits=(MODULE.SUPERSEDED_V2_0_1['commit'],))
     sup = MODULE.SUPERSEDED_V2_0_1
     auth_bytes = git('show', f"{sup['commit']}:{sup['relative_path']}").stdout
     dec_bytes = git('show', f"{sup['commit']}:{sup['governance_decisions_relative_path']}").stdout
@@ -735,8 +725,7 @@ def test_superseded_v2_0_1_constants_match_git_history():
     assert git('rev-parse', '31addfa').stdout.decode().strip() == sup['commit']
 
 def test_validate_signoff_accepts_frozen_2_0_1_signoff_with_explicit_identity():
-    reason = git_ready()
-    if reason: pytest.skip(reason)
+    require_history(ROOT, commits=(MODULE.SUPERSEDED_V2_0_1['commit'],))
     sup = MODULE.SUPERSEDED_V2_0_1
     record = json.loads(git('show', f"{sup['commit']}:registry/archive_assessment_applicability_authority_v2_signoff.json").stdout.decode('utf-8'))
     MODULE.validate_signoff(record, sup['sha256'], sup['authority_id'], sup['version'])
@@ -748,8 +737,7 @@ def test_validate_signoff_accepts_frozen_2_0_1_signoff_with_explicit_identity():
     MODULE.validate_signoff(live, sup['sha256'])
 
 def test_rows_equal_2_0_0_rows_and_only_identity_and_lineage_differ():
-    reason = git_ready()
-    if reason: pytest.skip(reason)
+    require_history(ROOT, commits=('54a7fd09114704a97a7a48fce5f89aebeb48c90a',))
     old = json.loads(git('show', '54a7fd0:registry/archive_assessment_applicability_authority_v2.json').stdout.decode('utf-8'))
     new = build()
     assert len(old['controls']) == len(new['controls']) == 80
@@ -1061,10 +1049,9 @@ def test_missing_2_0_1_history_raises_git_history_error_through_mutation_gates(m
 
 PUBLICATION_PATHS = ['schemas/archive_assessment_applicability_authority_v2.schema.json', 'registry/archive_assessment_applicability_authority_v2.json', 'registry/archive_assessment_applicability_authority_v2_signoff.json']
 
-@pytest.mark.skipif(not REAL_RECORD.exists(), reason='publication record not written yet')
 def test_publication_files_byte_identical_between_publication_and_record_commit():
-    reason = git_ready()
-    if reason: pytest.skip(reason)
+    assert REAL_RECORD.exists(), f'{REAL_RECORD} must be committed'
+    require_history(ROOT, commits=(MODULE.load(REAL_RECORD)['publication_commit'],))
     pub = MODULE.load(REAL_RECORD)['publication_commit']
     rec_rel = REAL_RECORD.relative_to(ROOT).as_posix()
     out_rel = REAL_OUT.relative_to(ROOT).as_posix()

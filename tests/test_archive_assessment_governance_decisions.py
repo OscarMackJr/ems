@@ -12,6 +12,8 @@ from pathlib import Path
 import jsonschema
 import pytest
 
+from aa_history import require_history
+
 TERMS = ['RiskMVP', '42aa362c76980a934fbaa470e603b48c7ef4b0b7', '42aa362', '2026-10-01', 'EMS_NOT_APPLICABLE_RULE_ABSENT']
 
 ROOT = Path(__file__).parents[1]
@@ -239,33 +241,24 @@ def test_schema_file_equals_function_and_is_valid():
 def git(*args):
     return subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
 
-def git_ready():
-    try: r = git('rev-parse', '--is-shallow-repository')
-    except OSError: return 'git is unavailable'
-    if r.returncode != 0: return 'not a git repository'
-    if r.stdout.decode().strip() == 'true': return 'shallow repository, history is incomplete'
-    return None
-
-def needs_git(fn):
-    reason = git_ready()
-    return pytest.mark.skipif(reason is not None, reason=reason or '')(fn)
+RECORDS_COMMIT = 'eed4a5fcdaeba0338f9b482598bcc08c4b7ee619'
 
 def lf(b): return b.replace(b'\r\n', b'\n')
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_drafting_commit_is_ancestor_and_holds_proposals():
     assert git('merge-base', '--is-ancestor', MODULE.DRAFTING_COMMIT, 'HEAD').returncode == 0
     files = git('show', '--name-only', '--pretty=format:', MODULE.DRAFTING_COMMIT).stdout.decode().split()
     assert MODULE.PROPOSALS_REL in files
     assert MODULE.DRAFTING_RECORD_REL not in files
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_proposals_frozen_since_drafting_commit():
     old = git('show', f'{MODULE.DRAFTING_COMMIT}:{MODULE.PROPOSALS_REL}')
     assert old.returncode == 0
     assert lf(old.stdout) == lf(MODULE.PROPOSALS.read_bytes())
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_drafting_record_and_frozen_inputs_unchanged():
     assert git('diff', '--quiet', 'HEAD', '--', MODULE.DRAFTING_RECORD_REL).returncode == 0
     assert DRAFTING['drafting_commit'] == MODULE.DRAFTING_COMMIT
@@ -282,13 +275,13 @@ def test_term_scan_built_output_and_source():
     assert scan(SCRIPT.read_text(encoding='utf-8')) == []
     assert 'DEMO3-W1-REQ-001' not in MODULE.decisions_text(built())
 
-@pytest.mark.skipif(not MODULE.DECISIONS.exists(), reason='decisions not yet built')
 def test_term_scan_real_decisions_file():
+    assert MODULE.DECISIONS.exists(), f'{MODULE.DECISIONS} must be committed'
     assert scan(MODULE.DECISIONS.read_text(encoding='utf-8')) == []
     assert scan(MODULE.DECISIONS.name) == []
 
-@pytest.mark.skipif(not MODULE.DECISIONS.exists(), reason='decisions not yet built')
 def test_real_decisions_file_valid_and_reproducible():
+    assert MODULE.DECISIONS.exists(), f'{MODULE.DECISIONS} must be committed'
     d = load(MODULE.DECISIONS)
     MODULE.validate_decisions(d)
     jsonschema.Draft202012Validator(load(MODULE.DECISIONS_SCHEMA)).validate(d)
@@ -346,10 +339,11 @@ def test_validate_rejects_file_differing_from_rebuild(monkeypatch):
     monkeypatch.setattr('sys.argv', ['x', '--validate'])
     with pytest.raises(AuthorityError): MODULE.main()
 
-@needs_git
 def test_records_unchanged_since_eed4a5f():
-    r = git('show', 'eed4a5f:registry/archive_assessment_governance_decisions.json')
-    if r.returncode != 0: pytest.skip('eed4a5f is not available')
+    require_history(ROOT, commits=(RECORDS_COMMIT,))
+    decisions_rel = 'registry/archive_assessment_governance_decisions.json'
+    r = git('show', f'{RECORDS_COMMIT}:{decisions_rel}')
+    if r.returncode != 0: pytest.fail(f'{decisions_rel} at commit {RECORDS_COMMIT} is not reachable in {ROOT}; fetch full history (git fetch --unshallow)', pytrace=False)
     old, new = json.loads(lf(r.stdout).decode('utf-8')), load(MODULE.DECISIONS)
     assert old['records'] == new['records']
     assert {k: v for k, v in old.items() if k != 'records'} == {k: v for k, v in new.items() if k not in ('records', 'frozen_input_sha256_normalisation')}

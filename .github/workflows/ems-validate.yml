@@ -85,6 +85,8 @@ jobs:
           pip install -r requirements.txt jsonschema pytest
 
       - name: Archive-assessment tests
+        env:
+          EMS_FAIL_ON_SKIP: '1'
         run: python -m pytest tests -k archive_assessment -p no:cacheprovider -q
 
       - name: Archive-assessment validators

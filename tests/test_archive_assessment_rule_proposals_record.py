@@ -31,17 +31,6 @@ def sha(b): return hashlib.sha256(b).hexdigest()
 
 def record(): return json.loads(MODULE.RECORD.read_text(encoding='utf-8'))
 
-def git_ready():
-    try: r = git('rev-parse', '--is-shallow-repository')
-    except OSError: return 'git is unavailable'
-    if r.returncode != 0: return 'not a git repository'
-    if r.stdout == 'true': return 'shallow repository, history is incomplete'
-    return None
-
-def needs_git(fn):
-    reason = git_ready()
-    return pytest.mark.skipif(reason is not None, reason=reason or '')(fn)
-
 def test_proposals_brief_and_record_exist():
     assert MODULE.PROPOSALS.exists()
     assert MODULE.BRIEF.exists()
@@ -62,22 +51,22 @@ def test_term_scan_covers_all_three_files():
         assert EARLIER.scan(p.read_text(encoding='utf-8')) == []
         assert EARLIER.scan(p.name) == []
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_recorded_commit_is_ancestor():
     assert git('merge-base', '--is-ancestor', record()['drafting_commit'], 'HEAD').returncode == 0
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_drafting_commit_changed_exactly_one_path():
     r = git('diff-tree', '--no-commit-id', '--name-only', '-r', record()['drafting_commit'])
     assert r.stdout.splitlines() == [PROPOSALS]
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_brief_commit_precedes_drafting_commit():
     rec = record()
     assert rec['brief_commit'] != rec['drafting_commit']
     assert git('merge-base', '--is-ancestor', rec['brief_commit'], rec['drafting_commit']).returncode == 0
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_blob_hashes_match_record():
     rec = record()
     dc = rec['drafting_commit']
@@ -89,13 +78,13 @@ def test_blob_hashes_match_record():
     proposals = json.loads(git('show', f'{dc}:{PROPOSALS}', text=False).stdout.decode('utf-8'))
     assert proposals['catalog_source']['git_blob_id'] == blob
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_proposals_frozen_since_drafting_commit():
     rec = record()
     assert git('rev-parse', f'HEAD:{PROPOSALS}').stdout == git('rev-parse', f"{rec['drafting_commit']}:{PROPOSALS}").stdout
     assert git('rev-parse', f'HEAD:{BRIEF}').stdout == git('rev-parse', f"{rec['brief_commit']}:{BRIEF}").stdout
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_catalog_inputs_match_catalog_at_drafting_commit():
     dc = record()['drafting_commit']
     catalog = yaml.safe_load(git('show', f'{dc}:{CATALOG}', text=False).stdout.decode('utf-8'))
@@ -107,7 +96,7 @@ def test_catalog_inputs_match_catalog_at_drafting_commit():
         entry = by_id[p['control_id']]
         for k, v in p['catalog_inputs'].items(): assert entry[k] == v
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_no_decision_or_v2_authority_at_drafting_commit():
     dc = record()['drafting_commit']
     names = git('ls-tree', '-r', '--name-only', dc).stdout.splitlines()
@@ -115,11 +104,11 @@ def test_no_decision_or_v2_authority_at_drafting_commit():
     r = git('grep', '-l', 'AA4-GOV', dc, '--', 'registry')
     assert r.returncode == 1 and r.stdout == ''
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_drafting_commit_is_sole_commit_of_proposals_file():
     assert git('log', '--format=%H', '--', PROPOSALS).stdout.splitlines() == [record()['drafting_commit']]
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_published_authority_files_unchanged_at_drafting_commit():
     dc = record()['drafting_commit']
     added = git('log', '--diff-filter=A', '--format=%H', '--', 'scripts/validate_archive_assessment_rule_proposals.py').stdout.splitlines()
@@ -142,7 +131,7 @@ def drifted_catalog(tmp_path):
 
 def real_proposals(): return json.loads(MODULE.PROPOSALS.read_text(encoding='utf-8'))
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_frozen_validation_survives_catalog_drift_via_git(monkeypatch, tmp_path):
     monkeypatch.setattr(MODULE, 'CATALOG', drifted_catalog(tmp_path))
     MODULE.validate_proposals(real_proposals())
@@ -176,7 +165,7 @@ def test_frozen_frame_is_pinned_to_constant():
     f = MODULE.frozen_frame()
     assert MODULE.V2.sha_text(MODULE.V2.jtext(f)) == MODULE.FROZEN_FRAME_SHA256
 
-@needs_git
+@pytest.mark.usefixtures('require_git_history')
 def test_frozen_frame_constant_matches_drafting_commit():
     blob = git('show', f'{FROZEN_COMMIT}:{PROPOSALS}', text=False).stdout
     frame = json.loads(blob.decode('utf-8'))['drafting_frame']

@@ -4,7 +4,7 @@ import json
 import subprocess
 from pathlib import Path
 
-import pytest
+from aa_history import require_history
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / 'scripts' / 'publish_archive_assessment_applicability_authority_v2.py'
@@ -33,12 +33,7 @@ def git(*args):
     r = subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
     return subprocess.CompletedProcess(r.args, r.returncode, r.stdout, r.stderr.decode('utf-8', 'replace').strip())
 
-def git_ready():
-    try: r = git('rev-parse', '--is-shallow-repository')
-    except OSError: return 'git is unavailable'
-    if r.returncode != 0: return 'not a git repository'
-    if r.stdout.decode().strip() == 'true': return 'shallow repository, history is incomplete'
-    return None
+PINNED_COMMITS = (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_1['commit'])
 
 
 # Files with eol=lf in .gitattributes have raw == LF bytes; the claim string and the LF recompute are still both asserted.
@@ -68,11 +63,10 @@ def test_manifest_artifacts_normalisation_claim():
 
 
 def test_manifest_publisher_script_normalisation_claim():
-    reason = git_ready()
-    if reason: pytest.skip(reason)
+    sha = read(RECORD)['publication_commit']
+    require_history(ROOT, commits=(*PINNED_COMMITS, sha))
     manifest = read(MANIFEST)
     assert manifest['publisher_script']['sha256_normalisation'] == CLAIM
-    sha = read(RECORD)['publication_commit']
     shown = git('show', f"{sha}:{manifest['publisher_script']['relative_path']}")
     assert shown.returncode == 0
     assert lf_sha(shown.stdout) == manifest['publisher_script']['sha256']
@@ -98,8 +92,7 @@ def test_reply_pin_normalisation_claim():
     pin = read(REPLY)['pin']
     assert pin['digest_normalisation'] == CLAIM
     # Compare against the 2.0.1 blobs at the pinned publication commit, not the working files, so a later republication does not break the claim.
-    reason = git_ready()
-    if reason: pytest.skip(reason)
+    require_history(ROOT, commits=(*PINNED_COMMITS, pin['publication_commit']))
     for key, path in (('authority_sha256', MODULE.AUTHORITY), ('manifest_sha256', MANIFEST)):
         shown = git('show', f"{pin['publication_commit']}:{MODULE.rel(path)}")
         assert shown.returncode == 0, shown.stderr

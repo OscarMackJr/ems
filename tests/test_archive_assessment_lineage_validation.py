@@ -1,11 +1,12 @@
 import copy
 import hashlib
 import importlib.util
-import shutil
 import subprocess
 from pathlib import Path
 
 import pytest
+
+from aa_history import require_history
 
 SCRIPT = Path(__file__).parents[1] / 'scripts' / 'publish_archive_assessment_applicability_authority_v2.py'
 SPEC = importlib.util.spec_from_file_location('aa3_authority_v2_lineage', SCRIPT)
@@ -25,16 +26,7 @@ def git(*args, cwd=REAL_ROOT):
     return subprocess.run(['git', *args], cwd=cwd, capture_output=True)
 
 
-def git_ready():
-    if not shutil.which('git'):
-        return 'git unavailable'
-    shallow = git('rev-parse', '--is-shallow-repository')
-    if shallow.returncode != 0 or shallow.stdout.strip() != b'false':
-        return 'shallow or unreadable repository'
-    for commit in (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_1['commit']):
-        if git('cat-file', '-e', f'{commit}^{{commit}}').returncode != 0:
-            return f'commit {commit[:7]} not available'
-    return None
+PINNED_COMMITS = (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_1['commit'])
 
 
 def sha(norm, data):
@@ -49,8 +41,7 @@ def put(root, rel, data):
 
 @pytest.fixture
 def fx(tmp_path, monkeypatch):
-    if not shutil.which('git'):
-        pytest.skip('git unavailable')
+    require_history(REAL_ROOT)
     monkeypatch.setattr(MODULE, 'ROOT', tmp_path)
     sup = MODULE.SUPERSEDED_V2_0_1
     rels = [MODULE.AA1_MANIFEST_REL, MODULE.AA2_CLOSURE_REL, MODULE.AA2_APPROVAL_REL, MODULE.CATALOG_REL,
@@ -262,9 +253,7 @@ def real_lineage():
 
 
 def test_real_lineage_validates_against_repo():
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(REAL_ROOT, commits=PINNED_COMMITS)
     assert MODULE.validate_lineage(real_lineage()) is None
 
 
@@ -289,15 +278,13 @@ def test_real_aa1_manifest_tampered_digest_raises():
 # LIN-03
 
 def test_aa1_manifest_is_tracked():
-    if not shutil.which('git'):
-        pytest.skip('git unavailable')
+    require_history(REAL_ROOT)
     r = git('ls-files', '--error-unmatch', '--', MODULE.AA1_MANIFEST_REL)
     assert r.returncode == 0, r.stderr.decode('utf-8', 'replace')
 
 
 def test_aa1_manifest_blob_raw_sha256_is_pinned_literal():
-    if not shutil.which('git'):
-        pytest.skip('git unavailable')
+    require_history(REAL_ROOT)
     r = git('show', f'HEAD:{MODULE.AA1_MANIFEST_REL}')
     assert r.returncode == 0, r.stderr.decode('utf-8', 'replace')
     assert hashlib.sha256(r.stdout).hexdigest() == AA1_MANIFEST_RAW_SHA256
@@ -309,8 +296,7 @@ def test_aa1_gitattributes_carries_text_unset_rule():
 
 
 def test_aa1_check_attr_reports_text_unset():
-    if not shutil.which('git'):
-        pytest.skip('git unavailable')
+    require_history(REAL_ROOT)
     r = git('check-attr', 'text', '--', MODULE.AA1_MANIFEST_REL)
     assert r.returncode == 0
     assert r.stdout.decode('utf-8').strip().endswith('text: unset')
@@ -332,11 +318,7 @@ def catalog_repo(tmp_path, monkeypatch, content):
 
 
 def test_d10_live_catalog_edit_does_not_change_catalog_reads(tmp_path, monkeypatch):
-    if not shutil.which('git'):
-        pytest.skip('git unavailable')
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(REAL_ROOT, commits=PINNED_COMMITS)
     pinned = git('show', f'{MODULE.CATALOG_COMMIT}:{MODULE.CATALOG_REL}').stdout
     catalog_repo(tmp_path, monkeypatch, pinned)
     before_controls = MODULE.catalog_controls()
@@ -349,16 +331,12 @@ def test_d10_live_catalog_edit_does_not_change_catalog_reads(tmp_path, monkeypat
 
 
 def test_d10_live_catalog_edit_or_delete_does_not_change_build_or_validation(tmp_path, monkeypatch):
-    if not shutil.which('git'):
-        pytest.skip('git unavailable')
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(REAL_ROOT, commits=PINNED_COMMITS)
     pinned = git('show', f'{MODULE.CATALOG_COMMIT}:{MODULE.CATALOG_REL}').stdout
     sup, real_git_show = MODULE.SUPERSEDED_V2_0_1, MODULE.git_show
     prev = git('show', f"{sup['commit']}:{sup['relative_path']}")
     if prev.returncode != 0:
-        pytest.skip('2.0.1 authority blob is not reachable in this clone')
+        pytest.fail(f"2.0.1 authority blob {sup['relative_path']} at commit {sup['commit']} is not reachable in {REAL_ROOT}; fetch full history (git fetch --unshallow)", pytrace=False)
     # the fixture repo has no 2.0.1 history; validate_publication's D-08 comparison reads it from the real repo
     monkeypatch.setattr(MODULE, 'git_show', lambda commit, path: prev.stdout if (commit, path) == (sup['commit'], sup['relative_path']) else real_git_show(commit, path))
     catalog_repo(tmp_path, monkeypatch, pinned)
@@ -376,8 +354,7 @@ def test_d10_live_catalog_edit_or_delete_does_not_change_build_or_validation(tmp
 
 
 def test_d09_catalog_read_without_history_raises(tmp_path, monkeypatch):
-    if not shutil.which('git'):
-        pytest.skip('git unavailable')
+    require_history(REAL_ROOT)
     monkeypatch.setattr(MODULE, 'ROOT', tmp_path)
     assert git('init', cwd=tmp_path).returncode == 0
     with pytest.raises(AuthorityError):

@@ -13,6 +13,8 @@ from pathlib import Path
 import jsonschema
 import pytest
 
+from aa_history import require_history
+
 ROOT = Path(__file__).parents[1]
 SCRIPT = ROOT / 'scripts' / 'build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py'
 SPEC = importlib.util.spec_from_file_location('aa_notice_demo3', SCRIPT)
@@ -71,16 +73,7 @@ def git(*args):
     return subprocess.CompletedProcess(r.args, r.returncode, r.stdout, r.stderr.decode('utf-8', 'replace').strip())
 
 
-def git_ready():
-    try:
-        r = git('rev-parse', '--is-shallow-repository')
-    except OSError:
-        return 'git is unavailable'
-    if r.returncode != 0:
-        return 'not a git repository'
-    if r.stdout.decode().strip() == 'true':
-        return 'shallow repository, history is incomplete'
-    return None
+FROZEN_COMMITS = (PUB, REC, SUP, SCH)
 
 
 def test_validate_notice_accepts_unmutated_notice_from_temp_files(monkeypatch):
@@ -142,9 +135,7 @@ def test_validate_reports_ungenerated_files(monkeypatch):
     ('NOTICE_SCHEMA_COMMIT', 'ae15c7458e49c8f55cc58c61bab04bc716aa9892'),
 ])
 def test_validate_rejects_tampered_constant(monkeypatch, name, value):
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(ROOT, commits=FROZEN_COMMITS)
     write_set(monkeypatch)
     monkeypatch.setattr(MODULE, name, value)
     with pytest.raises(REJECTS):
@@ -152,9 +143,7 @@ def test_validate_rejects_tampered_constant(monkeypatch, name, value):
 
 
 def test_frozen_constants_match_git():
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(ROOT, commits=FROZEN_COMMITS)
     assert git('rev-parse', 'ae15c74').stdout.decode().strip() == PUB
     assert git('rev-parse', 'a71257e').stdout.decode().strip() == REC
     assert git('rev-parse', '31addfa').stdout.decode().strip() == SUP
@@ -166,9 +155,7 @@ def test_frozen_constants_match_git():
 
 
 def test_notice_schema_commit_holds_the_committed_schema():
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(ROOT, commits=FROZEN_COMMITS)
     assert SCH == '052f0f13f4c882a7b80667d4835bc802002e0f80'
     assert git('rev-parse', '052f0f1').stdout.decode().strip() == SCH
     assert git('cat-file', '-e', f'{SCH}^{{commit}}').returncode == 0

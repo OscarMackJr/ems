@@ -9,6 +9,8 @@ from pathlib import Path
 import jsonschema
 import pytest
 
+from aa_history import require_history
+
 TERMS = ['RiskMVP', '42aa362c76980a934fbaa470e603b48c7ef4b0b7', '42aa362', 'Hayes', '2026-10-01', 'EMS_NOT_APPLICABLE_RULE_ABSENT', 'DEMO3-W1-REQ-001']
 
 SCRIPT = Path(__file__).parents[1] / 'scripts' / 'validate_archive_assessment_rule_proposals.py'
@@ -158,9 +160,7 @@ def test_term_scan_detects_each_term():
     assert '42aa362' in scan('commit 42AA362 here')
     assert scan('nothing to see') == []
 
-def gated(path): return pytest.mark.skipif(not path.exists(), reason='not yet written')
-
-@pytest.mark.parametrize('path', [pytest.param(MODULE.PROPOSALS, marks=gated(MODULE.PROPOSALS), id='proposals'), pytest.param(MODULE.BRIEF, marks=gated(MODULE.BRIEF), id='brief'), pytest.param(MODULE.RECORD, marks=gated(MODULE.RECORD), id='record')])
+@pytest.mark.parametrize('path', [pytest.param(MODULE.PROPOSALS, id='proposals'), pytest.param(MODULE.BRIEF, id='brief'), pytest.param(MODULE.RECORD, id='record')])
 def test_term_scan_real_files(path):
     assert scan(path.read_text(encoding='utf-8')) == []
     assert scan(path.name) == []
@@ -171,23 +171,20 @@ def test_term_scan_file_names():
 def load(p): return json.loads(p.read_text(encoding='utf-8'))
 
 def git_out(*args):
-    try: r = subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
-    except FileNotFoundError: pytest.skip('git unavailable')
+    require_history(ROOT)
+    r = subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
     assert r.returncode == 0
     return r.stdout
 
-@gated(MODULE.PROPOSALS)
 def test_real_proposals_validate_under_validator_and_schema():
     p = load(MODULE.PROPOSALS); MODULE.validate_proposals(p); jsonschema.Draft202012Validator(MODULE.schema()).validate(p)
 
-@gated(MODULE.PROPOSALS)
 def test_catalog_drift_info_real_proposals_equal_live_catalog():
     # drift information only: validity is judged against the frozen catalog, not the live one
     live = MODULE.live_catalog()
     for p in load(MODULE.PROPOSALS)['proposals']:
         for k, v in p['catalog_inputs'].items(): assert live[p['control_id']][k] == v
 
-@gated(MODULE.PROPOSALS)
 def test_catalog_drift_info_recorded_blob_equals_live_blob():
     # drift information only: validity is judged against the frozen catalog, not the live one
     blob = git_out('hash-object', MODULE.CATALOG_REL).decode('ascii').strip()
@@ -195,7 +192,6 @@ def test_catalog_drift_info_recorded_blob_equals_live_blob():
     src = load(MODULE.PROPOSALS)['catalog_source']
     assert src['git_blob_id'] == blob and src['sha256'] == hashlib.sha256(data).hexdigest()
 
-@gated(MODULE.PROPOSALS)
 def test_real_proposals_header_status_and_ids():
     p = load(MODULE.PROPOSALS)
     exp = MODULE.expected_header()
@@ -209,7 +205,6 @@ def fenced_after(text, heading):
     assert m
     return m, i
 
-@gated(MODULE.BRIEF)
 def test_brief_catalog_extract_equals_live_catalog():
     text = MODULE.BRIEF.read_text(encoding='utf-8')
     m, _ = fenced_after(text, '## Catalog extract')
@@ -218,18 +213,15 @@ def test_brief_catalog_extract_equals_live_catalog():
     assert extract == [live[c] for c in MODULE.CONTROL_IDS]
     assert all('description' not in e for e in extract)
 
-@gated(MODULE.BRIEF)
 def test_brief_header_equals_expected_header():
     m, _ = fenced_after(MODULE.BRIEF.read_text(encoding='utf-8'), '## Header to copy')
     assert json.loads(m.group(1)) == MODULE.expected_header()
 
-@gated(MODULE.BRIEF)
 def test_brief_has_no_control_ids_outside_extract():
     text = MODULE.BRIEF.read_text(encoding='utf-8')
     m, i = fenced_after(text, '## Catalog extract')
     rest = text[:i] + text[i:][:m.start()] + text[i:][m.end():]
     assert 'EMS-CTRL-' not in rest
 
-@gated(MODULE.RECORD)
 def test_real_record_validates():
     r = load(MODULE.RECORD); MODULE.validate_record(r); jsonschema.Draft202012Validator(MODULE.record_schema()).validate(r)

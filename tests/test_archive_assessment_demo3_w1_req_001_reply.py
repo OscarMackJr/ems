@@ -14,6 +14,8 @@ from pathlib import Path
 import jsonschema
 import pytest
 
+from aa_history import require_history
+
 ROOT = Path(__file__).parents[1]
 SCRIPT = ROOT / 'scripts' / 'build_archive_assessment_demo3_w1_req_001_reply.py'
 SPEC = importlib.util.spec_from_file_location('aa_reply_demo3', SCRIPT)
@@ -272,25 +274,14 @@ def git(*args):
     return subprocess.CompletedProcess(r.args, r.returncode, r.stdout, r.stderr.decode('utf-8', 'replace').strip())
 
 
-def git_ready():
-    try:
-        r = git('rev-parse', '--is-shallow-repository')
-    except OSError:
-        return 'git is unavailable'
-    if r.returncode != 0:
-        return 'not a git repository'
-    if r.stdout.decode().strip() == 'true':
-        return 'shallow repository, history is incomplete'
-    return None
+FROZEN_COMMITS = (MODULE.REPLY_PUBLICATION_COMMIT, MODULE.REPLY_RECORD_COMMIT, MODULE.REPLY_SCHEMA_COMMIT)
 
 
 def lf_sha(b): return hashlib.sha256(b.replace(b'\r\n', b'\n')).hexdigest()
 
 
 def test_publication_sha_is_ancestor_and_holds_authority():
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(ROOT, commits=FROZEN_COMMITS)
     rec = inputs()[1]
     sha = MODULE.REPLY_PUBLICATION_COMMIT
     assert rec['publication_commit'] == sha
@@ -300,9 +291,7 @@ def test_publication_sha_is_ancestor_and_holds_authority():
 
 
 def test_frozen_constants_match_git():
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(ROOT, commits=FROZEN_COMMITS)
     assert git('rev-parse', '31addfa').stdout.decode().strip() == MODULE.REPLY_PUBLICATION_COMMIT
     assert git('rev-parse', '4d9b7c1').stdout.decode().strip() == MODULE.REPLY_RECORD_COMMIT
     rec_rel = MODULE.rel(MODULE.PUBLICATION_RECORD)
@@ -405,9 +394,7 @@ def test_validate_rejects_tampered_reply_bytes(monkeypatch, which):
     ('REPLY_RECORD_COMMIT', '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb'),
 ])
 def test_validate_rejects_tampered_constant(monkeypatch, name, value):
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(ROOT, commits=FROZEN_COMMITS)
     monkeypatch.setattr(MODULE, name, value)
     with pytest.raises(AuthorityError):
         MODULE.validate_reply()
@@ -482,9 +469,7 @@ def test_record_commit_format_checked_by_schema_only():
 
 
 def test_hayes_side_list_and_send_condition_name_publication_sha():
-    reason = git_ready()
-    if reason:
-        pytest.skip(reason)
+    require_history(ROOT, commits=FROZEN_COMMITS)
     r = build()
     sha = r['pin']['publication_commit']
     assert any(sha in item for item in r['hayes_side_changes_needed'])

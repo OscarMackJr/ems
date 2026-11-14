@@ -60,7 +60,7 @@ def test_committed_answers_lenient_and_schema():
 
 def test_committed_answers_strict_when_filled():
     a = load(MODULE.ANSWERS)
-    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    assert all(e['disposition'] is not None for e in a['entries']), 'committed answers must be filled'
     MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=MODULE.answers_digest(MODULE.ANSWERS))
 
 def test_scope_note_ids_equal_proposals_with_shape_limitation():
@@ -114,13 +114,13 @@ def test_notes_differing_only_in_templated_values_fail():
 
 def test_certified_digest_grandfathers_committed_answers():
     a = load(MODULE.ANSWERS)
-    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    assert all(e['disposition'] is not None for e in a['entries']), 'committed answers must be filled'
     assert MODULE.CERTIFIED_ANSWERS_SHA256 == MODULE.answers_digest(MODULE.ANSWERS)
     MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=MODULE.CERTIFIED_ANSWERS_SHA256)
 
 def test_changed_answers_bytes_remove_exemption():
     a = load(MODULE.ANSWERS)
-    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    assert all(e['disposition'] is not None for e in a['entries']), 'committed answers must be filled'
     changed = MODULE.V2.sha_text(MODULE.ANSWERS.read_text(encoding='utf-8') + ' ')
     for digest in (None, changed):
         with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=digest)
@@ -133,7 +133,7 @@ def answers_copy(tmp_path, monkeypatch, extra=b''):
 
 def test_untouched_answers_copy_builds_through_real_paths(tmp_path, monkeypatch):
     a = load(MODULE.ANSWERS)
-    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    assert all(e['disposition'] is not None for e in a['entries']), 'committed answers must be filled'
     p = answers_copy(tmp_path, monkeypatch)
     assert MODULE.answers_digest(p) == MODULE.CERTIFIED_ANSWERS_SHA256
     assert MODULE.build_from_files()['answers_sha256'] == MODULE.CERTIFIED_ANSWERS_SHA256
@@ -142,7 +142,7 @@ def test_untouched_answers_copy_builds_through_real_paths(tmp_path, monkeypatch)
 
 def test_appended_answers_byte_removes_exemption_through_real_paths(tmp_path, monkeypatch):
     a = load(MODULE.ANSWERS)
-    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    assert all(e['disposition'] is not None for e in a['entries']), 'committed answers must be filled'
     p = answers_copy(tmp_path, monkeypatch, extra=b'\n')
     assert MODULE.answers_digest(p) != MODULE.CERTIFIED_ANSWERS_SHA256
     with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.build_from_files()
@@ -151,7 +151,7 @@ def test_appended_answers_byte_removes_exemption_through_real_paths(tmp_path, mo
 
 def test_exemption_is_the_exact_constant():
     a = load(MODULE.ANSWERS)
-    if any(e['disposition'] is None for e in a['entries']): pytest.skip('answers not yet filled')
+    assert all(e['disposition'] is not None for e in a['entries']), 'committed answers must be filled'
     c = MODULE.CERTIFIED_ANSWERS_SHA256
     flipped = c[:-1] + ('0' if c[-1] != '0' else '1')
     with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=flipped)
