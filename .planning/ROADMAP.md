@@ -40,48 +40,74 @@
 ## Phase Details
 
 ### Phase 11: Frozen Validators
+
 **Goal**: The DEMO3 reply validator and the 2.0.2 notice validator are frozen, so later publisher edits cannot change their results and a missing pinned blob is never silently skipped.
 **Depends on**: Phase 10 (v1.1.0 shipped)
 **Requirements**: FROZEN-01, FROZEN-02, FROZEN-03, FROZEN-04
 **Success Criteria** (what must be TRUE):
+
   1. The reply validator and the 2.0.2 notice validator import no live publisher constants or functions; a deliberate change to the publisher's `PREV_COMPARED_KEYS`, `DUAL_ROLE_STATEMENT`, `validate_signoff` or `rule_text` leaves both results unchanged.
   2. When the 2.0.1 blob or any other pinned blob cannot be reached, the tests and validators fail with an explicit error and do not skip.
   3. Pytest validates the committed notice files, and each notice test goes red when the specific check it is named for is broken.
-  4. This phase is completed before any publisher edit, so the historical reply and 2.0.2 notice stay green throughout.
-**Plans**: TBD
+  4. This phase is completed before any publisher edit, so the historical reply and 2.0.2 notice stay green throughout.**Plans**: 4 plans
+
+**Wave 1**
+
+- [ ] 11-01-PLAN.md — freeze the reply validator on 2.0.1
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 11-02-PLAN.md — freeze the 2.0.2 notice validator
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 11-03-PLAN.md — skip-to-fail and CI skip guard
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 11-04-PLAN.md — notice and reply test rigor
 
 ### Phase 12: Verify-at-Pin and Gate Hardening
+
 **Goal**: The publisher and validators are in their final 2.0.3 form: Hayes can verify at the pin, malformed input fails with domain errors, and the audit review items are closed, all before the single republication.
 **Depends on**: Phase 11
 **Requirements**: PIN-01, PIN-02, GATE-06, GATE-07, GATE-08, GATE-09, GATE-10
 **Success Criteria** (what must be TRUE):
+
   1. On a clean checkout of the publication commit with no later commit, the documented `--validate` command returns PASS and its output names the one check it defers (binding the record to its commit).
   2. Plain `--validate` returns PASS at the record commit or any later commit, by checking that the record names the publication commit and that the publication files are byte-identical between the two commits.
   3. `--validate` fails when the publisher-script digest differs from the certification, not only pytest.
   4. Malformed authority shapes raise `AuthorityError` (never `TypeError`, `KeyError` or `AttributeError`); `validate_published` checks the schema first; `--validate` enforces cross-note uniqueness under `norm_templated`.
   5. The D-10 test shows a live catalog edit does not change the build or `--validate`; the D-13 test uses real changed answer bytes; the GATE-10 publisher and test cleanup items are done (conditional dry-run text, reachable DIFFER branch, restored 2.0.0 constant check, no dead `log`, uniform `resolve_record_commit` errors, D-08 tamper test covering rule and no-rule rows).
+
 **Plans**: TBD
 
 ### Phase 13: Certified Republication 2.0.3
+
 **Goal**: `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3` is published once, with certification, manifest and traceability, signed off by the EMS governance authority, and no decision changed.
 **Depends on**: Phase 12
 **Requirements**: PUB-10, PUB-11, PUB-12
 **Success Criteria** (what must be TRUE):
+
   1. 2.0.3 is published with certification, manifest and traceability, supersedes 2.0.2 at `ae15c74`, and records Oscar Mack's sign-off as EMS governance authority with the dual-role statement (human gate).
   2. The decisions digest is still `4e746d1f…`, all 80 rows are identical to 2.0.2, and the counts are 21 decided and 59 undecided.
   3. The publication commit contains only this milestone's deliberate changes (staged by explicit path), and the CI `archive-assessment` job passes on it.
   4. The red window that opened at the first publisher edit in Phase 12 is closed: all real-file tests are green at the publication commit.
+
 **Plans**: TBD
 
 ### Phase 14: Notice to Hayes (2.0.3)
+
 **Goal**: Hayes receives a generated, validated notice for 2.0.3 whose claims are enforced rather than asserted, and which tells Hayes exactly how to verify at the pin and re-pin.
 **Depends on**: Phase 13
 **Requirements**: NOTICE-03, PIN-03, CLAIM-01, CLAIM-02, CLAIM-03
 **Success Criteria** (what must be TRUE):
+
   1. The generated notice, checked by `--validate`, cites the 2.0.3 id, version and commit, lists what changed, states that no decision changed, and asks Hayes to re-pin.
   2. The notice gives the exact commands to verify at the pin and at the record commit, and says what each result means.
   3. The builder runs every negative mutation and records a domain rejection for each; the validator fails if any mutation was not rejected.
   4. The validator recomputes all 7 lineage digests from git, and every "declared under the wrong scope" statement is computed by showing that each RAW_BYTES file's raw hash differs from its LF hash.
+
 **Plans**: TBD
 
 ## Progress
