@@ -646,6 +646,13 @@ def test_real_published_files_validate():
             for cond in c['not_applicable_rule']['conditions']:
                 assert cond['field'] in ('production', 'internet_exposed', 'contains_customer_data', 'ai_enabled') and cond['state'] in ('KNOWN_TRUE', 'KNOWN_FALSE')
 
+def test_publisher_still_valid_and_digest_matches_manifest():
+    # Moved from the reply tests (11-01): this checks the live publisher, not the frozen reply.
+    MODULE.validate_published()
+    manifest = MODULE.load(MODULE.OUT / MODULE.N_MANIFEST)
+    assert manifest['publisher_script']['relative_path'] == MODULE.rel(MODULE.SCRIPT)
+    assert MODULE.lf_digest(MODULE.SCRIPT) == manifest['publisher_script']['sha256']
+
 def git(*args):
     r = subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
     return subprocess.CompletedProcess(r.args, r.returncode, r.stdout, r.stderr.decode('utf-8', 'replace').strip())
