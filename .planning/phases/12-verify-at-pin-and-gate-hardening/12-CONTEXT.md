@@ -57,6 +57,13 @@ This phase puts the v2 publisher and its validators into their final 2.0.3 form 
 - **Who runs tests:** the orchestrator runs pytest and validators through PowerShell with a fresh `--basetemp`. Report pytest's own exit code, not one from a pipe.
 - **No CI weakening:** no CI auto-detect mode is added (09 D-04). CI keeps running plain `--validate`.
 
+### Resolutions of the research open questions (orchestrator, 2026-11-16, unattended run; conservative defaults)
+- **D-12:** The at-pin dirty check (D-04) covers the 10 D-05 publication paths **plus the publisher script**. This makes D-08's guarantee true: at the pin the live script is unmodified, and its digest equals the manifest. The D-05 byte-identity set for plain `--validate` stays at the 10 files, because D-07 covers the script separately.
+- **D-13:** GATE-10 IN-04 ("`resolve_record_commit` handles git errors the same way everywhere") is fixed only in the reply builder. The 2.0.2 notice builder stays frozen and untouched, as Phase 11 requires. The same pattern in the notice builder is recorded as deferred.
+- **D-14:** The dry-run gate line and the manifest `publisher_script_note` must be true after GATE-06 and the `--at-pin` rename. They must not mention `--pre-publication` or claim the script digest is checked only by pytest. Wording is the planner's choice. Any change to manifest text is output that the 2.0.3 publication certifies; it is not a hand edit.
+- **D-15:** Marking the notice files `eol=lf` in `.gitattributes` (a fresh Windows clone fails `test_committed_notice_files_validate`; CI is unaffected) is **out of scope**. It is deferred.
+- **D-16:** Record every commit's red set in `12-BASELINE-RED.md`, following `09-BASELINE-RED.md`. The research measured the accepted end state as 3 tests plus CI validator 1 (`publish_..._v2.py --validate`). Any red beyond that ledger blocks the commit.
+
 ### Claude's Discretion
 - Helper names, such as the D-05 path-list function and the at-pin result builder, in the publisher's compact single-quote style.
 - Exact deferred-check wording and error messages, including the D-06 pointer to `--at-pin`.
@@ -128,6 +135,8 @@ This phase puts the v2 publisher and its validators into their final 2.0.3 form 
 
 - 11-REVIEW IN-01..IN-07 (frozen-builder and test polish). Not in Phase 12's requirements, and touching the frozen builders has its own risk. Revisit after 2.0.3.
 - V2-01 (decisions for the other 59 controls) and V2-02 (Hayes re-run) stay deferred, per PROJECT.md.
+- The IN-04 git-error handling pattern in the frozen 2.0.2 notice builder (D-13).
+- `.gitattributes` `eol=lf` for the notice files, which fixes the fresh-Windows-clone failure (D-15).
 
 </deferred>
 
