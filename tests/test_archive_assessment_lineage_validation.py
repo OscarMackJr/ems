@@ -403,3 +403,9 @@ def test_d09_catalog_read_git_unavailable_raises(monkeypatch):
     monkeypatch.setattr(MODULE.subprocess, 'run', nogit)
     with pytest.raises(AuthorityError):
         MODULE.catalog_controls()
+
+
+@pytest.mark.parametrize('bad', [[], 'x'], ids=['list', 'string'])
+def test_validate_lineage_rejects_non_object(bad):
+    with pytest.raises(AuthorityError, match='source_lineage must be an object'):
+        MODULE.validate_lineage(bad)

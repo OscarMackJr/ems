@@ -1090,3 +1090,39 @@ def test_publication_files_byte_identical_between_publication_and_record_commit(
     assert git('diff-tree', '--no-commit-id', '--name-only', '-r', rec_commit).stdout.decode().split() == [rec_rel]
     between = git('diff', '--name-only', pub, f'{rec_commit}^').stdout.decode().split()
     assert all(f.startswith('.planning/') for f in between), between
+
+
+# ---- 12-04: GATE-07 malformed published files and GATE-10 IN-01 dry-run DIFFER branch ----
+
+def _drop_required_key(p):
+    a = MODULE.load(p); del a['evidence_boundary']; MODULE.dump(p, a)
+
+MALFORMED_FILES = {
+    'authority_invalid_json': (lambda: MODULE.AUTHORITY, b'{', 'cannot be read as JSON'),
+    'signoff_invalid_json': (lambda: MODULE.SIGNOFF, b'{', 'cannot be read as JSON'),
+    'manifest_invalid_json': (lambda: MODULE.OUT / MODULE.N_MANIFEST, b'{', 'cannot be read as JSON'),
+    'manifest_is_a_list': (lambda: MODULE.OUT / MODULE.N_MANIFEST, b'[]', 'manifest must be an object'),
+    'record_invalid_json': (lambda: MODULE.PUBLICATION_RECORD, b'{', 'cannot be read as JSON'),
+    'schema_invalid_json': (lambda: MODULE.SCHEMA, b'{', 'cannot be read as JSON'),
+    'schema_not_a_valid_schema': (lambda: MODULE.SCHEMA, b'{"type": 7}', 'committed schema is invalid'),
+    'authority_missing_required_key': (lambda: MODULE.AUTHORITY, _drop_required_key, 'fails the schema'),
+}
+
+@pytest.mark.parametrize('name', sorted(MALFORMED_FILES))
+def test_malformed_published_files_raise_domain_error(env, fake_git_show, name):
+    published_recorded(env, fake_git_show)
+    MODULE.validate_published()
+    path, corrupt, match = MALFORMED_FILES[name]
+    p = path()
+    if callable(corrupt): corrupt(p)
+    else: p.write_bytes(corrupt)
+    with pytest.raises(AuthorityError, match=match):
+        MODULE.validate_published()
+
+def test_dry_run_summary_differ_branch_is_reachable(monkeypatch):
+    require_history(ROOT, commits=(MODULE.SUPERSEDED_V2_0_1['commit'],))
+    a = build()
+    tamper_state(row(a, 'EMS-CTRL-030'))
+    out = MODULE.dry_run_summary(a)
+    assert 'DIFFER' in out and 'No decision changed' not in out
+    assert f"DECISIONS DIFFER from {MODULE.SUPERSEDED_V2_0_1['version']}" in out

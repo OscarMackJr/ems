@@ -84,6 +84,14 @@ def dump(p: Path, value: object) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     with open(p, 'w', encoding='utf-8', newline='\n') as f: f.write(json.dumps(value, indent=2, sort_keys=True) + '\n')
 def load(p: Path) -> dict: return json.loads(p.read_text(encoding='utf-8'))
+def load_checked(p: Path) -> object:
+    try: return json.loads(p.read_text(encoding='utf-8'))
+    except (OSError, ValueError) as e: raise AuthorityError(f'{p.name}: cannot be read as JSON: {e}') from e
+def schema_check(doc: object, schema_doc: object, what: str) -> None:
+    try: jsonschema.Draft202012Validator.check_schema(schema_doc)
+    except jsonschema.SchemaError as e: raise AuthorityError(f'{what}: committed schema is invalid: {e.message}') from e
+    try: jsonschema.Draft202012Validator(schema_doc).validate(doc)
+    except jsonschema.ValidationError as e: raise AuthorityError(f'{what} fails the schema: {e.message}') from e
 def contains_absolute(value: object) -> bool:
     if isinstance(value, str): return value.startswith(('/', '\\\\')) or (len(value) > 2 and value[1] == ':' and value[2] in '\\/')
     if isinstance(value, dict): return any(contains_absolute(v) for v in value.values())
@@ -365,6 +373,7 @@ def git_show(commit: str, relative_path: str) -> bytes:
     return r.stdout
 
 def validate_lineage(lin: dict) -> None:
+    if not isinstance(lin, dict): raise AuthorityError('source_lineage must be an object')
     errors = []
     checks = []
     sup = lin.get('supersedes') if isinstance(lin.get('supersedes'), dict) else {}
@@ -566,8 +575,10 @@ def dry_run_summary(authority: dict) -> str:
         if r['not_applicable_decision_state'] == 'RULE_PUBLISHED': lines.append(f"  {r['control_id']}: {rule_text(r['not_applicable_rule'])}")
     lines += ['', f'Authority LF sha256: {sha_text(jtext(authority))}', 'Digest normalisation: CRLF_TO_LF']
     same = 'equals' if dsha == sup['governance_decisions_sha256'] else 'DIFFERS FROM'
-    lines += ['', f'Version {authority["version"]} supersedes {sup["authority_id"]} version {sup["version"]} (commit {sup["commit"][:7]}). No decision changed: the governance decisions LF sha256 {dsha} {same} the {sup["version"]} value.']
     diff_ids, set_differs = rows_differing_from_previous(authority)
+    unchanged = same == 'equals' and not diff_ids and not set_differs
+    lead = 'No decision changed' if unchanged else f'DECISIONS DIFFER from {sup["version"]}'
+    lines += ['', f'Version {authority["version"]} supersedes {sup["authority_id"]} version {sup["version"]} (commit {sup["commit"][:7]}). {lead}: the governance decisions LF sha256 {dsha} {same} the {sup["version"]} value.']
     same_rows = f'{len(rows) - len(diff_ids)} controls identical to {sup["version"]}' if not diff_ids and not set_differs else f'{len(diff_ids)} controls DIFFER from {sup["version"]}' + ('; decision set differs' if set_differs else '')
     levels = closed_schema_levels(schema())
     lines += ['', f'What changed in {authority["version"]}:']
@@ -713,16 +724,18 @@ def publish(dry_run: bool) -> None:
 def validate_published(pre_publication: bool = False) -> None:
     validate_governance_decisions()
     if not AUTHORITY.exists(): raise AuthorityError('v2 registry authority file is not published')
-    a = load(AUTHORITY)
-    validate_publication(a); jsonschema.Draft202012Validator(load(SCHEMA)).validate(a)
+    a = load_checked(AUTHORITY)
+    schema_check(a, load_checked(SCHEMA), 'published authority')
+    validate_publication(a)
     validate_lineage(a['source_lineage'])
     if a !=build_published_authority(): raise AuthorityError('published authority differs from a fresh build')
     if lf_bytes(AUTHORITY.read_bytes()) != jtext(a).encode('utf-8'): raise AuthorityError('published authority bytes differ from canonical serialisation')
     if not SIGNOFF.exists(): raise AuthorityError('publication sign-off record is absent')
-    signoff = load(SIGNOFF); validate_signoff(signoff, lf_digest(AUTHORITY))
+    signoff = load_checked(SIGNOFF); validate_signoff(signoff, lf_digest(AUTHORITY))
     if not OUT.is_dir(): raise AuthorityError('v2 generated output folder is absent')
     if not (OUT / N_MANIFEST).exists(): raise AuthorityError('publication manifest is absent')
-    manifest = load(OUT / N_MANIFEST)
+    manifest = load_checked(OUT / N_MANIFEST)
+    if not isinstance(manifest, dict): raise AuthorityError('publication manifest must be an object')
     ps = manifest.get('publisher_script')
     if not isinstance(ps, dict) or ps.get('relative_path') != rel(SCRIPT) or not re.fullmatch(r'[0-9a-f]{64}', str(ps.get('sha256'))) or ps.get('sha256_normalisation') != 'CRLF_TO_LF': raise AuthorityError('manifest publisher_script entry missing or invalid')
     expected = build_all_outputs(a, signoff, script_sha256=ps['sha256'])
@@ -741,7 +754,7 @@ RECORD_KEYS = {'publication_commit', 'authority_id', 'version', 'authority_sha25
 
 def check_publication_record(a: dict, pre_publication: bool = False) -> None:
     if not PUBLICATION_RECORD.exists(): raise AuthorityError('publication record is absent')
-    record = load(PUBLICATION_RECORD)
+    record = load_checked(PUBLICATION_RECORD)
     if not isinstance(record, dict) or set(record) != RECORD_KEYS: raise AuthorityError('publication record must be an object with exactly the six record keys')
     if record['digest_normalisation'] != 'CRLF_TO_LF': raise AuthorityError('publication record digest_normalisation must be CRLF_TO_LF')
     if pre_publication:
