@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
 status: executing
-stopped_at: Completed 12-03-PLAN.md
-last_updated: "2026-11-16T08:30:00.000Z"
-last_activity: 2026-11-16 -- Completed 12-03
+stopped_at: Completed 12-04-PLAN.md
+last_updated: "2026-11-16T10:30:00.000Z"
+last_activity: 2026-11-16 -- Completed 12-04
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 13
-  completed_plans: 9
+  completed_plans: 10
   percent: 25
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 12 of 14 (verify at pin and gate hardening)
-Plan: 03 of 7 complete (next: 12-04)
+Plan: 04 of 7 complete (next: 12-05)
 Status: Executing Phase 12
-Last activity: 2026-11-16 -- Completed 12-03 (GATE-10 IN-02, IN-03, IN-04, IN-06)
+Last activity: 2026-11-16 -- Completed 12-04 (GATE-07, GATE-10 IN-01; red window open: 1 accepted test)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -66,6 +66,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 11 P06 | 5min | 1 tasks | 2 files |
 | Phase 12 P01 | 13min | 3 tasks | 5 files |
 | Phase 12 P02 | 25min | 2 tasks | 4 files |
+| Phase 12 P04 | 25min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,9 @@ Recent decisions affecting current work:
 - [Phase 12]: 12-02: D-10 --validate clone test asserts outcome equality only (not PASS); all 'f'*64 stand-ins replaced by real digests
 - [Phase 12]: 12-03: 2.0.0 anchor literal gains relative_path to equal the frozen SUPERSEDED_V2_0_0 at 31addfa by full equality
 - [Phase 12]: 12-03: reply resolve_record_commit: merge-base rc 1 = not an ancestor; other rc or OSError = cannot check ancestry (notice builder deferred, D-13)
+- [Phase 12]: 12-04: validate_published runs schema_check (check_schema + validate, wrapped as AuthorityError) before validate_publication; load() unchanged
+- [Phase 12]: 12-04: dry-run lead says 'DECISIONS DIFFER from <version>' unless decisions digest equals superseded value and no row/set differs
+- [Phase 12]: 12-04: red window open; accepted red set exactly test_publisher_still_valid_and_digest_matches_manifest until 2.0.3 publication
 
 ### Pending Todos
 
@@ -135,8 +139,8 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-11-16T06:42:02.000Z
-Stopped at: Completed 12-02-PLAN.md
+Last session: 2026-11-16T10:30:00.000Z
+Stopped at: Completed 12-04-PLAN.md
 Resume file: None
 
 ## Operator Next Steps

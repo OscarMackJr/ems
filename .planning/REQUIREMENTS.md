@@ -31,10 +31,10 @@ These apply to the notice builder and validator used for 2.0.3.
 ### Gate and validator hardening
 
 - [ ] **GATE-06**: `--validate` checks the publisher-script digest against the certification. Today only pytest checks it. (09-REVIEW IN-05)
-- [ ] **GATE-07**: Malformed authority shapes raise `AuthorityError`, never a raw `TypeError`, `KeyError` or `AttributeError`. `validate_published` validates the schema before running its Python checks. (08-REVIEW WR-03)
+- [x] **GATE-07**: Malformed authority shapes raise `AuthorityError`, never a raw `TypeError`, `KeyError` or `AttributeError`. `validate_published` validates the schema before running its Python checks. (08-REVIEW WR-03)
 - [x] **GATE-08**: The `--validate` path of `validate_decisions` enforces cross-note uniqueness under `norm_templated`. (08-REVIEW WR-05)
 - [x] **GATE-09**: The D-10 test shows that a live catalog edit does not change the build or `--validate` result. The D-13 test uses real changed answer bytes instead of a fabricated digest. (08-REVIEW WR-06, WR-07)
-- [ ] **GATE-10**: Publisher and test cleanup (09-REVIEW IN-01..04, IN-06):
+- [x] **GATE-10**: Publisher and test cleanup (09-REVIEW IN-01..04, IN-06):
   - the dry-run's "no decision changed" text is conditional, and the DIFFER branch can be reached;
   - the check of the 2.0.0 constant against git history is restored;
   - the dead `log` handling is removed;
@@ -84,10 +84,10 @@ These apply to the notice builder and validator used for 2.0.3.
 | CLAIM-02 | Phase 14 | Pending |
 | CLAIM-03 | Phase 14 | Pending |
 | GATE-06 | Phase 12 | Pending |
-| GATE-07 | Phase 12 | Pending |
+| GATE-07 | Phase 12 | Complete |
 | GATE-08 | Phase 12 | Complete |
 | GATE-09 | Phase 12 | Complete |
-| GATE-10 | Phase 12 | Pending |
+| GATE-10 | Phase 12 | Complete |
 | PUB-10 | Phase 13 | Pending |
 | PUB-11 | Phase 13 | Pending |
 | PUB-12 | Phase 13 | Pending |

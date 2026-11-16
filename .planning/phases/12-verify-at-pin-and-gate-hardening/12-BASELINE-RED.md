@@ -142,3 +142,34 @@ Failing node ids: none.
 CI validators: 1 PASS, 2 PASS, 3 PASS, 4 PASS, 5 PASS, 6 PASS.
 
 Accepted red set now: none.
+
+## After plan 12-04 (commit 68231fce71ca6ed221909311ecc870208028932d) — red window opens
+
+Measured on the working tree whose three changed files (publisher and two test files) are exactly the content
+committed in 68231fc (run immediately before the commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-04-full
+```
+
+Totals: **945 passed, 1 failed, 0 skipped, 0 deselected** (347.07s). The +11 tests against 12-03 Task 2 are the
+eight `test_malformed_published_files_raise_domain_error` cases, `test_dry_run_summary_differ_branch_is_reachable`
+and the two `test_validate_lineage_rejects_non_object` cases.
+
+pytest exit code: **exit 1**
+
+Failing node ids:
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+  — newly opened by design: live publisher differs from manifest publisher_script.sha256 f6b51cca… (live LF digest
+  now ee810746…), closes at the 2.0.3 publication (Phase 13).
+
+CI validators: 1 PASS, 2 PASS, 3 PASS, 4 PASS, 5 PASS, 6 PASS.
+
+Mutation invariance check (fresh `run_mutations` equals the committed N_NEGATIVE `negative_invariant_tests`): True.
+
+Accepted red set now:
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
