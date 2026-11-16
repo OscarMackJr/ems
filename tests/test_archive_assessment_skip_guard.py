@@ -165,6 +165,24 @@ def test_history_problem_git_unavailable(monkeypatch):
     assert 'git is unavailable' in history_problem(ROOT)
 
 
+@pytest.mark.parametrize('stdout', [b'', b'maybe', b'true'])
+def test_history_problem_unrecognised_shallow_output_is_problem(monkeypatch, stdout):
+    import aa_history
+
+    def fake(*a, **k): return subprocess.CompletedProcess(args=[], returncode=0, stdout=stdout, stderr=b'')
+    monkeypatch.setattr(aa_history.subprocess, 'run', fake)
+    msg = history_problem(ROOT)
+    assert 'shallow' in msg and 'fetch full history' in msg
+
+
+def test_history_problem_false_output_passes_shallow_check(monkeypatch):
+    import aa_history
+
+    def fake(*a, **k): return subprocess.CompletedProcess(args=[], returncode=0, stdout=b'false\n', stderr=b'')
+    monkeypatch.setattr(aa_history.subprocess, 'run', fake)
+    assert history_problem(ROOT, commits=()) is None
+
+
 def test_require_history_fail_and_opt_out(monkeypatch):
     for k in ENV_KEYS:
         monkeypatch.delenv(k, raising=False)
