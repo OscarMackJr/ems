@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
 status: executing
-last_updated: "2026-11-16T04:19:31.147Z"
+stopped_at: Phase 11 context gathered
+last_updated: "2026-11-16T04:31:47.796Z"
 last_activity: 2026-11-16 -- Phase 11 planning complete
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
   percent: 0
-stopped_at: Phase 11 context gathered
 ---
 
 # Project State
@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 11 of 14 (Frozen Validators)
-Plan: — (not yet planned)
-Status: Ready to execute
+Plan: 05 of 06 complete (11-05 gap closure; 11-06 remaining)
+Status: Executing
 Last activity: 2026-11-16 -- Phase 11 planning complete
 
 Progress: [░░░░░░░░░░] 0%
@@ -61,6 +61,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 06 P05 | 90min | 6 tasks | 4 files |
+| Phase 11 P05 | 15min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,8 @@ Recent decisions affecting current work:
 - [v1.2.0 Roadmap]: Accepted red window opens at the first publisher edit in Phase 12 and closes at the 2.0.3 publication commit (Phase 13)
 - [v1.2.0 Roadmap]: Verify-at-pin mechanics (PIN-01/02) are publisher/validator changes, so they land in Phase 12; PIN-03 guidance and CLAIM-01..03 belong to the notice in Phase 14, which cites the publication commit
 - [v1.2.0 Roadmap]: 2.0.3 publication requires sign-off by Oscar Mack as EMS governance authority with the dual-role statement (human gate in Phase 13)
+- [Phase 11]: 11-05: Collection-level skips under EMS_FAIL_ON_SKIP=1 become collection errors via pytest_make_collect_report hookwrapper
+- [Phase 11]: 11-05: history_problem requires exactly 'false' from --is-shallow-repository (WR-04); WR-02 opt-out reach accepted
 
 ### Pending Todos
 
@@ -123,9 +126,9 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-11-14T05:18:59.288Z
+Last session: 2026-11-16T04:31:39.677Z
 Stopped at: Phase 11 context gathered
-Resume file: .planning/phases/11-frozen-validators/11-CONTEXT.md
+Resume file: None
 
 ## Operator Next Steps
 

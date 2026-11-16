@@ -71,7 +71,7 @@
 
 **Gap closure** *(from 11-VERIFICATION.md; 11-05 and 11-06 run in parallel)*
 
-- [ ] 11-05-PLAN.md — collection-level skips fail under EMS_FAIL_ON_SKIP (WR-01); fail-closed shallow check (WR-04)
+- [x] 11-05-PLAN.md — collection-level skips fail under EMS_FAIL_ON_SKIP (WR-01); fail-closed shallow check (WR-04)
 - [ ] 11-06-PLAN.md — correct the resolve_record_commit statements (WR-03)
 
 ### Phase 12: Verify-at-Pin and Gate Hardening
@@ -125,7 +125,7 @@
 | 8. Gate and Schema Hardening | v1.1.0 | 5/5 | Complete | 2026-11-12 |
 | 9. Certified Republication 2.0.2 | v1.1.0 | 5/5 | Complete | 2026-11-13 |
 | 10. Notice to Hayes | v1.1.0 | 3/3 | Complete | 2026-11-13 |
-| 11. Frozen Validators | v1.2.0 | 4/6 | Gap closure planned | - |
+| 11. Frozen Validators | v1.2.0 | 5/6 | In Progress|  |
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 0/0 | Not started | - |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 0/0 | Not started | - |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |
