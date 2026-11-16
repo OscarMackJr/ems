@@ -118,11 +118,12 @@ def test_certified_digest_grandfathers_committed_answers():
     assert MODULE.CERTIFIED_ANSWERS_SHA256 == MODULE.answers_digest(MODULE.ANSWERS)
     MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=MODULE.CERTIFIED_ANSWERS_SHA256)
 
-def test_changed_answers_bytes_remove_exemption():
-    a = load(MODULE.ANSWERS)
-    assert all(e['disposition'] is not None for e in a['entries']), 'committed answers must be filled'
-    changed = MODULE.V2.sha_text(MODULE.ANSWERS.read_text(encoding='utf-8') + ' ')
-    for digest in (None, changed):
+def test_changed_answers_bytes_remove_exemption(tmp_path, monkeypatch):
+    assert all(e['disposition'] is not None for e in load(MODULE.ANSWERS)['entries']), 'committed answers must be filled'
+    p = answers_copy(tmp_path, monkeypatch, extra=b'\n')
+    a = load(p)
+    assert MODULE.answers_digest(p) != MODULE.CERTIFIED_ANSWERS_SHA256
+    for digest in (None, MODULE.answers_digest(p)):
         with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.validate_answers(a, PROPOSALS, strict=True, answers_sha256=digest)
 
 def answers_copy(tmp_path, monkeypatch, extra=b''):

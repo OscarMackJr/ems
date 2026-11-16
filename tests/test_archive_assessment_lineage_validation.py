@@ -2,6 +2,7 @@ import copy
 import hashlib
 import importlib.util
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -350,6 +351,29 @@ def test_d10_live_catalog_edit_or_delete_does_not_change_build_or_validation(tmp
         after = MODULE.build_published_authority()
         assert after == before_published
         MODULE.validate_publication(after)
+    assert not live.exists()
+
+
+def test_d10_live_catalog_edit_or_delete_does_not_change_validate_outcome(tmp_path):
+    require_history(REAL_ROOT, commits=PINNED_COMMITS)
+    clone = tmp_path / 'c'
+    cloned = subprocess.run(['git', '-c', 'core.longpaths=true', 'clone', '--shared', '-q', str(REAL_ROOT), str(clone)], capture_output=True)
+    if cloned.returncode != 0:
+        pytest.fail(f'git clone --shared of {REAL_ROOT} failed: {cloned.stderr.decode(errors="replace")}', pytrace=False)
+    assert git('config', 'core.longpaths', 'true', cwd=clone).returncode == 0
+
+    def outcome():
+        r = subprocess.run([sys.executable, 'scripts/publish_archive_assessment_applicability_authority_v2.py', '--validate'],
+                           cwd=clone, capture_output=True, text=True)
+        lines = [line for line in (r.stdout + r.stderr).splitlines() if line.strip()]
+        return r.returncode, (lines[-1] if lines else '')
+
+    before = outcome()
+    live = clone / MODULE.CATALOG_REL
+    for change in (lambda: live.write_bytes(b'controls: []\n'), live.unlink):
+        change()
+        after = outcome()
+        assert after == before, f'--validate outcome changed after live catalog change: before={before!r} after={after!r}'
     assert not live.exists()
 
 

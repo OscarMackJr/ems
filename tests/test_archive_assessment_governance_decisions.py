@@ -193,10 +193,51 @@ def templated_twins(d):
     d['records'][0]['note'] = 'Test-only note 9, the shared review text.'
     d['records'][1]['note'] = 'Test-only note 10, the shared review text.'
 
-def test_validate_decisions_rejects_templated_note_collision_for_uncertified_answers(monkeypatch):
-    monkeypatch.setattr(MODULE, 'CERTIFIED_ANSWERS_SHA256', 'f' * 64)
-    d = built(); templated_twins(d)
+def changed_answers(tmp_path, monkeypatch, builder=MODULE):
+    p = tmp_path / 'archive_assessment_governance_answers.json'
+    p.write_bytes(builder.ANSWERS.read_bytes() + b'\n')
+    monkeypatch.setattr(builder, 'ANSWERS', p)
+    assert builder.answers_digest(p) != builder.CERTIFIED_ANSWERS_SHA256
+    return p
+
+def changed_decisions(tmp_path, builder, answers):
+    d = builder.load_checked(builder.DECISIONS)
+    d['answers_sha256'] = builder.answers_digest(answers)
+    p = tmp_path / 'archive_assessment_governance_decisions.json'
+    builder.V2.dump(p, d)
+    return p
+
+def test_validate_decisions_rejects_templated_note_collision_for_uncertified_answers(tmp_path, monkeypatch):
+    p = changed_answers(tmp_path, monkeypatch)
+    d = built(); templated_twins(d); d['answers_sha256'] = MODULE.answers_digest(p)
     with pytest.raises(AuthorityError, match='repeats the note of AA4-GOV-001'): MODULE.validate_decisions(d)
+
+def test_validate_cli_rejects_note_collision_for_real_changed_answers(tmp_path, monkeypatch):
+    p = changed_answers(tmp_path, monkeypatch)
+    monkeypatch.setattr(MODULE, 'DECISIONS', changed_decisions(tmp_path, MODULE, p))
+    monkeypatch.setattr(sys, 'argv', ['x', '--validate'])
+    with pytest.raises(AuthorityError, match='repeats the note of'): MODULE.main()
+
+def test_validate_cli_passes_for_certified_answers(monkeypatch):
+    assert MODULE.answers_digest(MODULE.ANSWERS) == MODULE.CERTIFIED_ANSWERS_SHA256
+    monkeypatch.setattr(sys, 'argv', ['x', '--validate'])
+    MODULE.main()
+
+def publisher():
+    spec = importlib.util.spec_from_file_location('aa3_authority_v2_gate08', ROOT / 'scripts' / 'publish_archive_assessment_applicability_authority_v2.py')
+    pub = importlib.util.module_from_spec(spec); assert spec.loader is not None; spec.loader.exec_module(pub)
+    return pub
+
+def test_publisher_validate_governance_decisions_rejects_note_collision_for_real_changed_answers(tmp_path, monkeypatch):
+    PUB = publisher(); b = PUB.decisions_builder()
+    p = changed_answers(tmp_path, monkeypatch, builder=b)
+    monkeypatch.setattr(PUB, 'GOVERNANCE_DECISIONS', changed_decisions(tmp_path, b, p))
+    with pytest.raises(PUB.AuthorityError, match='repeats the note of'): PUB.validate_governance_decisions()
+
+def test_publisher_validate_governance_decisions_passes_for_certified_answers():
+    PUB = publisher()
+    assert PUB.decisions_builder().answers_digest(PUB.decisions_builder().ANSWERS) == PUB.decisions_builder().CERTIFIED_ANSWERS_SHA256
+    PUB.validate_governance_decisions()
 
 def test_validate_decisions_grandfathers_templated_notes_for_certified_answers():
     assert built()['answers_sha256'] == MODULE.CERTIFIED_ANSWERS_SHA256
@@ -208,9 +249,9 @@ def test_validate_decisions_rejects_exact_note_repeat_for_certified_answers():
     with pytest.raises(AuthorityError, match='repeats the note of AA4-GOV-001'):
         d = built(); m(d); MODULE.validate_decisions(d)
 
-def test_validate_decisions_ignores_superseded_note_repeat(monkeypatch):
-    monkeypatch.setattr(MODULE, 'CERTIFIED_ANSWERS_SHA256', 'f' * 64)
-    d = built(); supersede(d, 0)
+def test_validate_decisions_ignores_superseded_note_repeat(tmp_path, monkeypatch):
+    p = changed_answers(tmp_path, monkeypatch)
+    d = built(); supersede(d, 0); d['answers_sha256'] = MODULE.answers_digest(p)
     MODULE.validate_decisions(d)
 
 def test_two_unsuperseded_for_one_control_rejected():
@@ -484,7 +525,7 @@ def build_cli_setup(monkeypatch, name, answers, published, old=None):
     old_doc = built(filled()) if old is None else old
     dec = TMP / f'{name}_decisions.json'; ans = TMP / f'{name}_answers.json'; auth = TMP / f'{name}_authority.json'
     MODULE.V2.dump(dec, old_doc); MODULE.V2.dump(ans, answers)
-    digest = MODULE.V2.lf_digest(dec) if published else 'f' * 64
+    digest = MODULE.V2.lf_digest(dec) if published else MODULE.V2.lf_digest(ans)
     MODULE.V2.dump(auth, {'source_lineage': {'governance_decisions': {'sha256': digest}}})
     monkeypatch.setattr(MODULE, 'DECISIONS', dec); monkeypatch.setattr(MODULE, 'ANSWERS', ans); monkeypatch.setattr(MODULE.V2, 'AUTHORITY', auth)
     return dec
