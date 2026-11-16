@@ -1,6 +1,6 @@
 ---
 phase: 11-frozen-validators
-reviewed: 2026-11-14T00:00:00Z
+reviewed: 2026-11-15T00:00:00Z
 depth: standard
 files_reviewed: 15
 files_reviewed_list:
@@ -9,6 +9,8 @@ files_reviewed_list:
   - tests/conftest.py
   - tests/aa_history.py
   - tests/test_archive_assessment_skip_guard.py
+  - tests/test_archive_assessment_demo3_w1_req_001_reply.py
+  - tests/test_archive_assessment_demo3_w1_req_001_notice_2_0_2.py
   - tests/test_archive_assessment_applicability_authority_v2_publication.py
   - tests/test_archive_assessment_lineage_validation.py
   - tests/test_archive_assessment_governance_decisions.py
@@ -16,154 +18,105 @@ files_reviewed_list:
   - tests/test_archive_assessment_rule_proposals.py
   - tests/test_archive_assessment_rule_proposals_record.py
   - tests/test_archive_assessment_normalisation_claims.py
-  - tests/test_archive_assessment_demo3_w1_req_001_reply.py
-  - tests/test_archive_assessment_demo3_w1_req_001_notice_2_0_2.py
   - .github/workflows/ems-validate.yml
 findings:
   critical: 0
-  warning: 4
-  info: 7
-  total: 11
+  warning: 1
+  info: 9
+  total: 10
 status: issues_found
 ---
 
-# Phase 11: Code Review Report
+# Phase 11: Code Review Report (re-review after 11-05 / 11-06)
 
-**Reviewed:** 2026-11-14
+**Reviewed:** 2026-11-15
 **Depth:** standard
 **Files Reviewed:** 15
 **Status:** issues_found
 
 ## Summary
 
-Scope: `git diff 5f807d4 HEAD -- scripts tests .github` (commits fe5f5b2, de6c678, 2e11045, 7b97bc5).
+Scope: `git diff 9947a48^ HEAD -- scripts tests .github`. Since the prior review (at 1145cc9) the source delta is limited to:
 
-**Freeze (SC1).** Neither frozen builder has a runtime path to the live publisher. Both import only stdlib and `jsonschema`. Every publisher input is read through `git_show(<40-hex SHA>, <repo-relative path>)`, which uses list-form `subprocess`, a SHA regex and a `bad_rel` path guard. The only working-tree reads are the committed reply or notice JSON/MD/schema. I found no `importlib`, `exec` or `runpy` use and no publisher path string. The fail-closed paths hold: shallow detection uses `!= 'false'`, and every unknown or unreachable commit raises `AuthorityError` or `GitHistoryError`. I found no path where unknown state becomes PASS. I checked one possible concern: `git show <sha>:<path>` does not apply textconv drivers to blobs (probed in a scratch repo), so a local git config cannot change the frozen bytes.
+- `tests/conftest.py`: a new `pytest_make_collect_report` hookwrapper.
+- `tests/aa_history.py`: `== 'true'` changed to `!= 'false'`.
+- `tests/test_archive_assessment_skip_guard.py`: 4 module-skip cases and 4 shallow-output cases.
+- `tests/test_archive_assessment_demo3_w1_req_001_reply.py`: one comment line (line 423).
 
-**Problems found.** They are in the skip-to-fail machinery and in a mis-stated known finding:
+Both frozen builders and `.github/workflows/ems-validate.yml` are byte-identical to the previously reviewed versions. So the prior freeze assessment (SC1) still holds: there is no runtime path to the live publisher, and every pinned read and history check fails closed.
 
-- The `EMS_FAIL_ON_SKIP` hook only sees runtest-phase reports. A collection-level skip or an imperative `pytest.xfail()` still exits 0. Both were proven with a scratch run.
-- The `EMS_ALLOW_NO_HISTORY` opt-out reaches only 9 of the 104 test functions in the two frozen-validator test files. This is a second opt-out gap, separate from the known publisher-import one.
-- The known finding "validate_reply() never calls resolve_record_commit()" is wrong. It does call it, through `build_reply` line 177, but only after about 10 pinned git reads. A test comment repeats the wrong claim.
-- `aa_history.history_problem` treats an unrecognised shallow-check answer as a full clone. That is the opposite of the builders' fail-closed rule.
+Verification performed:
+- `pytest tests/test_archive_assessment_skip_guard.py --basetemp=.pytest-temp/rr11-skipguard -p no:cacheprovider`: 22 passed.
+- A scratch probe with copies of the real `conftest.py` / `aa_history.py` under `EMS_FAIL_ON_SKIP=1`:
+  - A module with `pytest.skip(..., allow_module_level=True)` now gives `ERROR collecting ... Interrupted: 1 error during collection`, exit 2. This happens even when `-k` deselects that module.
+  - An imperative `pytest.xfail('history missing')` still gives `1 xfailed`, exit 0. This was accepted in 11-05.
 
-No Critical issues: nothing here lets a frozen validator or the CI gate report PASS on missing or tampered history.
+No Critical issues. Nothing found lets a frozen validator or the CI gate report PASS on missing or tampered history.
+
+## Prior Findings Status
+
+| ID | Title (short) | Status | Evidence |
+|----|---------------|--------|----------|
+| WR-01 | EMS_FAIL_ON_SKIP misses collection skips and imperative xfail | **Resolved** (collection skips) / **Accepted** (imperative xfail, `xfail(run=False)`) | `conftest.py:24-32` hookwrapper; `test_module_*` cases at skip_guard lines 93-118 pass. 11-05 decision keeps the xfail exemption as is; probe confirms `pytest.xfail()` still exits 0. See new WR-05 for a side effect of the fix. |
+| WR-02 | EMS_ALLOW_NO_HISTORY opt-out reaches only a few history-dependent tests | **Accepted** | 11-05 decision: "accepted as the fail-closed D-08 convenience". Unchanged: `require_history` appears at reply lines 292/313/323/434/521 and notice lines 85/166/174/186 only. The hint text still advertises the opt-out (see IN-08). |
+| WR-03 | Wrong "validate_reply never calls resolve_record_commit" claim | **Resolved** (wording) / **Accepted** (ordering deferred) | Reply test line 423 now reads "resolve_record_commit is called via build_reply, after the pinned reads in load_inputs". This is accurate: reply builder line 177 is still the only call, after `load_inputs()` at lines 306-315. 11-06 defers the builder reordering to the frozen-builder edits. |
+| WR-04 | history_problem treats unrecognised shallow output as a full clone | **Resolved** | `aa_history.py:25` now uses `!= 'false'`, matching reply line 346 and notice line 155. Covered by the parametrised `b''`/`b'maybe'`/`b'true'` test at skip_guard lines 168-175. |
+| IN-01 | Reply lacks the publication-before-record ancestry check | **Open** (deferred with frozen-builder edits) | Reply `resolve_record_commit` (lines 341-353) has no `merge-base --is-ancestor REPLY_PUBLICATION_COMMIT REPLY_RECORD_COMMIT`; the notice has it at line 162. |
+| IN-02 | Reply ungenerated-file message can raise ValueError | **Open** | Reply lines 319-321 still call `rel(p)` without the `is_relative_to(ROOT)` guard the notice uses at line 362. |
+| IN-03 | Independence proofs miss runpy and split-string publisher paths | **Open** | Test files unchanged apart from one comment. |
+| IN-04 | D-11 mutation tests exec the live publisher file | **Open** | Unchanged. |
+| IN-05 | require_git_history names no pinned commit; no SHA shape check | **Open** | `conftest.py:35-37` still calls `require_history(ROOT)` with no commits. `aa_history.py:27-29` still passes registry-sourced values to `git cat-file -e` without a `[0-9a-f]{40}` check. |
+| IN-06 | No REPLY_SCHEMA_COMMIT tampered-constant case | **Open** | Reply parametrisation at lines 422-430 is unchanged. |
+| IN-07 | conftest imports aa_history via sys.path insertion | **Open** | `conftest.py:8` unchanged. There is still no `pytest.ini` / `pyproject.toml` pinning `--import-mode=prepend`. |
+
+## Narrative Findings (AI reviewer)
 
 ## Warnings
 
-### WR-01: The EMS_FAIL_ON_SKIP hook misses collection-level skips and imperative xfail, so the CI step can pass with skipped work
+### WR-05: The collection-skip guard aborts the whole session for a skip in any module, including ones that `-k` deselects, so one unrelated skip hides every archive-assessment result
 
-**File:** `tests/conftest.py:13-21`
-**Issue:** `pytest_runtest_makereport` runs only for item setup/call/teardown reports. A module-level skip (`pytest.importorskip(...)` or `pytest.skip(..., allow_module_level=True)`) produces a `CollectReport`, which this hook never sees. The module is reported as "skipped" and pytest exits 0. Separately, `rep.skipped and hasattr(rep, 'wasxfail')` also exempts an imperative `pytest.xfail('...')` and `@pytest.mark.xfail(run=False)`. Both are "skip with another label".
+**File:** `tests/conftest.py:24-32`; `.github/workflows/ems-validate.yml` (step "Archive-assessment tests": `python -m pytest tests -k archive_assessment`)
+**Issue:** The hookwrapper turns every skipped `CollectReport` into `failed`. pytest treats a failed collection report as a collection error, and by default it stops the session before running any test ("Interrupted: N errors during collection", exit 2). Two things make this broader than D-10 needs:
+1. The CI step collects all of `tests/` and only then filters with `-k archive_assessment`. Collection runs before deselection, so a module-level skip in any non-archive test file fails the archive-assessment job. That includes any of the roughly 100 other test modules in this repository, or one added later by unrelated work. My scratch probe shows this: `pytest test_a.py test_b.py -k ok`, where `test_a.py` has a module-level skip and `test_ok` is the only selected test, gives `1 error`, `Interrupted`, exit 2, and `test_ok` never runs.
+2. Because the session is interrupted, the converted skip hides every other result. The CI log shows one "ERROR collecting" line and no pass/fail data for the 900+ archive tests. The 11-05 summary records the outcome as "1 error" but does not say that nothing else runs.
 
-Proven in a scratch directory using copies of the real `conftest.py` and `aa_history.py`, with `EMS_FAIL_ON_SKIP=1`:
-```
-SKIPPED [1] test_mod.py:2: could not import 'no_such_mod_xyz' ...
-1 skipped, 1 xfailed in 0.05s
-exit=0
-```
-**Failure scenario:** In Phase 12 someone adds `pytest.importorskip('yaml')` at the top of an archive-assessment test file, or turns a history guard into `pytest.xfail('history missing')`. CI would then report green with the whole module or test unexecuted. D-10 ("fails if the pytest run reports any skipped test") is not met. `test_archive_assessment_skip_guard.py` does not cover either case.
-**Fix:** Also catch collection skips and enforce at session end:
+This is fail-closed, so it is not a blocker. But the archive-assessment gate now depends on whether unrelated, deselected modules call `importorskip` at module level. That is a realistic pattern for optional dependencies such as `docx` and LibreOffice-backed tests. A developer who adds one somewhere else in `tests/` turns the Hayes-facing gate red with no archive-assessment cause.
+**Fix:** Limit the conversion to collectors that will actually be selected, or defer the failure so collection finishes. Do either of these:
 ```python
-def pytest_collectreport(report):
-    if os.environ.get('EMS_FAIL_ON_SKIP') == '1' and report.skipped:
-        report.outcome = 'failed'
-        report.longrepr = f'collection skipped (EMS_FAIL_ON_SKIP=1): {report.nodeid}: {report.longrepr}'
-
-@pytest.hookimpl(trylast=True)
-def pytest_sessionfinish(session, exitstatus):
+@pytest.hookimpl(hookwrapper=True)
+def pytest_make_collect_report(collector):
+    outcome = yield
     if os.environ.get('EMS_FAIL_ON_SKIP') != '1':
         return
-    tr = session.config.pluginmanager.get_plugin('terminalreporter')
-    if tr and (tr.stats.get('skipped') or any(getattr(r, 'when', 'call') != 'call' or 'xfail(' in str(getattr(r, 'wasxfail', '')) for r in tr.stats.get('xfailed', []))):
-        session.exitstatus = 1
+    rep = outcome.get_result()
+    if rep.skipped and 'archive_assessment' in collector.nodeid:
+        rep.outcome = 'failed'
+        rep.longrepr = f'skipped module treated as failure (EMS_FAIL_ON_SKIP=1): {collector.nodeid}: {rep.longrepr}'
 ```
-At minimum, treat a skipped `CollectReport` as failed. Add skip-guard cases for `importorskip` and `pytest.xfail()`. Under the guard, treat imperative xfail (no `xfail` mark on the item) as a failure.
+or keep the reports as skipped and set `session.exitstatus = 1` in a `pytest_sessionfinish(session, exitstatus)` hook when `terminalreporter.stats.get('skipped')` is non-empty. That way the run completes and shows every result. Also narrow the CI step to `tests/test_archive_assessment_*.py` instead of `tests -k archive_assessment`, so CI does not collect unrelated modules. Add a skip-guard case that runs a skipped module together with `-k` deselection and asserts the intended behaviour.
 
-### WR-02: The EMS_ALLOW_NO_HISTORY opt-out does not reach most history-dependent tests in the reply and notice files
+## Info
 
-**File:** `tests/test_archive_assessment_demo3_w1_req_001_reply.py:52-63,566-571` and `tests/test_archive_assessment_demo3_w1_req_001_notice_2_0_2.py:43-48,493-498`
-**Issue:** `require_history` is called in only 5 of the 53 reply test functions and 4 of the 51 notice test functions. Nearly every other test calls `inputs()` / `build()`, which run `load_inputs()` (pinned git reads plus `resolve_record_commit`), or `blob()`. `frozen_publisher()` calls `pytest.fail` directly and bypasses `require_history`. The 11-03 summary lists only the live-publisher import-time case as an opt-out gap. This is a second, larger gap in the two files this phase was about.
-**Failure scenario:** A developer in a shallow clone sets `EMS_ALLOW_NO_HISTORY=1`, as the hint text tells them to. About 200 reply and notice test items still go red with `GitHistoryError` / `AuthorityError`. A handful skip. D-08 ("a local opt-out restores the skip for offline local runs") is not met. This is fail-closed, so not a blocker, but the documented operator path does not work.
-**Fix:** Gate each history-dependent module once with an autouse fixture, and route the blob loader through the helper:
-```python
-@pytest.fixture(autouse=True)
-def _pinned_history():
-    require_history(ROOT, commits=FROZEN_COMMITS)
-```
-(Define `FROZEN_COMMITS` before use.) In `frozen_publisher`, call `require_history(ROOT, commits=(commit,))` before the `git show`.
+### IN-08: The history-failure hint still tells operators to set EMS_ALLOW_NO_HISTORY=1, which skips only about 9 of the roughly 104 frozen-validator tests
 
-### WR-03: The "validate_reply never calls resolve_record_commit" finding is wrong, and a test comment asserts the wrong claim
+**File:** `tests/aa_history.py:10`
+**Issue:** WR-02 was accepted as a fail-closed convenience. But `HINT` still offers the opt-out as the fix for an offline run ("or set EMS_ALLOW_NO_HISTORY=1 for an offline local run"). An operator who follows it still sees about 200 red reply and notice items (see WR-02). With the gap accepted, the message now promises more than the code does.
+**Fix:** Change the hint wording to match the accepted behaviour, for example: "set EMS_ALLOW_NO_HISTORY=1 to skip the history-guarded tests; tests that read pinned history still fail without it". Alternatively, record the limit in the requirement doc.
 
-**File:** `scripts/build_archive_assessment_demo3_w1_req_001_reply.py:177,306-315,322-323`; `tests/test_archive_assessment_demo3_w1_req_001_reply.py:423`
-**Issue:** `validate_reply()` → `build_reply()` → `resolve_record_commit()` at line 177. `test_validate_fails_closed_without_history_shallow` (reply test line 392) proves this: it patches only `MODULE.git` and gets the `shallow` error from `validate_reply()`. The real defect is ordering. `load_inputs()` (lines 307-314) does about 10 `git show` reads, and `build_reply` does one more `pinned_digest` (line 174), before the shallow/cat-file/ancestor guard runs. The notice calls `resolve_record_commit()` first in `load_inputs()` (notice line 179). The test comment at line 423 ("validate_reply does not call resolve_record_commit") and the 11-04 SUMMARY "Findings" are both wrong.
-**Failure scenario:** Phase 12 or a later phase plans a "fix" that adds a second `resolve_record_commit()` call to `validate_reply`, or reasons about the reply's guards from the summary, on a false premise. In a shallow clone, the reply reports a `git show failed` error instead of the shallow-clone diagnosis the guard was written to give. Only the notice does this correctly, so the two frozen validators diverge.
-**Fix:** Move the call to the top of the reply's `load_inputs()` and keep `build_reply`'s use of its return value:
-```python
-def load_inputs() -> tuple:
-    resolve_record_commit()
-    authority, signoff = pinned_json(REPLY_PUBLICATION_COMMIT, AUTHORITY), ...
-```
-This is a frozen-builder edit, so it needs the same byte-for-byte reply check. If the builder must stay untouched, correct the comment at test line 423 and the 11-04 summary finding to: "called via build_reply after the pinned reads".
+### IN-09: An unrecognised shallow-check output is reported as "is a shallow repository", without the actual output
 
-### WR-04: history_problem treats an unrecognised shallow-check answer as a full clone, the opposite of the builders' fail-closed check
-
-**File:** `tests/aa_history.py:49-52`
-**Issue:** The helper returns "shallow" only when stdout is exactly `'true'`. Any other rc-0 output counts as a full clone: empty output, a wrapper's banner, or an old git that echoes `--is-shallow-repository` back. Both frozen builders do the opposite: `s.stdout.strip() != 'false'` → fail (reply line 346, notice line 155). This is "unknown resolves to OK", which CLAUDE.md's error-handling rule forbids.
-**Failure scenario:** With `require_git_history` (no `commits=`, used by about 14 tests in `governance_decisions` and `rule_proposals_record`) and a git that does not answer `true`/`false`, the guard passes. The tests then run against missing history. Most fail loudly. But a comparison of two empty outputs, such as `rule_proposals_record.test_proposals_frozen_since_drafting_commit` comparing two `rev-parse` stdouts, can pass vacuously when both reads fail.
+**File:** `tests/aa_history.py:25-26`
+**Issue:** After the WR-04 fix, empty output, a wrapper banner, or an old git echoing `--is-shallow-repository` all produce "`<root>` is a shallow repository, history is incomplete". Running `git fetch --unshallow`, as the hint suggests, does not fix those cases. The prior fix suggestion included the observed value; the implemented change kept the old text.
 **Fix:**
 ```python
 out = r.stdout.decode('utf-8', 'replace').strip()
 if out != 'false':
     return f'{root} is a shallow or unreadable repository (is-shallow={out!r}), history is incomplete{pinned}; fetch full history'
 ```
-
-## Info
-
-### IN-01: The reply's resolve_record_commit lacks the publication-before-record ancestry check the notice has
-
-**File:** `scripts/build_archive_assessment_demo3_w1_req_001_reply.py:341-353` (compare the notice at line 162)
-**Issue:** Only `test_frozen_constants_match_git` asserts that `REPLY_PUBLICATION_COMMIT` is an ancestor of `REPLY_RECORD_COMMIT`. `--validate` in CI does not enforce it. The record-binding check (line 310) covers most tamper cases, but the two frozen validators are asymmetric.
-**Fix:** Add `if git('merge-base', '--is-ancestor', REPLY_PUBLICATION_COMMIT, REPLY_RECORD_COMMIT).returncode != 0: raise AuthorityError(...)`. This is a frozen-builder edit, so defer it with WR-03.
-
-### IN-02: The reply's ungenerated-file message can raise ValueError instead of AuthorityError
-
-**File:** `scripts/build_archive_assessment_demo3_w1_req_001_reply.py:319-321`
-**Issue:** `rel(p)` raises `ValueError` when `REPLY_*` points outside ROOT, as the tests' temp redirects do. The notice guards this with `p.is_relative_to(ROOT)` (notice line 362), and the reply has no `test_validate_reports_ungenerated_files` counterpart.
-**Fix:** Mirror the notice: `rel(p) if p.is_relative_to(ROOT) else p.name`, and add the matching test.
-
-### IN-03: Both independence proofs miss runpy and split-string publisher paths
-
-**File:** `tests/test_archive_assessment_demo3_w1_req_001_reply.py:705-737` (`FORBIDDEN_CALLS`, `publisher_refs`); same in the notice tests at lines 677-701
-**Issue:** `FORBIDDEN_CALLS` lacks `run_path`/`run_module`/`compile`. The string check needs the full `publish_archive_assessment_applicability_authority_v2` literal. A regression such as `runpy.run_path(str(ROOT / 'scripts' / ('publish_archive_assessment_applicability_authority' + '_v2.py')))` passes the AST scan. It also passes the behavioural test, because runpy reads the unmutated file from disk, not `sys.modules`.
-**Fix:** Add `run_path`, `run_module`, `compile` and `import runpy` to the scanner. Also flag any string containing `publish_archive_assessment_applicability_authority`, with no `_v2` suffix required.
-
-### IN-04: The D-11 mutation tests exec the live publisher file, coupling frozen-builder tests to Phase 12 edits
-
-**File:** `tests/test_archive_assessment_demo3_w1_req_001_reply.py:753-771`; `tests/test_archive_assessment_demo3_w1_req_001_notice_2_0_2.py:715-736`
-**Issue:** `mutated_live_publisher()` compiles and runs `PUBLISHER_PATH` from disk. If a Phase 12 edit makes the publisher raise at import time (for example, the import-time catalog git reads noted in 11-03), these "frozen builder is independent" tests go red for a reason unrelated to the builders.
-**Fix:** Build the mutated module as a plain `types.ModuleType` carrying only the mutated attributes plus an `AuthorityError` class. The proof does not need the real publisher body.
-
-### IN-05: The require_git_history fixture names no pinned commit, and history_problem does not validate SHA shape
-
-**File:** `tests/conftest.py:24-26`, `tests/aa_history.py:53-55`; used in `tests/test_archive_assessment_governance_decisions.py:248-261` and `tests/test_archive_assessment_rule_proposals_record.py:54-134`
-**Issue:** D-07 asks failure messages to name the commit. These tests read `MODULE.DRAFTING_COMMIT` / `record()['drafting_commit']` / `brief_commit`, but the fixture passes no `commits=`, so a missing drafting commit is reported only as a generic git failure. `commits` taken from registry JSON (publication test lines 667/688/1054) are passed to `git cat-file -e` without a 40-hex check. A value starting with `-` would be read as an option.
-**Fix:** Pass the drafting/brief commits explicitly. In `history_problem`, reject any commit not matching `[0-9a-f]{40}` with a clear message.
-
-### IN-06: The reply tampered-constant test has no REPLY_SCHEMA_COMMIT case
-
-**File:** `tests/test_archive_assessment_demo3_w1_req_001_reply.py:421-436`
-**Issue:** The notice parametrises `NOTICE_SCHEMA_COMMIT` (`d*40` and a pre-schema commit). The reply covers only the publication and record commits, so nothing proves that a wrong `REPLY_SCHEMA_COMMIT` is rejected through `validate_reply()`.
-**Fix:** Add `('REPLY_SCHEMA_COMMIT', 'd'*40, AuthorityError, 'the frozen commit d{40} is not in the repository history')` and a reachable pre-schema commit expecting `GitHistoryError`.
-
-### IN-07: conftest.py imports aa_history through sys.path insertion
-
-**File:** `tests/conftest.py:8`
-**Issue:** `from aa_history import require_history` relies on pytest's default `prepend` import mode adding `tests/` to `sys.path`. Under `--import-mode=importlib` (or a future `pytest.ini` that sets it), the conftest fails to import, and the whole `tests/` collection errors, including the non-archive tests.
-**Fix:** Import lazily inside the fixture, or document and pin the import mode (for example, `pytest.ini` with `addopts = -p no:cacheprovider` and the import mode set to `prepend`).
+The existing test asserts only `'shallow' in msg and 'fetch full history' in msg`, so it still passes with this text.
 
 ---
 
-_Reviewed: 2026-11-14_
+_Reviewed: 2026-11-15_
 _Reviewer: Claude (gsd-code-reviewer)_
 _Depth: standard_
