@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
 status: executing
-stopped_at: Completed 11-06-PLAN.md
-last_updated: "2026-11-16T04:48:04.159Z"
+stopped_at: Phase 12 context gathered
+last_updated: "2026-11-16T05:03:06.894Z"
 last_activity: 2026-11-16
 progress:
   total_phases: 4
@@ -129,9 +129,9 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-11-16T04:34:39.687Z
-Stopped at: Completed 11-06-PLAN.md
-Resume file: None
+Last session: 2026-11-16T05:03:06.888Z
+Stopped at: Phase 12 context gathered
+Resume file: .planning/phases/12-verify-at-pin-and-gate-hardening/12-CONTEXT.md
 
 ## Operator Next Steps
 
