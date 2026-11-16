@@ -33,20 +33,23 @@ OK_MODULE = 'def test_ok():\n    pass\n'
 GUARD_MSG = 'skipped test treated as failure (EMS_FAIL_ON_SKIP=1)'
 
 
-def run_case(tmp_path, body, extra_module=None, **env_set):
+def run_case(tmp_path, body, extra_module=None, module_name='test_case.py', extra_name='test_ok.py',
+             extra_args=(), **env_set):
     work = tmp_path / 'work'
     work.mkdir()
     shutil.copyfile(TESTS / 'conftest.py', work / 'conftest.py')
     shutil.copyfile(TESTS / 'aa_history.py', work / 'aa_history.py')
-    (work / 'test_case.py').write_text(BODIES[body], encoding='utf-8')
-    targets = [str(work / 'test_case.py')]
+    (work / module_name).write_text(BODIES[body], encoding='utf-8')
+    targets = [str(work / module_name)]
     if extra_module is not None:
-        (work / 'test_ok.py').write_text(extra_module, encoding='utf-8')
-        targets.append(str(work / 'test_ok.py'))
+        (work / extra_name).write_text(extra_module, encoding='utf-8')
+        targets.append(str(work / extra_name))
+    if extra_args:
+        targets = [str(work)]
     env = {k: v for k, v in os.environ.items() if k not in ENV_KEYS}
     env.update(env_set)
     r = subprocess.run(
-        [sys.executable, '-m', 'pytest', *targets, '-p', 'no:cacheprovider', '-q', '-rs',
+        [sys.executable, '-m', 'pytest', *targets, *extra_args, '-p', 'no:cacheprovider', '-q', '-rs',
          '--rootdir', str(work), '--basetemp', str(tmp_path / 'bt')],
         cwd=work, env=env, capture_output=True, text=True,
     )
@@ -91,17 +94,28 @@ def test_guard_leaves_xfail_alone(tmp_path):
 
 
 def test_module_importorskip_with_guard_fails(tmp_path):
-    code, out = run_case(tmp_path, 'module_importorskip', OK_MODULE, EMS_FAIL_ON_SKIP='1')
+    code, out = run_case(tmp_path, 'module_importorskip', OK_MODULE, module_name='test_archive_assessment_case.py',
+                         extra_name='test_archive_assessment_ok.py', EMS_FAIL_ON_SKIP='1')
     assert code != 0, out
     assert GUARD_MSG in out
     assert '1 error' in out
 
 
 def test_module_skip_with_guard_fails(tmp_path):
-    code, out = run_case(tmp_path, 'module_skip', OK_MODULE, EMS_FAIL_ON_SKIP='1')
+    code, out = run_case(tmp_path, 'module_skip', OK_MODULE, module_name='test_archive_assessment_case.py',
+                         extra_name='test_archive_assessment_ok.py', EMS_FAIL_ON_SKIP='1')
     assert code != 0, out
     assert GUARD_MSG in out
     assert '1 error' in out
+
+
+def test_guard_ignores_skip_in_deselected_non_archive_module(tmp_path):
+    code, out = run_case(tmp_path, 'module_skip', OK_MODULE, module_name='test_other_skip.py',
+                         extra_name='test_archive_assessment_ok.py', extra_args=('-k', 'archive_assessment'),
+                         EMS_FAIL_ON_SKIP='1')
+    assert code == 0, out
+    assert '1 passed' in out
+    assert 'treated as failure' not in out
 
 
 def test_module_importorskip_without_guard_passes(tmp_path):
@@ -173,6 +187,13 @@ def test_history_problem_unrecognised_shallow_output_is_problem(monkeypatch, std
     monkeypatch.setattr(aa_history.subprocess, 'run', fake)
     msg = history_problem(ROOT)
     assert 'shallow' in msg and 'fetch full history' in msg
+    out = stdout.decode('utf-8').strip()
+    if out == 'true':
+        assert 'is a shallow repository' in msg
+    else:
+        assert repr(out) in msg
+        assert 'cannot tell whether' in msg
+        assert 'is a shallow repository' not in msg
 
 
 def test_history_problem_false_output_passes_shallow_check(monkeypatch):
