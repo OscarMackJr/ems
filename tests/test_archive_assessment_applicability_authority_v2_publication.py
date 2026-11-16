@@ -87,13 +87,15 @@ def test_lineage_records_governance_decisions_and_v1():
     for k in ('supersedes', 'v1_baseline'): assert len(lin[k]['commit']) == 40 and set(lin[k]['commit']) <= set('0123456789abcdef')
 
 def source_without_git_show():
-    # D-10: subprocess is confined to git_show (and its import line)
+    # D-10: subprocess is confined to the git seam, git_show and git_run (and the import line)
     src = inspect.getsource(MODULE).replace('import subprocess\n', '', 1)
-    return src.replace(inspect.getsource(MODULE.git_show), '', 1)
+    src = src.replace(inspect.getsource(MODULE.git_show), '', 1)
+    return src.replace(inspect.getsource(MODULE.git_run), '', 1)
 
 def test_module_does_not_call_git():
     assert 'subprocess' not in source_without_git_show() and 'import git' not in source_without_git_show()
     assert 'subprocess.run' in inspect.getsource(MODULE.git_show)
+    assert 'subprocess.run' in inspect.getsource(MODULE.git_run)
 
 def test_swapped_authority_fails():
     def m(a):
@@ -990,6 +992,7 @@ def test_publisher_source_runs_no_subprocess_or_evaluator():
     src = source_without_git_show()
     for banned in ('subprocess', 'os.system', 'Evaluate-', 'Popen'): assert banned not in src
     assert 'subprocess.run' in inspect.getsource(MODULE.git_show)
+    assert 'subprocess.run' in inspect.getsource(MODULE.git_run)
 
 def test_published_negative_file_equals_observed_outcomes(env):
     published(env)
@@ -1074,16 +1077,13 @@ def test_missing_2_0_1_history_raises_git_history_error_through_mutation_gates(m
     with pytest.raises(MODULE.GitHistoryError):
         MODULE.mutation_gates('AUTHORITY', docs['AUTHORITY'], ash)
 
-PUBLICATION_PATHS = ['schemas/archive_assessment_applicability_authority_v2.schema.json', 'registry/archive_assessment_applicability_authority_v2.json', 'registry/archive_assessment_applicability_authority_v2_signoff.json']
-
 def test_publication_files_byte_identical_between_publication_and_record_commit():
     assert REAL_RECORD.exists(), f'{REAL_RECORD} must be committed'
     require_history(ROOT, commits=(MODULE.load(REAL_RECORD)['publication_commit'],))
     pub = MODULE.load(REAL_RECORD)['publication_commit']
     rec_rel = REAL_RECORD.relative_to(ROOT).as_posix()
-    out_rel = REAL_OUT.relative_to(ROOT).as_posix()
-    paths = PUBLICATION_PATHS + [f'{out_rel}/{p.name}' for p in sorted(REAL_OUT.iterdir())]
-    assert len(paths) >= 10
+    paths = MODULE.publication_paths()
+    assert len(paths) == 10
     rec_commit = git('log', '-n1', '--format=%H', '--', rec_rel).stdout.decode().strip()
     assert re.fullmatch(r'[0-9a-f]{40}', rec_commit)
     assert git('diff', '--quiet', pub, rec_commit, '--', *paths).returncode == 0
@@ -1126,3 +1126,123 @@ def test_dry_run_summary_differ_branch_is_reachable(monkeypatch):
     out = MODULE.dry_run_summary(a)
     assert 'DIFFER' in out and 'No decision changed' not in out
     assert f"DECISIONS DIFFER from {MODULE.SUPERSEDED_V2_0_1['version']}" in out
+
+
+# ---- 12-05 Task 1: single git seam (git_run and typed helpers), git show --, D-05 publication_paths ----
+
+SHA40 = '0123456789abcdef0123456789abcdef01234567'
+
+def fake_git_run(monkeypatch, rc, stdout=b'', stderr=b''):
+    calls = []
+    def fake(*args):
+        calls.append(args)
+        return subprocess.CompletedProcess(['git', *args], rc, stdout, stderr)
+    monkeypatch.setattr(MODULE, 'git_run', fake)
+    return calls
+
+def test_git_head_returns_sha(monkeypatch):
+    calls = fake_git_run(monkeypatch, 0, SHA40.encode() + b'\n')
+    assert MODULE.git_head() == SHA40
+    assert calls == [('rev-parse', 'HEAD')]
+
+@pytest.mark.parametrize('rc,stdout', [(128, b''), (0, b'not-a-sha\n'), (0, b'ABCDEF' * 7)], ids=['rc128', 'non_hex', 'upper_hex'])
+def test_git_head_fails_closed(monkeypatch, rc, stdout):
+    fake_git_run(monkeypatch, rc, stdout, b'fatal: not a git repository')
+    with pytest.raises(MODULE.GitHistoryError):
+        MODULE.git_head()
+
+@pytest.mark.parametrize('rc,want', [(0, True), (1, False)])
+def test_git_is_ancestor_maps_rc(monkeypatch, rc, want):
+    calls = fake_git_run(monkeypatch, rc)
+    assert MODULE.git_is_ancestor(SHA40, 'f' * 40) is want
+    assert calls == [('merge-base', '--is-ancestor', SHA40, 'f' * 40)]
+
+def test_git_is_ancestor_other_rc_fails_closed(monkeypatch):
+    fake_git_run(monkeypatch, 128, b'', b'fatal: bad object')
+    with pytest.raises(MODULE.GitHistoryError, match='bad object'):
+        MODULE.git_is_ancestor(SHA40, 'f' * 40)
+
+@pytest.mark.parametrize('a,b', [('HEAD', SHA40), (SHA40, 'HEAD'), (SHA40[:7], SHA40), (SHA40, '--all'), (None, SHA40)])
+def test_git_is_ancestor_rejects_non_sha_before_git(monkeypatch, a, b):
+    calls = fake_git_run(monkeypatch, 0)
+    with pytest.raises(AuthorityError):
+        MODULE.git_is_ancestor(a, b)
+    assert calls == []
+
+def test_git_not_shallow_passes_on_false(monkeypatch):
+    calls = fake_git_run(monkeypatch, 0, b'false\n')
+    assert MODULE.git_not_shallow() is None
+    assert calls == [('rev-parse', '--is-shallow-repository')]
+
+def test_git_not_shallow_rejects_shallow(monkeypatch):
+    fake_git_run(monkeypatch, 0, b'true\n')
+    with pytest.raises(MODULE.GitHistoryError, match='shallow') as e:
+        MODULE.git_not_shallow()
+    assert 'fetch full history' in str(e.value)
+
+@pytest.mark.parametrize('stdout', [b'maybe\n', b''], ids=['maybe', 'empty'])
+def test_git_not_shallow_unknown_output_fails_closed(monkeypatch, stdout):
+    fake_git_run(monkeypatch, 0, stdout)
+    with pytest.raises(MODULE.GitHistoryError, match='cannot tell whether the clone is shallow') as e:
+        MODULE.git_not_shallow()
+    assert repr(stdout.decode('utf-8')) in str(e.value)
+
+def test_git_not_shallow_rc_failure(monkeypatch):
+    fake_git_run(monkeypatch, 128, b'', b'fatal: not a git repository')
+    with pytest.raises(MODULE.GitHistoryError):
+        MODULE.git_not_shallow()
+
+def test_git_dirty_returns_porcelain_lines(monkeypatch):
+    calls = fake_git_run(monkeypatch, 0, b' M registry/a.json\n?? registry/b.json\n\n')
+    assert MODULE.git_dirty(['registry/a.json', 'registry/b.json']) == [' M registry/a.json', '?? registry/b.json']
+    assert calls == [('status', '--porcelain', '--', 'registry/a.json', 'registry/b.json')]
+    fake_git_run(monkeypatch, 0, b'')
+    assert MODULE.git_dirty(['registry/a.json']) == []
+
+@pytest.mark.parametrize('bad', ['../x', '/etc/passwd', 'C:\\x', 'a/../../b', ''])
+def test_git_dirty_rejects_bad_path_before_git(monkeypatch, bad):
+    calls = fake_git_run(monkeypatch, 0)
+    with pytest.raises(AuthorityError):
+        MODULE.git_dirty(['registry/a.json', bad])
+    assert calls == []
+
+def test_git_dirty_rejects_empty_path_list(monkeypatch):
+    calls = fake_git_run(monkeypatch, 0)
+    with pytest.raises(AuthorityError):
+        MODULE.git_dirty([])
+    assert calls == []
+
+def test_git_dirty_rc_failure(monkeypatch):
+    fake_git_run(monkeypatch, 128, b'', b'fatal: not a git repository')
+    with pytest.raises(MODULE.GitHistoryError, match='not a git repository'):
+        MODULE.git_dirty(['registry/a.json'])
+
+def test_git_run_oserror_is_git_history_error(monkeypatch):
+    def boom(*args, **kwargs): raise OSError('no git on PATH')
+    monkeypatch.setattr(MODULE.subprocess, 'run', boom)
+    with pytest.raises(MODULE.GitHistoryError, match='git unavailable'):
+        MODULE.git_run('status')
+
+def test_git_show_argv_ends_with_double_dash(monkeypatch):
+    seen = []
+    def fake(argv, **kwargs):
+        seen.append(argv)
+        return subprocess.CompletedProcess(argv, 0, b'x', b'')
+    monkeypatch.setattr(MODULE.subprocess, 'run', fake)
+    assert MODULE.git_show(SHA40, 'registry/a.json') == b'x'
+    assert seen == [['git', 'show', f'{SHA40}:registry/a.json', '--']]
+
+def test_publication_paths_are_the_ten_d05_files():
+    paths = MODULE.publication_paths()
+    assert len(paths) == 10 and len(set(paths)) == 10
+    assert paths[:3] == [MODULE.rel(MODULE.AUTHORITY), MODULE.rel(MODULE.SCHEMA), MODULE.rel(MODULE.SIGNOFF)]
+    out_rel = MODULE.rel(MODULE.OUT)
+    assert paths[3:] == [f'{out_rel}/{n}' for n in (MODULE.N_MATRIX, MODULE.N_SEMANTIC, MODULE.N_NEGATIVE, MODULE.N_TRACE, MODULE.N_CERT, MODULE.N_REPORT, MODULE.N_MANIFEST)]
+    assert all(not MODULE.bad_rel(p) for p in paths)
+
+def test_publication_paths_match_the_publication_commit_file_list():
+    assert REAL_RECORD.exists(), f'{REAL_RECORD} must be committed'
+    pub = MODULE.load(REAL_RECORD)['publication_commit']
+    require_history(ROOT, commits=(pub,))
+    files = git('diff-tree', '--no-commit-id', '--name-only', '-r', pub).stdout.decode().split()
+    assert sorted(MODULE.publication_paths()) == sorted(files)

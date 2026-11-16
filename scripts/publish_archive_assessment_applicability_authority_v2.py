@@ -367,10 +367,46 @@ COMMIT_PINNED = {'catalog_reference', 'supersedes','supersedes_governance_decisi
 def git_show(commit: str, relative_path: str) -> bytes:
     if not isinstance(commit, str) or not re.fullmatch(r'[0-9a-f]{40}', commit): raise AuthorityError(f'{relative_path}: commit must be a 40-character lowercase hex SHA')
     if bad_rel(relative_path): raise AuthorityError(f'{relative_path}: path must be repo-relative without ..')
-    try: r = subprocess.run(['git', 'show', f'{commit}:{relative_path}'], cwd=ROOT, capture_output=True)
+    try: r = subprocess.run(['git', 'show', f'{commit}:{relative_path}', '--'], cwd=ROOT, capture_output=True)
     except OSError as e: raise GitHistoryError(f'{relative_path}@{commit[:7]}: git unavailable: {e}') from e
     if r.returncode != 0: raise GitHistoryError(f'{relative_path}@{commit[:7]}: git show failed: {r.stderr.decode("utf-8", "replace").strip()}')
     return r.stdout
+
+def git_run(*args: str) -> subprocess.CompletedProcess:
+    try: return subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
+    except OSError as e: raise GitHistoryError(f'git {args[0]}: git unavailable: {e}') from e
+
+def git_err(r) -> str: return (r.stderr or b'').decode('utf-8', 'replace').strip()
+
+def git_head() -> str:
+    r = git_run('rev-parse', 'HEAD')
+    if r.returncode != 0: raise GitHistoryError(f'git rev-parse HEAD failed: {git_err(r)}')
+    out = r.stdout.decode('utf-8', 'replace').strip()
+    if not re.fullmatch(r'[0-9a-f]{40}', out): raise GitHistoryError(f'git rev-parse HEAD did not return a 40-character hex SHA: {out!r}')
+    return out
+
+def git_is_ancestor(ancestor: str, descendant: str) -> bool:
+    for c in (ancestor, descendant):
+        if not isinstance(c, str) or not re.fullmatch(r'[0-9a-f]{40}', c): raise AuthorityError(f'{c!r}: commit must be a 40-character lowercase hex SHA')
+    r = git_run('merge-base', '--is-ancestor', ancestor, descendant)
+    if r.returncode in (0, 1): return r.returncode == 0
+    raise GitHistoryError(f'git merge-base --is-ancestor {ancestor[:7]} {descendant[:7]} failed: {git_err(r)}')
+
+def git_not_shallow() -> None:
+    r = git_run('rev-parse', '--is-shallow-repository')
+    if r.returncode != 0: raise GitHistoryError(f'git rev-parse --is-shallow-repository failed: {git_err(r)}')
+    out = r.stdout.decode('utf-8', 'replace')
+    if out.rstrip('\r\n') == 'false': return
+    if out.rstrip('\r\n') == 'true': raise GitHistoryError('the clone is shallow; fetch full history (git fetch --unshallow)')
+    raise GitHistoryError(f'cannot tell whether the clone is shallow: git rev-parse --is-shallow-repository printed {out!r}')
+
+def git_dirty(paths: list[str]) -> list[str]:
+    if not paths: raise AuthorityError('git_dirty needs at least one path')
+    for p in paths:
+        if bad_rel(p): raise AuthorityError(f'{p}: path must be repo-relative without ..')
+    r = git_run('status', '--porcelain', '--', *paths)
+    if r.returncode != 0: raise GitHistoryError(f'git status failed: {git_err(r)}')
+    return [line for line in r.stdout.decode('utf-8', 'replace').splitlines() if line.strip()]
 
 def validate_lineage(lin: dict) -> None:
     if not isinstance(lin, dict): raise AuthorityError('source_lineage must be an object')
@@ -526,6 +562,7 @@ NEGATIVE_MUTATIONS = [
 def jtext(value: object) -> str: return json.dumps(value, indent=2, sort_keys=True) + '\n'
 def sha_text(text: str) -> str: return hashlib.sha256(text.encode('utf-8')).hexdigest()
 def rel(p: Path) -> str: return p.relative_to(ROOT).as_posix()
+def publication_paths() -> list[str]: return [rel(AUTHORITY), rel(SCHEMA), rel(SIGNOFF)] + [f'{rel(OUT)}/{n}' for n in (N_MATRIX, N_SEMANTIC, N_NEGATIVE, N_TRACE, N_CERT, N_REPORT, N_MANIFEST)]
 def write_text(p: Path, text: str) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     with open(p, 'w', encoding='utf-8', newline='\n') as f: f.write(text)
