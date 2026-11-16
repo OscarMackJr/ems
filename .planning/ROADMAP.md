@@ -94,7 +94,7 @@
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 12-02-PLAN.md — GATE-08/GATE-09 real-bytes and `--validate`-path tests (green)
+- [x] 12-02-PLAN.md — GATE-08/GATE-09 real-bytes and `--validate`-path tests (green)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -153,6 +153,6 @@
 | 9. Certified Republication 2.0.2 | v1.1.0 | 5/5 | Complete | 2026-11-13 |
 | 10. Notice to Hayes | v1.1.0 | 3/3 | Complete | 2026-11-13 |
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
-| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 1/7 | In Progress|  |
+| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 2/7 | In Progress|  |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 0/0 | Not started | - |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |

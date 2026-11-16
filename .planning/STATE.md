@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
 status: executing
-stopped_at: Completed 12-01-PLAN.md
-last_updated: "2026-11-16T06:24:48.518Z"
-last_activity: 2026-11-16 -- Phase 12 planning complete
+stopped_at: Completed 12-02-PLAN.md
+last_updated: "2026-11-16T06:42:02.000Z"
+last_activity: 2026-11-16 -- Completed 12-02
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 13
-  completed_plans: 7
+  completed_plans: 8
   percent: 25
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 12 of 14 (verify at pin and gate hardening)
-Plan: 01 of 7 complete (next: 12-02)
+Plan: 02 of 7 complete (next: 12-03)
 Status: Executing Phase 12
-Last activity: 2026-11-16 -- Phase 12 planning complete
+Last activity: 2026-11-16 -- Completed 12-02 (GATE-08, GATE-09 tests)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -65,6 +65,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 11 P05 | 15min | 2 tasks | 3 files |
 | Phase 11 P06 | 5min | 1 tasks | 2 files |
 | Phase 12 P01 | 13min | 3 tasks | 5 files |
+| Phase 12 P02 | 25min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -98,6 +99,7 @@ Recent decisions affecting current work:
 - [Phase 11]: 11-05: history_problem requires exactly 'false' from --is-shallow-repository (WR-04); WR-02 opt-out reach accepted
 - [Phase 11]: 11-06: WR-03 closed as wording fix only; reply guard ordering deferred with frozen-builder edits
 - [Phase 12]: 12-01: collect skip guard scoped by collector.path name test_archive_assessment_*.py, not nodeid
+- [Phase 12]: 12-02: D-10 --validate clone test asserts outcome equality only (not PASS); all 'f'*64 stand-ins replaced by real digests
 
 ### Pending Todos
 
@@ -131,8 +133,8 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-11-16T06:24:48.510Z
-Stopped at: Completed 12-01-PLAN.md
+Last session: 2026-11-16T06:42:02.000Z
+Stopped at: Completed 12-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
