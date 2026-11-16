@@ -339,7 +339,7 @@ def test_frozen_constants_match_git():
     assert MODULE.frozen_schema() == json.loads(shown.stdout.decode('utf-8'))
 
 
-def fake_shallow_git(rc, out, log_sha=None, exc=None, cat_rc=0, mb_rc=0):
+def fake_shallow_git(rc, out, exc=None, cat_rc=0, mb_rc=0, cat_exc=None, mb_exc=None):
     seen = []
     def run(*args):
         seen.append(args)
@@ -347,11 +347,13 @@ def fake_shallow_git(rc, out, log_sha=None, exc=None, cat_rc=0, mb_rc=0):
             if exc:
                 raise exc
             return subprocess.CompletedProcess(args, rc, out, '')
-        if args[0] == 'log':
-            return subprocess.CompletedProcess(args, 0, (log_sha or '') + '\n', '')
         if args[0] == 'cat-file':
+            if cat_exc:
+                raise cat_exc
             return subprocess.CompletedProcess(args, cat_rc, '', '')
         if args[0] == 'merge-base':
+            if mb_exc:
+                raise mb_exc
             return subprocess.CompletedProcess(args, mb_rc, '', '')
         raise AssertionError(f'unexpected git command: {args}')
     run.seen = seen
@@ -365,23 +367,24 @@ def fake_shallow_git(rc, out, log_sha=None, exc=None, cat_rc=0, mb_rc=0):
     (0, '', OSError('git missing')),
 ])
 def test_resolve_record_commit_fails_when_shallow_or_unknown(monkeypatch, rc, out, exc):
-    fake = fake_shallow_git(rc, out, 'c' * 40, exc)
+    fake = fake_shallow_git(rc, out, exc)
     monkeypatch.setattr(MODULE, 'git', fake)
     with pytest.raises(MODULE.AuthorityError, match='shallow'):
         MODULE.resolve_record_commit()
-    assert not any(a[0] == 'log' for a in fake.seen)
 
 
 def test_resolve_record_commit_full_clone_passes_through(monkeypatch):
-    fake = fake_shallow_git(0, 'false\n', 'd' * 40)
+    fake = fake_shallow_git(0, 'false\n')
     monkeypatch.setattr(MODULE, 'git', fake)
     assert MODULE.resolve_record_commit() == MODULE.REPLY_RECORD_COMMIT
-    assert not any(a[0] == 'log' for a in fake.seen)
 
 
 @pytest.mark.parametrize('kwargs, match', [
     ({'cat_rc': 128}, f'the frozen commit {MODULE.REPLY_RECORD_COMMIT} is not in the repository history'),
     ({'mb_rc': 1}, f'the frozen commit {MODULE.REPLY_RECORD_COMMIT} is not an ancestor of HEAD'),
+    ({'mb_rc': 128}, 'cannot check ancestry.*git merge-base exit 128'),
+    ({'cat_exc': OSError('git gone')}, 'in the repository history'),
+    ({'mb_exc': OSError('git gone')}, 'cannot check ancestry'),
 ])
 def test_resolve_record_commit_fails_when_commit_missing_or_not_ancestor(monkeypatch, kwargs, match):
     monkeypatch.setattr(MODULE, 'git', fake_shallow_git(0, 'false\n', **kwargs))

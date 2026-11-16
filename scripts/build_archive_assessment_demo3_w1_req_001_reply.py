@@ -346,10 +346,22 @@ def resolve_record_commit() -> str:
     if s.returncode != 0 or s.stdout.strip() != 'false':
         raise AuthorityError('shallow clone or unreadable repository: cannot resolve the publication record commit; fetch full history')
     for sha in (REPLY_RECORD_COMMIT, REPLY_PUBLICATION_COMMIT, REPLY_SCHEMA_COMMIT):
-        if not re.fullmatch(r'[0-9a-f]{40}', sha) or git('cat-file', '-e', f'{sha}^{{commit}}').returncode != 0:
+        if not re.fullmatch(r'[0-9a-f]{40}', sha):
             raise AuthorityError(f'the frozen commit {sha} is not in the repository history; fetch full history (git fetch --unshallow)')
-        if git('merge-base', '--is-ancestor', sha, 'HEAD').returncode != 0:
+        try:
+            c = git('cat-file', '-e', f'{sha}^{{commit}}')
+        except OSError as e:
+            raise AuthorityError(f'cannot check whether the frozen commit {sha} is in the repository history: {e}') from e
+        if c.returncode != 0:
+            raise AuthorityError(f'the frozen commit {sha} is not in the repository history; fetch full history (git fetch --unshallow)')
+        try:
+            m = git('merge-base', '--is-ancestor', sha, 'HEAD')
+        except OSError as e:
+            raise AuthorityError(f'cannot check ancestry of the frozen commit {sha}: {e}') from e
+        if m.returncode == 1:
             raise AuthorityError(f'the frozen commit {sha} is not an ancestor of HEAD')
+        if m.returncode != 0:
+            raise AuthorityError(f'cannot check ancestry of the frozen commit {sha}: git merge-base exit {m.returncode}')
     return REPLY_RECORD_COMMIT
 
 
