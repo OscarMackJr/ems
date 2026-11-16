@@ -17,7 +17,7 @@
 
 - [ ] **FROZEN-01**: The DEMO3 reply validator, which is frozen on 2.0.1, uses no live publisher constants or functions. A publisher change does not change its result. (09-REVIEW WR-02)
 - [ ] **FROZEN-02**: The 2.0.2 notice validator uses no live publisher constants or functions: `PREV_COMPARED_KEYS`, `DUAL_ROLE_STATEMENT`, `validate_signoff` and `rule_text`. It still passes on the unchanged 2.0.2 notice files once the 2.0.3 publisher lands. (10-REVIEW WR-02)
-- [ ] **FROZEN-03**: If the 2.0.1 blob or any other pinned blob cannot be reached, tests and validators fail with an explicit error instead of skipping. (09-REVIEW WR-04)
+- [x] **FROZEN-03**: If the 2.0.1 blob or any other pinned blob cannot be reached, tests and validators fail with an explicit error instead of skipping. (09-REVIEW WR-04)
 - [ ] **FROZEN-04**: Pytest validates the committed notice files. Each notice test fails when the check it is named for is broken. (10-REVIEW IN-01, WR-03)
 
 ### Notice claim enforcement
@@ -78,7 +78,7 @@ These apply to the notice builder and validator used for 2.0.3.
 | PIN-03 | Phase 14 | Pending |
 | FROZEN-01 | Phase 11 | Pending |
 | FROZEN-02 | Phase 11 | Pending |
-| FROZEN-03 | Phase 11 | Pending |
+| FROZEN-03 | Phase 11 | Complete |
 | FROZEN-04 | Phase 11 | Pending |
 | CLAIM-01 | Phase 14 | Pending |
 | CLAIM-02 | Phase 14 | Pending |
