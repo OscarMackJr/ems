@@ -96,3 +96,49 @@ Failing node ids: none.
 CI validators: 1 PASS, 2 PASS, 3 PASS, 4 PASS, 5 PASS, 6 PASS.
 
 Accepted red set now: none.
+
+## After plan 12-03 Task 1 (commit e0d929b4b4d83fb599d204fc6a4998b3e612f2a2)
+
+Measured on the working tree whose one changed test file is exactly the content committed in e0d929b (run
+immediately before the commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-03-t1-full
+```
+
+Totals: **932 passed, 0 failed, 0 skipped, 0 deselected** (323.85s). The +8 against 12-02 come from the D-08
+row-tamper test now running 12 cases (3 rows x 4 tampers) instead of 4; the renamed 2.0.0 anchor test keeps a
+count of 1.
+
+pytest exit code: **exit 0**
+
+Failing node ids: none.
+
+CI validators: 1 PASS, 2 PASS, 3 PASS, 4 PASS, 5 PASS, 6 PASS.
+
+Accepted red set now: none.
+
+## After plan 12-03 Task 2 (commit a3a9c9beb6fce86e29a7d2d8b46b261c06f5e8ea)
+
+Measured on the working tree whose two changed files (reply builder and reply tests) are exactly the content
+committed in a3a9c9b (run immediately before the commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-03-t2-full
+```
+
+Totals: **935 passed, 0 failed, 0 skipped, 0 deselected** (331.18s). The +3 against 12-03 Task 1 are the new
+`test_resolve_record_commit_fails_when_commit_missing_or_not_ancestor` cases (`mb_rc` 128, `cat_exc` OSError,
+`mb_exc` OSError).
+
+pytest exit code: **exit 0**
+
+Failing node ids: none.
+
+CI validators: 1 PASS, 2 PASS, 3 PASS, 4 PASS, 5 PASS, 6 PASS.
+
+Accepted red set now: none.

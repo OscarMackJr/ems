@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
 status: executing
-stopped_at: Completed 12-02-PLAN.md
-last_updated: "2026-11-16T06:42:02.000Z"
-last_activity: 2026-11-16 -- Completed 12-02
+stopped_at: Completed 12-03-PLAN.md
+last_updated: "2026-11-16T08:30:00.000Z"
+last_activity: 2026-11-16 -- Completed 12-03
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 13
-  completed_plans: 8
+  completed_plans: 9
   percent: 25
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 12 of 14 (verify at pin and gate hardening)
-Plan: 02 of 7 complete (next: 12-03)
+Plan: 03 of 7 complete (next: 12-04)
 Status: Executing Phase 12
-Last activity: 2026-11-16 -- Completed 12-02 (GATE-08, GATE-09 tests)
+Last activity: 2026-11-16 -- Completed 12-03 (GATE-10 IN-02, IN-03, IN-04, IN-06)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -100,6 +100,8 @@ Recent decisions affecting current work:
 - [Phase 11]: 11-06: WR-03 closed as wording fix only; reply guard ordering deferred with frozen-builder edits
 - [Phase 12]: 12-01: collect skip guard scoped by collector.path name test_archive_assessment_*.py, not nodeid
 - [Phase 12]: 12-02: D-10 --validate clone test asserts outcome equality only (not PASS); all 'f'*64 stand-ins replaced by real digests
+- [Phase 12]: 12-03: 2.0.0 anchor literal gains relative_path to equal the frozen SUPERSEDED_V2_0_0 at 31addfa by full equality
+- [Phase 12]: 12-03: reply resolve_record_commit: merge-base rc 1 = not an ancestor; other rc or OSError = cannot check ancestry (notice builder deferred, D-13)
 
 ### Pending Todos
 

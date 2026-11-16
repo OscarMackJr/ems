@@ -98,7 +98,7 @@
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 12-03-PLAN.md — GATE-10 IN-02, IN-03, IN-04 (reply builder only), IN-06 (green)
+- [x] 12-03-PLAN.md — GATE-10 IN-02, IN-03, IN-04 (reply builder only), IN-06 (green)
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -153,6 +153,6 @@
 | 9. Certified Republication 2.0.2 | v1.1.0 | 5/5 | Complete | 2026-11-13 |
 | 10. Notice to Hayes | v1.1.0 | 3/3 | Complete | 2026-11-13 |
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
-| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 2/7 | In Progress|  |
+| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 3/7 | In Progress|  |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 0/0 | Not started | - |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |
