@@ -100,6 +100,13 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
   - states that no decision changed, and asks Hayes to re-pin.
 
   NOTICE-01..02. Validated in Phase 10: Notice to Hayes; shipped v1.1.0.
+- ✓ The validators are frozen:
+  - The DEMO3 reply validator is frozen on 2.0.1 at `31addfa`, and the 2.0.2 notice validator on 2.0.2 at `ae15c74`. They read git-pinned constants and import no live publisher constants or functions.
+  - A missing pinned blob or an incomplete history fails closed. This includes a shallow clone, and any `--is-shallow-repository` output other than `false`.
+  - With `EMS_FAIL_ON_SKIP=1` (set in CI), every skip fails, including a collection-level skip.
+  - Pytest validates the committed notice files, and each notice test goes red when the check it is named for is broken.
+
+  FROZEN-01..04. Validated in Phase 11: Frozen Validators (re-verified 15/15 after the 11-05/11-06 gap closure). The full guarded archive-assessment run gave 918 passed and 0 skipped. Review WR-05 is open for Phase 12: the collection-skip hook fires for any module in `tests/`, including deselected ones. It fails closed but is noisy.
 
 ### Active
 
@@ -207,4 +214,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-12 at start of v1.2.0 milestone*
+*Last updated: 2026-11-15 after Phase 11 (Frozen Validators)*
