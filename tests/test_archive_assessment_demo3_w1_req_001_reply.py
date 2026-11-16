@@ -420,7 +420,7 @@ REPLY_RECORD_BINDING = 'REPLY_PUBLICATION_COMMIT differs from the publication_co
 
 
 @pytest.mark.parametrize('name, value, error, match', [
-    # an unknown commit: validate_reply does not call resolve_record_commit, so the first pinned read fails
+    # an unknown commit: resolve_record_commit is called via build_reply, after the pinned reads in load_inputs, so the first pinned read fails
     ('REPLY_PUBLICATION_COMMIT', 'd' * 40, MODULE.GitHistoryError, 'registry/archive_assessment_applicability_authority_v2.json@d{40}: git show failed'),
     ('REPLY_PUBLICATION_COMMIT', '54a7fd09114704a97a7a48fce5f89aebeb48c90a', AuthorityError, REPLY_RECORD_BINDING),
     # valid commits holding the same 2.0.1 bytes or reachable history: only the record binding rejects these (WR-01)

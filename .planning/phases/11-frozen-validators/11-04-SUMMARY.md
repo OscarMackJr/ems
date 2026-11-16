@@ -102,7 +102,7 @@ Research strings that were directional and corrected (A4):
   - the schema commit ae15c74 fails `git show` with `GitHistoryError`.
   - `'not an ancestor'` is reachable only through a fake `git`. It is asserted in the `resolve_record_commit` tests instead.
 - Reply sha/digest. The reply has no "differs from the values derived" message. The guard that rejects a zeroed digest is the fresh-build file comparison.
-- Reply tampered constants. `validate_reply` does not call `resolve_record_commit`, so d*40 constants fail at the first `git show` (`GitHistoryError`), not at a history check. This is recorded as a finding and the builder was not changed (FROZEN-04 is test-only).
+- Reply tampered constants. `resolve_record_commit` is called via build_reply, after the pinned reads in load_inputs, so d*40 constants fail at the first pinned `git show` (`GitHistoryError`), before the history check is reached. This is recorded as a finding and the builder was not changed (FROZEN-04 is test-only).
 
 ## Non-vacuity (sabotage) runs
 
@@ -172,7 +172,7 @@ All runs used `-p no:cacheprovider` and a fresh `--basetemp=.pytest-temp/p11-4*`
 
 ## Findings (not fixed: frozen builder code)
 
-- `validate_reply()` never calls `resolve_record_commit()`. The reply's shallow-clone, history and ancestor guards run only when called directly. With an unknown commit, `validate_reply` fails at `git show` (`GitHistoryError`, still with the fetch hint), not at the history check. The notice's `load_inputs()` does call it.
+- `validate_reply()` reaches `resolve_record_commit()` via build_reply, after the pinned reads in load_inputs. The reply's shallow-clone, history and ancestor guards therefore run only after those reads. With an unknown commit, `validate_reply` fails at the first pinned `git show` (`GitHistoryError`, still with the fetch hint), before reaching the history check. The notice's `load_inputs()` calls it first.
 - The notice builder working copy has mixed line endings (`git ls-files --eol`: `i/lf w/mixed`). It was like this before this plan and was left alone; `git diff -- scripts` is empty.
 
 ## Self-Check: PASSED
