@@ -555,16 +555,20 @@ The supersedes move is a rename and refactor inside code only.
 | A1 | Hayes may run verification on Windows in a deep directory, so the long-path risk is real for PIN-01 | Pitfall 4 | Low. Fails closed either way; adding `--` is cheap |
 | A2 | A `pytest.skip` inside `conftest.py` produces "no tests ran" (exit 5) under the scoped hook | CI section | Low. CI still fails |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should the at-pin dirty check also cover the publisher script?**
    - Known: D-08 says "D-04 guarantees it is unmodified", but D-05 (and so D-04) excludes the script, and "10 files + script" was rejected for D-05.
    - Recommendation: keep D-05 at 10 files. The live-digest == manifest check is the guarantee. Optionally pass `[*publication_paths(), rel(SCRIPT)]` to the at-pin dirty check only. The planner or user should confirm the reading.
+   - RESOLVED: CONTEXT D-12 (the at-pin dirty check covers the 10 D-05 paths plus the publisher script; the D-05 byte-identity set for plain --validate stays at 10 files).
 2. **IN-04 "everywhere": reply only, or the notice builder too?**
    - Known: CONTEXT names reply L341 only. The notice builder has the identical pattern, and its polish items are deferred.
    - Recommendation: reply only, as scoped. Note the notice for after 2.0.3.
+   - RESOLVED: CONTEXT D-13 (IN-04 is fixed in the reply builder only; the same pattern in the frozen 2.0.2 notice builder is deferred).
 3. **Fixed gate line in the dry run, and the manifest `publisher_script_note`.** The wording is the planner's choice. The Phase 14 notice may quote the dry run, so name GATE-06..10 and `--at-pin` plainly.
+   - RESOLVED: CONTEXT D-14 (the dry-run gate line and manifest publisher_script_note must be true after GATE-06 and the --at-pin rename; wording is the planner's choice).
 4. **A fresh Windows clone fails `test_committed_notice_files_validate`,** because the notice files have no `eol=lf` in `.gitattributes`. This is outside Phase 12 scope and affects only local fresh clones. Record it as tech debt. Adding `eol=lf` lines for the three notice files would fix it, but it touches `.gitattributes`, so it needs a decision.
+   - RESOLVED: CONTEXT D-15 (marking the notice files eol=lf in .gitattributes is out of scope and deferred).
 
 ## Validation Architecture
 

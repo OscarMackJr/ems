@@ -87,7 +87,34 @@
   4. Malformed authority shapes raise `AuthorityError` (never `TypeError`, `KeyError` or `AttributeError`); `validate_published` checks the schema first; `--validate` enforces cross-note uniqueness under `norm_templated`.
   5. The D-10 test shows a live catalog edit does not change the build or `--validate`; the D-13 test uses real changed answer bytes; the GATE-10 publisher and test cleanup items are done (conditional dry-run text, reachable DIFFER branch, restored 2.0.0 constant check, no dead `log`, uniform `resolve_record_commit` errors, D-08 tamper test covering rule and no-rule rows).
 
-**Plans**: TBD
+**Plans**: 7 plans (sequential waves; every plan updates 12-BASELINE-RED.md)
+**Wave 1**
+
+- [ ] 12-01-PLAN.md — baseline ledger; D-09/D-10/D-11 CI glob, scoped skip guard, history wording (green)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 12-02-PLAN.md — GATE-08/GATE-09 real-bytes and `--validate`-path tests (green)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 12-03-PLAN.md — GATE-10 IN-02, IN-03, IN-04 (reply builder only), IN-06 (green)
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 12-04-PLAN.md — GATE-07 schema-first domain errors, GATE-10 IN-01 dry-run DIFFER (opens red window: 1 test)
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [ ] 12-05-PLAN.md — PIN-01 git seam, D-05 paths, `--validate --at-pin` (red set unchanged)
+
+**Wave 6** *(blocked on Wave 5 completion)*
+
+- [ ] 12-06-PLAN.md — PIN-02 ancestry + blob identity; GATE-06 script digest (+1 test, + CI validator 1)
+
+**Wave 7** *(blocked on Wave 6 completion)*
+
+- [ ] 12-07-PLAN.md — final 2.0.3 form: SUPERSEDED_V2_0_2, VERSION 2.0.3, truthful texts (+1 test; D-16 end state)
 
 ### Phase 13: Certified Republication 2.0.3
 
