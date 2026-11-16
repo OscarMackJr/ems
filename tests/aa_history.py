@@ -22,7 +22,7 @@ def history_problem(root: Path, commits=()) -> str | None:
         return f'git is unavailable, cannot read the pinned history of {root}{pinned}; fetch full history with git installed'
     if r.returncode != 0:
         return f'{root} is not a git repository, pinned history is unavailable{pinned}; fetch full history'
-    if r.stdout.decode('utf-8', 'replace').strip() == 'true':
+    if r.stdout.decode('utf-8', 'replace').strip() != 'false':
         return f'{root} is a shallow repository, history is incomplete{pinned}; fetch full history'
     for sha in commits:
         if _git(root, 'cat-file', '-e', f'{sha}^{{commit}}').returncode != 0:
