@@ -32,7 +32,7 @@
 
 ### v1.2.0 Authority 2.0.3 Verification Hardening (Phases 11-14)
 
-- [ ] **Phase 11: Frozen Validators** - Historical reply and 2.0.2 notice validators stop depending on live publisher code, and pinned-blob failures are loud
+- [ ] **Phase 11: Frozen Validators** - Historical reply and 2.0.2 notice validators stop depending on live publisher code, and pinned-blob failures are loud (gap closure planned 2026-11-15)
 - [ ] **Phase 12: Verify-at-Pin and Gate Hardening** - Publisher and validator changes: `--validate` works at the pin, the gates fail closed, and the review cleanup items are closed
 - [ ] **Phase 13: Certified Republication 2.0.3** - One human-gated publication of 2.0.3 with no decision change
 - [ ] **Phase 14: Notice to Hayes (2.0.3)** - A generated, claim-enforced notice that cites the 2.0.3 commit and tells Hayes how to verify at the pin
@@ -49,23 +49,30 @@
   1. The reply validator and the 2.0.2 notice validator import no live publisher constants or functions; a deliberate change to the publisher's `PREV_COMPARED_KEYS`, `DUAL_ROLE_STATEMENT`, `validate_signoff` or `rule_text` leaves both results unchanged.
   2. When the 2.0.1 blob or any other pinned blob cannot be reached, the tests and validators fail with an explicit error and do not skip.
   3. Pytest validates the committed notice files, and each notice test goes red when the specific check it is named for is broken.
-  4. This phase is completed before any publisher edit, so the historical reply and 2.0.2 notice stay green throughout.**Plans**: 4 plans
+  4. This phase is completed before any publisher edit, so the historical reply and 2.0.2 notice stay green throughout.
+
+**Plans**: 6 plans (4 executed, 2 gap closure)
 
 **Wave 1**
 
-- [ ] 11-01-PLAN.md — freeze the reply validator on 2.0.1
+- [x] 11-01-PLAN.md — freeze the reply validator on 2.0.1
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 11-02-PLAN.md — freeze the 2.0.2 notice validator
+- [x] 11-02-PLAN.md — freeze the 2.0.2 notice validator
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 11-03-PLAN.md — skip-to-fail and CI skip guard
+- [x] 11-03-PLAN.md — skip-to-fail and CI skip guard
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 11-04-PLAN.md — notice and reply test rigor
+- [x] 11-04-PLAN.md — notice and reply test rigor
+
+**Gap closure** *(from 11-VERIFICATION.md; 11-05 and 11-06 run in parallel)*
+
+- [ ] 11-05-PLAN.md — collection-level skips fail under EMS_FAIL_ON_SKIP (WR-01); fail-closed shallow check (WR-04)
+- [ ] 11-06-PLAN.md — correct the resolve_record_commit statements (WR-03)
 
 ### Phase 12: Verify-at-Pin and Gate Hardening
 
@@ -118,7 +125,7 @@
 | 8. Gate and Schema Hardening | v1.1.0 | 5/5 | Complete | 2026-11-12 |
 | 9. Certified Republication 2.0.2 | v1.1.0 | 5/5 | Complete | 2026-11-13 |
 | 10. Notice to Hayes | v1.1.0 | 3/3 | Complete | 2026-11-13 |
-| 11. Frozen Validators | v1.2.0 | 0/0 | Not started | - |
+| 11. Frozen Validators | v1.2.0 | 4/6 | Gap closure planned | - |
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 0/0 | Not started | - |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 0/0 | Not started | - |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |
