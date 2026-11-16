@@ -22,19 +22,31 @@ BODIES = {
     ),
     'passes': 'def test_x():\n    assert True\n',
     'xfail': 'import pytest\n\n@pytest.mark.xfail(reason="deliberate", strict=True)\ndef test_x():\n    assert False\n',
+    'module_importorskip': (
+        'import pytest\n\npytest.importorskip("ems_no_such_module_xyz")\n\ndef test_x():\n    pass\n'
+    ),
+    'module_skip': (
+        'import pytest\n\npytest.skip("deliberate module skip", allow_module_level=True)\n\ndef test_x():\n    pass\n'
+    ),
 }
+OK_MODULE = 'def test_ok():\n    pass\n'
+GUARD_MSG = 'skipped test treated as failure (EMS_FAIL_ON_SKIP=1)'
 
 
-def run_case(tmp_path, body, **env_set):
+def run_case(tmp_path, body, extra_module=None, **env_set):
     work = tmp_path / 'work'
     work.mkdir()
     shutil.copyfile(TESTS / 'conftest.py', work / 'conftest.py')
     shutil.copyfile(TESTS / 'aa_history.py', work / 'aa_history.py')
     (work / 'test_case.py').write_text(BODIES[body], encoding='utf-8')
+    targets = [str(work / 'test_case.py')]
+    if extra_module is not None:
+        (work / 'test_ok.py').write_text(extra_module, encoding='utf-8')
+        targets.append(str(work / 'test_ok.py'))
     env = {k: v for k, v in os.environ.items() if k not in ENV_KEYS}
     env.update(env_set)
     r = subprocess.run(
-        [sys.executable, '-m', 'pytest', str(work / 'test_case.py'), '-p', 'no:cacheprovider', '-q', '-rs',
+        [sys.executable, '-m', 'pytest', *targets, '-p', 'no:cacheprovider', '-q', '-rs',
          '--rootdir', str(work), '--basetemp', str(tmp_path / 'bt')],
         cwd=work, env=env, capture_output=True, text=True,
     )
@@ -76,6 +88,34 @@ def test_guard_leaves_xfail_alone(tmp_path):
     code, out = run_case(tmp_path, 'xfail', EMS_FAIL_ON_SKIP='1')
     assert code == 0, out
     assert '1 xfailed' in out
+
+
+def test_module_importorskip_with_guard_fails(tmp_path):
+    code, out = run_case(tmp_path, 'module_importorskip', OK_MODULE, EMS_FAIL_ON_SKIP='1')
+    assert code != 0, out
+    assert GUARD_MSG in out
+    assert '1 error' in out
+
+
+def test_module_skip_with_guard_fails(tmp_path):
+    code, out = run_case(tmp_path, 'module_skip', OK_MODULE, EMS_FAIL_ON_SKIP='1')
+    assert code != 0, out
+    assert GUARD_MSG in out
+    assert '1 error' in out
+
+
+def test_module_importorskip_without_guard_passes(tmp_path):
+    code, out = run_case(tmp_path, 'module_importorskip', OK_MODULE)
+    assert code == 0, out
+    assert 'skipped' in out
+    assert 'treated as failure' not in out
+
+
+def test_module_skip_without_guard_passes(tmp_path):
+    code, out = run_case(tmp_path, 'module_skip', OK_MODULE)
+    assert code == 0, out
+    assert 'skipped' in out
+    assert 'treated as failure' not in out
 
 
 def test_missing_history_fails_by_default(tmp_path):
