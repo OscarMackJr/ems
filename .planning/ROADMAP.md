@@ -90,7 +90,7 @@
 **Plans**: 7 plans (sequential waves; every plan updates 12-BASELINE-RED.md)
 **Wave 1**
 
-- [ ] 12-01-PLAN.md — baseline ledger; D-09/D-10/D-11 CI glob, scoped skip guard, history wording (green)
+- [x] 12-01-PLAN.md — baseline ledger; D-09/D-10/D-11 CI glob, scoped skip guard, history wording (green)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -153,6 +153,6 @@
 | 9. Certified Republication 2.0.2 | v1.1.0 | 5/5 | Complete | 2026-11-13 |
 | 10. Notice to Hayes | v1.1.0 | 3/3 | Complete | 2026-11-13 |
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
-| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 0/0 | Not started | - |
+| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 1/7 | In Progress|  |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 0/0 | Not started | - |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |

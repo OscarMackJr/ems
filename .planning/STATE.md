@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
 status: executing
-stopped_at: Phase 12 context gathered
-last_updated: "2026-11-16T06:11:18.307Z"
+stopped_at: Completed 12-01-PLAN.md
+last_updated: "2026-11-16T06:24:48.518Z"
 last_activity: 2026-11-16 -- Phase 12 planning complete
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 13
-  completed_plans: 6
+  completed_plans: 7
   percent: 25
 ---
 
@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 12 of 14 (verify at pin and gate hardening)
-Plan: Not started
-Status: Ready to execute
+Plan: 01 of 7 complete (next: 12-02)
+Status: Executing Phase 12
 Last activity: 2026-11-16 -- Phase 12 planning complete
 
 Progress: [░░░░░░░░░░] 0%
@@ -64,6 +64,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P05 | 90min | 6 tasks | 4 files |
 | Phase 11 P05 | 15min | 2 tasks | 3 files |
 | Phase 11 P06 | 5min | 1 tasks | 2 files |
+| Phase 12 P01 | 13min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,7 @@ Recent decisions affecting current work:
 - [Phase 11]: 11-05: Collection-level skips under EMS_FAIL_ON_SKIP=1 become collection errors via pytest_make_collect_report hookwrapper
 - [Phase 11]: 11-05: history_problem requires exactly 'false' from --is-shallow-repository (WR-04); WR-02 opt-out reach accepted
 - [Phase 11]: 11-06: WR-03 closed as wording fix only; reply guard ordering deferred with frozen-builder edits
+- [Phase 12]: 12-01: collect skip guard scoped by collector.path name test_archive_assessment_*.py, not nodeid
 
 ### Pending Todos
 
@@ -129,9 +131,9 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-11-16T05:03:06.888Z
-Stopped at: Phase 12 context gathered
-Resume file: .planning/phases/12-verify-at-pin-and-gate-hardening/12-CONTEXT.md
+Last session: 2026-11-16T06:24:48.510Z
+Stopped at: Completed 12-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 
