@@ -2,6 +2,7 @@ import copy
 import importlib.util
 import inspect
 import sys
+import types
 from pathlib import Path
 
 import jsonschema
@@ -699,9 +700,24 @@ def test_manifest_publisher_script_digest_matches_publication_commit():
 PREVIOUS_17 = ['swapped_authority', 'rule_field_change', 'rule_state_unknown', 'rule_unused_field', 'rule_state_flip', 'decided_flipped_to_not_yet_decided', 'twenty_second_control_decided', 'v1_field_change_on_undecided_row', 'extra_field_on_decided_row', 'authority_removed_from_id_list', 'authority_cited_twice', 'duplicate_id_in_list', 'altered_governance_digest', 'altered_record_count_or_drafting_commit', 'missing_governance_lineage', 'wrong_v1_lineage', 'superseded_record_cited']
 NEW_9 = ['signoff_role_hayes_developer', 'signoff_invalid_date', 'signoff_dual_role_text_appended', 'signoff_extra_keys', 'decision_record_tampered_approver', 'decision_record_empty_dual_role_statement', 'decision_record_bogus_disposition', 'rule_same_field_twice_opposite_states', 'supersedes_governance_digest_differs']
 
-def test_superseded_constants_match_git_history():
-    require_history(ROOT, commits=('54a7fd09114704a97a7a48fce5f89aebeb48c90a', MODULE.V1_BASELINE_COMMIT))
-    sup = {'authority_id': 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0', 'version': '2.0.0', 'commit': '54a7fd09114704a97a7a48fce5f89aebeb48c90a', 'sha256': 'de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353', 'governance_decisions_sha256': '4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f'}
+PUBLISHER_REL = 'scripts/publish_archive_assessment_applicability_authority_v2.py'
+
+def publisher_at(commit):
+    r = git('show', f'{commit}:{PUBLISHER_REL}')
+    if r.returncode != 0: pytest.fail(f'cannot read {PUBLISHER_REL} at {commit}: {r.stderr}; fetch full history (git fetch --unshallow)', pytrace=False)
+    name = f'aa_publisher_at_{commit[:7]}'
+    m = types.ModuleType(name)
+    m.__file__ = str(SCRIPT)
+    sys.modules[name] = m
+    try:
+        exec(compile(r.stdout.decode('utf-8'), f'publisher@{commit}', 'exec'), m.__dict__)
+    finally:
+        sys.modules.pop(name, None)
+    return m
+
+def test_2_0_0_anchor_matches_frozen_2_0_1_publisher_and_chain():
+    require_history(ROOT, commits=('54a7fd09114704a97a7a48fce5f89aebeb48c90a', MODULE.V1_BASELINE_COMMIT, '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb', 'ae15c7458e49c8f55cc58c61bab04bc716aa9892'))
+    sup = {'authority_id': 'EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.0', 'version': '2.0.0', 'commit': '54a7fd09114704a97a7a48fce5f89aebeb48c90a', 'relative_path': 'registry/archive_assessment_applicability_authority_v2.json', 'sha256': 'de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353', 'governance_decisions_sha256': '4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f'}
     auth_bytes = git('show', '54a7fd0:registry/archive_assessment_applicability_authority_v2.json').stdout
     dec_bytes = git('show', '54a7fd0:registry/archive_assessment_governance_decisions.json').stdout
     old = json.loads(auth_bytes.decode('utf-8'))
@@ -711,6 +727,13 @@ def test_superseded_constants_match_git_history():
     assert sup['commit'] == rec['publication_commit'] and sup['sha256'] == rec['authority_sha256']
     assert git('rev-parse', '54a7fd0').stdout.decode().strip() == sup['commit']
     assert git('rev-parse', '62a8955').stdout.decode().strip() == MODULE.V1_BASELINE_COMMIT
+    assert git('show', f"{sup['commit']}:{sup['relative_path']}").stdout == auth_bytes
+    assert publisher_at('31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb').SUPERSEDED_V2_0_0 == sup
+    auth_201 = json.loads(git('show', '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb:registry/archive_assessment_applicability_authority_v2.json').stdout.decode('utf-8'))
+    assert auth_201['version'] == '2.0.1' and auth_201['source_lineage']['supersedes'] == sup
+    auth_202 = json.loads(git('show', 'ae15c7458e49c8f55cc58c61bab04bc716aa9892:registry/archive_assessment_applicability_authority_v2.json').stdout.decode('utf-8'))
+    # moves to the 2.0.2 chain in plan 12-07
+    assert auth_202['version'] == '2.0.2' and auth_202['source_lineage']['supersedes'] == MODULE.SUPERSEDED_V2_0_1
 
 def test_superseded_v2_0_1_constants_match_git_history():
     require_history(ROOT, commits=(MODULE.SUPERSEDED_V2_0_1['commit'],))
@@ -1022,14 +1045,18 @@ def tamper_rule(c): c['not_applicable_rule'] = None if c['not_applicable_rule'] 
 def tamper_authority(c): c['not_applicable_authority'] = 'AA4-GOV-999' if c['not_applicable_authority'] != 'AA4-GOV-999' else None
 def tamper_decision_ids(c): c['decision_ids'] = c['decision_ids'][:-1]
 
+@pytest.mark.parametrize('cid, state', [('EMS-CTRL-001', 'NOT_YET_DECIDED'), ('EMS-CTRL-009', 'NO_RULE_WILL_BE_PUBLISHED'), ('EMS-CTRL-030', 'RULE_PUBLISHED')])
 @pytest.mark.parametrize('tamper', [tamper_state, tamper_rule, tamper_authority, tamper_decision_ids], ids=lambda f: f.__name__)
-def test_row_tamper_against_2_0_1_raises_authority_error(monkeypatch, tamper):
-    a = build(); tamper(a['controls'][0])
+def test_row_tamper_against_superseded_raises_authority_error(monkeypatch, tamper, cid, state):
+    a = build(); r = row(a, cid)
+    assert r['not_applicable_decision_state'] == state
+    before = copy.deepcopy(r); tamper(r)
+    assert r != before, f'{tamper.__name__} is a no-op on {cid}'
     with pytest.raises(AuthorityError):
         MODULE.validate_publication(a)
     # isolate the D-08 comparison from the earlier checks
     monkeypatch.setattr(MODULE, 'validate_authority', lambda *args, **kwargs: None)
-    with pytest.raises(AuthorityError, match='EMS-CTRL-001: decision content differs from 2.0.1'):
+    with pytest.raises(AuthorityError, match=f'{cid}: decision content differs from'):
         MODULE.validate_publication(a)
 
 def test_applicability_decision_ids_tamper_against_2_0_1_raises_authority_error(monkeypatch):
