@@ -374,7 +374,7 @@ def git_show(commit: str, relative_path: str) -> bytes:
 
 def git_run(*args: str) -> subprocess.CompletedProcess:
     try: return subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
-    except OSError as e: raise GitHistoryError(f'git {args[0]}: git unavailable: {e}') from e
+    except OSError as e: raise GitHistoryError(f"git {next((a for a in args if not a.startswith('-')), 'command')}: git unavailable: {e}") from e
 
 def git_err(r) -> str: return (r.stderr or b'').decode('utf-8', 'replace').strip()
 
@@ -404,9 +404,40 @@ def git_dirty(paths: list[str]) -> list[str]:
     if not paths: raise AuthorityError('git_dirty needs at least one path')
     for p in paths:
         if bad_rel(p): raise AuthorityError(f'{p}: path must be repo-relative without ..')
-    r = git_run('status', '--porcelain', '--', *paths)
+    r = git_run('--literal-pathspecs', 'status', '--porcelain', '--untracked-files=all', '--ignored=matching', '--', *paths)
     if r.returncode != 0: raise GitHistoryError(f'git status failed: {git_err(r)}')
     return [line for line in r.stdout.decode('utf-8', 'replace').splitlines() if line.strip()]
+
+def git_commit_blob(commit: str, relative_path: str) -> bytes:
+    if not isinstance(commit, str) or not re.fullmatch(r'[0-9a-f]{40}', commit): raise AuthorityError(f'{relative_path}: commit must be a 40-character lowercase hex SHA')
+    if bad_rel(relative_path): raise AuthorityError(f'{relative_path}: path must be repo-relative without ..')
+    r = git_run('cat-file', 'blob', f'{commit}:{relative_path}')
+    if r.returncode != 0: raise GitHistoryError(f'{relative_path}@{commit[:7]}: git cat-file failed: {git_err(r)}')
+    return r.stdout
+
+def git_index_flags(paths: list[str]) -> list[str]:
+    if not paths: raise AuthorityError('git_index_flags needs at least one path')
+    for p in paths:
+        if bad_rel(p): raise AuthorityError(f'{p}: path must be repo-relative without ..')
+    r = git_run('--literal-pathspecs', 'ls-files', '-v', '--', *paths)
+    if r.returncode != 0: raise GitHistoryError(f'git ls-files failed: {git_err(r)}')
+    tags = {line[2:]: line[0] for line in (raw.rstrip('\r') for raw in r.stdout.decode('utf-8', 'replace').split('\n')) if line.strip()}
+    problems = []
+    for p in paths:
+        if p not in tags: problems.append(f'{p}: not in the index')
+        elif tags[p] != 'H': problems.append(f'{p}: index tag {tags[p]!r} (lowercase = assume-unchanged, S = skip-worktree)')
+    return problems
+
+def check_tree_matches_head(paths: list[str]) -> None:
+    head = git_head()
+    for p in paths:
+        try: blob = git_commit_blob(head, p)
+        except GitHistoryError as e: raise AuthorityError(f'{p}: not committed at HEAD {head[:7]}') from e
+        live = ROOT / p
+        if not live.is_file(): raise AuthorityError(f'{p}: absent from the working tree')
+        if lf_bytes(live.read_bytes()) != lf_bytes(blob): raise AuthorityError(f'{p}: working tree differs from HEAD {head[:7]} (CRLF_TO_LF normalised)')
+    flags = git_index_flags(paths)
+    if flags: raise AuthorityError('index flags hide working-tree state from git: ' + '; '.join(flags))
 
 def validate_lineage(lin: dict) -> None:
     if not isinstance(lin, dict): raise AuthorityError('source_lineage must be an object')
@@ -761,8 +792,9 @@ def publish(dry_run: bool) -> None:
 def validate_published(at_pin: bool = False) -> None:
     if at_pin:
         git_not_shallow()
-        dirty = git_dirty([*publication_paths(), rel(SCRIPT)])
-        if dirty: raise AuthorityError('at-pin: publication files are modified or untracked in the working tree: ' + '; '.join(dirty))
+        check_tree_matches_head([*publication_paths(), rel(SCRIPT)])
+        dirty = git_dirty([*publication_paths(), rel(SCRIPT), rel(OUT)])
+        if dirty: raise AuthorityError('at-pin: git status (untracked and ignored files shown) reports changes to publication paths or extra files in the output folder: ' + '; '.join(dirty))
     validate_governance_decisions()
     if not AUTHORITY.exists(): raise AuthorityError('v2 registry authority file is not published')
     a = load_checked(AUTHORITY)
@@ -822,6 +854,7 @@ def check_publication_record(a: dict, at_pin: bool, script_sha256: str) -> None:
         for p in publication_paths():
             if git_show(pub, p) != git_show(head, p): raise AuthorityError(f'{p}: differs between the publication commit and HEAD')
         if hashlib.sha256(lf_bytes(git_show(pub, rel(SCRIPT)))).hexdigest() != script_sha256: raise AuthorityError('publisher script at the publication commit differs from the certified manifest digest')
+        check_tree_matches_head(publication_paths())
 
 def write_publication_record(sha: str) -> None:
     if not re.fullmatch(r'[0-9a-f]{40}', sha or ''): raise AuthorityError('publication commit must be a 40-character lowercase hex SHA')

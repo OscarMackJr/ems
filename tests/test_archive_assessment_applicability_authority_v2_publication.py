@@ -22,6 +22,7 @@ REAL_GIT_DIRTY = MODULE.git_dirty
 REAL_GIT_NOT_SHALLOW = MODULE.git_not_shallow
 REAL_GIT_HEAD = MODULE.git_head
 REAL_GIT_IS_ANCESTOR = MODULE.git_is_ancestor
+REAL_CHECK_TREE_MATCHES_HEAD = MODULE.check_tree_matches_head
 
 REQUEST = MODULE.REQUEST_CONTROL_IDS
 T, F, U = 'KNOWN_TRUE', 'KNOWN_FALSE', 'UNKNOWN'
@@ -243,6 +244,8 @@ def env(monkeypatch, lineage_calls):
     # at-pin git state checks run against the real repo otherwise; the temp ROOT is not a git repo
     monkeypatch.setattr(MODULE, 'git_not_shallow', lambda: None)
     monkeypatch.setattr(MODULE, 'git_dirty', lambda paths: [])
+    # working-tree vs HEAD binding (CR-01, WR-01); tests that need the real check restore REAL_CHECK_TREE_MATCHES_HEAD
+    monkeypatch.setattr(MODULE, 'check_tree_matches_head', lambda paths: None)
     # plain-mode D-06 ancestry; tests that need real history restore REAL_GIT_HEAD / REAL_GIT_IS_ANCESTOR
     monkeypatch.setattr(MODULE, 'git_head', lambda: HEAD_COMMIT)
     monkeypatch.setattr(MODULE, 'git_is_ancestor', lambda a, b: True)
@@ -598,25 +601,30 @@ def test_at_pin_record_blobs_must_match_the_superseded_commit(env, fake_git_show
         MODULE.validate_published(True)
 
 def test_at_pin_dirty_tree_fails_closed(env, monkeypatch):
-    seen = []
+    seen, tree = [], []
+    monkeypatch.setattr(MODULE, 'check_tree_matches_head', lambda paths: tree.append(list(paths)))
     monkeypatch.setattr(MODULE, 'git_dirty', lambda paths: seen.append(list(paths)) or [' M registry/a.json'])
-    with pytest.raises(AuthorityError, match='modified or untracked'):
+    with pytest.raises(AuthorityError, match='at-pin: git status'):
         MODULE.validate_published(True)
-    assert seen == [MODULE.publication_paths() + [MODULE.rel(MODULE.SCRIPT)]]
-    assert len(seen[0]) == 11
+    assert tree == [MODULE.publication_paths() + [MODULE.rel(MODULE.SCRIPT)]]
+    assert len(tree[0]) == 11
+    assert seen == [MODULE.publication_paths() + [MODULE.rel(MODULE.SCRIPT), MODULE.rel(MODULE.OUT)]]
+    assert len(seen[0]) == 12
     # plain mode does not consult the working-tree state
     with pytest.raises(AuthorityError, match='not published'):
         MODULE.validate_published()
     assert len(seen) == 1
 
 def test_at_pin_shallow_fails_closed(env, monkeypatch):
-    dirty_calls = []
+    dirty_calls, tree_calls = [], []
     def shallow(): raise MODULE.GitHistoryError('the clone is shallow; fetch full history (git fetch --unshallow)')
     monkeypatch.setattr(MODULE, 'git_not_shallow', shallow)
     monkeypatch.setattr(MODULE, 'git_dirty', lambda paths: dirty_calls.append(paths) or [])
+    monkeypatch.setattr(MODULE, 'check_tree_matches_head', lambda paths: tree_calls.append(paths))
     with pytest.raises(MODULE.GitHistoryError, match='shallow'):
         MODULE.validate_published(True)
     assert dirty_calls == []
+    assert tree_calls == []
 
 @pytest.mark.parametrize('mutate', [lambda r: r.pop('version'), lambda r: r.__setitem__('extra', 1)], ids=['missing_key', 'extra_key'])
 def test_record_shape_violation_raises_authority_error(env, fake_git_show, mutate):
@@ -670,6 +678,7 @@ def use_real_git_state(monkeypatch):
     monkeypatch.setattr(MODULE, 'git_head', REAL_GIT_HEAD)
     monkeypatch.setattr(MODULE, 'git_is_ancestor', REAL_GIT_IS_ANCESTOR)
     monkeypatch.setattr(MODULE, 'git_not_shallow', REAL_GIT_NOT_SHALLOW)
+    monkeypatch.setattr(MODULE, 'check_tree_matches_head', REAL_CHECK_TREE_MATCHES_HEAD)
 
 def test_plain_validate_requires_ancestry(env, fake_git_show, monkeypatch):
     published_recorded(env, fake_git_show)
@@ -771,17 +780,19 @@ def test_real_git_repo_at_pin_passes_and_dirty_fails(env, fake_git_show, monkeyp
     if r.returncode != 0: pytest.fail(f"git commit failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
     monkeypatch.setattr(MODULE, 'git_dirty', REAL_GIT_DIRTY)
     monkeypatch.setattr(MODULE, 'git_not_shallow', REAL_GIT_NOT_SHALLOW)
+    monkeypatch.setattr(MODULE, 'git_head', REAL_GIT_HEAD)
+    monkeypatch.setattr(MODULE, 'check_tree_matches_head', REAL_CHECK_TREE_MATCHES_HEAD)
     capsys.readouterr()
     MODULE.validate_published(True)
     assert json.loads(capsys.readouterr().out) == {'status': 'PASS', 'mode': 'AT_PIN', 'deferred': [MODULE.AT_PIN_DEFERRED]}
     original = MODULE.AUTHORITY.read_bytes()
     MODULE.AUTHORITY.write_bytes(original + b' ')
-    with pytest.raises(AuthorityError, match='modified or untracked'):
+    with pytest.raises(AuthorityError, match='working tree differs from HEAD'):
         MODULE.validate_published(True)
     MODULE.AUTHORITY.write_bytes(original)
     MODULE.validate_published(True)
     MODULE.write_text(MODULE.SCRIPT, 'print(2)\n')
-    with pytest.raises(AuthorityError, match='modified or untracked') as e:
+    with pytest.raises(AuthorityError, match='working tree differs from HEAD') as e:
         MODULE.validate_published(True)
     assert MODULE.rel(MODULE.SCRIPT) in str(e.value)
 
@@ -1422,7 +1433,7 @@ def test_git_not_shallow_rc_failure(monkeypatch):
 def test_git_dirty_returns_porcelain_lines(monkeypatch):
     calls = fake_git_run(monkeypatch, 0, b' M registry/a.json\n?? registry/b.json\n\n')
     assert MODULE.git_dirty(['registry/a.json', 'registry/b.json']) == [' M registry/a.json', '?? registry/b.json']
-    assert calls == [('status', '--porcelain', '--', 'registry/a.json', 'registry/b.json')]
+    assert calls == [('--literal-pathspecs', 'status', '--porcelain', '--untracked-files=all', '--ignored=matching', '--', 'registry/a.json', 'registry/b.json')]
     fake_git_run(monkeypatch, 0, b'')
     assert MODULE.git_dirty(['registry/a.json']) == []
 
