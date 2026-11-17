@@ -466,10 +466,10 @@ Skipped. `workflow.nyquist_validation` is `false` in `.planning/config.json`. Th
 | A2 | `gh workflow run … --ref <branch>` still dispatches on this branch | Push/CI | Low. It worked in Phase 9 (run 43332405316). If refused, stop and ask Oscar, since D-08 forbids a PR. |
 | A3 | Plain `git push` works this session; otherwise the env workaround does | Push/CI | Low. Both are documented as working. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Sign-off date.** Use the date Oscar gives at the checkpoint. The planner should make it part of the resume signal ("approve, date YYYY-MM-DD").
-2. **Will the ledger accept the transient reds?** The CONTEXT says the red set "may only shrink", but three tests necessarily go red at the publication commit. Recommendation: the plan states them up front as planned, record-bound transients that close at the record commit. This is the same self-reference reasoning as D-01.
+1. **Sign-off date.** Use the date Oscar gives at the checkpoint. The planner should make it part of the resume signal ("approve, date YYYY-MM-DD"). **RESOLVED:** 13-01 uses the resume signal "approve, date YYYY-MM-DD", with the date rule cited from 13-CONTEXT D-06.
+2. **Will the ledger accept the transient reds?** The CONTEXT says the red set "may only shrink", but three tests necessarily go red at the publication commit. Recommendation: the plan states them up front as planned, record-bound transients that close at the record commit. This is the same self-reference reasoning as D-01. **RESOLVED:** by the 13-CONTEXT post-research clarification ("The red window"), which lists the three record-bound reds as expected at the publication commit and closing at the record commit.
 
 ## Sources
 
