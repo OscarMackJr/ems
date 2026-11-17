@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 12 of 14 (verify at pin and gate hardening)
-Plan: 06 of 7 complete (next: 12-07)
-Status: Executing Phase 12
-Last activity: 2026-11-16 -- Completed 12-06 ([Phase 12] PIN-02 D-06 ancestry + blob identity; GATE-06 publisher-script digest; red set now 2 accepted tests + CI validator 1, by design)
+Plan: 07 of 7 complete ([Phase 12] all 7 plans complete)
+Status: [Phase 12] Ready for review and verification
+Last activity: 2026-11-16 -- Completed 12-07 ([Phase 12] final 2.0.3 form: VERSION 2.0.3, SUPERSEDED_V2_0_2 at ae15c74, truthful D-14 texts; D-16 end state: 3 accepted tests + CI validator 1)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -68,6 +68,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 12 P02 | 25min | 2 tasks | 4 files |
 | Phase 12 P04 | 25min | 2 tasks | 4 files |
 | Phase 12 P05 | 45min | 2 tasks | 3 files |
+| Phase 12 P07 | 35min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -121,6 +122,9 @@ Recent decisions affecting current work:
 
 - [All phases]: The working tree holds unrelated modified files (`registry/adjudication_rules.json`, `registry/policy_decisions.json`, `.planning/config.json`) and about 60 untracked files from other work. Stage by explicit path only.
 - [Phase 12]: Any publisher, schema or authority edit turns the real-file tests red until the 2.0.3 publication commit (hash certification). The red window is accepted and planned.
+- [Phase 12]: 12-07: SUPERSEDED_V2_0_1 replaced by SUPERSEDED_V2_0_2 (ae15c74, a44eea1f..., decisions 4e746d1f...); VERSION '2.0.3'; superseded-version messages derive from the constant
+- [Phase 12]: 12-07: frozen 2.0.1 sign-off test reads the 2.0.1 identity from the 2.0.2 authority's source_lineage.supersedes at ae15c74
+- [Phase 12]: 12-07: end-of-phase accepted red set is 3 tests (committed schema, real published files, publisher digest) + CI validator 1; closed by Phase 13 publication and record commits
 - [v1.2.0]: Scope is the v1.1.0 audit tech debt (`.planning/milestones/v1.1.0-MILESTONE-AUDIT.md`); no decision content changes (decisions digest `4e746d1f…` is pinned).
 - [CI]: `archive-assessment` job (261015-ci1) green on ubuntu-latest, run 38744767442: 492 passed, 5 validators PASS; runs on PRs, pushes to main, and `workflow_dispatch`
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
@@ -146,7 +150,7 @@ Items acknowledged and carried forward from previous milestone close:
 ## Session Continuity
 
 Last session: 2026-11-16T10:30:00.000Z
-Stopped at: Completed 12-04-PLAN.md
+Stopped at: Completed 12-07-PLAN.md (Phase 12 ready for review and verification)
 Resume file: None
 
 ## Operator Next Steps

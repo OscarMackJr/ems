@@ -315,3 +315,55 @@ Accepted red set now:
 - `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
 - `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate`
 - CI validator 1 (`publish_archive_assessment_applicability_authority_v2.py --validate`, script-digest message)
+
+## After plan 12-07 (commit 8a519ba4effbc5692e32633a9461eaab5b96c1fc) — end of Phase 12
+
+The suite and validators were run on the working tree that equals commit 8a519ba (run immediately before the
+commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-07-full
+```
+
+Totals: **986 passed, 3 failed, 0 skipped, 0 deselected** (362.25s). Total test count unchanged at 989:
+`test_superseded_v2_0_1_constants_match_git_history` was replaced by `test_superseded_v2_0_2_constants_match_git_history`.
+
+pytest exit code: **exit 1**
+
+Targeted run (`pytest` on the v2, v2_publication, lineage_validation and normalisation_claims modules,
+`--basetemp=.pytest-temp/p12-07-t2`): 454 passed, 3 failed (the same three ids), no collection errors.
+
+Failing node ids:
+
+- `tests/test_archive_assessment_applicability_authority_v2.py::test_committed_schema_equals_schema_function`
+  — newly opened by design: `schema()` now pins 2.0.3 / `SUPERSEDED_V2_0_2`, and the committed schema is
+  re-emitted only in Phase 13 (`--emit-schema` was not run).
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate`
+  (accepted since 12-06; the committed files are still the 2.0.2 publication)
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+  (accepted since 12-04)
+
+CI validators:
+
+| # | Validator | Result |
+|---|-----------|--------|
+| 1 | `scripts/publish_archive_assessment_applicability_authority_v2.py --validate` | **FAIL** (exit 1, by design): `AuthorityError: authority identity/version/status invalid; source_lineage supersedes does not name the 2.0.2 publication` (the committed authority is 2.0.2; the publisher now expects 2.0.3 superseding 2.0.2, so validation fails before the GATE-06 script-digest check is reached) |
+| 2 | `scripts/build_archive_assessment_governance_decisions.py --validate` | PASS |
+| 3 | `scripts/validate_archive_assessment_rule_proposals.py --validate` | PASS |
+| 4 | `scripts/validate_archive_assessment_rule_proposals.py --validate-record` | PASS |
+| 5 | `scripts/build_archive_assessment_demo3_w1_req_001_reply.py --validate` | PASS |
+| 6 | `scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py --validate` | PASS |
+
+`git grep -n "SUPERSEDED_V2_0_1" -- scripts tests`: no output.
+
+### Accepted red set at end of Phase 12 (closed by the Phase 13 publication and record commits)
+
+- `tests/test_archive_assessment_applicability_authority_v2.py::test_committed_schema_equals_schema_function`
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate`
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+- CI validator 1 (`publish_archive_assessment_applicability_authority_v2.py --validate`)
+
+Note for Phase 13: the publish sequence uses `--validate --at-pin` at the publication commit where Phase 09 used
+`--validate --pre-publication` (removed in 12-05, no alias), then plain `--validate` at the record commit or later.
