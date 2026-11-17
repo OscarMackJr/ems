@@ -107,6 +107,14 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
   - Pytest validates the committed notice files, and each notice test goes red when the check it is named for is broken.
 
   FROZEN-01..04. Validated in Phase 11: Frozen Validators (re-verified 15/15 after the 11-05/11-06 gap closure). The full guarded archive-assessment run gave 918 passed and 0 skipped. Review WR-05 is open for Phase 12: the collection-skip hook fires for any module in `tests/`, including deselected ones. It fails closed but is noisy.
+- ✓ The publisher and validators are in their final 2.0.3 form:
+  - `--validate --at-pin` replaces `--pre-publication`. At a clean pin it prints `{"status":"PASS","mode":"AT_PIN","deferred":["PUBLICATION_RECORD_BINDING"]}`. Before any content check it confirms that the 10 publication files and the publisher script are committed at HEAD, match their HEAD blobs after LF normalisation, carry no index flags that hide changes, and that a hardened git status shows nothing under those paths or the OUT folder.
+  - Plain `--validate` checks that the publication commit is an ancestor of HEAD, that the 10 publication files are byte-identical between the publication commit and HEAD, and that the working tree matches HEAD for all 10.
+  - The publisher-script digest is checked live in both modes, and also at the publication commit in plain mode (GATE-06).
+  - Schema validation runs first, and malformed shapes raise `AuthorityError` (GATE-07). GATE-08, GATE-09 and GATE-10 are closed. CI targets `tests/test_archive_assessment_*.py`, and the collection-skip hook applies only to archive-assessment modules (WR-05).
+  - The 2.0.3 publisher supersedes 2.0.2 (`ae15c74`) through `SUPERSEDED_V2_0_2`.
+
+  PIN-01..02 and GATE-06..10. Validated in Phase 12: Verify-at-Pin and Gate Hardening (re-verified 8/8 after the 12-08 gap closure of review CR-01). The guarded run gave 1020 passed and 3 failed. The 3 failures and CI validator 1 are the D-16 red window, accepted by design: they stay red until the certified 2.0.3 republication in Phase 13. Watching at-pin PASS at a real 2.0.3 pin is a Phase 13 success criterion. Deferred: WR-02 (scrubbing `GIT_*` env), and WR-03 (the D-10 subprocess test should assert `(0, 'PASS')`), which moves to Phase 13.
 
 ### Active
 
@@ -214,4 +222,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-15 after Phase 11 (Frozen Validators)*
+*Last updated: 2026-11-16 after Phase 12 (Verify-at-Pin and Gate Hardening)*
