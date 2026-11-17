@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
-status: ready_to_plan
-stopped_at: Phase 13 complete (4/4) — ready to discuss Phase 14
-last_updated: 2026-11-17T17:21:26.086Z
-last_activity: 2026-11-17 -- 2.0.3 published (PUB 1544dc1), recorded (REC 87a46d1), WR-03 (5498002); all green locally
+status: planning
+last_updated: "2026-11-17T17:50:54.377Z"
+last_activity: 2026-11-17
 progress:
   total_phases: 4
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 18
-  completed_plans: 66
-  percent: 50
+  completed_plans: 18
+  percent: 75
+stopped_at: Phase 13 complete (4/4) — ready to discuss Phase 14
 ---
 
 # Project State
@@ -156,9 +156,9 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-11-17T13:18:35.981Z
-Stopped at: Phase 13 context gathered
-Resume file: .planning/phases/13-certified-republication-2-0-3/13-CONTEXT.md
+Last session: 2026-11-17T17:50:54.362Z
+Stopped at: Phase 14 context gathered
+Resume file: .planning/phases/14-notice-to-hayes-2-0-3/14-CONTEXT.md
 
 ## Operator Next Steps
 
