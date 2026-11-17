@@ -561,9 +561,10 @@ def test_at_pin_binding_reads_supersedes_from_authority(env, fake_git_show):
     superseded_record(fake_git_show, publication_commit=other['commit'], authority_id=other['authority_id'], version=other['version'], authority_sha256=other['sha256'])
     fake_git_show[(other['commit'], MODULE.rel(MODULE.AUTHORITY))] = other_blob
     fake_git_show[(other['commit'], MODULE.rel(MODULE.OUT / MODULE.N_MANIFEST))] = (MODULE.OUT / MODULE.N_MANIFEST).read_bytes()
-    MODULE.check_publication_record(a, True)
+    script_sha256 = MODULE.load(MODULE.OUT / MODULE.N_MANIFEST)['publisher_script']['sha256']
+    MODULE.check_publication_record(a, True, script_sha256)
     with pytest.raises(AuthorityError, match=f"superseded {re.escape(sup['version'])} publication commit"):
-        MODULE.check_publication_record(MODULE.load(MODULE.AUTHORITY), True)
+        MODULE.check_publication_record(MODULE.load(MODULE.AUTHORITY), True, script_sha256)
 
 def test_other_authority_record_fails_in_both_modes(env, fake_git_show):
     published_recorded(env, fake_git_show)
@@ -983,10 +984,35 @@ def test_manifest_records_publisher_script(env):
     assert all(a['relative_path'] != ps['relative_path'] for a in m['artifacts'])
     assert {a['relative_path'] for a in m['artifacts']} >= {MODULE.rel(MODULE.SCHEMA), MODULE.rel(MODULE.AUTHORITY), MODULE.rel(MODULE.SIGNOFF)}
 
-def test_script_edit_after_publication_does_not_break_validate(env, fake_git_show):
+SCRIPT_DIGEST_MSG = 'publisher script differs from the certified manifest digest'
+
+def test_script_edit_after_publication_fails_validate(env, fake_git_show, capsys):
     published_recorded(env, fake_git_show)
-    MODULE.write_text(MODULE.SCRIPT, 'print(2)\n')
     MODULE.validate_published()
+    # D-07: a later publisher edit, even a comment, turns plain --validate red until a certified republication
+    MODULE.write_text(MODULE.SCRIPT, 'print(1)  # comment\n')
+    with pytest.raises(AuthorityError, match=SCRIPT_DIGEST_MSG):
+        MODULE.validate_published()
+    # D-08: at the pin the live script check is not deferred
+    s = authority_supersedes()
+    superseded_record(fake_git_show)
+    fake_git_show[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = superseded_authority_blob(s)
+    with pytest.raises(AuthorityError, match=SCRIPT_DIGEST_MSG):
+        MODULE.validate_published(True)
+    MODULE.write_text(MODULE.SCRIPT, 'print(1)\n')
+    capsys.readouterr()
+    MODULE.validate_published(True)
+    assert json.loads(capsys.readouterr().out)['status'] == 'PASS'
+
+def test_pinned_script_digest_mismatch_fails_plain_validate(env, fake_git_show):
+    published_recorded(env, fake_git_show)
+    script_rel = MODULE.rel(MODULE.SCRIPT)
+    # CRLF in the pinned blob is normalised away
+    fake_git_show[(RECORD_COMMIT, script_rel)] = b'print(1)\r\n'
+    MODULE.validate_published()
+    fake_git_show[(RECORD_COMMIT, script_rel)] = b'print(3)\n'
+    with pytest.raises(AuthorityError, match='publisher script at the publication commit differs from the certified manifest digest'):
+        MODULE.validate_published()
 
 def test_validate_rejects_missing_publisher_script_entry(env):
     published(env)

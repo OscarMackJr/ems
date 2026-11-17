@@ -779,6 +779,7 @@ def validate_published(at_pin: bool = False) -> None:
     if not isinstance(manifest, dict): raise AuthorityError('publication manifest must be an object')
     ps = manifest.get('publisher_script')
     if not isinstance(ps, dict) or ps.get('relative_path') != rel(SCRIPT) or not re.fullmatch(r'[0-9a-f]{64}', str(ps.get('sha256'))) or ps.get('sha256_normalisation') != 'CRLF_TO_LF': raise AuthorityError('manifest publisher_script entry missing or invalid')
+    if lf_digest(SCRIPT) != ps['sha256']: raise AuthorityError('publisher script differs from the certified manifest digest (manifest publisher_script.sha256); a publisher edit needs a certified republication')
     expected = build_all_outputs(a, signoff, script_sha256=ps['sha256'])
     actual = {p.name for p in OUT.iterdir() if p.is_file()}
     if actual != set(expected): raise AuthorityError('generated file set differs from the expected set')
@@ -788,13 +789,13 @@ def validate_published(at_pin: bool = False) -> None:
         rp = art['relative_path']
         if not isinstance(rp, str) or contains_absolute(rp) or '..' in rp.replace('\\', '/').split('/'): raise AuthorityError(f'{rp}: manifest path must be repo-relative without ..')
         if lf_digest(ROOT / art['relative_path']) != art['sha256']: raise AuthorityError(f"{art['relative_path']}: manifest digest differs")
-    check_publication_record(a, at_pin)
+    check_publication_record(a, at_pin, ps['sha256'])
     print(json.dumps({'status': 'PASS', 'mode': 'AT_PIN', 'deferred': [AT_PIN_DEFERRED]}) if at_pin else 'PASS')
 
 RECORD_KEYS = {'publication_commit', 'authority_id', 'version', 'authority_sha256', 'manifest_sha256', 'digest_normalisation'}
 AT_PIN_DEFERRED = 'PUBLICATION_RECORD_BINDING: the publication record naming this commit is written in the next commit; run plain --validate at the record commit or any later commit to check it'
 
-def check_publication_record(a: dict, at_pin: bool = False) -> None:
+def check_publication_record(a: dict, at_pin: bool, script_sha256: str) -> None:
     if not PUBLICATION_RECORD.exists(): raise AuthorityError('publication record is absent')
     record = load_checked(PUBLICATION_RECORD)
     if not isinstance(record, dict) or set(record) != RECORD_KEYS: raise AuthorityError('publication record must be an object with exactly the six record keys')
@@ -820,6 +821,7 @@ def check_publication_record(a: dict, at_pin: bool = False) -> None:
         if not git_is_ancestor(pub, head): raise AuthorityError(f'publication commit {pub[:7]} is not an ancestor of HEAD; plain --validate runs at the record commit or later')
         for p in publication_paths():
             if git_show(pub, p) != git_show(head, p): raise AuthorityError(f'{p}: differs between the publication commit and HEAD')
+        if hashlib.sha256(lf_bytes(git_show(pub, rel(SCRIPT)))).hexdigest() != script_sha256: raise AuthorityError('publisher script at the publication commit differs from the certified manifest digest')
 
 def write_publication_record(sha: str) -> None:
     if not re.fullmatch(r'[0-9a-f]{40}', sha or ''): raise AuthorityError('publication commit must be a 40-character lowercase hex SHA')
