@@ -195,4 +195,4 @@
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete    | 2026-11-16 |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 4/4 | Complete    | 2026-11-17 |
-| 14. Notice to Hayes (2.0.3) | v1.2.0 | 5/5 | Complete   | 2026-11-17 |
+| 14. Notice to Hayes (2.0.3) | v1.2.0 | 5/5 | Complete    | 2026-11-17 |

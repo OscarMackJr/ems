@@ -11,7 +11,7 @@
 
 - [x] **PIN-01**: Hayes can run a documented `--validate` command on a clean checkout of the 2.0.3 publication commit, with no later commit, and get PASS. The output names the one check it defers: binding the record to its commit.
 - [x] **PIN-02**: Plain `--validate` returns PASS at the record commit or any later commit. It verifies that the record names the publication commit and that the publication files are byte-identical between the two commits.
-- [ ] **PIN-03**: The 2.0.3 notice tells Hayes the exact commands to verify at the pin and at the record commit, and what each result means. This closes the v1.1.0 gap where the notice gave no instructions for the pin (09 tech debt, PUB-09/NOTICE-01).
+- [x] **PIN-03**: The 2.0.3 notice tells Hayes the exact commands to verify at the pin and at the record commit, and what each result means. This closes the v1.1.0 gap where the notice gave no instructions for the pin (09 tech debt, PUB-09/NOTICE-01).
 
 ### Frozen validators
 
@@ -24,9 +24,9 @@
 
 These apply to the notice builder and validator used for 2.0.3.
 
-- [ ] **CLAIM-01**: The builder runs every negative mutation and records a domain rejection for each one. The validator fails if any mutation was not rejected. Today the builder only counts the mutations. (10-REVIEW WR-01)
-- [ ] **CLAIM-02**: The validator recomputes all 7 lineage digests from git instead of echoing 4 of them. (10-REVIEW WR-04)
-- [ ] **CLAIM-03**: Any "declared under the wrong scope" statement is computed: for each RAW_BYTES file, the validator shows that its raw hash differs from its LF hash. (10-REVIEW WR-05)
+- [x] **CLAIM-01**: The builder runs every negative mutation and records a domain rejection for each one. The validator fails if any mutation was not rejected. Today the builder only counts the mutations. (10-REVIEW WR-01)
+- [x] **CLAIM-02**: The validator recomputes all 7 lineage digests from git instead of echoing 4 of them. (10-REVIEW WR-04)
+- [x] **CLAIM-03**: Any "declared under the wrong scope" statement is computed: for each RAW_BYTES file, the validator shows that its raw hash differs from its LF hash. (10-REVIEW WR-05)
 
 ### Gate and validator hardening
 
@@ -51,7 +51,7 @@ These apply to the notice builder and validator used for 2.0.3.
 
 ### Notice
 
-- [ ] **NOTICE-03**: A generated notice, checked by `--validate`, cites the 2.0.3 id, version and commit. It lists what changed, states that no decision changed, includes the PIN-03 verification guidance, and asks Hayes to re-pin.
+- [x] **NOTICE-03**: A generated notice, checked by `--validate`, cites the 2.0.3 id, version and commit. It lists what changed, states that no decision changed, includes the PIN-03 verification guidance, and asks Hayes to re-pin.
 
 ## Future Requirements
 
@@ -75,14 +75,14 @@ These apply to the notice builder and validator used for 2.0.3.
 |-------------|-------|--------|
 | PIN-01 | Phase 12 | Complete |
 | PIN-02 | Phase 12 | Complete |
-| PIN-03 | Phase 14 | Pending |
+| PIN-03 | Phase 14 | Complete |
 | FROZEN-01 | Phase 11 | Complete |
 | FROZEN-02 | Phase 11 | Complete |
 | FROZEN-03 | Phase 11 | Complete |
 | FROZEN-04 | Phase 11 | Complete |
-| CLAIM-01 | Phase 14 | Pending |
-| CLAIM-02 | Phase 14 | Pending |
-| CLAIM-03 | Phase 14 | Pending |
+| CLAIM-01 | Phase 14 | Complete |
+| CLAIM-02 | Phase 14 | Complete |
+| CLAIM-03 | Phase 14 | Complete |
 | GATE-06 | Phase 12 | Complete |
 | GATE-07 | Phase 12 | Complete |
 | GATE-08 | Phase 12 | Complete |
@@ -91,7 +91,7 @@ These apply to the notice builder and validator used for 2.0.3.
 | PUB-10 | Phase 13 | Complete |
 | PUB-11 | Phase 13 | Complete |
 | PUB-12 | Phase 13 | Complete |
-| NOTICE-03 | Phase 14 | Pending |
+| NOTICE-03 | Phase 14 | Complete |
 
 **Coverage:** 19 requirements, 19 mapped (Phase 11: 4, Phase 12: 7, Phase 13: 3, Phase 14: 5)
 
