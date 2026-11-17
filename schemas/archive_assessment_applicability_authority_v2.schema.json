@@ -51,7 +51,7 @@
       "type": "object"
     },
     "authority_id": {
-      "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2"
+      "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3"
     },
     "classification_vocabulary": {
       "properties": {
@@ -821,10 +821,10 @@
           "additionalProperties": false,
           "properties": {
             "authority_id": {
-              "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1"
+              "const": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2"
             },
             "commit": {
-              "const": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb"
+              "const": "ae15c7458e49c8f55cc58c61bab04bc716aa9892"
             },
             "governance_decisions_normalisation": {
               "const": "CRLF_TO_LF"
@@ -847,7 +847,7 @@
               "type": "string"
             },
             "version": {
-              "const": "2.0.1"
+              "const": "2.0.2"
             }
           },
           "required": [
@@ -915,7 +915,7 @@
       "const": "ARCHIVED_REPOSITORY_SNAPSHOT"
     },
     "version": {
-      "const": "2.0.2"
+      "const": "2.0.3"
     }
   },
   "required": [

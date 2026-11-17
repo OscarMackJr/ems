@@ -238,7 +238,7 @@
       "result": "REJECTED_FAIL_CLOSED"
     },
     {
-      "description": "The supersedes governance decisions digest differs from the 2.0.1 value.",
+      "description": "The supersedes governance decisions digest differs from the 2.0.2 value.",
       "id": "supersedes_governance_digest_differs",
       "mutation": "supersedes_governance_digest_differs",
       "rejected_by": [
@@ -276,6 +276,6 @@
       "result": "REJECTED_FAIL_CLOSED"
     }
   ],
-  "published_on": "2026-11-12",
+  "published_on": "2026-11-17",
   "result": "PASS"
 }

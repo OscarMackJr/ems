@@ -44,7 +44,7 @@
     "historical_compliance_attestation": false,
     "production_readiness_attestation": false
   },
-  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2",
+  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3",
   "classification_vocabulary": {
     "fields": [
       "production",
@@ -3095,15 +3095,15 @@
       "sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f"
     },
     "supersedes": {
-      "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1",
-      "commit": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb",
+      "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2",
+      "commit": "ae15c7458e49c8f55cc58c61bab04bc716aa9892",
       "governance_decisions_normalisation": "CRLF_TO_LF",
       "governance_decisions_relative_path": "registry/archive_assessment_governance_decisions.json",
       "governance_decisions_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
       "normalisation": "CRLF_TO_LF",
       "relative_path": "registry/archive_assessment_applicability_authority_v2.json",
-      "sha256": "7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f",
-      "version": "2.0.1"
+      "sha256": "a44eea1f98ec361ab100c554eb3a8d3529cfeb1fec78ec6d38193a675f0b8beb",
+      "version": "2.0.2"
     },
     "v1_baseline": {
       "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-1.0.0",
@@ -3116,5 +3116,5 @@
   },
   "status": "CONTROLLED",
   "target_type": "ARCHIVED_REPOSITORY_SNAPSHOT",
-  "version": "2.0.2"
+  "version": "2.0.3"
 }

@@ -2,50 +2,50 @@
   "artifacts": [
     {
       "relative_path": "schemas/archive_assessment_applicability_authority_v2.schema.json",
-      "sha256": "86cf734c70217d7ae674576a5afa68adae970bd0bf3b47b899dc775f5ec8c4ad"
+      "sha256": "0bee1f23ed7e70d90e73ecd25b6a4337d42ee8322895c9ace123ffb29798b6f2"
     },
     {
       "relative_path": "registry/archive_assessment_applicability_authority_v2.json",
-      "sha256": "a44eea1f98ec361ab100c554eb3a8d3529cfeb1fec78ec6d38193a675f0b8beb"
+      "sha256": "696116e765111c6f15237d876a9aca27f830c756707ee9c4b5e251d03aa0e0a6"
     },
     {
       "relative_path": "registry/archive_assessment_applicability_authority_v2_signoff.json",
-      "sha256": "50f43578a66c6d37d6775fcaa820efab2f724220baf05bad06ea6073b239e094"
+      "sha256": "409fc1293fa90b5488ce408004bff13768790718890d39c9383f61b1d6545e02"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/archive_assessment_applicability_authority_v2_matrix.json",
-      "sha256": "d68f6c63d9283199f7afbd40ae2e64d67b33639ee02af6fad09be85f0b11e428"
+      "sha256": "60f31e7e83be9f82e4008c128cb0ea08bb4c294761792850a9f04e4ebb03d868"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/archive_assessment_applicability_authority_v2_semantic_validation.json",
-      "sha256": "6bfad8c940799af2fb3bbe4a5f872f7a6739973a20c521cabb4259afdc693c23"
+      "sha256": "73b40d227acc046d65c102abcb9ac3775d11ecaac13822a2a40ad837e2745676"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/archive_assessment_applicability_authority_v2_negative_invariant_validation.json",
-      "sha256": "7254a7c545ffd61af4c7db024c3d77acff8ea9c33e1f6b0fc7139f089c6865d6"
+      "sha256": "8013a87e86cbd7a96215ca41b67b41bd7474362a1e7f7787c316d8ef2b0b6d82"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/archive_assessment_applicability_authority_v2_decision_traceability.json",
-      "sha256": "7e7f2ade62751a8c950d8eb868e96688768940cc7d38e77b49542966d53cd8bf"
+      "sha256": "e5a3a230ce21da069edd0a3340ee1da9e9134dfbee792e7febf7111814eedd70"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_CERTIFICATION.json",
-      "sha256": "0f47dad38ccc77391c37fb967d5bd7e2b5f9f02f24884b6ae582c3af8fcff835"
+      "sha256": "29ff8410856988a3ba41320d01ff14ab6ed3a345b1f84a67b35d29d8b5ef52b1"
     },
     {
       "relative_path": "generated/archive-assessment/ems-aa3-v2/EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION.md",
-      "sha256": "e846fbfb7ff359b78b841861133ac60ffa1f375cf502d6d6a7c68793a9ee6210"
+      "sha256": "352137b5b7d8d9cfc07e58a9c6522fa57e27e570a0baee4340efc3c87b2c2968"
     }
   ],
-  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2",
+  "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3",
   "digest_normalisation": "CRLF_TO_LF",
   "manifest_type": "EMS_AA3_V2_ARCHIVE_APPLICABILITY_AUTHORITY_PUBLICATION_MANIFEST",
-  "published_on": "2026-11-12",
+  "published_on": "2026-11-17",
   "publisher_script": {
     "relative_path": "scripts/publish_archive_assessment_applicability_authority_v2.py",
-    "sha256": "f6b51cca0fae899aa51170f7b14a5b936fc3fae7372a68ead5de90a8c5af89b6",
+    "sha256": "cf694a06b3aa13838b2c414d01372efd94481bbdf8f2af9387d096956e14c908",
     "sha256_normalisation": "CRLF_TO_LF"
   },
-  "publisher_script_note": "The publisher script digest is recorded at publication and is not recomputed on validation; validation rebuilds every output with the recorded value.",
+  "publisher_script_note": "The publisher script digest is recorded at publication. --validate requires the live publisher script to match it, and plain --validate also requires the script at the publication commit to match it; validation rebuilds every output with the recorded value.",
   "self_entry_exclusion_reason": "A SHA-256 manifest cannot include a hash of itself without recursion."
 }
