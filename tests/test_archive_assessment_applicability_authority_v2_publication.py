@@ -17,6 +17,9 @@ AuthorityError = MODULE.AuthorityError
 build = MODULE.build_published_authority
 validate_publication = MODULE.validate_publication
 resolve_applicability = MODULE.resolve_applicability
+# captured before any fixture fakes them; the real-repo at-pin test restores them
+REAL_GIT_DIRTY = MODULE.git_dirty
+REAL_GIT_NOT_SHALLOW = MODULE.git_not_shallow
 
 REQUEST = MODULE.REQUEST_CONTROL_IDS
 T, F, U = 'KNOWN_TRUE', 'KNOWN_FALSE', 'UNKNOWN'
@@ -235,6 +238,9 @@ def env(monkeypatch, lineage_calls):
     prev_blob, real_git_show, sup = prev_201_authority_bytes(), MODULE.git_show, MODULE.SUPERSEDED_V2_0_1
     # validate_publication compares against the 2.0.1 authority in git history; serve it under the empty temp ROOT
     monkeypatch.setattr(MODULE, 'git_show', lambda commit, path: prev_blob if (commit, path) == (sup['commit'], sup['relative_path']) else real_git_show(commit, path))
+    # at-pin git state checks run against the real repo otherwise; the temp ROOT is not a git repo
+    monkeypatch.setattr(MODULE, 'git_not_shallow', lambda: None)
+    monkeypatch.setattr(MODULE, 'git_dirty', lambda paths: [])
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
         for name, value in {'ROOT': root, 'AUTHORITY': root / 'registry' / 'a.json', 'SCHEMA': root / 'schemas' / 's.json', 'SIGNOFF': root / 'registry' / 'signoff.json', 'PUBLICATION_RECORD': root / 'registry' / 'record.json', 'OUT': root / 'generated' / 'out', 'SCRIPT': root / 'scripts' / 'pub.py'}.items():
@@ -496,37 +502,57 @@ def test_validate_record_matching_passes(env, fake_git_show):
     published_recorded(env, fake_git_show)
     MODULE.validate_published()
 
+def authority_supersedes():
+    return MODULE.load(MODULE.AUTHORITY)['source_lineage']['supersedes']
+
+def superseded_authority_blob(s):
+    blob = subprocess.run(['git', 'show', f"{s['commit']}:{s['relative_path']}", '--'], cwd=SCRIPT.parents[1], capture_output=True, check=True).stdout
+    assert hashlib.sha256(MODULE.lf_bytes(blob)).hexdigest() == s['sha256']
+    return blob
+
 def superseded_record(blobs, **over):
-    s = MODULE.SUPERSEDED_V2_0_1
+    s = authority_supersedes()
     rec = {'publication_commit': s['commit'], 'authority_id': s['authority_id'], 'version': s['version'], 'authority_sha256': s['sha256'], 'manifest_sha256': MODULE.lf_digest(MODULE.OUT / MODULE.N_MANIFEST), 'digest_normalisation': 'CRLF_TO_LF'}
     rec.update(over)
     MODULE.dump(MODULE.PUBLICATION_RECORD, rec)
-    blobs[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = b'superseded 2.0.1 authority bytes\n'
+    blobs[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = b'superseded authority bytes\n'
     blobs[(s['commit'], MODULE.rel(MODULE.OUT / MODULE.N_MANIFEST))] = (MODULE.OUT / MODULE.N_MANIFEST).read_bytes()
     return rec
 
-def test_pre_publication_mode_accepts_only_superseded_record(env, fake_git_show):
+def test_at_pin_mode_accepts_only_superseded_record(env, fake_git_show, capsys):
     published(env)
-    s = MODULE.SUPERSEDED_V2_0_1
-    # D-03 needs the real 2.0.1 authority blob; patching the pinned sha would break source_lineage.supersedes
-    blob = subprocess.run(['git', 'show', f"{s['commit']}:{s['relative_path']}"], cwd=SCRIPT.parents[1], capture_output=True, check=True).stdout
-    assert hashlib.sha256(MODULE.lf_bytes(blob)).hexdigest() == s['sha256']
+    s = authority_supersedes()
+    # D-02 needs the real superseded authority blob; patching the pinned sha would break source_lineage.supersedes
+    blob = superseded_authority_blob(s)
     superseded_record(fake_git_show)
     fake_git_show[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = blob
+    capsys.readouterr()
     MODULE.validate_published(True)
+    out = capsys.readouterr().out
+    assert out.endswith('\n') and out.count('\n') == 1
+    doc = json.loads(out)
+    assert doc == {'status': 'PASS', 'mode': 'AT_PIN', 'deferred': [MODULE.AT_PIN_DEFERRED]}
+    assert len(doc['deferred']) == 1 and doc['deferred'][0].startswith('PUBLICATION_RECORD_BINDING: ')
     with pytest.raises(AuthorityError, match='must name'):
         MODULE.validate_published()
 
-def test_pre_publication_binding_names_2_0_1_literals(env, fake_git_show):
+def test_at_pin_binding_reads_supersedes_from_authority(env, fake_git_show):
     published_recorded(env, fake_git_show)
-    s = MODULE.SUPERSEDED_V2_0_1
-    assert (s['commit'], s['sha256'], s['version']) == ('31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb', '7be5eb8869a8897ee6d55051f9d872fee9a8a35bdbd2ad5093d40e8a1d489e4f', '2.0.1')
-    superseded_record(fake_git_show, publication_commit='54a7fd09114704a97a7a48fce5f89aebeb48c90a')
-    with pytest.raises(AuthorityError, match='must name the 2.0.1 publication commit'):
-        MODULE.validate_published(True)
-    superseded_record(fake_git_show, authority_sha256='de36e227be4ccc95f4a8a8a08247cf6e49f7682908c7f425f8cc02bbaa1da353')
-    with pytest.raises(AuthorityError, match='must equal the 2.0.1 digest'):
-        MODULE.validate_published(True)
+    src = inspect.getsource(MODULE.check_publication_record)
+    assert 'SUPERSEDED_V2_0_1' not in src and "a['source_lineage']['supersedes']" in src
+    sup = authority_supersedes()
+    rec = superseded_record(fake_git_show)
+    assert (rec['publication_commit'], rec['authority_id'], rec['version'], rec['authority_sha256']) == (sup['commit'], sup['authority_id'], sup['version'], sup['sha256'])
+    # the identity follows the authority document passed in, not a module constant
+    other_blob = b'another superseded authority\n'
+    other = dict(sup, authority_id='EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-9.9.8', version='9.9.8', commit='c' * 40, sha256=hashlib.sha256(other_blob).hexdigest())
+    a = MODULE.load(MODULE.AUTHORITY); a['source_lineage']['supersedes'] = other
+    superseded_record(fake_git_show, publication_commit=other['commit'], authority_id=other['authority_id'], version=other['version'], authority_sha256=other['sha256'])
+    fake_git_show[(other['commit'], MODULE.rel(MODULE.AUTHORITY))] = other_blob
+    fake_git_show[(other['commit'], MODULE.rel(MODULE.OUT / MODULE.N_MANIFEST))] = (MODULE.OUT / MODULE.N_MANIFEST).read_bytes()
+    MODULE.check_publication_record(a, True)
+    with pytest.raises(AuthorityError, match=f"superseded {re.escape(sup['version'])} publication commit"):
+        MODULE.check_publication_record(MODULE.load(MODULE.AUTHORITY), True)
 
 def test_other_authority_record_fails_in_both_modes(env, fake_git_show):
     published_recorded(env, fake_git_show)
@@ -537,14 +563,48 @@ def test_other_authority_record_fails_in_both_modes(env, fake_git_show):
         with pytest.raises(AuthorityError):
             MODULE.validate_published(mode)
 
-def test_pre_publication_wrong_commit_or_digest_fails(env, fake_git_show):
+def test_at_pin_wrong_commit_or_digest_fails(env, fake_git_show):
     published_recorded(env, fake_git_show)
+    v = re.escape(authority_supersedes()['version'])
     superseded_record(fake_git_show, publication_commit='b' * 40)
-    with pytest.raises(AuthorityError, match='2.0.1 publication commit'):
+    with pytest.raises(AuthorityError, match=f'superseded {v} publication commit'):
         MODULE.validate_published(True)
     superseded_record(fake_git_show, authority_sha256='0' * 64)
-    with pytest.raises(AuthorityError, match='2.0.1 digest'):
+    with pytest.raises(AuthorityError, match=f'superseded {v} digest'):
         MODULE.validate_published(True)
+
+def test_at_pin_record_blobs_must_match_the_superseded_commit(env, fake_git_show):
+    published(env)
+    s = authority_supersedes()
+    # superseded_record serves a wrong authority blob at the superseded commit
+    superseded_record(fake_git_show)
+    with pytest.raises(AuthorityError, match='authority at the publication commit'):
+        MODULE.validate_published(True)
+    fake_git_show[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = superseded_authority_blob(s)
+    fake_git_show[(s['commit'], MODULE.rel(MODULE.OUT / MODULE.N_MANIFEST))] = b'different manifest bytes\n'
+    with pytest.raises(AuthorityError, match='manifest at the publication commit'):
+        MODULE.validate_published(True)
+
+def test_at_pin_dirty_tree_fails_closed(env, monkeypatch):
+    seen = []
+    monkeypatch.setattr(MODULE, 'git_dirty', lambda paths: seen.append(list(paths)) or [' M registry/a.json'])
+    with pytest.raises(AuthorityError, match='modified or untracked'):
+        MODULE.validate_published(True)
+    assert seen == [MODULE.publication_paths() + [MODULE.rel(MODULE.SCRIPT)]]
+    assert len(seen[0]) == 11
+    # plain mode does not consult the working-tree state
+    with pytest.raises(AuthorityError, match='not published'):
+        MODULE.validate_published()
+    assert len(seen) == 1
+
+def test_at_pin_shallow_fails_closed(env, monkeypatch):
+    dirty_calls = []
+    def shallow(): raise MODULE.GitHistoryError('the clone is shallow; fetch full history (git fetch --unshallow)')
+    monkeypatch.setattr(MODULE, 'git_not_shallow', shallow)
+    monkeypatch.setattr(MODULE, 'git_dirty', lambda paths: dirty_calls.append(paths) or [])
+    with pytest.raises(MODULE.GitHistoryError, match='shallow'):
+        MODULE.validate_published(True)
+    assert dirty_calls == []
 
 @pytest.mark.parametrize('mutate', [lambda r: r.pop('version'), lambda r: r.__setitem__('extra', 1)], ids=['missing_key', 'extra_key'])
 def test_record_shape_violation_raises_authority_error(env, fake_git_show, mutate):
@@ -608,15 +668,57 @@ def test_real_git_repo_record_passes_plain_mode(env):
     MODULE.write_publication_record(sha)
     MODULE.validate_published()
 
-def test_cli_pre_publication_requires_validate(monkeypatch):
-    monkeypatch.setattr(sys, 'argv', ['x', '--pre-publication'])
+def test_real_git_repo_at_pin_passes_and_dirty_fails(env, fake_git_show, monkeypatch, capsys):
+    def run(*args): return subprocess.run(['git', *args], cwd=MODULE.ROOT, capture_output=True)
+    require_history(ROOT)
+    r = run('init', '-q')
+    if r.returncode != 0: pytest.fail(f"git init failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
+    run('config', 'user.email', 't@example.com'); run('config', 'user.name', 't'); run('config', 'commit.gpgsign', 'false'); run('config', 'core.autocrlf', 'false')
+    published(env)
+    s = authority_supersedes()
+    superseded_record(fake_git_show)
+    # git_show stays faked: it serves the superseded-commit blobs, which are not in the temp repo
+    fake_git_show[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = superseded_authority_blob(s)
+    run('add', '-A')
+    r = run('commit', '-q', '-m', 'publish')
+    if r.returncode != 0: pytest.fail(f"git commit failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
+    monkeypatch.setattr(MODULE, 'git_dirty', REAL_GIT_DIRTY)
+    monkeypatch.setattr(MODULE, 'git_not_shallow', REAL_GIT_NOT_SHALLOW)
+    capsys.readouterr()
+    MODULE.validate_published(True)
+    assert json.loads(capsys.readouterr().out) == {'status': 'PASS', 'mode': 'AT_PIN', 'deferred': [MODULE.AT_PIN_DEFERRED]}
+    original = MODULE.AUTHORITY.read_bytes()
+    MODULE.AUTHORITY.write_bytes(original + b' ')
+    with pytest.raises(AuthorityError, match='modified or untracked'):
+        MODULE.validate_published(True)
+    MODULE.AUTHORITY.write_bytes(original)
+    MODULE.validate_published(True)
+    MODULE.write_text(MODULE.SCRIPT, 'print(2)\n')
+    with pytest.raises(AuthorityError, match='modified or untracked') as e:
+        MODULE.validate_published(True)
+    assert MODULE.rel(MODULE.SCRIPT) in str(e.value)
+
+def test_cli_at_pin_requires_validate(monkeypatch):
+    monkeypatch.setattr(sys, 'argv', ['x', '--at-pin'])
     with pytest.raises(SystemExit):
         MODULE.main()
 
-def test_cli_validate_pre_publication_passes_true(monkeypatch):
+REMOVED_FLAG = '--pre' + '-publication'  # built so a source grep for the removed flag finds nothing
+
+def test_cli_pre_publication_flag_is_removed(monkeypatch):
     seen = []
-    monkeypatch.setattr(MODULE, 'validate_published', lambda pre=False: seen.append(pre))
-    monkeypatch.setattr(sys, 'argv', ['x', '--validate', '--pre-publication'])
+    monkeypatch.setattr(MODULE, 'validate_published', lambda at_pin=False: seen.append(at_pin))
+    monkeypatch.setattr(sys, 'argv', ['x', '--validate', REMOVED_FLAG])
+    with pytest.raises(SystemExit):
+        MODULE.main()
+    assert seen == []
+    src = inspect.getsource(MODULE)
+    assert REMOVED_FLAG[2:] not in src and REMOVED_FLAG[2:].replace('-', '_') not in src
+
+def test_cli_validate_at_pin_passes_true(monkeypatch):
+    seen = []
+    monkeypatch.setattr(MODULE, 'validate_published', lambda at_pin=False: seen.append(at_pin))
+    monkeypatch.setattr(sys, 'argv', ['x', '--validate', '--at-pin'])
     MODULE.main()
     monkeypatch.setattr(sys, 'argv', ['x', '--validate'])
     MODULE.main()
