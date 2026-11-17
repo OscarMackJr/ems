@@ -562,7 +562,12 @@ def test_verify_section():
     assert 'git checkout ' + REC in s2['commands'] and any(c.endswith('--validate') for c in s2['commands'])
     assert 'git checkout ' + MODULE.REMOTE_BRANCH in s3['commands'] and any(c.endswith('--validate') and MODULE.SCRIPT_REL in c for c in s3['commands'])
     assert not re.search(r'[0-9a-f]{40}', ' '.join(s3['commands']) + s3['checkout'])
-    assert len(v['steps']) == 3 and len(v['outcomes']) == 4
+    assert len(v['steps']) == 3 and len(v['outcomes']) == 5
+    assert [o['action'] for o in v['outcomes'][:3]] == ['Run step 2.', 'Run step 3.', f'Re-pin to {PUB}.']
+    assert [o for o in v['outcomes'] if 'Re-pin' in o['action']] == [v['outcomes'][2]]
+    assert v['outcomes'][2]['case'].startswith('Step 3 prints PASS') and 'steps 1, 2 and 3 all print PASS' in v['outcomes'][2]['meaning']
+    assert REC not in v['outcomes'][2]['case'] and not any('step 2 or step 3' in o['case'].lower() for o in v['outcomes'])
+    assert 'any later commit' not in MODULE.jtext(v)
     require_history(ROOT, commits=FROZEN_COMMITS)
     assert v['at_pin_deferred'] == at_pin_deferred_literal()
 

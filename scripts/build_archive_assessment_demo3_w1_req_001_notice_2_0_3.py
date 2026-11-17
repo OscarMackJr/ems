@@ -421,12 +421,13 @@ def build_notice(authority: dict, previous_2_0_2: dict, previous_2_0_1: dict, re
                 {'step': 1, 'checkout': pub, 'commands': ['git clone ' + REPOSITORY_URL, 'cd ems', 'git checkout ' + pub, INSTALL_COMMAND, PUBLISHER_CMD + ' --validate --at-pin'],
                  'pass_means': 'One JSON object with status PASS and mode AT_PIN, with exactly one deferred item. The pinned bytes are certified.'},
                 {'step': 2, 'checkout': rec, 'commands': ['git checkout ' + rec, PUBLISHER_CMD + ' --validate'],
-                 'pass_means': f'PASS means the publication record at this commit names {pub} and the publication files are byte-identical between the two commits. It also passes at any later commit on {REMOTE_BRANCH}.'},
+                 'pass_means': f'PASS means the publication record at this commit names {pub} and the publication files are byte-identical between the two commits. It is expected to pass at later commits on {REMOTE_BRANCH} that do not change the publication files.'},
                 {'step': 3, 'checkout': REMOTE_BRANCH, 'commands': ['git checkout ' + REMOTE_BRANCH, 'python ' + SCRIPT_REL + ' --validate'],
                  'pass_means': f'Run this at or after the commit that adds this notice. PASS means the builder rebuilt the notice, reran the {len(mutations)} mutations from the pinned publisher and recomputed the digests, and all of them match the committed notice.'}],
             'outcomes': [
                 {'case': 'Step 1 prints PASS with mode AT_PIN and one deferred item', 'meaning': 'The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit.', 'action': 'Run step 2.'},
-                {'case': f'Step 2 or step 3 prints PASS at {rec} or any later commit', 'meaning': 'The publication record binds the pin and the publication files are unchanged.', 'action': f'Re-pin to {pub}.'},
+                {'case': f'Step 2 prints PASS at {rec} or a later commit', 'meaning': 'The publication record binds the pin and the publication files are byte-identical between the pin and the checked-out commit.', 'action': 'Run step 3.'},
+                {'case': 'Step 3 prints PASS at or after the commit that adds this notice, and steps 1 and 2 printed PASS', 'meaning': 'The notice was rebuilt from the frozen inputs, the mutations were rerun from the pinned publisher and the digests were recomputed, and all of them match the committed notice. Re-pin only when steps 1, 2 and 3 all print PASS.', 'action': f'Re-pin to {pub}.'},
                 {'case': 'Plain --validate at the pin fails', 'meaning': 'This failure is by design: the record that binds the pin is added after the pin. The message points to --validate --at-pin.', 'action': 'Run --validate --at-pin at the pin.'},
                 {'case': 'Any other failure, including a shallow clone', 'meaning': 'The check did not complete as described.', 'action': 'Do not consume the authority. Report the output to EMS.'}],
             'at_pin_deferred': deferred},
@@ -543,7 +544,7 @@ def schema() -> dict:
             'lineage': {'type': 'array', 'minItems': 7, 'maxItems': 7, 'items': lineage},
             'digest_scope_error': obj({'previous_version': {'const': PREVIOUS_2_0_1_VERSION}, 'previous_commit': commit, 'previous_declared_normalisation': {'const': 'CRLF_TO_LF'}, 'computed_at': commit, 'digests': {'type': 'array', 'minItems': 3, 'maxItems': 3, 'items': digest}, 'digest_values_changed': {'const': False}}),
             'decisions': obj({'decided_count': {'const': 21}, 'rule_count': {'const': 3}, 'no_rule_count': {'const': 18}, 'not_yet_decided_count': {'const': 59}, 'rules': {'type': 'array', 'minItems': 3, 'maxItems': 3, 'items': obj({'control_id': {'type': 'string', 'pattern': '^EMS-CTRL-[0-9]{3}$'}, 'authority': {'type': 'string', 'pattern': AUTHORITY_ID_RE}, 'rule': rule, 'machine_form': s})}, 'governance_decisions_sha256': sha, 'decisions_changed': {'const': False}, 'no_rule_reasons_pointer': s}),
-            'verify': obj({'repository_url': {'const': REPOSITORY_URL}, 'prerequisites': strings(4), 'steps': {'type': 'array', 'minItems': 3, 'maxItems': 3, 'items': step}, 'outcomes': {'type': 'array', 'minItems': 4, 'maxItems': 4, 'items': outcome}, 'at_pin_deferred': {'type': 'string', 'pattern': '^PUBLICATION_RECORD_BINDING: '}}),
+            'verify': obj({'repository_url': {'const': REPOSITORY_URL}, 'prerequisites': strings(4), 'steps': {'type': 'array', 'minItems': 3, 'maxItems': 3, 'items': step}, 'outcomes': {'type': 'array', 'minItems': 5, 'maxItems': 5, 'items': outcome}, 'at_pin_deferred': {'type': 'string', 'pattern': '^PUBLICATION_RECORD_BINDING: '}}),
             'hayes_side_changes_needed': strings(3),
             'send_condition': s}}
 
