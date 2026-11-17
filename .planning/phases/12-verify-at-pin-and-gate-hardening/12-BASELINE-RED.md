@@ -367,3 +367,42 @@ CI validators:
 
 Note for Phase 13: the publish sequence uses `--validate --at-pin` at the publication commit where Phase 09 used
 `--validate --pre-publication` (removed in 12-05, no alias), then plain `--validate` at the record commit or later.
+
+## After plan 12-08 Task 1 (commit d7a98f76a4f7ee455681d24dfc0cd922aec68667) — CR-01 / WR-01 publisher fix
+
+The suite and validators were run on the working tree that equals commit d7a98f7 (run immediately before the
+commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-08-t1-full
+```
+
+Totals: **986 passed, 3 failed, 0 skipped, 0 errors** (338.64s). Total test count unchanged at 989 versus 12-07
+(Task 1 adapts existing tests; it adds none).
+
+pytest exit code: **exit 1**
+
+Targeted run (`tests/test_archive_assessment_applicability_authority_v2_publication.py`,
+`--basetemp=.pytest-temp/p12-08-t1-pub`): 273 passed, 2 failed (`test_real_published_files_validate`,
+`test_publisher_still_valid_and_digest_matches_manifest`), as expected.
+
+Failing node ids:
+
+- `tests/test_archive_assessment_applicability_authority_v2.py::test_committed_schema_equals_schema_function`
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate`
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+
+CI validators:
+
+| # | Validator | Result |
+|---|-----------|--------|
+| 1 | `scripts/publish_archive_assessment_applicability_authority_v2.py --validate` | **FAIL** (exit 1, by design): `AuthorityError: authority identity/version/status invalid; source_lineage supersedes does not name the 2.0.2 publication` (unchanged) |
+| 2 | `scripts/build_archive_assessment_governance_decisions.py --validate` | PASS |
+| 3 | `scripts/validate_archive_assessment_rule_proposals.py --validate` | PASS |
+| 4 | `scripts/validate_archive_assessment_rule_proposals.py --validate-record` | PASS |
+| 5 | `scripts/build_archive_assessment_demo3_w1_req_001_reply.py --validate` | PASS |
+| 6 | `scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py --validate` | PASS |
+
+Accepted red set: unchanged (the D-16 end state: the three ids above plus CI validator 1).
