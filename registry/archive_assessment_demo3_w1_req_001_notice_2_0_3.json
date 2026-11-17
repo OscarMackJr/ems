@@ -1,0 +1,482 @@
+{
+  "decisions": {
+    "decided_count": 21,
+    "decisions_changed": false,
+    "governance_decisions_sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+    "no_rule_count": 18,
+    "no_rule_reasons_pointer": "The reasons for the 18 no-rule decisions are in docs/DEMO3_W1_REQ_001_REPLY.md and registry/archive_assessment_governance_decisions.json.",
+    "not_yet_decided_count": 59,
+    "rule_count": 3,
+    "rules": [
+      {
+        "authority": "AA4-GOV-014",
+        "control_id": "EMS-CTRL-030",
+        "machine_form": "ALL_CONDITIONS_MUST_MATCH: production = KNOWN_FALSE",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "production",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      {
+        "authority": "AA4-GOV-016",
+        "control_id": "EMS-CTRL-039",
+        "machine_form": "ALL_CONDITIONS_MUST_MATCH: production = KNOWN_FALSE",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "production",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      },
+      {
+        "authority": "AA4-GOV-018",
+        "control_id": "EMS-CTRL-052",
+        "machine_form": "ALL_CONDITIONS_MUST_MATCH: ai_enabled = KNOWN_FALSE",
+        "rule": {
+          "combination": "ALL_CONDITIONS_MUST_MATCH",
+          "conditions": [
+            {
+              "field": "ai_enabled",
+              "state": "KNOWN_FALSE"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "digest_scope_error": {
+    "computed_at": "1544dc19ba235d732c832d1651895550ed5a265d",
+    "digest_values_changed": false,
+    "digests": [
+      {
+        "declared_scope": "RAW_BYTES",
+        "key": "aa1_manifest",
+        "lf_sha256": "06e39f7bd7925933b8f6f04b9d9a27e9c33acd2bb17672eb7431584ea90c77e7",
+        "previous_declared_scope": "CRLF_TO_LF",
+        "previous_key": "aa1_manifest_sha256",
+        "raw_sha256": "f0da8e2e45c306ccc42ae96f25a19922668f3eedecdb26006f13514e24ad9b4b",
+        "relative_path": "generated/archive-assessment/ems-aa1/ems_aa1_analysis_artifact_manifest.json"
+      },
+      {
+        "declared_scope": "RAW_BYTES",
+        "key": "aa2_approval",
+        "lf_sha256": "248b6e3812082888f0d8d449b80cc1eafb571f4bd8db5d2510ff4095eb2a4886",
+        "previous_declared_scope": "CRLF_TO_LF",
+        "previous_key": "aa2_approval_sha256",
+        "raw_sha256": "de170ebcf60aabe593b3e9766c11170c3c597730ef0f342028c8f844614f745c",
+        "relative_path": "generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_approval.json"
+      },
+      {
+        "declared_scope": "RAW_BYTES",
+        "key": "aa2_closure",
+        "lf_sha256": "66662df3502c87a2cc96acf170c45604c3f320ec6d4b2f7a6f580c138bac5170",
+        "previous_declared_scope": "CRLF_TO_LF",
+        "previous_key": "aa2_closure_sha256",
+        "raw_sha256": "ed589d76febe255665fd11697a9c0b9f8c7f036487e26b6f765ef8046c55887b",
+        "relative_path": "generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_closure.json"
+      }
+    ],
+    "previous_commit": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb",
+    "previous_declared_normalisation": "CRLF_TO_LF",
+    "previous_version": "2.0.1"
+  },
+  "document_id": "EMS-DEMO3-W1-REQ-001-NOTICE-2.0.3",
+  "dual_role_statement": "Oscar Mack made this decision as the EMS governance authority and is also the developer of Hayes Verify, the assessor that will read it.",
+  "from_authority": {
+    "approver": "Oscar Mack",
+    "role": "EMS_GOVERNANCE_AUTHORITY",
+    "roles": [
+      "EMS_GOVERNANCE_AUTHORITY",
+      "HAYES_VERIFY_DEVELOPER"
+    ]
+  },
+  "hayes_side_changes_needed": [
+    "Re-pin to 1544dc19ba235d732c832d1651895550ed5a265d. It replaces ae15c7458e49c8f55cc58c61bab04bc716aa9892 (2.0.2) and 31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb (2.0.1); if Hayes pins either, move straight to 1544dc19ba235d732c832d1651895550ed5a265d.",
+    "The target description must carry the eight classification facts.",
+    "Hayes must read the published v2 shape."
+  ],
+  "lineage": [
+    {
+      "key": "aa1_manifest",
+      "normalisation": "RAW_BYTES",
+      "recomputed_at": "1544dc19ba235d732c832d1651895550ed5a265d",
+      "relative_path": "generated/archive-assessment/ems-aa1/ems_aa1_analysis_artifact_manifest.json",
+      "sha256": "f0da8e2e45c306ccc42ae96f25a19922668f3eedecdb26006f13514e24ad9b4b"
+    },
+    {
+      "key": "aa2_approval",
+      "normalisation": "RAW_BYTES",
+      "recomputed_at": "1544dc19ba235d732c832d1651895550ed5a265d",
+      "relative_path": "generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_approval.json",
+      "sha256": "de170ebcf60aabe593b3e9766c11170c3c597730ef0f342028c8f844614f745c"
+    },
+    {
+      "key": "aa2_closure",
+      "normalisation": "RAW_BYTES",
+      "recomputed_at": "1544dc19ba235d732c832d1651895550ed5a265d",
+      "relative_path": "generated/archive-assessment/ems-aa2/approval/archive_assessment_applicability_governance_closure.json",
+      "sha256": "ed589d76febe255665fd11697a9c0b9f8c7f036487e26b6f765ef8046c55887b"
+    },
+    {
+      "key": "catalog_reference",
+      "normalisation": "CRLF_TO_LF",
+      "recomputed_at": "62a8955dc28d9458cd1167fad314926e057c31fc",
+      "relative_path": "registry/control_catalog.yaml",
+      "sha256": "12bb1a9d2476e4b0208ff51f9296f51462395f01af8d0543ad3c7eae9f039477"
+    },
+    {
+      "key": "governance_decisions",
+      "normalisation": "CRLF_TO_LF",
+      "recomputed_at": "1544dc19ba235d732c832d1651895550ed5a265d",
+      "relative_path": "registry/archive_assessment_governance_decisions.json",
+      "sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f"
+    },
+    {
+      "key": "supersedes",
+      "normalisation": "CRLF_TO_LF",
+      "recomputed_at": "ae15c7458e49c8f55cc58c61bab04bc716aa9892",
+      "relative_path": "registry/archive_assessment_applicability_authority_v2.json",
+      "sha256": "a44eea1f98ec361ab100c554eb3a8d3529cfeb1fec78ec6d38193a675f0b8beb"
+    },
+    {
+      "key": "v1_baseline",
+      "normalisation": "CRLF_TO_LF",
+      "recomputed_at": "62a8955dc28d9458cd1167fad314926e057c31fc",
+      "relative_path": "registry/archive_assessment_applicability_authority.json",
+      "sha256": "f084607c28e5b223137af0e3e10dffd924f44593fbed6fef87ff801562b192aa"
+    }
+  ],
+  "mutations": [
+    {
+      "id": "swapped_authority",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "rule_field_change",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "rule_state_unknown",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "rule_unused_field",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "rule_state_flip",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "decided_flipped_to_not_yet_decided",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "twenty_second_control_decided",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "v1_field_change_on_undecided_row",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "extra_field_on_decided_row",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "authority_removed_from_id_list",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "authority_cited_twice",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "duplicate_id_in_list",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "altered_governance_digest",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "altered_record_count_or_drafting_commit",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "missing_governance_lineage",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "wrong_v1_lineage",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "superseded_record_cited",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "signoff_role_hayes_developer",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "signoff_invalid_date",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "signoff_dual_role_text_appended",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "signoff_extra_keys",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "decision_record_tampered_approver",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "decision_record_empty_dual_role_statement",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "decision_record_bogus_disposition",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "rule_same_field_twice_opposite_states",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "supersedes_governance_digest_differs",
+      "rejected_by": [
+        "PYTHON_VALIDATOR"
+      ]
+    },
+    {
+      "id": "extra_top_level_field",
+      "rejected_by": [
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "extra_field_on_undecided_row",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    },
+    {
+      "id": "extra_field_in_semantics",
+      "rejected_by": [
+        "PYTHON_VALIDATOR",
+        "SCHEMA"
+      ]
+    }
+  ],
+  "notice_date": "2026-11-17",
+  "pin": {
+    "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3",
+    "authority_sha256": "696116e765111c6f15237d876a9aca27f830c756707ee9c4b5e251d03aa0e0a6",
+    "digest_normalisation": "CRLF_TO_LF",
+    "manifest_sha256": "3084dd94e7f831f11681621d13be1d6e75cc7db3452cb4189349f4b64cc3830e",
+    "publication_commit": "1544dc19ba235d732c832d1651895550ed5a265d",
+    "publication_record_commit": "87a46d147413bd99e931c71a1ab165eb0903f014",
+    "published_on": "2026-11-17",
+    "version": "2.0.3"
+  },
+  "request_id": "DEMO3-W1-REQ-001",
+  "request_label": "EMSREQ-APPLIC-RULES",
+  "send_condition": "Do not send this notice until the commit that adds it is on the remote branch feature/ems-aa3-archive-applicability-authority.",
+  "supersedes": {
+    "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2",
+    "commit": "ae15c7458e49c8f55cc58c61bab04bc716aa9892",
+    "previous": {
+      "authority_id": "EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.1",
+      "commit": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb",
+      "version": "2.0.1"
+    },
+    "version": "2.0.2"
+  },
+  "verify": {
+    "at_pin_deferred": "PUBLICATION_RECORD_BINDING: the publication record naming this commit is written in the next commit; run plain --validate at the record commit or any later commit to check it",
+    "outcomes": [
+      {
+        "action": "Run step 2.",
+        "case": "Step 1 prints PASS with mode AT_PIN and one deferred item",
+        "meaning": "The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit."
+      },
+      {
+        "action": "Re-pin to 1544dc19ba235d732c832d1651895550ed5a265d.",
+        "case": "Step 2 or step 3 prints PASS at 87a46d147413bd99e931c71a1ab165eb0903f014 or any later commit",
+        "meaning": "The publication record binds the pin and the publication files are unchanged."
+      },
+      {
+        "action": "Run --validate --at-pin at the pin.",
+        "case": "Plain --validate at the pin fails",
+        "meaning": "This failure is by design: the record that binds the pin is added after the pin. The message points to --validate --at-pin."
+      },
+      {
+        "action": "Do not consume the authority. Report the output to EMS.",
+        "case": "Any other failure, including a shallow clone",
+        "meaning": "The check did not complete as described."
+      }
+    ],
+    "prerequisites": [
+      "Python 3.12",
+      "python -m pip install -r requirements.txt jsonschema==4.26.0",
+      "A full clone (not shallow); run git fetch --unshallow if needed",
+      "No local edits to the pinned paths"
+    ],
+    "repository_url": "https://github.com/OscarMackJr/ems.git",
+    "steps": [
+      {
+        "checkout": "1544dc19ba235d732c832d1651895550ed5a265d",
+        "commands": [
+          "git clone https://github.com/OscarMackJr/ems.git",
+          "cd ems",
+          "git checkout 1544dc19ba235d732c832d1651895550ed5a265d",
+          "python -m pip install -r requirements.txt jsonschema==4.26.0",
+          "python scripts/publish_archive_assessment_applicability_authority_v2.py --validate --at-pin"
+        ],
+        "pass_means": "One JSON object with status PASS and mode AT_PIN, with exactly one deferred item. The pinned bytes are certified.",
+        "step": 1
+      },
+      {
+        "checkout": "87a46d147413bd99e931c71a1ab165eb0903f014",
+        "commands": [
+          "git checkout 87a46d147413bd99e931c71a1ab165eb0903f014",
+          "python scripts/publish_archive_assessment_applicability_authority_v2.py --validate"
+        ],
+        "pass_means": "PASS means the publication record at this commit names 1544dc19ba235d732c832d1651895550ed5a265d and the publication files are byte-identical between the two commits. It also passes at any later commit on feature/ems-aa3-archive-applicability-authority.",
+        "step": 2
+      },
+      {
+        "checkout": "feature/ems-aa3-archive-applicability-authority",
+        "commands": [
+          "git checkout feature/ems-aa3-archive-applicability-authority",
+          "python scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_3.py --validate"
+        ],
+        "pass_means": "Run this at or after the commit that adds this notice. PASS means the builder rebuilt the notice, reran the 29 mutations from the pinned publisher and recomputed the digests, and all of them match the committed notice.",
+        "step": 3
+      }
+    ]
+  },
+  "what_changed": {
+    "closed_schema_levels": {
+      "count": 16,
+      "paths": [
+        "$",
+        "$.properties.controls.items",
+        "$.properties.controls.items.allOf[0].then.properties.not_applicable_rule",
+        "$.properties.controls.items.allOf[0].then.properties.not_applicable_rule.properties.conditions.items",
+        "$.properties.controls.items.properties.not_applicable_rule.anyOf[0]",
+        "$.properties.controls.items.properties.not_applicable_rule.anyOf[0].properties.conditions.items",
+        "$.properties.not_applicable_semantics",
+        "$.properties.not_applicable_semantics.properties.field_definitions",
+        "$.properties.source_lineage",
+        "$.properties.source_lineage.properties.aa1_manifest",
+        "$.properties.source_lineage.properties.aa2_approval",
+        "$.properties.source_lineage.properties.aa2_closure",
+        "$.properties.source_lineage.properties.catalog_reference",
+        "$.properties.source_lineage.properties.governance_decisions",
+        "$.properties.source_lineage.properties.supersedes",
+        "$.properties.source_lineage.properties.v1_baseline"
+      ]
+    },
+    "decisions_digest": {
+      "recomputed_at": "ae15c7458e49c8f55cc58c61bab04bc716aa9892",
+      "sha256": "4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f",
+      "unchanged": true
+    },
+    "negative_mutation_count": 29,
+    "row_comparison": {
+      "compared_keys": [
+        "not_applicable_decision_state",
+        "not_applicable_rule",
+        "not_applicable_authority",
+        "decision_ids"
+      ],
+      "compared_with_version": "2.0.2",
+      "rows_compared": 80,
+      "rows_differing": 0
+    },
+    "supersedes_moved": {
+      "from_commit": "31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb",
+      "from_version": "2.0.1",
+      "to_commit": "ae15c7458e49c8f55cc58c61bab04bc716aa9892",
+      "to_version": "2.0.2"
+    },
+    "verification_changes_line": "Verification changes in 2.0.3: the publisher adds --validate --at-pin, plain --validate checks that the publication files are byte-identical between the publication commit and HEAD, gates GATE-06 to GATE-10 were added, and the reply and 2.0.2 notice validators are frozen."
+  }
+}
