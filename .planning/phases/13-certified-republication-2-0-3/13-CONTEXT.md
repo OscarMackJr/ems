@@ -43,7 +43,7 @@ Unlike Phase 9, no publisher code change is planned before the publication. Phas
   1. In the operator working tree, immediately after the publication commit and before writing the record. This is the gate that replaces Phase 9's `--validate --pre-publication`.
   2. In a fresh full clone (not shallow) of the repo, checked out at the publication SHA with no later commit. This is what Hayes does.
 
-  Both must print `{"status":"PASS","mode":"AT_PIN","deferred":["PUBLICATION_RECORD_BINDING"]}` (key order as the publisher emits it) with exit 0. If either fails, stop. Do not write the record. Report the failure.
+  Both must exit 0 and print one JSON object with `status == "PASS"` and `mode == "AT_PIN"`. Its `deferred` list must have exactly one entry, and that entry must start with `PUBLICATION_RECORD_BINDING`. The publisher emits the full sentence `PUBLICATION_RECORD_BINDING: the publication record naming this commit is written in the next commit; …` (publisher L825/L828), so checks parse the JSON and test these fields rather than comparing strings. If either run fails, stop. Do not write the record. Report the failure.
 - **D-04: Where the evidence goes.** The at-pin JSON outputs, the publication SHA, the clone method and the CI run id go in planning docs only: `13-VERIFICATION.md` and STATE.md, as in 09 D-06. The publication record and the schemas keep their shape.
 
 ### Sign-off summary and record
@@ -87,7 +87,17 @@ Unlike Phase 9, no publisher code change is planned before the publication. Phas
 - **Contents of the publication commit.** It holds only the generated publication, which is the 10 D-05 files: the v2 registry authority, the regenerated schema, the sign-off and the 7 `ems-aa3-v2/` outputs, manifest included.
 - **No decision change (PUB-11).** The decisions digest stays `4e746d1f…`. All 80 rows are value-equal to 2.0.2, read via `git_show` at `ae15c74`, and the counts are 21 decided and 59 undecided. This is enforced by the publisher validator and by pytest, and the dry run shows it.
 - **Staging.** Stage only by explicit path. Unrelated modified and untracked files (`.planning/config.json`, `registry/adjudication_rules.json`, `registry/policy_decisions.json` and the untracked onboarding/supply-chain/release/test-quality work) stay out of every commit.
-- **The red window.** It closes at the publication and record commits. The plan lists which red items close at which commit; the red set may only shrink.
+- **The red window.** It closes at the publication and record commits. The plan lists which red items close at which commit.
+  - *Clarification after research (13-RESEARCH.md):* the publish step necessarily opens three record-bound reds. They compare the 2.0.2 record against the new live files, so they are red from `--publish` through the publication commit and close at the record commit:
+    - `tests/test_archive_assessment_normalisation_claims.py::test_publication_record_normalisation_claim`
+    - `test_manifest_publisher_script_normalisation_claim`
+    - `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_manifest_publisher_script_digest_matches_publication_commit`
+
+    `test_committed_schema_equals_schema_function` closes at the publication commit.
+  - The expected red set at the publication commit is therefore exactly those three, plus `test_real_published_files_validate`, `test_publisher_still_valid_and_digest_matches_manifest` and validator 1, which now fails with "publication record still names the superseded 2.0.2 publication…".
+  - At the record commit and at the WR-03 commit, nothing may be red.
+  - Do not run the suite between `--record-publication` and the record commit.
+  - Any red outside these sets is a defect: stop.
 - **Running tests.** The orchestrator runs tests and validators through PowerShell with a fresh `--basetemp` and `-p no:cacheprovider`, recording pytest's own exit code.
 - **Approval.** No publication happens on drafting judgment. Every human gate waits for Oscar Mack.
 
