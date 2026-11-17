@@ -87,7 +87,7 @@
   4. Malformed authority shapes raise `AuthorityError` (never `TypeError`, `KeyError` or `AttributeError`); `validate_published` checks the schema first; `--validate` enforces cross-note uniqueness under `norm_templated`.
   5. The D-10 test shows a live catalog edit does not change the build or `--validate`; the D-13 test uses real changed answer bytes; the GATE-10 publisher and test cleanup items are done (conditional dry-run text, reachable DIFFER branch, restored 2.0.0 constant check, no dead `log`, uniform `resolve_record_commit` errors, D-08 tamper test covering rule and no-rule rows).
 
-**Plans**: 7 plans (sequential waves; every plan updates 12-BASELINE-RED.md)
+**Plans**: 8 plans (sequential waves; every plan updates 12-BASELINE-RED.md; 12-08 is gap closure)
 **Wave 1**
 
 - [x] 12-01-PLAN.md — baseline ledger; D-09/D-10/D-11 CI glob, scoped skip guard, history wording (green)
@@ -115,6 +115,10 @@
 **Wave 7** *(blocked on Wave 6 completion)*
 
 - [x] 12-07-PLAN.md — final 2.0.3 form: SUPERSEDED_V2_0_2, VERSION 2.0.3, truthful texts (+1 test; D-16 end state)
+
+**Wave 8** *(gap closure; blocked on Wave 7 completion)*
+
+- [ ] 12-08-PLAN.md — CR-01 at-pin binds pinned tree to HEAD blobs and index, hardened git status; WR-01 plain working-tree binding; WR-04 real-layout tests (red set unchanged)
 
 ### Phase 13: Certified Republication 2.0.3
 
