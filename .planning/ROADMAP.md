@@ -162,7 +162,27 @@
   3. The builder runs every negative mutation and records a domain rejection for each; the validator fails if any mutation was not rejected.
   4. The validator recomputes all 7 lineage digests from git, and every "declared under the wrong scope" statement is computed by showing that each RAW_BYTES file's raw hash differs from its LF hash.
 
-**Plans**: TBD
+**Plans**: 5 plans
+
+**Wave 1**
+
+- [ ] 14-01-PLAN.md — builder core: frozen constants, history guard, pinned mutation rerun (CLAIM-01), lineage recomputation (CLAIM-02), raw/LF scope proof (CLAIM-03)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 14-02-PLAN.md — build_notice with verify-at-pin section (PIN-03), render, closed schema, --build/--emit-schema/--validate
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 14-03-PLAN.md — tests: per-claim, tamper, fail-closed, content, CLI, live-file clone
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 14-04-PLAN.md — orchestrator pytest gate, code commit, generate notice, Oscar Mack review (D-14)
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [ ] 14-05-PLAN.md — notice commit, CI line commit, push checkpoint, push and CI green
 
 ## Progress
 
@@ -175,4 +195,4 @@
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete    | 2026-11-16 |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 4/4 | Complete    | 2026-11-17 |
-| 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |
+| 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/5 | Planned | - |
