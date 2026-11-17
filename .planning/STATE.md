@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
 status: executing
-stopped_at: Phase 13 planned; awaiting execution (sign-off gate in 13-01)
-last_updated: "2026-11-17T16:01:37.695Z"
-last_activity: 2026-11-17 -- Phase 13 planning complete (4 plans, checked)
+stopped_at: Phase 13 plans 13-01..13-03 complete; 13-04 awaiting push go-ahead
+last_updated: "2026-11-17T23:30:00.000Z"
+last_activity: 2026-11-17 -- 2.0.3 published (PUB 1544dc1), recorded (REC 87a46d1), WR-03 (5498002); all green locally
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 18
-  completed_plans: 14
+  completed_plans: 17
   percent: 50
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 13 of 14 (certified republication 2.0.3)
-Plan: Not started
-Status: Phase 13 planned (4 plans, plan-checked); ready to execute — 13-01 stops at the sign-off checkpoint
-Last activity: 2026-11-17 -- Phase 13 planning complete (research 44983bc, patterns 509371d, plans 35a9462/b83d91d/c5cf943)
+Plan: 13-04 of 4 (push go-ahead checkpoint)
+Status: 13-01..13-03 complete — sign-off approved 2026-11-17; PUB 1544dc19ba235d732c832d1651895550ed5a265d (at-pin PASS in tree and fresh clone); REC 87a46d147413bd99e931c71a1ab165eb0903f014 (direct child of PUB, red window closed); WR03 5498002c5eea3a6d9e3bfbb6766119880bb36804 (1023 passed, six validators PASS). Not pushed.
+Last activity: 2026-11-17 -- Phase 13 waves 1-3 executed (13-01 summary 1b750a5)
 
 Progress: [█████░░░░░] 50%
 

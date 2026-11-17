@@ -136,15 +136,15 @@
 
 **Wave 1**
 
-- [ ] 13-01-PLAN.md — pre-flight, read-only dry run, blocking sign-off by Oscar Mack, write sign-off
+- [x] 13-01-PLAN.md — pre-flight, read-only dry run, blocking sign-off by Oscar Mack, write sign-off
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 13-02-PLAN.md — emit schema, publish, 10-path publication commit, at-pin in tree and fresh clone, red set at PUB, PUB-11 check
+- [x] 13-02-PLAN.md — emit schema, publish, 10-path publication commit, at-pin in tree and fresh clone, red set at PUB, PUB-11 check
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 13-03-PLAN.md — record-only commit (red window closed), WR-03 test-only commit, all green
+- [x] 13-03-PLAN.md — record-only commit (red window closed), WR-03 test-only commit, all green
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -174,5 +174,5 @@
 | 10. Notice to Hayes | v1.1.0 | 3/3 | Complete | 2026-11-13 |
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete    | 2026-11-16 |
-| 13. Certified Republication 2.0.3 | v1.2.0 | 0/4 | Planned | - |
+| 13. Certified Republication 2.0.3 | v1.2.0 | 3/4 | In Progress|  |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |
