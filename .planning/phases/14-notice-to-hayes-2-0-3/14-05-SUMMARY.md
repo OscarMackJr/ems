@@ -49,6 +49,15 @@ The approved 2.0.3 notice and the CI validator line are committed separately, th
 
 Sending the notice to Hayes stays the EMS authority's action.
 
+## Addendum: review fixes, re-approval and second push (2026-11-17)
+
+- `/gsd-code-review 14 --fix` fixed WR-01 (1b5f6c2), WR-02 (e15eeb9) and WR-03 (fcd9f7e); the orchestrator narrowed one over-broad WR-02 test assertion (12842fd). See 14-REVIEW-FIX.md.
+- The notice was regenerated with --emit-schema/--build; --validate PASS; the 2.0.3 notice tests passed (89 + the corrected test). The Markdown diff changed only the step 2 sentence and the outcome table (5 rows; re-pin only after steps 1, 2 and 3 all pass).
+- Oscar Mack re-approved the regenerated wording ("approved", D-14) and approved the second push ("push").
+- Notice regeneration commit: b23a623. Plain `git push` c04763d..b23a623; HEAD equals origin at b23a623e24515b8be5892466df47ba397671a281.
+- Dispatched run 44171475201 (workflow_dispatch) at headSha b23a623e24515b8be5892466df47ba397671a281: completed, success; validate and archive-assessment jobs success. This supersedes run 44160179245 as the final head check.
+- Hayes verifies step 3 at or after b23a623; the pin stays 1544dc19ba235d732c832d1651895550ed5a265d. No PR, merge or tag.
+
 ## Deviations from Plan
 
 None. Run inline by the orchestrator.
