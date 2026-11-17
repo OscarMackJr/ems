@@ -9,8 +9,8 @@
 
 ### Verify-at-pin
 
-- [ ] **PIN-01**: Hayes can run a documented `--validate` command on a clean checkout of the 2.0.3 publication commit, with no later commit, and get PASS. The output names the one check it defers: binding the record to its commit.
-- [ ] **PIN-02**: Plain `--validate` returns PASS at the record commit or any later commit. It verifies that the record names the publication commit and that the publication files are byte-identical between the two commits.
+- [x] **PIN-01**: Hayes can run a documented `--validate` command on a clean checkout of the 2.0.3 publication commit, with no later commit, and get PASS. The output names the one check it defers: binding the record to its commit.
+- [x] **PIN-02**: Plain `--validate` returns PASS at the record commit or any later commit. It verifies that the record names the publication commit and that the publication files are byte-identical between the two commits.
 - [ ] **PIN-03**: The 2.0.3 notice tells Hayes the exact commands to verify at the pin and at the record commit, and what each result means. This closes the v1.1.0 gap where the notice gave no instructions for the pin (09 tech debt, PUB-09/NOTICE-01).
 
 ### Frozen validators
@@ -30,7 +30,7 @@ These apply to the notice builder and validator used for 2.0.3.
 
 ### Gate and validator hardening
 
-- [ ] **GATE-06**: `--validate` checks the publisher-script digest against the certification. Today only pytest checks it. (09-REVIEW IN-05)
+- [x] **GATE-06**: `--validate` checks the publisher-script digest against the certification. Today only pytest checks it. (09-REVIEW IN-05)
 - [x] **GATE-07**: Malformed authority shapes raise `AuthorityError`, never a raw `TypeError`, `KeyError` or `AttributeError`. `validate_published` validates the schema before running its Python checks. (08-REVIEW WR-03)
 - [x] **GATE-08**: The `--validate` path of `validate_decisions` enforces cross-note uniqueness under `norm_templated`. (08-REVIEW WR-05)
 - [x] **GATE-09**: The D-10 test shows that a live catalog edit does not change the build or `--validate` result. The D-13 test uses real changed answer bytes instead of a fabricated digest. (08-REVIEW WR-06, WR-07)
@@ -73,8 +73,8 @@ These apply to the notice builder and validator used for 2.0.3.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PIN-01 | Phase 12 | Pending |
-| PIN-02 | Phase 12 | Pending |
+| PIN-01 | Phase 12 | Complete |
+| PIN-02 | Phase 12 | Complete |
 | PIN-03 | Phase 14 | Pending |
 | FROZEN-01 | Phase 11 | Complete |
 | FROZEN-02 | Phase 11 | Complete |
@@ -83,7 +83,7 @@ These apply to the notice builder and validator used for 2.0.3.
 | CLAIM-01 | Phase 14 | Pending |
 | CLAIM-02 | Phase 14 | Pending |
 | CLAIM-03 | Phase 14 | Pending |
-| GATE-06 | Phase 12 | Pending |
+| GATE-06 | Phase 12 | Complete |
 | GATE-07 | Phase 12 | Complete |
 | GATE-08 | Phase 12 | Complete |
 | GATE-09 | Phase 12 | Complete |

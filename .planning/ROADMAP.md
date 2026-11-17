@@ -33,7 +33,7 @@
 ### v1.2.0 Authority 2.0.3 Verification Hardening (Phases 11-14)
 
 - [x] **Phase 11: Frozen Validators** - Historical reply and 2.0.2 notice validators stop depending on live publisher code, and pinned-blob failures are loud (gap closure planned 2026-11-15) (completed 2026-11-16)
-- [x] **Phase 12: Verify-at-Pin and Gate Hardening** - Publisher and validator changes: `--validate` works at the pin, the gates fail closed, and the review cleanup items are closed (completed 2026-11-17)
+- [x] **Phase 12: Verify-at-Pin and Gate Hardening** - Publisher and validator changes: `--validate` works at the pin, the gates fail closed, and the review cleanup items are closed (completed 2026-11-16)
 - [ ] **Phase 13: Certified Republication 2.0.3** - One human-gated publication of 2.0.3 with no decision change
 - [ ] **Phase 14: Notice to Hayes (2.0.3)** - A generated, claim-enforced notice that cites the 2.0.3 commit and tells Hayes how to verify at the pin
 
@@ -157,6 +157,6 @@
 | 9. Certified Republication 2.0.2 | v1.1.0 | 5/5 | Complete | 2026-11-13 |
 | 10. Notice to Hayes | v1.1.0 | 3/3 | Complete | 2026-11-13 |
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
-| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete   | 2026-11-17 |
+| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete    | 2026-11-16 |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 0/0 | Not started | - |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |

@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
-status: executing
-stopped_at: Completed 12-06-PLAN.md
-last_updated: "2026-11-16T23:59:00.000Z"
-last_activity: 2026-11-16 -- Completed 12-06
+status: ready_to_plan
+stopped_at: Phase 12 complete (verified 8/8); Phase 13 not started
+last_updated: "2026-11-16T23:59:00.000-05:00"
+last_activity: 2026-11-16 -- Phase 12 complete
 progress:
   total_phases: 4
-  completed_phases: 1
-  total_plans: 13
-  completed_plans: 12
-  percent: 25
+  completed_phases: 2
+  total_plans: 14
+  completed_plans: 14
+  percent: 50
 ---
 
 # Project State
@@ -21,22 +21,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-11-13)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** v1.2.0 Phase 11 — Frozen Validators
+**Current focus:** v1.2.0 Phase 13 — Certified Republication 2.0.3
 
 ## Current Position
 
-Phase: 12 of 14 (verify at pin and gate hardening)
-Plan: 08 of 8 complete ([Phase 12] all 8 plans complete; 12-08 gap closure done)
-Status: [Phase 12] Gap CR-01 closed (12-08); ready for re-verification
-Last activity: 2026-11-16 -- Completed 12-08 ([Phase 12] gap closure: at-pin binds the 11 pinned paths to HEAD blobs and index + hardened git status over them and OUT (CR-01, IN-05); plain --validate binds the 10 D-05 files to HEAD (WR-01); real-layout git tests (WR-04); red set unchanged at D-16)
+Phase: 13 of 14 (certified republication 2.0.3)
+Plan: Not started
+Status: Phase 12 complete (re-verified 8/8, 1492cf8); ready to plan Phase 13
+Last activity: 2026-11-16 -- Phase 12 complete (8 plans; CR-01 gap closed by 12-08; D-16 red set held until 2.0.3 publication)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 54
+- Total plans completed: 62
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -54,6 +54,7 @@ Progress: [░░░░░░░░░░] 0%
 | 09 | 5 | - | - |
 | 10 | 3 | - | - |
 | 11 | 6 | - | - |
+| 12 | 8 | - | - |
 
 **Recent Trend:**
 
