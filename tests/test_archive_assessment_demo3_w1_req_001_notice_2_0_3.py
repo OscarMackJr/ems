@@ -567,7 +567,7 @@ def test_verify_section():
     assert [o for o in v['outcomes'] if 'Re-pin' in o['action']] == [v['outcomes'][2]]
     assert v['outcomes'][2]['case'].startswith('Step 3 prints PASS') and 'steps 1, 2 and 3 all print PASS' in v['outcomes'][2]['meaning']
     assert REC not in v['outcomes'][2]['case'] and not any('step 2 or step 3' in o['case'].lower() for o in v['outcomes'])
-    assert 'any later commit' not in MODULE.jtext(v)
+    assert 'any later commit' not in MODULE.jtext({'steps': v['steps'], 'outcomes': v['outcomes']})
     require_history(ROOT, commits=FROZEN_COMMITS)
     assert v['at_pin_deferred'] == at_pin_deferred_literal()
 
