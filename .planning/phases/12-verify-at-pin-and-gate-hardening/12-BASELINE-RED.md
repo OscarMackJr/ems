@@ -406,3 +406,44 @@ CI validators:
 | 6 | `scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py --validate` | PASS |
 
 Accepted red set: unchanged (the D-16 end state: the three ids above plus CI validator 1).
+
+## After plan 12-08 Task 2 (commit ce4caa7018065b25012d5bf437ceb0671fade867) — seam unit tests
+
+The suite and validators were run on the working tree that equals commit ce4caa7 (run immediately before the
+commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-08-t2-full
+```
+
+Totals: **1008 passed, 3 failed, 0 skipped, 0 errors** (339.37s). Total test count 1011 = 989 + 22 new test ids
+(`test_git_commit_blob_argv_and_failures` x8, `test_git_index_flags_reports_flagged_and_missing_paths`,
+`test_git_index_flags_rejects_bad_input_before_git` x5, `test_git_index_flags_rc_failure`,
+`test_check_tree_matches_head_cases` x5, `test_plain_validate_binds_working_tree_to_head`,
+`test_git_run_oserror_names_the_command`).
+
+pytest exit code: **exit 1**
+
+Seam run (`-k "git_commit_blob or git_index_flags or check_tree_matches_head or git_run_oserror or binds_working_tree"`,
+`--basetemp=.pytest-temp/p12-08-t2-seam`): 23 passed (the 22 new ids plus `test_git_run_oserror_is_git_history_error`), 0 failed.
+
+Failing node ids:
+
+- `tests/test_archive_assessment_applicability_authority_v2.py::test_committed_schema_equals_schema_function`
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate`
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+
+CI validators:
+
+| # | Validator | Result |
+|---|-----------|--------|
+| 1 | `scripts/publish_archive_assessment_applicability_authority_v2.py --validate` | **FAIL** (exit 1, by design): `AuthorityError: authority identity/version/status invalid; source_lineage supersedes does not name the 2.0.2 publication` (unchanged) |
+| 2 | `scripts/build_archive_assessment_governance_decisions.py --validate` | PASS |
+| 3 | `scripts/validate_archive_assessment_rule_proposals.py --validate` | PASS |
+| 4 | `scripts/validate_archive_assessment_rule_proposals.py --validate-record` | PASS |
+| 5 | `scripts/build_archive_assessment_demo3_w1_req_001_reply.py --validate` | PASS |
+| 6 | `scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py --validate` | PASS |
+
+Accepted red set: unchanged (the D-16 end state).
