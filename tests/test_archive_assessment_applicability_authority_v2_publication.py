@@ -796,6 +796,132 @@ def test_real_git_repo_at_pin_passes_and_dirty_fails(env, fake_git_show, monkeyp
         MODULE.validate_published(True)
     assert MODULE.rel(MODULE.SCRIPT) in str(e.value)
 
+# ---- 12-08 Task 3 (WR-04): real-layout git repos, `.gitignore: generated/` with force-added generated files ----
+
+def real_layout_pin(env, fake_git_show, monkeypatch):
+    def run(*args): return subprocess.run(['git', *args], cwd=MODULE.ROOT, capture_output=True)
+    require_history(ROOT)
+    r = run('init', '-q')
+    if r.returncode != 0: pytest.fail(f"git init failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
+    run('config', 'user.email', 't@example.com'); run('config', 'user.name', 't'); run('config', 'commit.gpgsign', 'false'); run('config', 'core.autocrlf', 'false')
+    # mirrors .gitignore:6 of this repository; the generated publication files are force-added
+    (MODULE.ROOT / '.gitignore').write_text('generated/\n', encoding='utf-8')
+    published(env)
+    s = authority_supersedes()
+    superseded_record(fake_git_show)
+    # git_show stays faked: it serves the superseded-commit blobs, which are not in the temp repo
+    fake_git_show[(s['commit'], MODULE.rel(MODULE.AUTHORITY))] = superseded_authority_blob(s)
+    run('add', '-A')
+    run('add', '-f', '--', MODULE.rel(MODULE.OUT))
+    r = run('commit', '-q', '-m', 'publish')
+    if r.returncode != 0: pytest.fail(f"git commit failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
+    monkeypatch.setattr(MODULE, 'git_dirty', REAL_GIT_DIRTY)
+    monkeypatch.setattr(MODULE, 'git_not_shallow', REAL_GIT_NOT_SHALLOW)
+    monkeypatch.setattr(MODULE, 'git_head', REAL_GIT_HEAD)
+    monkeypatch.setattr(MODULE, 'check_tree_matches_head', REAL_CHECK_TREE_MATCHES_HEAD)
+    out_rel = MODULE.rel(MODULE.OUT)
+    assert sorted(run('ls-files', '--', out_rel).stdout.decode().split()) == sorted(MODULE.publication_paths()[3:])
+    assert run('check-ignore', '-q', '--no-index', '--', f'{out_rel}/{MODULE.N_MANIFEST}').returncode == 0
+    return run
+
+def legacy_status(run):
+    # the pre-12-08 at-pin status argv
+    r = run('status', '--porcelain', '--', *MODULE.publication_paths(), MODULE.rel(MODULE.SCRIPT), MODULE.rel(MODULE.OUT))
+    assert r.returncode == 0, r.stderr
+    return r.stdout.decode('utf-8', 'replace')
+
+def at_pin_pass(capsys):
+    capsys.readouterr()
+    MODULE.validate_published(True)
+    assert json.loads(capsys.readouterr().out) == {'status': 'PASS', 'mode': 'AT_PIN', 'deferred': [MODULE.AT_PIN_DEFERRED]}
+
+def test_real_layout_at_pin_passes_on_clean_pinned_tree(env, fake_git_show, monkeypatch, capsys):
+    real_layout_pin(env, fake_git_show, monkeypatch)
+    at_pin_pass(capsys)
+    # ignored content elsewhere under generated/ is outside the at-pin pathspecs
+    MODULE.write_text(MODULE.ROOT / 'generated' / 'other' / 'scratch.txt', 'scratch\n')
+    at_pin_pass(capsys)
+
+def test_real_layout_at_pin_passes_with_crlf_on_disk_over_lf_blobs(env, fake_git_show, monkeypatch, capsys):
+    run = real_layout_pin(env, fake_git_show, monkeypatch)
+    run('config', 'core.autocrlf', 'true')
+    files = [MODULE.AUTHORITY, MODULE.SCRIPT, MODULE.OUT / MODULE.N_MATRIX]
+    for f in files: f.unlink()
+    # git itself writes the CRLF checkout (hand-written CRLF changes the size the index records)
+    r = run('checkout', '--', *[MODULE.rel(f) for f in files])
+    assert r.returncode == 0, r.stderr
+    for f in files: assert b'\r\n' in f.read_bytes(), f
+    assert b'\r' not in run('cat-file', 'blob', f'HEAD:{MODULE.rel(MODULE.AUTHORITY)}').stdout
+    at_pin_pass(capsys)
+
+BLIND_SPOT_CASES = ['rm_cached_generated', 'skip_worktree_authority_edit', 'assume_unchanged_authority_edit', 'skip_worktree_script_edit', 'assume_unchanged_script_edit', 'skip_worktree_flag_only', 'assume_unchanged_flag_only', 'untracked_with_show_untracked_no', 'ignored_extra_in_out']
+
+@pytest.mark.parametrize('case', BLIND_SPOT_CASES)
+def test_real_layout_at_pin_fails_closed_where_git_status_is_blind(env, fake_git_show, monkeypatch, case):
+    run = real_layout_pin(env, fake_git_show, monkeypatch)
+    def commit(msg):
+        r = run('commit', '-q', '-m', msg)
+        if r.returncode != 0: pytest.fail(f"git commit failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
+    def git_ok(*args):
+        r = run(*args)
+        assert r.returncode == 0, r.stderr
+    matrix, auth, script, signoff = f'{MODULE.rel(MODULE.OUT)}/{MODULE.N_MATRIX}', MODULE.rel(MODULE.AUTHORITY), MODULE.rel(MODULE.SCRIPT), MODULE.rel(MODULE.SIGNOFF)
+    flag = '--skip-worktree' if case.startswith('skip_worktree') else '--assume-unchanged'
+    if case == 'rm_cached_generated':
+        git_ok('rm', '--cached', '-q', '--', matrix); commit('drop')
+        want = re.escape(matrix) + ': not committed at HEAD'
+    elif case.endswith('_authority_edit'):
+        git_ok('update-index', flag, '--', auth)
+        MODULE.AUTHORITY.write_bytes(MODULE.AUTHORITY.read_bytes() + b' ')
+        want = re.escape(auth) + ': working tree differs from HEAD'
+    elif case.endswith('_script_edit'):
+        git_ok('update-index', flag, '--', script)
+        MODULE.write_text(MODULE.SCRIPT, 'print(2)\n')
+        want = re.escape(script) + ': working tree differs from HEAD'
+    elif case.endswith('_flag_only'):
+        git_ok('update-index', flag, '--', auth)
+        want = 'index flags hide working-tree state'
+    elif case == 'untracked_with_show_untracked_no':
+        git_ok('config', 'status.showUntrackedFiles', 'no')
+        git_ok('rm', '--cached', '-q', '--', signoff); commit('untrack')
+        want = re.escape(signoff) + ': not committed at HEAD'
+        assert REAL_GIT_DIRTY([signoff]) == [f'?? {signoff}']
+    else:
+        MODULE.write_text(MODULE.OUT / 'extra.json', '{}\n')
+        want = 'at-pin: git status'
+    assert legacy_status(run) == ''
+    with pytest.raises(AuthorityError, match=want) as e:
+        MODULE.validate_published(True)
+    if case == 'ignored_extra_in_out': assert f'!! {MODULE.rel(MODULE.OUT)}/extra.json' in str(e.value)
+
+def test_real_layout_plain_validate_binds_working_tree_to_head(env, monkeypatch):
+    def run(*args): return subprocess.run(['git', *args], cwd=MODULE.ROOT, capture_output=True)
+    def commit(msg):
+        r = run('commit', '-q', '-m', msg)
+        if r.returncode != 0: pytest.fail(f"git commit failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
+        return run('rev-parse', 'HEAD').stdout.decode().strip()
+    require_history(ROOT)
+    r = run('init', '-q')
+    if r.returncode != 0: pytest.fail(f"git init failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
+    run('config', 'user.email', 't@example.com'); run('config', 'user.name', 't'); run('config', 'commit.gpgsign', 'false'); run('config', 'core.autocrlf', 'false')
+    (MODULE.ROOT / '.gitignore').write_text('generated/\n', encoding='utf-8')
+    use_real_git_state(monkeypatch)
+    published(env)
+    matrix_file = MODULE.OUT / MODULE.N_MATRIX
+    good = matrix_file.read_bytes()
+    # commit stale generated bytes, then restore the correct bytes on disk: pub equals HEAD, both stale
+    matrix_file.write_bytes(good + b' ')
+    run('add', '-A')
+    run('add', '-f', '--', MODULE.rel(MODULE.OUT))
+    c1 = commit('publish')
+    matrix_file.write_bytes(good)
+    MODULE.write_publication_record(c1)
+    run('add', '--', MODULE.rel(MODULE.PUBLICATION_RECORD))
+    commit('record')
+    matrix = f'{MODULE.rel(MODULE.OUT)}/{MODULE.N_MATRIX}'
+    with pytest.raises(AuthorityError, match=re.escape(matrix) + ': working tree differs from HEAD'):
+        MODULE.validate_published()
+
 def test_cli_at_pin_requires_validate(monkeypatch):
     monkeypatch.setattr(sys, 'argv', ['x', '--at-pin'])
     with pytest.raises(SystemExit):
