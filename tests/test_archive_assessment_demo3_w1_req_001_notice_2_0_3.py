@@ -173,13 +173,23 @@ def test_pinned_run_paths_stay_in_temp_materialisation(monkeypatch):
     seen = []
 
     def wrapper(tmp):
-        seen.append(tmp)
-        return real(tmp)
+        pub = real(tmp)
+        seen.append((tmp, pub))
+        return pub
     monkeypatch.setattr(MODULE, 'load_pinned_publisher', wrapper)
     out = MODULE.pinned_mutation_run(a[0], a[4], a[5], a[6])
     assert len(out['outcomes']) == 29
     assert out['at_pin_deferred'].startswith('PUBLICATION_RECORD_BINDING: ')
-    assert len(seen) == 1 and not seen[0].resolve().is_relative_to(ROOT.resolve())
+    assert len(seen) == 1 and not seen[0][0].resolve().is_relative_to(ROOT.resolve())
+    tmp, pub = seen[0]
+    b = pub._BUILDER
+    for module in (pub, b, b.V2):
+        assert Path(module.ROOT).resolve().is_relative_to(tmp.resolve()), module.__name__
+    for module in (pub, b.V2):
+        top = module.git_run('rev-parse', '--show-toplevel')
+        assert top.returncode == 0 and Path(top.stdout.decode('utf-8').strip()).resolve() == ROOT.resolve(), module.__name__
+        with pytest.raises(AuthorityError, match='not git'):
+            module.subprocess.run(['python', '--version'])
 
 
 def test_pinned_run_rejects_publisher_digest_mismatch():
@@ -621,9 +631,9 @@ def _rm_readonly(func, path, exc):
     func(path)
 
 
-def test_live_publisher_and_decisions_builder_edit_does_not_change_notice():
+def make_clone(name):
     require_history(ROOT, commits=FROZEN_COMMITS)
-    clone = TMP / 'clone'
+    clone = TMP / name
     if clone.exists():
         shutil.rmtree(clone, onerror=_rm_readonly)
     cloned = subprocess.run(['git', '-c', 'core.longpaths=true', 'clone', '--shared', '-q', str(ROOT), str(clone)], capture_output=True)
@@ -634,23 +644,51 @@ def test_live_publisher_and_decisions_builder_edit_does_not_change_notice():
         dest = clone / p.relative_to(ROOT)
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(p, dest)
+    return clone
 
-    def run(mode):
-        r = subprocess.run([sys.executable, MODULE.SCRIPT_REL, mode], cwd=clone, capture_output=True, text=True)
-        lines = [line for line in (r.stdout + r.stderr).splitlines() if line.strip()]
-        return r.returncode, (lines[-1] if lines else '')
 
-    def outcome():
-        return run('--validate')
+def run_in_clone(clone, mode):
+    r = subprocess.run([sys.executable, MODULE.SCRIPT_REL, mode], cwd=clone, capture_output=True, text=True)
+    lines = [line for line in (r.stdout + r.stderr).splitlines() if line.strip()]
+    return r.returncode, (lines[-1] if lines else '')
 
-    before = outcome()
+
+def assert_live_edit_does_not_change_notice(clone, edit):
+    before = run_in_clone(clone, '--validate')
     assert before == (0, 'PASS'), f'--validate baseline must be PASS for this test to be meaningful: {before!r}'
-    assert run('--build')[0] == 0
+    assert run_in_clone(clone, '--build')[0] == 0
     json_before = (clone / MODULE.rel(MODULE.NOTICE_JSON)).read_bytes()
     md_before = (clone / MODULE.rel(MODULE.NOTICE_MD)).read_bytes()
-    for rel_path in (PUBLISHER_REL, DECISIONS_BUILDER_REL):
-        (clone / rel_path).write_text("raise SystemExit('mutated live file executed')\n", encoding='utf-8', newline='\n')
-    assert outcome() == (0, 'PASS')
-    assert run('--build')[0] == 0
+    edit()
+    assert run_in_clone(clone, '--validate') == (0, 'PASS')
+    assert run_in_clone(clone, '--build')[0] == 0
     assert (clone / MODULE.rel(MODULE.NOTICE_JSON)).read_bytes() == json_before
     assert (clone / MODULE.rel(MODULE.NOTICE_MD)).read_bytes() == md_before
+
+
+def test_live_publisher_and_decisions_builder_edit_does_not_change_notice():
+    clone = make_clone('clone')
+
+    def edit():
+        for rel_path in (PUBLISHER_REL, DECISIONS_BUILDER_REL):
+            (clone / rel_path).write_text("raise SystemExit('mutated live file executed')\n", encoding='utf-8', newline='\n')
+    assert_live_edit_does_not_change_notice(clone, edit)
+
+
+def test_live_data_file_edit_does_not_change_notice():
+    clone = make_clone('clone-data')
+    lineage = MODULE.pinned_json(PUB, MODULE.AUTHORITY)['source_lineage']
+    live_reads = [e['relative_path'] for e in lineage.values() if isinstance(e, dict) and 'relative_path' in e and 'commit' not in e]
+    assert 'registry/archive_assessment_governance_decisions.json' in live_reads
+    assert any(p.startswith('generated/archive-assessment/ems-aa1') for p in live_reads)
+    assert any(p.startswith('generated/archive-assessment/ems-aa2') for p in live_reads)
+    out = MODULE.rel(MODULE.OUT)
+    tampered = sorted({*MODULE.PINNED_DATA, *live_reads, MODULE.rel(MODULE.AUTHORITY), MODULE.rel(MODULE.SCHEMA), MODULE.rel(MODULE.SIGNOFF),
+                       MODULE.rel(MODULE.PUBLICATION_RECORD), f'{out}/{MODULE.N_NEGATIVE}', f'{out}/{MODULE.N_TRACE}', f'{out}/{MODULE.N_MANIFEST}'})
+
+    def edit():
+        for rel_path in tampered:
+            dest = clone / rel_path
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text('{"tampered": true}\n', encoding='utf-8', newline='\n')
+    assert_live_edit_does_not_change_notice(clone, edit)

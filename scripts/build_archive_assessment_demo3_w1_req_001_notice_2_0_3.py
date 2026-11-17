@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 from datetime import date
 from pathlib import Path
+from types import SimpleNamespace
 
 import jsonschema
 
@@ -263,8 +264,23 @@ def load_pinned_publisher(tmp: Path):
     spec = importlib.util.spec_from_file_location('aa_pinned_publisher_2_0_3', tmp / PINNED_CODE[0])
     pub = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pub)
-    pub.ROOT = ROOT  # git cwd only; every path constant already points into tmp
+    b = pub.decisions_builder()
+    # Pinned ROOT stays inside tmp, so no pinned ROOT read can reach a live file; only git processes run in the live repository.
+    for name, module in (('ROOT', pub), ('builder ROOT', b), ('builder V2 ROOT', b.V2)):
+        if not Path(module.ROOT).resolve().is_relative_to(tmp.resolve()):
+            raise AuthorityError(f'pinned code resolved {name} outside the pinned materialisation')
+    for module in (pub, b.V2):
+        module.subprocess = live_git_subprocess()
     return pub
+
+
+def live_git_subprocess() -> SimpleNamespace:
+    def run(cmd, *args, **kwargs):
+        if not isinstance(cmd, (list, tuple)) or not cmd or cmd[0] != 'git':
+            raise AuthorityError(f'pinned code started a process that is not git: {cmd!r}')
+        kwargs['cwd'] = ROOT
+        return subprocess.run(cmd, *args, **kwargs)
+    return SimpleNamespace(run=run, CompletedProcess=subprocess.CompletedProcess)
 
 
 _WRAPPED = (ValueError, OSError, KeyError, TypeError, AttributeError, ImportError, jsonschema.ValidationError, jsonschema.SchemaError)
@@ -305,7 +321,7 @@ def pinned_mutation_run(authority: dict, signoff: dict, decisions: dict, manifes
             cls = GitHistoryError if type(e).__name__ == 'GitHistoryError' else AuthorityError
             raise cls(f'pinned mutation run failed: {type(e).__name__}: {e}') from e
         b = pub._BUILDER
-        names = {'GOVERNANCE_DECISIONS': pub.GOVERNANCE_DECISIONS, 'V1_AUTHORITY': pub.V1_AUTHORITY, 'BUILDER_SCRIPT': pub.BUILDER_SCRIPT, 'builder __file__': b.__file__, 'builder V2 __file__': b.V2.__file__, 'PROPOSALS': b.PROPOSALS, 'DRAFTING_RECORD': b.DRAFTING_RECORD, 'ANSWERS': b.ANSWERS, 'WORDING_APPROVAL': b.WORDING_APPROVAL, 'DECISIONS_SCHEMA': b.DECISIONS_SCHEMA}
+        names = {'ROOT': pub.ROOT, 'builder ROOT': b.ROOT, 'builder V2 ROOT': b.V2.ROOT, 'GOVERNANCE_DECISIONS': pub.GOVERNANCE_DECISIONS, 'V1_AUTHORITY': pub.V1_AUTHORITY, 'BUILDER_SCRIPT': pub.BUILDER_SCRIPT, 'builder __file__': b.__file__, 'builder V2 __file__': b.V2.__file__, 'PROPOSALS': b.PROPOSALS, 'DRAFTING_RECORD': b.DRAFTING_RECORD, 'ANSWERS': b.ANSWERS, 'WORDING_APPROVAL': b.WORDING_APPROVAL, 'DECISIONS_SCHEMA': b.DECISIONS_SCHEMA}
         for name, path in names.items():
             if not Path(path).resolve().is_relative_to(tmp.resolve()):
                 raise AuthorityError(f'pinned code resolved {name} outside the pinned materialisation')
