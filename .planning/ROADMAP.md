@@ -35,7 +35,7 @@
 - [x] **Phase 11: Frozen Validators** - Historical reply and 2.0.2 notice validators stop depending on live publisher code, and pinned-blob failures are loud (gap closure planned 2026-11-15) (completed 2026-11-16)
 - [x] **Phase 12: Verify-at-Pin and Gate Hardening** - Publisher and validator changes: `--validate` works at the pin, the gates fail closed, and the review cleanup items are closed (completed 2026-11-16)
 - [x] **Phase 13: Certified Republication 2.0.3** - One human-gated publication of 2.0.3 with no decision change (completed 2026-11-17)
-- [ ] **Phase 14: Notice to Hayes (2.0.3)** - A generated, claim-enforced notice that cites the 2.0.3 commit and tells Hayes how to verify at the pin
+- [x] **Phase 14: Notice to Hayes (2.0.3)** - A generated, claim-enforced notice that cites the 2.0.3 commit and tells Hayes how to verify at the pin (completed 2026-11-17)
 
 ## Phase Details
 
@@ -166,23 +166,23 @@
 
 **Wave 1**
 
-- [ ] 14-01-PLAN.md — builder core: frozen constants, history guard, pinned mutation rerun (CLAIM-01), lineage recomputation (CLAIM-02), raw/LF scope proof (CLAIM-03)
+- [x] 14-01-PLAN.md — builder core: frozen constants, history guard, pinned mutation rerun (CLAIM-01), lineage recomputation (CLAIM-02), raw/LF scope proof (CLAIM-03)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 14-02-PLAN.md — build_notice with verify-at-pin section (PIN-03), render, closed schema, --build/--emit-schema/--validate
+- [x] 14-02-PLAN.md — build_notice with verify-at-pin section (PIN-03), render, closed schema, --build/--emit-schema/--validate
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 14-03-PLAN.md — tests: per-claim, tamper, fail-closed, content, CLI, live-file clone
+- [x] 14-03-PLAN.md — tests: per-claim, tamper, fail-closed, content, CLI, live-file clone
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 14-04-PLAN.md — orchestrator pytest gate, code commit, generate notice, Oscar Mack review (D-14)
+- [x] 14-04-PLAN.md — orchestrator pytest gate, code commit, generate notice, Oscar Mack review (D-14)
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
-- [ ] 14-05-PLAN.md — notice commit, CI line commit, push checkpoint, push and CI green
+- [x] 14-05-PLAN.md — notice commit, CI line commit, push checkpoint, push and CI green
 
 ## Progress
 
@@ -195,4 +195,4 @@
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete    | 2026-11-16 |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 4/4 | Complete    | 2026-11-17 |
-| 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/5 | Planned | - |
+| 14. Notice to Hayes (2.0.3) | v1.2.0 | 5/5 | Complete   | 2026-11-17 |
