@@ -236,3 +236,82 @@ publication pin (the committed record names 2.0.2 at ae15c74). It is not a red.
 Accepted red set now (unchanged):
 
 - `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+
+## After plan 12-06 Task 1 (commit 0054f2cb012f9a616b3083a2db59296f650e9d8c)
+
+Measured on the working tree whose two changed files (publisher and v2_publication tests) are exactly the content
+committed in 0054f2c (run immediately before the commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-06-t1-full
+```
+
+Totals: **987 passed, 1 failed, 0 skipped, 0 deselected** (405.51s). The +8 against 12-05 Task 2 are
+`test_plain_validate_requires_ancestry`, the three `test_plain_validate_requires_blob_identity_at_head` cases
+(authority, schema, manifest), `test_plain_validate_shallow_fails_closed`,
+`test_plain_validate_at_pin_record_points_to_at_pin`,
+`test_real_git_repo_plain_passes_after_record_and_later_commits_and_catches_head_drift` and the
+`record_is_a_list` case of `test_malformed_published_files_raise_domain_error`.
+
+pytest exit code: **exit 1**
+
+Failing node ids:
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+  (accepted window opener from 12-04)
+
+CI validators: 1 PASS, 2 PASS, 3 PASS, 4 PASS, 5 PASS, 6 PASS. Validator 1 (plain `--validate`) passes against real
+history: the record's publication commit ae15c74 is an ancestor of HEAD and the 10 D-05 blobs are identical.
+
+Accepted red set now (unchanged):
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+
+## After plan 12-06 (commits 0054f2cb012f9a616b3083a2db59296f650e9d8c, c24f1d30f7a15a5e3fe73e594883ae46905795d7) — Task 2, GATE-06 opens the planned red
+
+Commit 1 (0054f2c, D-06): 987 passed, 1 failed, exit 1; validators 1-6 PASS; red set unchanged (see the Task 1
+section above).
+
+Commit 2 (c24f1d3, GATE-06): measured on the working tree whose two changed files (publisher and v2_publication tests)
+are exactly the content committed in c24f1d3 (run immediately before the commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-06-t2-full
+```
+
+Totals: **987 passed, 2 failed, 0 skipped, 0 deselected** (368.31s). The +1 test against commit 1 is
+`test_pinned_script_digest_mismatch_fails_plain_validate`; `test_script_edit_after_publication_does_not_break_validate`
+was rewritten as `test_script_edit_after_publication_fails_validate`.
+
+pytest exit code: **exit 1**
+
+Failing node ids:
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+  (accepted window opener from 12-04; it now fails inside `validate_published` with the GATE-06 message)
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate`
+  — newly opened by design, GATE-06 compares the live publisher with manifest f6b51cca…; closes at the 2.0.3
+  publication (Phase 13).
+
+CI validators:
+
+| # | Validator | Result |
+|---|-----------|--------|
+| 1 | `scripts/publish_archive_assessment_applicability_authority_v2.py --validate` | **FAIL** (exit 1, by design): `AuthorityError: publisher script differs from the certified manifest digest (manifest publisher_script.sha256); a publisher edit needs a certified republication` |
+| 2 | `scripts/build_archive_assessment_governance_decisions.py --validate` | PASS |
+| 3 | `scripts/validate_archive_assessment_rule_proposals.py --validate` | PASS |
+| 4 | `scripts/validate_archive_assessment_rule_proposals.py --validate-record` | PASS |
+| 5 | `scripts/build_archive_assessment_demo3_w1_req_001_reply.py --validate` | PASS |
+| 6 | `scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py --validate` | PASS |
+
+Frozen builders: `pytest tests/test_archive_assessment_demo3_w1_req_001_reply.py tests/test_archive_assessment_demo3_w1_req_001_notice_2_0_2.py --basetemp=.pytest-temp/p12-06-frozen`: 242 passed, exit 0.
+
+Accepted red set now:
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate`
+- CI validator 1 (`publish_archive_assessment_applicability_authority_v2.py --validate`, script-digest message)

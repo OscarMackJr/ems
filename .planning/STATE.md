@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
 status: executing
-stopped_at: Completed 12-05-PLAN.md
-last_updated: "2026-11-16T23:00:00.000Z"
-last_activity: 2026-11-16 -- Completed 12-05
+stopped_at: Completed 12-06-PLAN.md
+last_updated: "2026-11-16T23:59:00.000Z"
+last_activity: 2026-11-16 -- Completed 12-06
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 13
-  completed_plans: 11
+  completed_plans: 12
   percent: 25
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 12 of 14 (verify at pin and gate hardening)
-Plan: 05 of 7 complete (next: 12-06)
+Plan: 06 of 7 complete (next: 12-07)
 Status: Executing Phase 12
-Last activity: 2026-11-16 -- Completed 12-05 ([Phase 12] PIN-01 --validate --at-pin and single git seam; red set unchanged: 1 accepted test)
+Last activity: 2026-11-16 -- Completed 12-06 ([Phase 12] PIN-02 D-06 ancestry + blob identity; GATE-06 publisher-script digest; red set now 2 accepted tests + CI validator 1, by design)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -110,6 +110,8 @@ Recent decisions affecting current work:
 - [Phase 12]: 12-05: all git access goes through git_show or git_run; helpers validate SHAs/paths before git and fail closed (GitHistoryError)
 - [Phase 12]: 12-05: --pre-publication removed (no alias); --validate --at-pin reads superseded identity from source_lineage.supersedes
 - [Phase 12]: 12-05: at-pin checks shallow state and git_dirty over the 10 D-05 paths + publisher script first; PASS prints one JSON object with one deferred item (PUBLICATION_RECORD_BINDING); plain --validate still prints PASS
+- [Phase 12]: 12-06: plain --validate requires a full clone, publication commit ancestor of HEAD and identical raw blobs for the 10 D-05 paths at pub and HEAD; at the pin it points to --validate --at-pin
+- [Phase 12]: 12-06: GATE-06 --validate checks the live publisher LF digest against manifest publisher_script.sha256 in both modes, and the script at the publication commit in plain mode; CI validator 1 red by design until the 2.0.3 publication
 
 ### Pending Todos
 
