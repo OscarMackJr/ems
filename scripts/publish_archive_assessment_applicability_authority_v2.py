@@ -799,18 +799,27 @@ def check_publication_record(a: dict, at_pin: bool = False) -> None:
     record = load_checked(PUBLICATION_RECORD)
     if not isinstance(record, dict) or set(record) != RECORD_KEYS: raise AuthorityError('publication record must be an object with exactly the six record keys')
     if record['digest_normalisation'] != 'CRLF_TO_LF': raise AuthorityError('publication record digest_normalisation must be CRLF_TO_LF')
+    sup = a['source_lineage']['supersedes']
     if at_pin:
-        sup = a['source_lineage']['supersedes']
         if record['publication_commit'] != sup['commit']: raise AuthorityError(f"at-pin record must name the superseded {sup['version']} publication commit")
         if record['authority_sha256'] != sup['sha256']: raise AuthorityError(f"at-pin record authority_sha256 must equal the superseded {sup['version']} digest")
         want_id, want_version = sup['authority_id'], sup['version']
-    else: want_id, want_version = a['authority_id'], a['version']
+    else:
+        if record.get('authority_id') == sup.get('authority_id') and record.get('version') == sup.get('version'): raise AuthorityError(f"publication record still names the superseded {sup['version']} publication, so HEAD is the publication commit, not the record commit; run --validate --at-pin here, or plain --validate at the record commit or later")
+        want_id, want_version = a['authority_id'], a['version']
     if record['authority_id'] != want_id or record['version'] != want_version: raise AuthorityError(f'publication record must name {want_id} version {want_version}')
     if not at_pin:
         if record['authority_sha256'] != lf_digest(AUTHORITY): raise AuthorityError('publication record authority_sha256 does not match the committed authority')
         if record['manifest_sha256'] != lf_digest(OUT / N_MANIFEST): raise AuthorityError('publication record manifest_sha256 does not match the committed manifest')
     if hashlib.sha256(lf_bytes(git_show(record['publication_commit'], rel(AUTHORITY)))).hexdigest() != record['authority_sha256']: raise AuthorityError('publication record authority_sha256 does not match the authority at the publication commit')
     if hashlib.sha256(lf_bytes(git_show(record['publication_commit'], rel(OUT / N_MANIFEST)))).hexdigest() != record['manifest_sha256']: raise AuthorityError('publication record manifest_sha256 does not match the manifest at the publication commit')
+    if not at_pin:
+        pub = record['publication_commit']
+        git_not_shallow()
+        head = git_head()
+        if not git_is_ancestor(pub, head): raise AuthorityError(f'publication commit {pub[:7]} is not an ancestor of HEAD; plain --validate runs at the record commit or later')
+        for p in publication_paths():
+            if git_show(pub, p) != git_show(head, p): raise AuthorityError(f'{p}: differs between the publication commit and HEAD')
 
 def write_publication_record(sha: str) -> None:
     if not re.fullmatch(r'[0-9a-f]{40}', sha or ''): raise AuthorityError('publication commit must be a 40-character lowercase hex SHA')

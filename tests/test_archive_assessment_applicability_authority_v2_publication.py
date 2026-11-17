@@ -20,6 +20,8 @@ resolve_applicability = MODULE.resolve_applicability
 # captured before any fixture fakes them; the real-repo at-pin test restores them
 REAL_GIT_DIRTY = MODULE.git_dirty
 REAL_GIT_NOT_SHALLOW = MODULE.git_not_shallow
+REAL_GIT_HEAD = MODULE.git_head
+REAL_GIT_IS_ANCESTOR = MODULE.git_is_ancestor
 
 REQUEST = MODULE.REQUEST_CONTROL_IDS
 T, F, U = 'KNOWN_TRUE', 'KNOWN_FALSE', 'UNKNOWN'
@@ -241,6 +243,9 @@ def env(monkeypatch, lineage_calls):
     # at-pin git state checks run against the real repo otherwise; the temp ROOT is not a git repo
     monkeypatch.setattr(MODULE, 'git_not_shallow', lambda: None)
     monkeypatch.setattr(MODULE, 'git_dirty', lambda paths: [])
+    # plain-mode D-06 ancestry; tests that need real history restore REAL_GIT_HEAD / REAL_GIT_IS_ANCESTOR
+    monkeypatch.setattr(MODULE, 'git_head', lambda: HEAD_COMMIT)
+    monkeypatch.setattr(MODULE, 'git_is_ancestor', lambda a, b: True)
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
         for name, value in {'ROOT': root, 'AUTHORITY': root / 'registry' / 'a.json', 'SCHEMA': root / 'schemas' / 's.json', 'SIGNOFF': root / 'registry' / 'signoff.json', 'PUBLICATION_RECORD': root / 'registry' / 'record.json', 'OUT': root / 'generated' / 'out', 'SCRIPT': root / 'scripts' / 'pub.py'}.items():
@@ -394,6 +399,7 @@ def published(env):
     MODULE.publish(False)
 
 RECORD_COMMIT = 'a' * 40
+HEAD_COMMIT = 'b' * 40
 
 @pytest.fixture
 def fake_git_show(monkeypatch):
@@ -407,6 +413,11 @@ def fake_git_show(monkeypatch):
 def register_blobs(blobs, commit=RECORD_COMMIT):
     blobs[(commit, MODULE.rel(MODULE.AUTHORITY))] = MODULE.AUTHORITY.read_bytes()
     blobs[(commit, MODULE.rel(MODULE.OUT / MODULE.N_MANIFEST))] = (MODULE.OUT / MODULE.N_MANIFEST).read_bytes()
+    # D-06: every D-05 file (and the publisher script) at the publication commit and at HEAD
+    for p in [*MODULE.publication_paths(), MODULE.rel(MODULE.SCRIPT)]:
+        data = (MODULE.ROOT / p).read_bytes()
+        blobs[(commit, p)] = data
+        blobs[(HEAD_COMMIT, p)] = data
 
 def published_recorded(env, blobs):
     published(env)
@@ -533,7 +544,7 @@ def test_at_pin_mode_accepts_only_superseded_record(env, fake_git_show, capsys):
     doc = json.loads(out)
     assert doc == {'status': 'PASS', 'mode': 'AT_PIN', 'deferred': [MODULE.AT_PIN_DEFERRED]}
     assert len(doc['deferred']) == 1 and doc['deferred'][0].startswith('PUBLICATION_RECORD_BINDING: ')
-    with pytest.raises(AuthorityError, match='must name'):
+    with pytest.raises(AuthorityError, match='--validate --at-pin'):
         MODULE.validate_published()
 
 def test_at_pin_binding_reads_supersedes_from_authority(env, fake_git_show):
@@ -654,12 +665,54 @@ def test_unreachable_publication_commit_fails_closed(env, fake_git_show):
     with pytest.raises(AuthorityError, match='git show failed'):
         MODULE.validate_published()
 
-def test_real_git_repo_record_passes_plain_mode(env):
+def use_real_git_state(monkeypatch):
+    monkeypatch.setattr(MODULE, 'git_head', REAL_GIT_HEAD)
+    monkeypatch.setattr(MODULE, 'git_is_ancestor', REAL_GIT_IS_ANCESTOR)
+    monkeypatch.setattr(MODULE, 'git_not_shallow', REAL_GIT_NOT_SHALLOW)
+
+def test_plain_validate_requires_ancestry(env, fake_git_show, monkeypatch):
+    published_recorded(env, fake_git_show)
+    MODULE.validate_published()
+    seen = []
+    monkeypatch.setattr(MODULE, 'git_is_ancestor', lambda a, b: seen.append((a, b)) or False)
+    with pytest.raises(AuthorityError, match='is not an ancestor of HEAD'):
+        MODULE.validate_published()
+    assert seen == [(RECORD_COMMIT, HEAD_COMMIT)]
+
+@pytest.mark.parametrize('which', ['authority', 'schema', 'manifest'])
+def test_plain_validate_requires_blob_identity_at_head(env, fake_git_show, which):
+    published_recorded(env, fake_git_show)
+    path = {'authority': MODULE.AUTHORITY, 'schema': MODULE.SCHEMA, 'manifest': MODULE.OUT / MODULE.N_MANIFEST}[which]
+    p = MODULE.rel(path)
+    assert p in MODULE.publication_paths()
+    fake_git_show[(HEAD_COMMIT, p)] = fake_git_show[(HEAD_COMMIT, p)] + b' '
+    with pytest.raises(AuthorityError, match=re.escape(p) + ': differs between the publication commit and HEAD'):
+        MODULE.validate_published()
+
+def test_plain_validate_shallow_fails_closed(env, fake_git_show, monkeypatch):
+    published_recorded(env, fake_git_show)
+    head_calls = []
+    def shallow(): raise MODULE.GitHistoryError('the clone is shallow; fetch full history (git fetch --unshallow)')
+    monkeypatch.setattr(MODULE, 'git_not_shallow', shallow)
+    monkeypatch.setattr(MODULE, 'git_head', lambda: head_calls.append(1) or HEAD_COMMIT)
+    with pytest.raises(MODULE.GitHistoryError, match='shallow'):
+        MODULE.validate_published()
+    assert head_calls == []
+
+def test_plain_validate_at_pin_record_points_to_at_pin(env, fake_git_show):
+    published(env)
+    v = re.escape(authority_supersedes()['version'])
+    superseded_record(fake_git_show)
+    with pytest.raises(AuthorityError, match=f'still names the superseded {v} publication.*run --validate --at-pin here'):
+        MODULE.validate_published()
+
+def test_real_git_repo_record_passes_plain_mode(env, monkeypatch):
     def run(*args): return subprocess.run(['git', *args], cwd=MODULE.ROOT, capture_output=True)
     require_history(ROOT)
     r = run('init', '-q')
     if r.returncode != 0: pytest.fail(f"git init failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
     run('config', 'user.email', 't@example.com'); run('config', 'user.name', 't'); run('config', 'commit.gpgsign', 'false')
+    use_real_git_state(monkeypatch)
     published(env)
     run('add', '-A')
     r = run('commit', '-q', '-m', 'publish')
@@ -667,6 +720,39 @@ def test_real_git_repo_record_passes_plain_mode(env):
     sha = run('rev-parse', 'HEAD').stdout.decode().strip()
     MODULE.write_publication_record(sha)
     MODULE.validate_published()
+
+def test_real_git_repo_plain_passes_after_record_and_later_commits_and_catches_head_drift(env, monkeypatch):
+    def run(*args): return subprocess.run(['git', *args], cwd=MODULE.ROOT, capture_output=True)
+    def commit(msg):
+        r = run('commit', '-q', '-m', msg)
+        if r.returncode != 0: pytest.fail(f"git commit failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
+        return run('rev-parse', 'HEAD').stdout.decode().strip()
+    require_history(ROOT)
+    r = run('init', '-q')
+    if r.returncode != 0: pytest.fail(f"git init failed in temp repo {MODULE.ROOT}: {r.stderr.decode('utf-8', 'replace')}", pytrace=False)
+    run('config', 'user.email', 't@example.com'); run('config', 'user.name', 't'); run('config', 'commit.gpgsign', 'false'); run('config', 'core.autocrlf', 'false')
+    use_real_git_state(monkeypatch)
+    published(env)
+    run('add', '-A')
+    c1 = commit('publish')
+    MODULE.write_publication_record(c1)
+    run('add', '-A')
+    c2 = commit('record')
+    (MODULE.ROOT / 'notes.txt').write_text('unrelated\n', encoding='utf-8')
+    run('add', 'notes.txt')
+    c3 = commit('unrelated')
+    assert len({c1, c2, c3}) == 3 and MODULE.git_head() == c3
+    MODULE.validate_published()
+    schema_rel = MODULE.rel(MODULE.SCHEMA)
+    original = MODULE.SCHEMA.read_bytes()
+    MODULE.SCHEMA.write_bytes(original + b'\n')
+    run('add', schema_rel)
+    commit('drift')
+    r = run('checkout', 'HEAD~1', '--', schema_rel)
+    assert r.returncode == 0, r.stderr
+    assert MODULE.SCHEMA.read_bytes() == original
+    with pytest.raises(AuthorityError, match=re.escape(schema_rel) + ': differs between the publication commit and HEAD'):
+        MODULE.validate_published()
 
 def test_real_git_repo_at_pin_passes_and_dirty_fails(env, fake_git_show, monkeypatch, capsys):
     def run(*args): return subprocess.run(['git', *args], cwd=MODULE.ROOT, capture_output=True)
@@ -1208,6 +1294,8 @@ MALFORMED_FILES = {
     'schema_invalid_json': (lambda: MODULE.SCHEMA, b'{', 'cannot be read as JSON'),
     'schema_not_a_valid_schema': (lambda: MODULE.SCHEMA, b'{"type": 7}', 'committed schema is invalid'),
     'authority_missing_required_key': (lambda: MODULE.AUTHORITY, _drop_required_key, 'fails the schema'),
+    # 12-06: the --at-pin pointer must not run before the record shape check
+    'record_is_a_list': (lambda: MODULE.PUBLICATION_RECORD, b'[]', 'exactly the six'),
 }
 
 @pytest.mark.parametrize('name', sorted(MALFORMED_FILES))
