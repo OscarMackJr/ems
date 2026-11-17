@@ -132,7 +132,23 @@
   3. The publication commit contains only this milestone's deliberate changes (staged by explicit path), and the CI `archive-assessment` job passes on it.
   4. The red window that opened at the first publisher edit in Phase 12 is closed: all real-file tests are green at the publication commit.
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+**Wave 1**
+
+- [ ] 13-01-PLAN.md — pre-flight, read-only dry run, blocking sign-off by Oscar Mack, write sign-off
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 13-02-PLAN.md — emit schema, publish, 10-path publication commit, at-pin in tree and fresh clone, red set at PUB, PUB-11 check
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 13-03-PLAN.md — record-only commit (red window closed), WR-03 test-only commit, all green
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 13-04-PLAN.md — blocking push go-ahead, push to WR-03 head, CI green, 13-VERIFICATION.md and STATE.md evidence
 
 ### Phase 14: Notice to Hayes (2.0.3)
 
@@ -158,5 +174,5 @@
 | 10. Notice to Hayes | v1.1.0 | 3/3 | Complete | 2026-11-13 |
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete    | 2026-11-16 |
-| 13. Certified Republication 2.0.3 | v1.2.0 | 0/0 | Not started | - |
+| 13. Certified Republication 2.0.3 | v1.2.0 | 0/4 | Planned | - |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |
