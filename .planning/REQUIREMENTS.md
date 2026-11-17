@@ -43,11 +43,11 @@ These apply to the notice builder and validator used for 2.0.3.
 
 ### Republication
 
-- [ ] **PUB-10**: `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3` is published with certification, manifest and traceability.
+- [x] **PUB-10**: `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3` is published with certification, manifest and traceability.
   - Oscar Mack signs it off as EMS governance authority, with the dual-role statement.
   - It supersedes 2.0.2 at `ae15c74`.
-- [ ] **PUB-11**: No decision changes. The decisions digest stays `4e746d1f…`, all 80 rows are identical to 2.0.2, and the counts stay at 21 decided and 59 undecided.
-- [ ] **PUB-12**: The publication commit contains only this milestone's deliberate changes, and the CI `archive-assessment` job passes on it.
+- [x] **PUB-11**: No decision changes. The decisions digest stays `4e746d1f…`, all 80 rows are identical to 2.0.2, and the counts stay at 21 decided and 59 undecided.
+- [x] **PUB-12**: The publication commit contains only this milestone's deliberate changes, and the CI `archive-assessment` job passes on it.
 
 ### Notice
 
@@ -88,9 +88,9 @@ These apply to the notice builder and validator used for 2.0.3.
 | GATE-08 | Phase 12 | Complete |
 | GATE-09 | Phase 12 | Complete |
 | GATE-10 | Phase 12 | Complete |
-| PUB-10 | Phase 13 | Pending |
-| PUB-11 | Phase 13 | Pending |
-| PUB-12 | Phase 13 | Pending |
+| PUB-10 | Phase 13 | Complete |
+| PUB-11 | Phase 13 | Complete |
+| PUB-12 | Phase 13 | Complete |
 | NOTICE-03 | Phase 14 | Pending |
 
 **Coverage:** 19 requirements, 19 mapped (Phase 11: 4, Phase 12: 7, Phase 13: 3, Phase 14: 5)
