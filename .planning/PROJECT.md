@@ -115,6 +115,13 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
   - The 2.0.3 publisher supersedes 2.0.2 (`ae15c74`) through `SUPERSEDED_V2_0_2`.
 
   PIN-01..02 and GATE-06..10. Validated in Phase 12: Verify-at-Pin and Gate Hardening (re-verified 8/8 after the 12-08 gap closure of review CR-01). The guarded run gave 1020 passed and 3 failed. The 3 failures and CI validator 1 are the D-16 red window, accepted by design: they stay red until the certified 2.0.3 republication in Phase 13. Watching at-pin PASS at a real 2.0.3 pin is a Phase 13 success criterion. Deferred: WR-02 (scrubbing `GIT_*` env), and WR-03 (the D-10 subprocess test should assert `(0, 'PASS')`), which moves to Phase 13.
+- ✓ The 2.0.3 notice to Hayes is generated, validated and pushed:
+  - `docs/DEMO3_W1_REQ_001_NOTICE_2_0_3.md`, plus its JSON and closed schema, is in notice commit `e10b240`. It asks Hayes to re-pin to `1544dc1…` and gives the three-step verify sequence (`--validate --at-pin` at the pin, plain `--validate` at record commit `87a46d1`, then the notice `--validate`) with an outcome table.
+  - `--validate` reruns the 29 mutations from the publisher at the pin, recomputes the 7 lineage digests from git and computes raw ≠ LF for the 3 RAW_BYTES files.
+  - CI validates the notice (`c04763d`). Dispatched run `44160179245` passed at the pushed head.
+  - Oscar Mack approved the wording (D-14). Sending the notice remains the authority's action.
+
+  NOTICE-03, PIN-03 and CLAIM-01..03. Validated in Phase 14: Notice to Hayes 2.0.3 (verified 4/4). The notice tests gave 89 passed and 0 skipped. Review 14-REVIEW.md lists 3 non-blocking warnings: WR-01 (the pinned publisher's `ROOT` points at the live repository by convention), WR-02 (outcome table row 2 wording) and WR-03 (CI installs an unpinned `jsonschema`).
 
 ### Active
 
@@ -222,4 +229,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-16 after Phase 12 (Verify-at-Pin and Gate Hardening)*
+*Last updated: 2026-11-17 after Phase 14 (Notice to Hayes 2.0.3)*
