@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
-status: ready_to_plan
-stopped_at: Phase 12 complete (verified 8/8); Phase 13 not started
-last_updated: "2026-11-16T23:59:00.000-05:00"
-last_activity: 2026-11-16 -- Phase 12 complete
+status: planning
+stopped_at: Phase 13 context gathered
+last_updated: "2026-11-17T13:18:35.987Z"
+last_activity: 2026-11-16 -- Phase 12 complete (8 plans; CR-01 gap closed by 12-08; D-16 red set held until 2.0.3 publication)
 progress:
   total_phases: 4
   completed_phases: 2
@@ -154,9 +154,9 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-11-16T14:00:00.000Z
-Stopped at: Completed 12-08-PLAN.md (Phase 12 gap closed; ready for re-verification)
-Resume file: None
+Last session: 2026-11-17T13:18:35.981Z
+Stopped at: Phase 13 context gathered
+Resume file: .planning/phases/13-certified-republication-2-0-3/13-CONTEXT.md
 
 ## Operator Next Steps
 
