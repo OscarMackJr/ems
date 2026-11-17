@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 12 of 14 (verify at pin and gate hardening)
-Plan: 07 of 7 complete ([Phase 12] all 7 plans complete)
-Status: [Phase 12] Ready for review and verification
-Last activity: 2026-11-16 -- Completed 12-07 ([Phase 12] final 2.0.3 form: VERSION 2.0.3, SUPERSEDED_V2_0_2 at ae15c74, truthful D-14 texts; D-16 end state: 3 accepted tests + CI validator 1)
+Plan: 08 of 8 complete ([Phase 12] all 8 plans complete; 12-08 gap closure done)
+Status: [Phase 12] Gap CR-01 closed (12-08); ready for re-verification
+Last activity: 2026-11-16 -- Completed 12-08 ([Phase 12] gap closure: at-pin binds the 11 pinned paths to HEAD blobs and index + hardened git status over them and OUT (CR-01, IN-05); plain --validate binds the 10 D-05 files to HEAD (WR-01); real-layout git tests (WR-04); red set unchanged at D-16)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -69,6 +69,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 12 P04 | 25min | 2 tasks | 4 files |
 | Phase 12 P05 | 45min | 2 tasks | 3 files |
 | Phase 12 P07 | 35min | 2 tasks | 6 files |
+| Phase 12 P08 | 60min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -125,6 +126,9 @@ Recent decisions affecting current work:
 - [Phase 12]: 12-07: SUPERSEDED_V2_0_1 replaced by SUPERSEDED_V2_0_2 (ae15c74, a44eea1f..., decisions 4e746d1f...); VERSION '2.0.3'; superseded-version messages derive from the constant
 - [Phase 12]: 12-07: frozen 2.0.1 sign-off test reads the 2.0.1 identity from the 2.0.2 authority's source_lineage.supersedes at ae15c74
 - [Phase 12]: 12-07: end-of-phase accepted red set is 3 tests (committed schema, real published files, publisher digest) + CI validator 1; closed by Phase 13 publication and record commits
+- [Phase 12]: 12-08: at-pin runs check_tree_matches_head over the 10 D-05 paths + publisher script (HEAD blob under CRLF_TO_LF, present on disk, index tag 'H' only), then hardened git status (--literal-pathspecs, --untracked-files=all, --ignored=matching) over those paths and the output folder
+- [Phase 12]: 12-08: plain --validate ends with check_tree_matches_head(publication_paths()) (WR-01)
+- [Phase 12]: 12-08: WR-02 stays advisory; WR-03 (assert before == (0, 'PASS') in the D-10 subprocess test) is a Phase 13 follow-up
 - [v1.2.0]: Scope is the v1.1.0 audit tech debt (`.planning/milestones/v1.1.0-MILESTONE-AUDIT.md`); no decision content changes (decisions digest `4e746d1f…` is pinned).
 - [CI]: `archive-assessment` job (261015-ci1) green on ubuntu-latest, run 38744767442: 492 passed, 5 validators PASS; runs on PRs, pushes to main, and `workflow_dispatch`
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
@@ -149,8 +153,8 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-11-16T10:30:00.000Z
-Stopped at: Completed 12-07-PLAN.md (Phase 12 ready for review and verification)
+Last session: 2026-11-16T14:00:00.000Z
+Stopped at: Completed 12-08-PLAN.md (Phase 12 gap closed; ready for re-verification)
 Resume file: None
 
 ## Operator Next Steps

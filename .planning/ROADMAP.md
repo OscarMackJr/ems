@@ -118,7 +118,7 @@
 
 **Wave 8** *(gap closure; blocked on Wave 7 completion)*
 
-- [ ] 12-08-PLAN.md — CR-01 at-pin binds pinned tree to HEAD blobs and index, hardened git status; WR-01 plain working-tree binding; WR-04 real-layout tests (red set unchanged)
+- [x] 12-08-PLAN.md — CR-01 at-pin binds pinned tree to HEAD blobs and index, hardened git status; WR-01 plain working-tree binding; WR-04 real-layout tests (red set unchanged)
 
 ### Phase 13: Certified Republication 2.0.3
 
@@ -157,6 +157,6 @@
 | 9. Certified Republication 2.0.2 | v1.1.0 | 5/5 | Complete | 2026-11-13 |
 | 10. Notice to Hayes | v1.1.0 | 3/3 | Complete | 2026-11-13 |
 | 11. Frozen Validators | v1.2.0 | 6/6 | Complete    | 2026-11-16 |
-| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 7/7 | Complete   | 2026-11-17 |
+| 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete   | 2026-11-17 |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 0/0 | Not started | - |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 0/0 | Not started | - |
