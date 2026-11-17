@@ -41,7 +41,7 @@ Out of scope:
 - **D-08:** Decision content as in 10 D-08: counts (21 decided: 3 rules, 18 no-rule; 59 `NOT_YET_DECIDED`), the 3 rules in machine form, the governance decisions LF sha256 unchanged, and a pointer to the reply and decisions file for the 18 no-rule reasons.
 
 ### Verify-at-pin guidance (PIN-03)
-- **D-09:** **Full command sequence**, with prerequisites (Python 3.12, `pip install -r requirements.txt`, a full non-shallow clone, no local edits to the pinned paths):
+- **D-09:** **Full command sequence**, with prerequisites (Python 3.12, `python -m pip install -r requirements.txt jsonschema==4.26.0` — amended 2026-11-17 by Oscar Mack after research found the pinned `requirements.txt` omits `jsonschema`, which the pinned publisher imports; a full non-shallow clone, no local edits to the pinned paths):
   1. `git clone https://github.com/OscarMackJr/ems.git`, `git checkout 1544dc1…` (full SHA), install requirements, `python scripts/publish_archive_assessment_applicability_authority_v2.py --validate --at-pin`.
   2. `git checkout 87a46d1…` (the record commit, full SHA), then plain `python scripts/publish_archive_assessment_applicability_authority_v2.py --validate`. The notice says this also passes at any later commit on the branch.
   3. At the notice commit or later, `python scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_3.py --validate`, which rebuilds the notice and reruns the mutations and digests.
