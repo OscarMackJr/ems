@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 13 of 14 (certified republication 2.0.3)
-Plan: 13-04 of 4 (push go-ahead checkpoint)
-Status: 13-01..13-03 complete — sign-off approved 2026-11-17; PUB 1544dc19ba235d732c832d1651895550ed5a265d (at-pin PASS in tree and fresh clone); REC 87a46d147413bd99e931c71a1ab165eb0903f014 (direct child of PUB, red window closed); WR03 5498002c5eea3a6d9e3bfbb6766119880bb36804 (1023 passed, six validators PASS). Not pushed.
+Plan: 4 of 4 — Phase 13 executed; Phase 14 (Notice to Hayes 2.0.3) is next
+Status: 13-04 complete — pushed to 5498002, CI 44134035073 green; 13-01..13-03 complete — sign-off approved 2026-11-17; PUB 1544dc19ba235d732c832d1651895550ed5a265d (at-pin PASS in tree and fresh clone); REC 87a46d147413bd99e931c71a1ab165eb0903f014 (direct child of PUB, red window closed); WR03 5498002c5eea3a6d9e3bfbb6766119880bb36804 (1023 passed, six validators PASS). Not pushed.
 Last activity: 2026-11-17 -- Phase 13 waves 1-3 executed (13-01 summary 1b750a5)
 
 Progress: [█████░░░░░] 50%
@@ -133,6 +133,7 @@ Recent decisions affecting current work:
 - [v1.2.0]: Scope is the v1.1.0 audit tech debt (`.planning/milestones/v1.1.0-MILESTONE-AUDIT.md`); no decision content changes (decisions digest `4e746d1f…` is pinned).
 - [CI]: `archive-assessment` job (261015-ci1) green on ubuntu-latest, run 38744767442: 492 passed, 5 validators PASS; runs on PRs, pushes to main, and `workflow_dispatch`
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
+- [Publication 2.0.3]: EMS-AA3 authority 2.0.3 published at 1544dc19ba235d732c832d1651895550ed5a265d (Hayes pins this; signed off by Oscar Mack 2026-11-17), record commit 87a46d147413bd99e931c71a1ab165eb0903f014 (direct child of PUB), WR-03 commit 5498002c5eea3a6d9e3bfbb6766119880bb36804; CI run 44134035073 green (validate + archive-assessment) at headSha 5498002 (workflow_dispatch, 2026-11-17); publication bytes identical PUB..WR03; --validate --at-pin PASS in tree and in a fresh --no-local clone. Push scope: remote tip is 5498002; the .planning-only commits after WR03 (3fd54ac, and the docs(13-04) evidence commit) are local and are published by the Phase 14 push.
 - [Environment]: `git push` via the credential manager fails in this session (sh.exe crash); pushing with the GitHub CLI token as a one-command `http.extraheader` (env `GIT_CONFIG_*`, credential.helper cleared) works
 - [Environment]: Bash fails on this machine (cygwin `add_item` fatal error); GSD subagents have no PowerShell tool, so they cannot run tests or validators — run those from the orchestrator
 
