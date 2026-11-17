@@ -377,9 +377,14 @@
         "meaning": "The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit."
       },
       {
+        "action": "Run step 3.",
+        "case": "Step 2 prints PASS at 87a46d147413bd99e931c71a1ab165eb0903f014 or a later commit",
+        "meaning": "The publication record binds the pin and the publication files are byte-identical between the pin and the checked-out commit."
+      },
+      {
         "action": "Re-pin to 1544dc19ba235d732c832d1651895550ed5a265d.",
-        "case": "Step 2 or step 3 prints PASS at 87a46d147413bd99e931c71a1ab165eb0903f014 or any later commit",
-        "meaning": "The publication record binds the pin and the publication files are unchanged."
+        "case": "Step 3 prints PASS at or after the commit that adds this notice, and steps 1 and 2 printed PASS",
+        "meaning": "The notice was rebuilt from the frozen inputs, the mutations were rerun from the pinned publisher and the digests were recomputed, and all of them match the committed notice. Re-pin only when steps 1, 2 and 3 all print PASS."
       },
       {
         "action": "Run --validate --at-pin at the pin.",
@@ -418,7 +423,7 @@
           "git checkout 87a46d147413bd99e931c71a1ab165eb0903f014",
           "python scripts/publish_archive_assessment_applicability_authority_v2.py --validate"
         ],
-        "pass_means": "PASS means the publication record at this commit names 1544dc19ba235d732c832d1651895550ed5a265d and the publication files are byte-identical between the two commits. It also passes at any later commit on feature/ems-aa3-archive-applicability-authority.",
+        "pass_means": "PASS means the publication record at this commit names 1544dc19ba235d732c832d1651895550ed5a265d and the publication files are byte-identical between the two commits. It is expected to pass at later commits on feature/ems-aa3-archive-applicability-authority that do not change the publication files.",
         "step": 2
       },
       {
