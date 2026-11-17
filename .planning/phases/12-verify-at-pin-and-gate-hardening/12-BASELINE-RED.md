@@ -173,3 +173,66 @@ Mutation invariance check (fresh `run_mutations` equals the committed N_NEGATIVE
 Accepted red set now:
 
 - `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+
+## After plan 12-05 Task 1 (commit bc3d47e22d949ef01a3121212e6e4ec70501dcb2)
+
+Measured on the working tree whose two changed files (publisher and v2_publication tests) are exactly the content
+committed in bc3d47e (run immediately before the commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-05-t1-full
+```
+
+Totals: **974 passed, 1 failed, 0 skipped, 0 deselected** (328.67s). The +29 passing tests against 12-04 are the
+new git-seam helper unit tests (git_head, git_is_ancestor, git_not_shallow, git_dirty, git_run, git_show `--`) and
+the two publication_paths tests.
+
+pytest exit code: **exit 1**
+
+Failing node ids:
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+  (accepted window opener from 12-04)
+
+CI validators: 1 PASS, 2 PASS, 3 PASS, 4 PASS, 5 PASS, 6 PASS.
+
+Accepted red set now (unchanged):
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+
+## After plan 12-05 Task 2 (commit 1b83c425565a83010b060efd0e108161bb16f8e2)
+
+Measured on the working tree whose two changed files (publisher and v2_publication tests) are exactly the content
+committed in 1b83c42 (run immediately before the commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-05-t2-full
+```
+
+Totals: **979 passed, 1 failed, 0 skipped, 0 deselected**. pytest printed a wall time of 44138.13s; this is a
+host clock/sleep artefact, not test time (the v2_publication module alone took 151.89s in the same session). The +5
+against Task 1 are `test_at_pin_record_blobs_must_match_the_superseded_commit`, `test_at_pin_dirty_tree_fails_closed`,
+`test_at_pin_shallow_fails_closed`, `test_real_git_repo_at_pin_passes_and_dirty_fails` and
+`test_cli_pre_publication_flag_is_removed`; the five pre-publication tests were renamed to their at-pin ids.
+
+pytest exit code: **exit 1**
+
+Failing node ids:
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+  (accepted window opener from 12-04)
+
+CI validators: 1 PASS, 2 PASS, 3 PASS, 4 PASS, 5 PASS, 6 PASS.
+
+`.venv/Scripts/python.exe scripts/publish_archive_assessment_applicability_authority_v2.py --validate --at-pin` at the
+working HEAD 1b83c42 (clean D-05 paths and publisher script): exit 1,
+`AuthorityError: at-pin record must name the superseded 2.0.1 publication commit`. This is correct: HEAD is not a
+publication pin (the committed record names 2.0.2 at ae15c74). It is not a red.
+
+Accepted red set now (unchanged):
+
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`

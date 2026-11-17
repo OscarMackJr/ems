@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
 status: executing
-stopped_at: Completed 12-04-PLAN.md
-last_updated: "2026-11-16T10:30:00.000Z"
-last_activity: 2026-11-16 -- Completed 12-04
+stopped_at: Completed 12-05-PLAN.md
+last_updated: "2026-11-16T23:00:00.000Z"
+last_activity: 2026-11-16 -- Completed 12-05
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 13
-  completed_plans: 10
+  completed_plans: 11
   percent: 25
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 ## Current Position
 
 Phase: 12 of 14 (verify at pin and gate hardening)
-Plan: 04 of 7 complete (next: 12-05)
+Plan: 05 of 7 complete (next: 12-06)
 Status: Executing Phase 12
-Last activity: 2026-11-16 -- Completed 12-04 (GATE-07, GATE-10 IN-01; red window open: 1 accepted test)
+Last activity: 2026-11-16 -- Completed 12-05 ([Phase 12] PIN-01 --validate --at-pin and single git seam; red set unchanged: 1 accepted test)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -67,6 +67,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 12 P01 | 13min | 3 tasks | 5 files |
 | Phase 12 P02 | 25min | 2 tasks | 4 files |
 | Phase 12 P04 | 25min | 2 tasks | 4 files |
+| Phase 12 P05 | 45min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -106,6 +107,9 @@ Recent decisions affecting current work:
 - [Phase 12]: 12-04: validate_published runs schema_check (check_schema + validate, wrapped as AuthorityError) before validate_publication; load() unchanged
 - [Phase 12]: 12-04: dry-run lead says 'DECISIONS DIFFER from <version>' unless decisions digest equals superseded value and no row/set differs
 - [Phase 12]: 12-04: red window open; accepted red set exactly test_publisher_still_valid_and_digest_matches_manifest until 2.0.3 publication
+- [Phase 12]: 12-05: all git access goes through git_show or git_run; helpers validate SHAs/paths before git and fail closed (GitHistoryError)
+- [Phase 12]: 12-05: --pre-publication removed (no alias); --validate --at-pin reads superseded identity from source_lineage.supersedes
+- [Phase 12]: 12-05: at-pin checks shallow state and git_dirty over the 10 D-05 paths + publisher script first; PASS prints one JSON object with one deferred item (PUBLICATION_RECORD_BINDING); plain --validate still prints PASS
 
 ### Pending Todos
 
