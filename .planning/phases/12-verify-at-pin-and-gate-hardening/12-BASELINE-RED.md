@@ -447,3 +447,56 @@ CI validators:
 | 6 | `scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py --validate` | PASS |
 
 Accepted red set: unchanged (the D-16 end state).
+
+## After plan 12-08 Task 3 (commit 0de82088fedcf6f84014daae4e3a4a04db8e6194) — real-layout git tests (WR-04); end of the 12-08 gap closure
+
+The suite and validators were run on the working tree that equals commit 0de8208 (run immediately before the
+commit; no edit in between).
+
+Command (Git Bash, repo root):
+
+```
+EMS_FAIL_ON_SKIP=1 .venv/Scripts/python.exe -m pytest tests/test_archive_assessment_*.py -p no:cacheprovider -q -rf --basetemp=.pytest-temp/p12-08-t3-full
+```
+
+Totals: **1020 passed, 3 failed, 0 skipped, 0 errors** (367.33s). Total test count 1023 = 1011 + 12 new test ids
+(`test_real_layout_at_pin_fails_closed_where_git_status_is_blind` x9, `test_real_layout_at_pin_passes_on_clean_pinned_tree`,
+`test_real_layout_at_pin_passes_with_crlf_on_disk_over_lf_blobs`, `test_real_layout_plain_validate_binds_working_tree_to_head`);
++34 against 12-07 (989).
+
+pytest exit code: **exit 1**
+
+Real-layout run (`-k "real_layout or real_git_repo"`, `--basetemp=.pytest-temp/p12-08-t3-layout`): 15 passed, 0 failed.
+The CRLF positive control (git-checkout CRLF over LF blobs with `core.autocrlf true`) passed as planned; no
+stop-and-report event.
+
+Failing node ids:
+
+- `tests/test_archive_assessment_applicability_authority_v2.py::test_committed_schema_equals_schema_function`
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_real_published_files_validate`
+- `tests/test_archive_assessment_applicability_authority_v2_publication.py::test_publisher_still_valid_and_digest_matches_manifest`
+
+CI validators:
+
+| # | Validator | Result |
+|---|-----------|--------|
+| 1 | `scripts/publish_archive_assessment_applicability_authority_v2.py --validate` | **FAIL** (exit 1, by design): `AuthorityError: authority identity/version/status invalid; source_lineage supersedes does not name the 2.0.2 publication` (unchanged) |
+| 2 | `scripts/build_archive_assessment_governance_decisions.py --validate` | PASS |
+| 3 | `scripts/validate_archive_assessment_rule_proposals.py --validate` | PASS |
+| 4 | `scripts/validate_archive_assessment_rule_proposals.py --validate-record` | PASS |
+| 5 | `scripts/build_archive_assessment_demo3_w1_req_001_reply.py --validate` | PASS |
+| 6 | `scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py --validate` | PASS |
+
+Accepted red set: unchanged (the D-16 end state: the three ids above plus CI validator 1).
+
+### Deferred from the 12-08 gap closure
+
+- WR-02 (`GIT_*` environment scrubbing, `GIT_CONFIG_NOSYSTEM`) stays advisory: `core.autocrlf=true` comes from both
+  the Git for Windows system config and the repo config on the operator machine, so scrubbing ambient config changes
+  status and CRLF behaviour in the operator's tree and needs its own test design.
+- WR-03 is a Phase 13 follow-up: once CI validator 1 is green at the record commit, the D-10 subprocess test must
+  assert `before == (0, 'PASS')`.
+- Phase 13 note: `--validate --at-pin` now also fails if any of the 11 pinned paths (the 10 D-05 files and the
+  publisher script) is not committed at the publication commit, differs from its HEAD blob (CRLF_TO_LF normalised),
+  is absent, or is index-flagged (skip-worktree, assume-unchanged, unmerged, not in the index), or if the output
+  folder holds an untracked or ignored extra file.
