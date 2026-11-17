@@ -369,6 +369,7 @@ def test_d10_live_catalog_edit_or_delete_does_not_change_validate_outcome(tmp_pa
         return r.returncode, (lines[-1] if lines else '')
 
     before = outcome()
+    assert before == (0, 'PASS'), f'--validate baseline must be PASS for D-10 to be meaningful: {before!r}'
     live = clone / MODULE.CATALOG_REL
     for change in (lambda: live.write_bytes(b'controls: []\n'), live.unlink):
         change()
