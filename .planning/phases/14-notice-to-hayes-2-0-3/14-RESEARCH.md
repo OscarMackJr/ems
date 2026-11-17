@@ -478,16 +478,19 @@ Also needed:
 | A3 | Hayes will run the commands in a POSIX or PowerShell shell where `python` is 3.12 | Verify section | Low/medium: the notice may add "use the Python 3.12 interpreter (`py -3.12` on Windows)"; wording is discretionary |
 | A4 | Users accept changing the D-09 install text to `pip install -r requirements.txt jsonschema` | Pitfall 1 | Medium: if refused, step 1 fails for Hayes. Requires user confirmation |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **D-09 install command (Pitfall 1)**
    - Known: `requirements.txt` at the pin lacks jsonschema; CI adds it.
    - Unclear: whether the user wants the exact version named.
    - Recommendation: `python -m pip install -r requirements.txt jsonschema`, and state that jsonschema 4.26.0 was the version used for verification. Confirm at the D-14 Markdown review at the latest, preferably during planning.
+   - RESOLVED: D-09 amended in CONTEXT.md (commit 9d5ce7c) to `python -m pip install -r requirements.txt jsonschema`; the notice states jsonschema 4.26.0 was used for verification.
 2. **Should the 8th digest (`supersedes.governance_decisions_sha256`) be shown?**
    - Recommendation: recompute it at `ae15c74` and show it as the "decisions digest unchanged" evidence. Keep exactly 7 lineage rows (D-07).
+   - RESOLVED: 14-02 recomputes `supersedes.governance_decisions_sha256` at `ae15c74` and shows it as "decisions digest unchanged" evidence; the lineage table keeps exactly 7 rows.
 3. **`.gitattributes` for the new notice files**
    - The 2.0.2 notice files have no entry, and `eol=lf` is deferred (12 D-15). Validation compares after LF normalisation, so a Windows `autocrlf=true` checkout passes. Recommendation: no `.gitattributes` change.
+   - RESOLVED: no `.gitattributes` change in this phase.
 
 ## Environment Availability
 
