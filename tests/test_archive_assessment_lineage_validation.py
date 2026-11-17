@@ -27,7 +27,7 @@ def git(*args, cwd=REAL_ROOT):
     return subprocess.run(['git', *args], cwd=cwd, capture_output=True)
 
 
-PINNED_COMMITS = (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_1['commit'])
+PINNED_COMMITS = (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_2['commit'])
 
 
 def sha(norm, data):
@@ -44,7 +44,7 @@ def put(root, rel, data):
 def fx(tmp_path, monkeypatch):
     require_history(REAL_ROOT)
     monkeypatch.setattr(MODULE, 'ROOT', tmp_path)
-    sup = MODULE.SUPERSEDED_V2_0_1
+    sup = MODULE.SUPERSEDED_V2_0_2
     rels = [MODULE.AA1_MANIFEST_REL, MODULE.AA2_CLOSURE_REL, MODULE.AA2_APPROVAL_REL, MODULE.CATALOG_REL,
             MODULE.GOVERNANCE_DECISIONS_REL, MODULE.V1_BASELINE_REL, sup['relative_path']]
     for i, rel in enumerate(rels):
@@ -334,11 +334,11 @@ def test_d10_live_catalog_edit_does_not_change_catalog_reads(tmp_path, monkeypat
 def test_d10_live_catalog_edit_or_delete_does_not_change_build_or_validation(tmp_path, monkeypatch):
     require_history(REAL_ROOT, commits=PINNED_COMMITS)
     pinned = git('show', f'{MODULE.CATALOG_COMMIT}:{MODULE.CATALOG_REL}').stdout
-    sup, real_git_show = MODULE.SUPERSEDED_V2_0_1, MODULE.git_show
+    sup, real_git_show = MODULE.SUPERSEDED_V2_0_2, MODULE.git_show
     prev = git('show', f"{sup['commit']}:{sup['relative_path']}")
     if prev.returncode != 0:
-        pytest.fail(f"2.0.1 authority blob {sup['relative_path']} at commit {sup['commit']} is not reachable in {REAL_ROOT}; fetch full history (git fetch --unshallow)", pytrace=False)
-    # the fixture repo has no 2.0.1 history; validate_publication's D-08 comparison reads it from the real repo
+        pytest.fail(f"{sup['version']} authority blob {sup['relative_path']} at commit {sup['commit']} is not reachable in {REAL_ROOT}; fetch full history (git fetch --unshallow)", pytrace=False)
+    # the fixture repo has no superseded-publication history; validate_publication's D-08 comparison reads it from the real repo
     monkeypatch.setattr(MODULE, 'git_show', lambda commit, path: prev.stdout if (commit, path) == (sup['commit'], sup['relative_path']) else real_git_show(commit, path))
     catalog_repo(tmp_path, monkeypatch, pinned)
     before_build = MODULE.jtext(MODULE.build_authority())

@@ -33,7 +33,7 @@ def git(*args):
     r = subprocess.run(['git', *args], cwd=ROOT, capture_output=True)
     return subprocess.CompletedProcess(r.args, r.returncode, r.stdout, r.stderr.decode('utf-8', 'replace').strip())
 
-PINNED_COMMITS = (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_1['commit'])
+PINNED_COMMITS = (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_2['commit'])
 
 
 # Files with eol=lf in .gitattributes have raw == LF bytes; the claim string and the LF recompute are still both asserted.

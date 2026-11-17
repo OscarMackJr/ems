@@ -78,10 +78,10 @@ def test_lineage_records_governance_decisions_and_v1():
     assert gd['relative_path'] == 'registry/archive_assessment_governance_decisions.json'
     assert gd['record_count'] == 21 and len(gd['drafting_commit']) == 40
     assert gd['sha256'] == MODULE.lf_digest(MODULE.GOVERNANCE_DECISIONS)
-    assert lin['supersedes'] == MODULE.SUPERSEDED_V2_0_1
+    assert lin['supersedes'] == MODULE.SUPERSEDED_V2_0_2
     assert lin['v1_baseline']['commit'] == MODULE.V1_BASELINE_COMMIT and len(lin['v1_baseline']['commit']) == 40 and lin['v1_baseline']['version'] == '1.0.0'
     assert lin['v1_baseline']['sha256'] == MODULE.lf_digest(MODULE.V1_AUTHORITY)
-    assert gd['sha256'] == MODULE.SUPERSEDED_V2_0_1['governance_decisions_sha256']
+    assert gd['sha256'] == MODULE.SUPERSEDED_V2_0_2['governance_decisions_sha256']
     assert lin['catalog_reference']['sha256'] == hashlib.sha256(MODULE.lf_bytes(MODULE.catalog_bytes())).hexdigest()
     assert lin['catalog_reference']['commit'] == MODULE.CATALOG_COMMIT
     assert 'digest_normalisation' not in lin
@@ -187,7 +187,7 @@ def test_decisions_digest_bound_to_2_0_0_constant(monkeypatch, tmp_path):
     monkeypatch.setattr(MODULE, 'GOVERNANCE_DECISIONS', p)
     a = build()
     a['source_lineage']['governance_decisions']['sha256'] = MODULE.lf_digest(p)
-    with pytest.raises(AuthorityError, match='2.0.1'):
+    with pytest.raises(AuthorityError, match=re.escape(MODULE.SUPERSEDED_V2_0_2['version'])):
         validate_publication(a)
 
 def test_row_decision_fields_are_rederived_from_records():
@@ -221,10 +221,10 @@ def sha_text(t): return hashlib.sha256(t.encode('utf-8')).hexdigest()
 def valid_signoff(authority_digest, on='2026-10-14'):
     return {'status': 'PUBLICATION_SIGNOFF', 'approval': {'approver': 'Oscar Mack', 'role': 'EMS_GOVERNANCE_AUTHORITY', 'date': on, 'scope': 'Publish v2 authority'}, 'dual_role_statement': DUAL, 'authority_id': MODULE.AUTHORITY_ID, 'version': MODULE.VERSION, 'authority_sha256': authority_digest, 'authority_sha256_normalisation': 'CRLF_TO_LF'}
 
-def prev_201_authority_bytes():
-    sup = MODULE.SUPERSEDED_V2_0_1
+def prev_superseded_authority_bytes():
+    sup = MODULE.SUPERSEDED_V2_0_2
     r = subprocess.run(['git', 'show', f"{sup['commit']}:{sup['relative_path']}"], cwd=ROOT, capture_output=True)
-    if r.returncode != 0: pytest.fail(f"2.0.1 authority blob {sup['relative_path']} at commit {sup['commit']} is not reachable in {ROOT}; fetch full history (git fetch --unshallow)", pytrace=False)
+    if r.returncode != 0: pytest.fail(f"{sup['version']} authority blob {sup['relative_path']} at commit {sup['commit']} is not reachable in {ROOT}; fetch full history (git fetch --unshallow)", pytrace=False)
     return r.stdout
 
 @pytest.fixture
@@ -237,8 +237,8 @@ def env(monkeypatch, lineage_calls):
     monkeypatch.setattr(MODULE, 'catalog_bytes', lambda: real_catalog)
     # validate_lineage reads git history and the real tree; under the empty temp ROOT it is a recorder
     monkeypatch.setattr(MODULE, 'validate_lineage', lambda lin: lineage_calls.append(lin))
-    prev_blob, real_git_show, sup = prev_201_authority_bytes(), MODULE.git_show, MODULE.SUPERSEDED_V2_0_1
-    # validate_publication compares against the 2.0.1 authority in git history; serve it under the empty temp ROOT
+    prev_blob, real_git_show, sup = prev_superseded_authority_bytes(), MODULE.git_show, MODULE.SUPERSEDED_V2_0_2
+    # validate_publication compares against the superseded authority in git history; serve it under the empty temp ROOT
     monkeypatch.setattr(MODULE, 'git_show', lambda commit, path: prev_blob if (commit, path) == (sup['commit'], sup['relative_path']) else real_git_show(commit, path))
     # at-pin git state checks run against the real repo otherwise; the temp ROOT is not a git repo
     monkeypatch.setattr(MODULE, 'git_not_shallow', lambda: None)
@@ -403,7 +403,7 @@ HEAD_COMMIT = 'b' * 40
 
 @pytest.fixture
 def fake_git_show(monkeypatch):
-    blobs = {(MODULE.SUPERSEDED_V2_0_1['commit'], MODULE.SUPERSEDED_V2_0_1['relative_path']): prev_201_authority_bytes()}
+    blobs = {(MODULE.SUPERSEDED_V2_0_2['commit'], MODULE.SUPERSEDED_V2_0_2['relative_path']): prev_superseded_authority_bytes()}
     def fake(commit, path):
         if (commit, path) not in blobs: raise AuthorityError(f'{path}@{commit[:7]}: git show failed: unknown object')
         return blobs[(commit, path)]
@@ -550,7 +550,7 @@ def test_at_pin_mode_accepts_only_superseded_record(env, fake_git_show, capsys):
 def test_at_pin_binding_reads_supersedes_from_authority(env, fake_git_show):
     published_recorded(env, fake_git_show)
     src = inspect.getsource(MODULE.check_publication_record)
-    assert 'SUPERSEDED_V2_0_1' not in src and "a['source_lineage']['supersedes']" in src
+    assert 'SUPERSEDED_V2_0_' not in src and "a['source_lineage']['supersedes']" in src
     sup = authority_supersedes()
     rec = superseded_record(fake_git_show)
     assert (rec['publication_commit'], rec['authority_id'], rec['version'], rec['authority_sha256']) == (sup['commit'], sup['authority_id'], sup['version'], sup['sha256'])
@@ -923,24 +923,34 @@ def test_2_0_0_anchor_matches_frozen_2_0_1_publisher_and_chain():
     auth_201 = json.loads(git('show', '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb:registry/archive_assessment_applicability_authority_v2.json').stdout.decode('utf-8'))
     assert auth_201['version'] == '2.0.1' and auth_201['source_lineage']['supersedes'] == sup
     auth_202 = json.loads(git('show', 'ae15c7458e49c8f55cc58c61bab04bc716aa9892:registry/archive_assessment_applicability_authority_v2.json').stdout.decode('utf-8'))
-    # moves to the 2.0.2 chain in plan 12-07
-    assert auth_202['version'] == '2.0.2' and auth_202['source_lineage']['supersedes'] == MODULE.SUPERSEDED_V2_0_1
+    blob_201 = git('show', '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb:registry/archive_assessment_applicability_authority_v2.json').stdout
+    sup_202 = auth_202['source_lineage']['supersedes']
+    assert auth_202['version'] == '2.0.2' and sup_202['commit'] == '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb' and sup_202['version'] == '2.0.1'
+    assert sup_202['sha256'] == lf_sha(blob_201)
+    assert git('rev-parse', 'ae15c74').stdout.decode().strip() == MODULE.SUPERSEDED_V2_0_2['commit']
 
-def test_superseded_v2_0_1_constants_match_git_history():
-    require_history(ROOT, commits=(MODULE.SUPERSEDED_V2_0_1['commit'],))
-    sup = MODULE.SUPERSEDED_V2_0_1
-    auth_bytes = git('show', f"{sup['commit']}:{sup['relative_path']}").stdout
-    dec_bytes = git('show', f"{sup['commit']}:{sup['governance_decisions_relative_path']}").stdout
+def test_superseded_v2_0_2_constants_match_git_history():
+    require_history(ROOT, commits=('ae15c7458e49c8f55cc58c61bab04bc716aa9892', 'a71257ed267410138a3c4daba412b00c116663d8'))
+    sup = MODULE.SUPERSEDED_V2_0_2
+    assert sup['commit'] == 'ae15c7458e49c8f55cc58c61bab04bc716aa9892'
+    auth_bytes = git('show', f"ae15c7458e49c8f55cc58c61bab04bc716aa9892:{sup['relative_path']}").stdout
+    dec_bytes = git('show', f"ae15c7458e49c8f55cc58c61bab04bc716aa9892:{sup['governance_decisions_relative_path']}").stdout
     old = json.loads(auth_bytes.decode('utf-8'))
-    assert sup['authority_id'] == old['authority_id'] and sup['version'] == old['version'] == '2.0.1'
+    assert sup['authority_id'] == old['authority_id'] and sup['version'] == old['version'] == '2.0.2'
     assert sup['sha256'] == lf_sha(auth_bytes) and sup['governance_decisions_sha256'] == lf_sha(dec_bytes) == '4e746d1f2c9ffc36d93bead5742db3fa41b22abb11c499dc4cef823a023f081f'
-    rec = json.loads(git('show', '4d9b7c1f41df5fa7575d4653a7d54ff9cf0a192b:registry/archive_assessment_applicability_authority_v2_publication_record.json').stdout.decode('utf-8'))
+    rec = json.loads(git('show', 'a71257ed267410138a3c4daba412b00c116663d8:registry/archive_assessment_applicability_authority_v2_publication_record.json').stdout.decode('utf-8'))
     assert sup['commit'] == rec['publication_commit'] and sup['sha256'] == rec['authority_sha256']
-    assert git('rev-parse', '31addfa').stdout.decode().strip() == sup['commit']
+    assert rec['authority_id'] == sup['authority_id'] and rec['version'] == sup['version']
+    assert git('rev-parse', 'ae15c74').stdout.decode().strip() == sup['commit']
+
+def superseded_2_0_1_identity():
+    # the frozen 2.0.1 identity, as the 2.0.2 publication at ae15c74 recorded it in source_lineage.supersedes
+    require_history(ROOT, commits=('ae15c7458e49c8f55cc58c61bab04bc716aa9892', '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb'))
+    return json.loads(git('show', 'ae15c7458e49c8f55cc58c61bab04bc716aa9892:registry/archive_assessment_applicability_authority_v2.json').stdout.decode('utf-8'))['source_lineage']['supersedes']
 
 def test_validate_signoff_accepts_frozen_2_0_1_signoff_with_explicit_identity():
-    require_history(ROOT, commits=(MODULE.SUPERSEDED_V2_0_1['commit'],))
-    sup = MODULE.SUPERSEDED_V2_0_1
+    sup = superseded_2_0_1_identity()
+    assert sup['version'] == '2.0.1' and sup['commit'] == '31addfa95ffc5c2d6805c73fa1f34d6ccbe313eb'
     record = json.loads(git('show', f"{sup['commit']}:registry/archive_assessment_applicability_authority_v2_signoff.json").stdout.decode('utf-8'))
     MODULE.validate_signoff(record, sup['sha256'], sup['authority_id'], sup['version'])
     with pytest.raises(AuthorityError):
@@ -964,7 +974,7 @@ def test_rows_equal_2_0_0_rows_and_only_identity_and_lineage_differ():
     assert nl['aa2_approval']['sha256'] == ol['aa2_approval_sha256']
 
 def test_version_constants_and_published_on_removed():
-    assert MODULE.VERSION == '2.0.2' and MODULE.AUTHORITY_ID.endswith('-2.0.2')
+    assert MODULE.VERSION == '2.0.3' and MODULE.AUTHORITY_ID.endswith('-2.0.3')
     assert not hasattr(MODULE, 'PUBLISHED_ON')
 
 def test_build_all_outputs_requires_signoff_and_uses_its_date(env):
@@ -1030,19 +1040,20 @@ def test_dry_run_summary_lists_decisions_rules_and_supersession(env, capsys):
             assert f"{r['control_id']}  {r['not_applicable_authority']}  {r['not_applicable_decision_state']}" in out
     assert 'EMS-CTRL-039: ALL_CONDITIONS_MUST_MATCH: production = KNOWN_FALSE' in out
     assert 'Published on' not in out and 'PUBLISHED_ON' not in out
-    sup = MODULE.SUPERSEDED_V2_0_1
-    assert f"supersedes {sup['authority_id']} version 2.0.1 (commit 31addfa). No decision changed" in out
-    assert f"{sup['governance_decisions_sha256']} equals the 2.0.1 value" in out
+    sup = MODULE.SUPERSEDED_V2_0_2
+    assert f"supersedes {sup['authority_id']} version 2.0.2 (commit ae15c74). No decision changed" in out
+    assert f"{sup['governance_decisions_sha256']} equals the 2.0.2 value" in out
     for word in ('best', 'critical', 'important', 'recommended', 'highest'): assert word not in out.lower()
-    assert 'What changed in 2.0.2' in out
+    assert 'What changed in 2.0.3' in out
     for label, e in build()['source_lineage'].items():
         if isinstance(e, dict) and 'relative_path' in e: assert f"lineage {label}: {e['relative_path']} ({e['normalisation']})" in out
     assert 'lineage aa1_manifest: ' in out and '(RAW_BYTES)' in out
     assert f'negative mutations: {len(MODULE.NEGATIVE_MUTATIONS)}' in out
     levels = MODULE.closed_schema_levels(MODULE.schema())
     assert levels and f'additionalProperties false: {len(levels)} (' in out
-    assert 'row comparison 2.0.1 -> 2.0.2: 80 controls identical to 2.0.1' in out
-    assert 'GATE-01 to GATE-05' in out
+    assert 'row comparison 2.0.2 -> 2.0.3: 80 controls identical to 2.0.2' in out
+    assert 'GATE-01 to GATE-10' in out and 'publisher-script digest checked by --validate' in out
+    assert 'pre-publication' not in out
     assert 'Decided controls: 21' in out and 'Undecided controls: 59' in out
 
 def test_mutation_records_shape():
@@ -1242,19 +1253,19 @@ def test_catalog_commit_is_v1_baseline_and_in_commit_pinned():
     assert not hasattr(MODULE, 'CATALOG')
 
 
-# ---- 09-01 Task 2b: D-08 comparison with 2.0.1, D-04 byte identity ----
+# ---- 09-01 Task 2b: D-08 comparison with the superseded publication (2.0.2 since 12-07), D-04 byte identity ----
 
 DECISION_FIELDS = ('not_applicable_decision_state', 'not_applicable_rule', 'not_applicable_authority', 'decision_ids')
 
-def prev_201_rows():
-    return {c['control_id']: c for c in json.loads(prev_201_authority_bytes().decode('utf-8'))['controls']}
+def prev_superseded_rows():
+    return {c['control_id']: c for c in json.loads(prev_superseded_authority_bytes().decode('utf-8'))['controls']}
 
-def test_built_rows_equal_2_0_1_rows_on_the_four_decision_fields():
-    a = build(); prev = prev_201_rows()
+def test_built_rows_equal_superseded_rows_on_the_four_decision_fields():
+    a = build(); prev = prev_superseded_rows()
     assert len(a['controls']) == 80 and set(prev) == {c['control_id'] for c in a['controls']}
     for c in a['controls']:
         assert all(c[k] == prev[c['control_id']][k] for k in DECISION_FIELDS), c['control_id']
-    assert a['applicability_decision_ids'] == json.loads(prev_201_authority_bytes().decode('utf-8'))['applicability_decision_ids']
+    assert a['applicability_decision_ids'] == json.loads(prev_superseded_authority_bytes().decode('utf-8'))['applicability_decision_ids']
     MODULE.validate_publication(a)
 
 def tamper_state(c): c['not_applicable_decision_state'] = 'NO_RULE_WILL_BE_PUBLISHED' if c['not_applicable_decision_state'] != 'NO_RULE_WILL_BE_PUBLISHED' else 'NOT_YET_DECIDED'
@@ -1276,13 +1287,13 @@ def test_row_tamper_against_superseded_raises_authority_error(monkeypatch, tampe
     with pytest.raises(AuthorityError, match=f'{cid}: decision content differs from'):
         MODULE.validate_publication(a)
 
-def test_applicability_decision_ids_tamper_against_2_0_1_raises_authority_error(monkeypatch):
+def test_applicability_decision_ids_tamper_against_superseded_raises_authority_error(monkeypatch):
     a = build(); a['applicability_decision_ids'] = a['applicability_decision_ids'][:-1]
     monkeypatch.setattr(MODULE, 'validate_authority', lambda *args, **kwargs: None)
-    with pytest.raises(AuthorityError, match='decision set differs from 2.0.1'):
+    with pytest.raises(AuthorityError, match=re.escape(f"decision set differs from {MODULE.SUPERSEDED_V2_0_2['version']}")):
         MODULE.validate_publication(a)
 
-def test_missing_2_0_1_history_raises_git_history_error_through_mutation_gates(monkeypatch):
+def test_missing_superseded_history_raises_git_history_error_through_mutation_gates(monkeypatch):
     docs, ash = mutation_inputs()
     def boom(commit, path): raise MODULE.GitHistoryError(f'{path}@{commit[:7]}: git show failed: shallow clone')
     monkeypatch.setattr(MODULE, 'git_show', boom)
@@ -1336,12 +1347,12 @@ def test_malformed_published_files_raise_domain_error(env, fake_git_show, name):
         MODULE.validate_published()
 
 def test_dry_run_summary_differ_branch_is_reachable(monkeypatch):
-    require_history(ROOT, commits=(MODULE.SUPERSEDED_V2_0_1['commit'],))
+    require_history(ROOT, commits=(MODULE.SUPERSEDED_V2_0_2['commit'],))
     a = build()
     tamper_state(row(a, 'EMS-CTRL-030'))
     out = MODULE.dry_run_summary(a)
     assert 'DIFFER' in out and 'No decision changed' not in out
-    assert f"DECISIONS DIFFER from {MODULE.SUPERSEDED_V2_0_1['version']}" in out
+    assert f"DECISIONS DIFFER from {MODULE.SUPERSEDED_V2_0_2['version']}" in out
 
 
 # ---- 12-05 Task 1: single git seam (git_run and typed helpers), git show --, D-05 publication_paths ----
