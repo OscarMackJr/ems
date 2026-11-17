@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
-status: planning
-stopped_at: Phase 13 context gathered
-last_updated: "2026-11-17T13:18:35.987Z"
-last_activity: 2026-11-16 -- Phase 12 complete (8 plans; CR-01 gap closed by 12-08; D-16 red set held until 2.0.3 publication)
+status: executing
+stopped_at: Phase 13 planned; awaiting execution (sign-off gate in 13-01)
+last_updated: "2026-11-17T16:01:37.695Z"
+last_activity: 2026-11-17 -- Phase 13 planning complete (4 plans, checked)
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 14
+  total_plans: 18
   completed_plans: 14
   percent: 50
 ---
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 
 Phase: 13 of 14 (certified republication 2.0.3)
 Plan: Not started
-Status: Phase 12 complete (re-verified 8/8, 1492cf8); ready to plan Phase 13
-Last activity: 2026-11-16 -- Phase 12 complete (8 plans; CR-01 gap closed by 12-08; D-16 red set held until 2.0.3 publication)
+Status: Phase 13 planned (4 plans, plan-checked); ready to execute — 13-01 stops at the sign-off checkpoint
+Last activity: 2026-11-17 -- Phase 13 planning complete (research 44983bc, patterns 509371d, plans 35a9462/b83d91d/c5cf943)
 
 Progress: [█████░░░░░] 50%
 
