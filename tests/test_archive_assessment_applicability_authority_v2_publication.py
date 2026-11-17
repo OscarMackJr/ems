@@ -1461,6 +1461,98 @@ def test_git_run_oserror_is_git_history_error(monkeypatch):
     with pytest.raises(MODULE.GitHistoryError, match='git unavailable'):
         MODULE.git_run('status')
 
+def test_git_run_oserror_names_the_command(monkeypatch):
+    def boom(*args, **kwargs): raise OSError('no git on PATH')
+    monkeypatch.setattr(MODULE.subprocess, 'run', boom)
+    with pytest.raises(MODULE.GitHistoryError) as e:
+        MODULE.git_run('--literal-pathspecs', 'status')
+    assert 'git status:' in str(e.value) and 'git --literal-pathspecs' not in str(e.value)
+
+# ---- 12-08 Task 2: HEAD-blob, index-flag and plain working-tree binding seams (CR-01, WR-01) ----
+
+@pytest.mark.parametrize('commit,path', [('HEAD', 'registry/a.json'), (SHA40[:7], 'registry/a.json'), (SHA40.upper(), 'registry/a.json'), (None, 'registry/a.json'), (SHA40, '../x'), (SHA40, '/etc/passwd'), (SHA40, 'C:\\x'), (SHA40, '')], ids=['head_name', 'short_sha', 'upper_sha', 'none', 'dotdot', 'absolute', 'drive', 'empty'])
+def test_git_commit_blob_argv_and_failures(monkeypatch, commit, path):
+    calls = fake_git_run(monkeypatch, 0, b'{"a": 1}\n')
+    assert MODULE.git_commit_blob(SHA40, 'registry/a.json') == b'{"a": 1}\n'
+    assert calls == [('cat-file', 'blob', f'{SHA40}:registry/a.json')]
+    fake_git_run(monkeypatch, 128, b'', b'fatal: path does not exist')
+    with pytest.raises(MODULE.GitHistoryError, match='git cat-file failed: fatal: path does not exist'):
+        MODULE.git_commit_blob(SHA40, 'registry/a.json')
+    calls = fake_git_run(monkeypatch, 0, b'x')
+    with pytest.raises(AuthorityError) as e:
+        MODULE.git_commit_blob(commit, path)
+    assert e.type is AuthorityError
+    assert calls == []
+
+def test_git_index_flags_reports_flagged_and_missing_paths(monkeypatch):
+    paths = ['registry/a.json', 'registry/b.json', 'registry/c.json', 'registry/d.json']
+    want = ["registry/b.json: index tag 'S' (lowercase = assume-unchanged, S = skip-worktree)", "registry/c.json: index tag 'h' (lowercase = assume-unchanged, S = skip-worktree)", 'registry/d.json: not in the index']
+    calls = fake_git_run(monkeypatch, 0, b'H registry/a.json\nS registry/b.json\nh registry/c.json\n')
+    assert MODULE.git_index_flags(paths) == want
+    assert calls == [('--literal-pathspecs', 'ls-files', '-v', '--', *paths)]
+    fake_git_run(monkeypatch, 0, b'H registry/a.json\r\nS registry/b.json\r\nh registry/c.json\r\n')
+    assert MODULE.git_index_flags(paths) == want
+    fake_git_run(monkeypatch, 0, b'H registry/a.json\nM registry/b.json\n')
+    assert MODULE.git_index_flags(paths[:2]) == ["registry/b.json: index tag 'M' (lowercase = assume-unchanged, S = skip-worktree)"]
+    fake_git_run(monkeypatch, 0, b'H registry/a.json\nH registry/b.json\n')
+    assert MODULE.git_index_flags(paths[:2]) == []
+
+@pytest.mark.parametrize('paths', [[], ['registry/a.json', '../x'], ['registry/a.json', '/etc/passwd'], ['C:\\x'], ['']], ids=['empty_list', 'dotdot', 'absolute', 'drive', 'empty_path'])
+def test_git_index_flags_rejects_bad_input_before_git(monkeypatch, paths):
+    calls = fake_git_run(monkeypatch, 0)
+    with pytest.raises(AuthorityError) as e:
+        MODULE.git_index_flags(paths)
+    assert e.type is AuthorityError
+    assert calls == []
+
+def test_git_index_flags_rc_failure(monkeypatch):
+    fake_git_run(monkeypatch, 128, b'', b'fatal: not a git repository')
+    with pytest.raises(MODULE.GitHistoryError, match='git ls-files failed: fatal: not a git repository'):
+        MODULE.git_index_flags(['registry/a.json'])
+
+@pytest.mark.parametrize('case', ['pass_crlf', 'not_committed', 'absent', 'differs', 'flagged'])
+def test_check_tree_matches_head_cases(env, monkeypatch, case):
+    p, blob = 'registry/a.json', b'{"a": 1}\n'
+    live = MODULE.ROOT / p
+    if case != 'absent':
+        live.parent.mkdir(parents=True, exist_ok=True)
+        live.write_bytes(b'{"a": 2}\n' if case == 'differs' else blob.replace(b'\n', b'\r\n'))
+    blob_calls, flag_calls = [], []
+    def commit_blob(commit, path):
+        blob_calls.append((commit, path))
+        if case == 'not_committed': raise MODULE.GitHistoryError(f'{path}@{commit[:7]}: git cat-file failed: fatal: path does not exist')
+        return blob
+    monkeypatch.setattr(MODULE, 'git_commit_blob', commit_blob)
+    flagged = [f"{p}: index tag 'S' (lowercase = assume-unchanged, S = skip-worktree)"]
+    monkeypatch.setattr(MODULE, 'git_index_flags', lambda paths: flag_calls.append(list(paths)) or (flagged if case == 'flagged' else []))
+    if case == 'pass_crlf':
+        assert REAL_CHECK_TREE_MATCHES_HEAD([p]) is None
+        assert blob_calls == [(HEAD_COMMIT, p)] and flag_calls == [[p]]
+        return
+    want = {'not_committed': re.escape(p) + ': not committed at HEAD bbbbbbb', 'absent': re.escape(p) + ': absent from the working tree', 'differs': re.escape(p) + ': working tree differs from HEAD bbbbbbb', 'flagged': 'index flags hide working-tree state from git: ' + re.escape(flagged[0])}[case]
+    with pytest.raises(AuthorityError, match=want) as e:
+        REAL_CHECK_TREE_MATCHES_HEAD([p])
+    assert e.type is AuthorityError
+    assert blob_calls == [(HEAD_COMMIT, p)]
+    # the byte comparison runs first, so the index is consulted only when every path's bytes match HEAD
+    assert flag_calls == ([[p]] if case == 'flagged' else [])
+
+def test_plain_validate_binds_working_tree_to_head(env, fake_git_show, monkeypatch, capsys):
+    published_recorded(env, fake_git_show)
+    tree, dirty = [], []
+    monkeypatch.setattr(MODULE, 'check_tree_matches_head', lambda paths: tree.append(list(paths)))
+    monkeypatch.setattr(MODULE, 'git_dirty', lambda paths: dirty.append(list(paths)) or [])
+    capsys.readouterr()
+    MODULE.validate_published()
+    assert capsys.readouterr().out.strip() == 'PASS'
+    assert tree == [MODULE.publication_paths()] and len(tree[0]) == 10
+    assert dirty == []
+    matrix = f'{MODULE.rel(MODULE.OUT)}/{MODULE.N_MATRIX}'
+    def differs(paths): raise AuthorityError(f'{matrix}: working tree differs from HEAD bbbbbbb (CRLF_TO_LF normalised)')
+    monkeypatch.setattr(MODULE, 'check_tree_matches_head', differs)
+    with pytest.raises(AuthorityError, match=re.escape(matrix) + ': working tree differs from HEAD'):
+        MODULE.validate_published()
+
 def test_git_show_argv_ends_with_double_dash(monkeypatch):
     seen = []
     def fake(argv, **kwargs):
