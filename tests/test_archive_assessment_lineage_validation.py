@@ -39,7 +39,7 @@ def overlay(clone):
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes((REAL_ROOT / r).read_bytes().replace(b'\r\n', b'\n'))
     base = ['-c', 'core.autocrlf=false', '-c', 'user.name=t', '-c', 'user.email=t@t', '-c', 'commit.gpgsign=false']
-    added = git(*base, '--literal-pathspecs', 'add', '--', *rels, cwd=clone)
+    added = git(*base, '--literal-pathspecs', 'add', '-f', '--', *rels, cwd=clone)
     assert added.returncode == 0, added.stderr
     if git(*base, 'diff', '--cached', '--quiet', cwd=clone).returncode != 0:
         committed = git(*base, 'commit', '-q', '-m', 'overlay working-tree publication paths', cwd=clone)
