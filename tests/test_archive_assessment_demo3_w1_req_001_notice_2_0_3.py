@@ -782,6 +782,30 @@ def test_malformed_pinned_input_raises_authority_error(monkeypatch, blob):
     assert type(e.value) is AuthorityError
 
 
+@pytest.mark.parametrize('commit_name, path_name', [('REC', 'PUBLICATION_RECORD'), ('PUB', 'MANIFEST')])
+@pytest.mark.parametrize('blob', [b'[]', b'"x"'])
+def test_wrong_json_type_pinned_input_raises_authority_error(monkeypatch, commit_name, path_name, blob):
+    require_history(ROOT, commits=FROZEN_COMMITS)
+    commit = {'REC': REC, 'PUB': PUB}[commit_name]
+    path = MODULE.PUBLICATION_RECORD if path_name == 'PUBLICATION_RECORD' else MODULE.OUT / MODULE.N_MANIFEST
+    rel_path, real = MODULE.rel(path), MODULE.git_show
+    monkeypatch.setattr(MODULE, 'git_show', lambda c, relative_path: blob if (c == commit and relative_path == rel_path) else real(c, relative_path))
+    with pytest.raises(AuthorityError) as e:
+        MODULE.load_inputs()
+    assert type(e.value) is AuthorityError
+
+
+@pytest.mark.parametrize('index', [6, 8])
+@pytest.mark.parametrize('wrong', [[], 'x'])
+def test_wrong_json_type_in_build_notice_inputs_raises_authority_error(monkeypatch, index, wrong):
+    cached_pinned_run(monkeypatch)
+    a = list(args())
+    a[index] = wrong
+    with pytest.raises(AuthorityError) as e:
+        MODULE.build_notice(*a)
+    assert type(e.value) is AuthorityError
+
+
 def test_missing_key_in_pinned_input_raises_authority_error(monkeypatch):
     cached_pinned_run(monkeypatch)
     a = args()
@@ -818,7 +842,63 @@ def redirect_outputs(monkeypatch, name):
     return out, paths
 
 
-def test_failed_build_validation_leaves_no_partial_files(monkeypatch):
+def seed_outputs(paths):
+    old = {p: f'old {p.name}\n'.encode('utf-8') for p in paths}
+    for p, data in old.items(): p.write_bytes(data)
+    return old
+
+
+def test_failed_replace_restores_originals_and_leaves_no_tmp(monkeypatch):
+    cached_pinned_run(monkeypatch)
+    out, paths = redirect_outputs(monkeypatch, 'atomic-replace-fail')
+    old = seed_outputs(paths)
+    real, calls = MODULE.os.replace, []
+
+    def flaky(src, dst):
+        calls.append(dst)
+        if len(calls) == 2: raise OSError('forced replace failure')
+        return real(src, dst)
+    monkeypatch.setattr(MODULE.os, 'replace', flaky)
+    monkeypatch.setattr(sys, 'argv', ['build', '--build'])
+    with pytest.raises(OSError, match='forced replace failure'):
+        MODULE.main()
+    assert len(calls) == 2
+    assert {p.name for p in out.iterdir()} == {p.name for p in paths}
+    assert {p: p.read_bytes() for p in paths} == old
+
+
+def test_failed_replace_with_no_originals_leaves_nothing(monkeypatch):
+    cached_pinned_run(monkeypatch)
+    out, _paths = redirect_outputs(monkeypatch, 'atomic-replace-fail-fresh')
+    real, calls = MODULE.os.replace, []
+
+    def flaky(src, dst):
+        calls.append(dst)
+        if len(calls) == 3: raise OSError('forced replace failure')
+        return real(src, dst)
+    monkeypatch.setattr(MODULE.os, 'replace', flaky)
+    monkeypatch.setattr(sys, 'argv', ['build', '--build'])
+    with pytest.raises(OSError, match='forced replace failure'):
+        MODULE.main()
+    assert list(out.iterdir()) == []
+
+
+def test_failed_post_write_validation_restores_originals(monkeypatch):
+    cached_pinned_run(monkeypatch)
+    out, paths = redirect_outputs(monkeypatch, 'atomic-post-check-fail')
+    old = seed_outputs(paths)
+
+    def reject():
+        raise AuthorityError('forced post-write failure')
+    monkeypatch.setattr(MODULE, 'validate_notice', reject)
+    monkeypatch.setattr(sys, 'argv', ['build', '--build'])
+    with pytest.raises(AuthorityError, match='forced post-write failure'):
+        MODULE.main()
+    assert {p.name for p in out.iterdir()} == {p.name for p in paths}
+    assert {p: p.read_bytes() for p in paths} == old
+
+
+def test_failed_build_validation_before_write_leaves_no_partial_files(monkeypatch):
     cached_pinned_run(monkeypatch)
     out, _paths = redirect_outputs(monkeypatch, 'atomic-fail')
 

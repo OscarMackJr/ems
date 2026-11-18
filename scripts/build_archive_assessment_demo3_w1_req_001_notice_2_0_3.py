@@ -92,13 +92,23 @@ def dump(p: Path, value: object) -> None:
 def write_text(p: Path, text: str) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     with open(p, 'w', encoding='utf-8', newline='\n') as f: f.write(text)
+def snapshot(paths: list) -> list: return [(p, p.read_bytes() if p.exists() else None) for p in paths]
+def restore(snap: list) -> None:
+    for p, data in snap:
+        if data is None: p.unlink(missing_ok=True)
+        else: p.write_bytes(data)
 def write_atomic(files: list) -> None:
     temps = [(p, p.with_name(p.name + '.tmp'), text) for p, text in files]
+    snap = snapshot([p for p, _ in files])
     try:
         for p, tmp, text in temps:
             p.parent.mkdir(parents=True, exist_ok=True)
             with open(tmp, 'w', encoding='utf-8', newline='\n') as f: f.write(text)
-        for p, tmp, _ in temps: os.replace(tmp, p)
+        try:
+            for p, tmp, _ in temps: os.replace(tmp, p)
+        except BaseException:
+            restore(snap)
+            raise
     finally:
         for _, tmp, _ in temps: tmp.unlink(missing_ok=True)
 def contains_absolute(value: object) -> bool:
@@ -345,7 +355,7 @@ def pinned_mutation_run(authority: dict, signoff: dict, decisions: dict, manifes
 def load_inputs() -> tuple:
     try: return _load_inputs()
     except AuthorityError: raise
-    except (ValueError, KeyError, TypeError) as e: raise AuthorityError(f'pinned input is malformed: {type(e).__name__}: {e}') from e
+    except (ValueError, KeyError, TypeError, AttributeError) as e: raise AuthorityError(f'pinned input is malformed: {type(e).__name__}: {e}') from e
 
 
 def _load_inputs() -> tuple:
@@ -381,7 +391,7 @@ def binding_note(pub: str) -> str:
 def build_notice(*inputs: object) -> dict:
     try: return _build_notice(*inputs)
     except AuthorityError: raise
-    except (ValueError, KeyError, TypeError) as e: raise AuthorityError(f'notice inputs are malformed: {type(e).__name__}: {e}') from e
+    except (ValueError, KeyError, TypeError, AttributeError) as e: raise AuthorityError(f'notice inputs are malformed: {type(e).__name__}: {e}') from e
 
 
 def _build_notice(authority: dict, previous_2_0_2: dict, previous_2_0_1: dict, record: dict, signoff: dict, decisions: dict, manifest: dict, frozen_schema: dict, negative: dict, rerun: dict) -> dict:
@@ -622,8 +632,12 @@ def main() -> None:
         validate_notice_object(notice, inputs)
         json_text, md_text, schema_text = jtext(notice), render_markdown(notice), jtext(schema())
         jsonschema.Draft202012Validator.check_schema(schema())
+        snap = snapshot([NOTICE_JSON, NOTICE_MD, NOTICE_SCHEMA])
         write_atomic([(NOTICE_JSON, json_text), (NOTICE_MD, md_text), (NOTICE_SCHEMA, schema_text)])
-        validate_notice()
+        try: validate_notice()
+        except BaseException:
+            restore(snap)
+            raise
     elif args.validate: validate_notice()
 
 
