@@ -697,3 +697,41 @@ def test_live_data_file_edit_does_not_change_notice():
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_text('{"tampered": true}\n', encoding='utf-8', newline='\n')
     assert_live_edit_does_not_change_notice(clone, edit)
+
+
+def test_git_show_passes_double_dash(monkeypatch):
+    seen = []
+
+    def fake_run(argv, **kwargs):
+        seen.append(list(argv))
+        return subprocess.CompletedProcess(argv, 0, stdout=b'x', stderr=b'')
+
+    monkeypatch.setattr(MODULE.subprocess, 'run', fake_run)
+    assert MODULE.git_show(PUB, 'registry/x.json') == b'x'
+    assert seen[0][-1] == '--' and seen[0][:3] == ['git', 'show', f'{PUB}:registry/x.json']
+
+
+def test_git_show_error_hint_names_long_paths_and_unshallow():
+    with pytest.raises(GitHistoryError, match='git show failed') as e:
+        MODULE.git_show('e' * 40, 'registry/archive_assessment_applicability_authority_v2.json')
+    assert 'core.longpaths' in str(e.value) and 'git fetch --unshallow' in str(e.value)
+
+
+def test_notice_has_long_path_prerequisite():
+    v = build()['verify']
+    assert any('core.longpaths' in p for p in v['prerequisites'])
+    assert len(v['prerequisites']) == 5
+
+
+def test_step2_wording_does_not_overstate():
+    notice = build()
+    pass_means = notice['verify']['steps'][1]['pass_means']
+    assert 'enforced by step 3' in pass_means and 'all three steps' in pass_means
+    old_step2 = 'PASS means the publication record at this commit names'
+    old_row = 'The publication record binds the pin'
+    assert old_step2 not in pass_means
+    text = json.dumps(notice)
+    assert old_step2 not in text and old_row not in text
+    md = MODULE.NOTICE_MD.read_text(encoding='utf-8')
+    assert old_step2 not in md and old_row not in md
+    assert 'core.longpaths' in md
