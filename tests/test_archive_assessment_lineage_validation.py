@@ -1,6 +1,8 @@
 import copy
 import hashlib
 import importlib.util
+import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -28,6 +30,40 @@ def git(*args, cwd=REAL_ROOT):
 
 
 PINNED_COMMITS = (MODULE.V1_BASELINE_COMMIT, MODULE.SUPERSEDED_V2_0_2['commit'])
+
+
+def overlay(clone):
+    rels = [*MODULE.publication_paths(), MODULE.rel(MODULE.SCRIPT)]
+    for r in rels:
+        dest = clone / r
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes((REAL_ROOT / r).read_bytes().replace(b'\r\n', b'\n'))
+    base = ['-c', 'core.autocrlf=false', '-c', 'user.name=t', '-c', 'user.email=t@t', '-c', 'commit.gpgsign=false']
+    added = git(*base, '--literal-pathspecs', 'add', '--', *rels, cwd=clone)
+    assert added.returncode == 0, added.stderr
+    if git(*base, 'diff', '--cached', '--quiet', cwd=clone).returncode != 0:
+        committed = git(*base, 'commit', '-q', '-m', 'overlay working-tree publication paths', cwd=clone)
+        assert committed.returncode == 0, committed.stderr
+
+
+def supersedes_identity():
+    authority = json.loads((REAL_ROOT / MODULE.rel(MODULE.AUTHORITY)).read_text(encoding='utf-8'))
+    sup = authority['source_lineage']['supersedes']
+    assert 'authority_id' in sup and 'version' in sup, sup
+    return sup['authority_id'], sup['version']
+
+
+def record_identity(clone):
+    rec = json.loads((clone / MODULE.rel(MODULE.PUBLICATION_RECORD)).read_text(encoding='utf-8'))
+    return rec.get('authority_id'), rec.get('version')
+
+
+def mode_detail(clone):
+    return f'record={record_identity(clone)!r} supersedes={supersedes_identity()!r}'
+
+
+def validate_mode(clone):
+    return ['--validate', '--at-pin'] if record_identity(clone) == supersedes_identity() else ['--validate']
 
 
 def sha(norm, data):
@@ -361,20 +397,36 @@ def test_d10_live_catalog_edit_or_delete_does_not_change_validate_outcome(tmp_pa
     if cloned.returncode != 0:
         pytest.fail(f'git clone --shared of {REAL_ROOT} failed: {cloned.stderr.decode(errors="replace")}', pytrace=False)
     assert git('config', 'core.longpaths', 'true', cwd=clone).returncode == 0
+    # D-08a: from Phase 17's first publisher edit this test is in the accepted red set until the 2.0.4 publication; do not weaken it.
+    overlay(clone)
+    stderr_last = ['']
 
     def outcome():
-        r = subprocess.run([sys.executable, 'scripts/publish_archive_assessment_applicability_authority_v2.py', '--validate'],
-                           cwd=clone, capture_output=True, text=True)
-        lines = [line for line in (r.stdout + r.stderr).splitlines() if line.strip()]
-        return r.returncode, (lines[-1] if lines else '')
+        mode = validate_mode(clone)
+        assert mode in (['--validate', '--at-pin'], ['--validate']), mode
+        r = subprocess.run([sys.executable, 'scripts/publish_archive_assessment_applicability_authority_v2.py', *mode],
+                           cwd=clone, capture_output=True, text=True, encoding='utf-8', errors='replace',
+                           env={**os.environ, 'PYTHONIOENCODING': 'utf-8'})
+        stderr_last[0] = f'mode={mode} {mode_detail(clone)} stderr={r.stderr}'
+        lines = [line for line in r.stdout.splitlines() if line.strip()]
+        last = lines[-1] if lines else ''
+        status = last
+        if last != 'PASS':
+            try:
+                obj = json.loads(last)
+                if isinstance(obj, dict) and 'status' in obj:
+                    status = obj['status']
+            except ValueError:
+                pass
+        return r.returncode, status
 
     before = outcome()
-    assert before == (0, 'PASS'), f'--validate baseline must be PASS for D-10 to be meaningful: {before!r}'
+    assert before == (0, 'PASS'), f'--validate baseline must be PASS for D-10 to be meaningful: {before!r} {stderr_last[0]}'
     live = clone / MODULE.CATALOG_REL
     for change in (lambda: live.write_bytes(b'controls: []\n'), live.unlink):
         change()
         after = outcome()
-        assert after == before, f'--validate outcome changed after live catalog change: before={before!r} after={after!r}'
+        assert after == before, f'--validate outcome changed after live catalog change: before={before!r} after={after!r} {stderr_last[0]}'
     assert not live.exists()
 
 
