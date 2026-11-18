@@ -29,6 +29,7 @@ metrics:
   completed: 2026-11-16
   tasks: 2
   files: 3
+requirements-completed: [PIN-02, GATE-06]
 ---
 
 # Phase 12 Plan 06: D-06 ancestry and blob identity, GATE-06 script digest Summary

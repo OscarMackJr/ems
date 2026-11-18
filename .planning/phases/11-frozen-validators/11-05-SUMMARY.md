@@ -28,6 +28,7 @@ metrics:
   duration: ~15min
   completed: 2026-11-15
 requirements: [FROZEN-03]
+requirements-completed: [FROZEN-03]
 ---
 
 # Phase 11 Plan 05: Collection-Level Skip Guard and Fail-Closed Shallow Check Summary

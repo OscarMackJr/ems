@@ -23,6 +23,7 @@ key-files:
     - tests/test_archive_assessment_demo3_w1_req_001_reply.py
     - tests/test_archive_assessment_demo3_w1_req_001_notice_2_0_2.py
 requirements: [FROZEN-03]
+requirements-completed: [FROZEN-03]
 decisions:
   - "Opt-out env var is EMS_ALLOW_NO_HISTORY=1 (skip instead of fail); CI guard env var is EMS_FAIL_ON_SKIP=1, set only on the Archive-assessment tests step"
   - "D-10 mechanism: pytest_runtest_makereport hookwrapper in tests/conftest.py (not -rs summary grep); proven for pytest.skip and skipif-mark skips, leaves xfail alone"

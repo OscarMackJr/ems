@@ -32,6 +32,7 @@ metrics:
   completed: 2026-11-16
   tasks: 3
   files: 3
+requirements-completed: [PIN-01, PIN-02]
 ---
 
 # Phase 12 Plan 08: At-pin binds the pinned tree to HEAD (CR-01 gap closure) Summary

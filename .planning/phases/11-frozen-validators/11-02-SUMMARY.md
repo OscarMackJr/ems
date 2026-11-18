@@ -12,6 +12,7 @@ key-files:
     - scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_2.py
     - tests/test_archive_assessment_demo3_w1_req_001_notice_2_0_2.py
 requirements: [FROZEN-02]
+requirements-completed: [FROZEN-02]
 decisions:
   - "Notice validate_signoff is the ae15c74 4-arg form (authority_id=None, version=None defaults), byte-for-byte; the builder passes both keywords"
   - "NOTICE_SCHEMA_COMMIT = 052f0f13f4c882a7b80667d4835bc802002e0f80, checked only in the cat-file/ancestor-of-HEAD loop, never in the publication-vs-record ancestor check"

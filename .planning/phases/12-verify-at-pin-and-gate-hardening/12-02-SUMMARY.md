@@ -27,6 +27,7 @@ metrics:
   completed: 2026-11-16
   tasks: 2
   files: 4
+requirements-completed: [GATE-08, GATE-09]
 ---
 
 # Phase 12 Plan 02: GATE-08/GATE-09 real-bytes and --validate-path tests Summary

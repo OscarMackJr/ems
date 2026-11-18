@@ -34,6 +34,7 @@ metrics:
   completed: 2026-11-16
   tasks: 2
   files: 6
+requirements-completed: [PIN-01, PIN-02, GATE-06]
 ---
 
 # Phase 12 Plan 07: 2.0.3 supersedes 2.0.2, truthful texts Summary

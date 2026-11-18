@@ -13,6 +13,7 @@ key-files:
     - tests/test_archive_assessment_demo3_w1_req_001_reply.py
     - tests/test_archive_assessment_applicability_authority_v2_publication.py
 requirements: [FROZEN-01]
+requirements-completed: [FROZEN-01]
 decisions:
   - "Reply validate_signoff is the 2-arg form from 31addfa (frozen on 2.0.1 semantics), not the live 4-arg 2.0.2 form"
   - "D-06: --push-check removed from the reply (network-dependent, live remote state, unused by CI, a frozen validator must be hermetic)"

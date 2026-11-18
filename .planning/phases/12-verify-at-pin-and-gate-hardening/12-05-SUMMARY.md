@@ -31,6 +31,7 @@ metrics:
   completed: 2026-11-16
   tasks: 2
   files: 3
+requirements-completed: [PIN-01]
 ---
 
 # Phase 12 Plan 05: `--validate --at-pin` and a single git seam Summary

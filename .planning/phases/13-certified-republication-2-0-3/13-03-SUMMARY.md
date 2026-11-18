@@ -4,6 +4,7 @@ plan: 03
 subsystem: archive-assessment v2 publisher
 tags: [record, red-window, WR-03, D-01, D-02, D-07, PUB-10, PUB-12]
 requirements: [PUB-10, PUB-12]
+requirements-completed: [PUB-10, PUB-12]
 key-files:
   created: []
   modified:

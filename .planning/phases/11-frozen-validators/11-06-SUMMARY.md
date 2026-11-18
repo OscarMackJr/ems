@@ -22,6 +22,7 @@ metrics:
   tasks: 1
   files: 2
 requirements: [FROZEN-03]
+requirements-completed: [FROZEN-03]
 ---
 
 # Phase 11 Plan 06: Correct WR-03 resolve_record_commit statements Summary

@@ -29,6 +29,7 @@ metrics:
   completed: 2026-11-16
   tasks: 3
   files: 5
+requirements-completed: [GATE-09]
 ---
 
 # Phase 12 Plan 01: Baseline ledger and test-gate hardening (D-09..D-11) Summary

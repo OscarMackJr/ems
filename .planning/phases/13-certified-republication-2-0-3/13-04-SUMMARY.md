@@ -4,6 +4,7 @@ plan: 04
 subsystem: archive-assessment v2 publication / CI
 tags: [push, CI, D-01, D-04, D-08, PUB-12]
 requirements: [PUB-10, PUB-11, PUB-12]
+requirements-completed: [PUB-10, PUB-11, PUB-12]
 key-files:
   created:
     - .planning/phases/13-certified-republication-2-0-3/13-VERIFICATION.md

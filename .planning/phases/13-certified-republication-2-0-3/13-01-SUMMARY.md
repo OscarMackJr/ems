@@ -4,6 +4,7 @@ plan: 01
 subsystem: archive-assessment v2 publisher
 tags: [sign-off, D-05, D-06, PUB-10, PUB-11]
 requirements: [PUB-10, PUB-11]
+requirements-completed: [PUB-10, PUB-11]
 key-files:
   created: []
   modified:

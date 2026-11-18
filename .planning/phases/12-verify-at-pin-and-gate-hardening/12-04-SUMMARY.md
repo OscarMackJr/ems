@@ -30,6 +30,7 @@ metrics:
   completed: 2026-11-16
   tasks: 2
   files: 4
+requirements-completed: [GATE-07, GATE-10]
 ---
 
 # Phase 12 Plan 04: Schema-first domain errors and conditional dry-run text Summary

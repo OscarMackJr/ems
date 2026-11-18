@@ -12,6 +12,7 @@ key-files:
     - tests/test_archive_assessment_demo3_w1_req_001_notice_2_0_2.py
     - tests/test_archive_assessment_demo3_w1_req_001_reply.py
 requirements: [FROZEN-04]
+requirements-completed: [FROZEN-04]
 decisions:
   - "Schema-level rejections assert jsonschema.ValidationError plus the failing keyword and instance path (validator/absolute_path), not only the class"
   - "Every match= string was taken from a run of the unmodified validator (A4); none of the builder code was changed"
