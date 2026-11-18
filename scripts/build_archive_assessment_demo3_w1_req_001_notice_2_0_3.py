@@ -100,7 +100,11 @@ def git_show(commit: str, relative_path: str) -> bytes:
     if bad_rel(relative_path): raise AuthorityError(f'{relative_path}: path must be repo-relative without ..')
     try: r = subprocess.run(['git', 'show', f'{commit}:{relative_path}', '--'], cwd=ROOT, capture_output=True)
     except OSError as e: raise GitHistoryError(f'{relative_path}@{commit}: git unavailable: {e}; fetch full history (git fetch --unshallow)') from e
-    if r.returncode != 0: raise GitHistoryError(f'{relative_path}@{commit}: git show failed: {r.stderr.decode("utf-8", "replace").strip()}; fetch full history (git fetch --unshallow); if the path is long on Windows, run git config core.longpaths true or use a shorter checkout root')
+    if r.returncode != 0:
+        err = r.stderr.decode('utf-8', 'replace').strip()
+        hint = 'fetch full history (git fetch --unshallow)'
+        if 'Filename too long' in err: hint += '; on Windows set core.longpaths true or use a shorter checkout root'
+        raise GitHistoryError(f'{relative_path}@{commit}: git show failed: {err}; {hint}')
     return r.stdout
 def jtext(value: object) -> str: return json.dumps(value, indent=2, sort_keys=True) + '\n'
 def rel(p: Path) -> str: return p.relative_to(ROOT).as_posix()

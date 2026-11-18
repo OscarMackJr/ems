@@ -711,10 +711,17 @@ def test_git_show_passes_double_dash(monkeypatch):
     assert seen[0][-1] == '--' and seen[0][:3] == ['git', 'show', f'{PUB}:registry/x.json']
 
 
-def test_git_show_error_hint_names_long_paths_and_unshallow():
+@pytest.mark.parametrize('stderr, long_path_hint', [
+    (b"fatal: invalid object name 'eeee'.", False),
+    (b"fatal: path 'registry/x.json' does not exist in 'eeee'", False),
+    (b"fatal: failed to stat 'eeee:registry/x.json': Filename too long", True),
+])
+def test_git_show_error_hint_names_long_paths_only_when_git_reports_them(monkeypatch, stderr, long_path_hint):
+    monkeypatch.setattr(MODULE.subprocess, 'run', lambda argv, **kwargs: subprocess.CompletedProcess(argv, 128, stdout=b'', stderr=stderr))
     with pytest.raises(GitHistoryError, match='git show failed') as e:
-        MODULE.git_show('e' * 40, 'registry/archive_assessment_applicability_authority_v2.json')
-    assert 'core.longpaths' in str(e.value) and 'git fetch --unshallow' in str(e.value)
+        MODULE.git_show('e' * 40, 'registry/x.json')
+    assert 'fetch full history (git fetch --unshallow)' in str(e.value)
+    assert ('core.longpaths' in str(e.value)) is long_path_hint
 
 
 def test_notice_has_long_path_prerequisite():
