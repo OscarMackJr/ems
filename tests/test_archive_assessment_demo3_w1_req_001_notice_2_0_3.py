@@ -757,6 +757,111 @@ def test_git_show_double_dash_survives_deep_checkout_root_with_real_git(monkeypa
         shutil.rmtree(base, onexc=_rm_readonly)
 
 
+# ---- GATE-14 / GATE-15 builder behaviour (error and write paths only) ----
+
+@pytest.mark.parametrize('key, wrong', [('catalog_reference', PUB), ('v1_baseline', P202), ('supersedes', PUB), ('aa1_manifest', P202), ('governance_decisions', REC)])
+def test_lineage_entries_fails_when_commit_differs_from_expected(key, wrong):
+    a = authority()
+    a['source_lineage'][key]['commit'] = wrong
+    with pytest.raises(AuthorityError, match=f'source_lineage {key}: commit {wrong} differs from the expected commit'):
+        MODULE.lineage_entries(a)
+
+
+def test_expected_lineage_commit_covers_the_pinned_exceptions():
+    assert MODULE.EXPECTED_LINEAGE_COMMIT == {'catalog_reference': MODULE.CATALOG_COMMIT, 'v1_baseline': MODULE.CATALOG_COMMIT, 'supersedes': P202}
+    assert not hasattr(MODULE, 'pinned_raw_digest')
+
+
+@pytest.mark.parametrize('blob', [b'{not json', b'\xff\xfe'])
+def test_malformed_pinned_input_raises_authority_error(monkeypatch, blob):
+    require_history(ROOT, commits=FROZEN_COMMITS)
+    rel_path, real = MODULE.rel(MODULE.GOVERNANCE_DECISIONS), MODULE.git_show
+    monkeypatch.setattr(MODULE, 'git_show', lambda c, relative_path: blob if (c == PUB and relative_path == rel_path) else real(c, relative_path))
+    with pytest.raises(AuthorityError) as e:
+        MODULE.load_inputs()
+    assert type(e.value) is AuthorityError
+
+
+def test_missing_key_in_pinned_input_raises_authority_error(monkeypatch):
+    cached_pinned_run(monkeypatch)
+    a = args()
+    del a[3]['manifest_sha256']
+    with pytest.raises(AuthorityError, match='KeyError'):
+        MODULE.build_notice(*a)
+
+
+def test_pinned_history_error_is_reraised_as_history_error_with_baseline_context(monkeypatch):
+    a = args()
+    real = MODULE.load_pinned_publisher
+
+    def wrapper(tmp):
+        pub = real(tmp)
+
+        def boom():
+            raise pub.GitHistoryError('history gone')
+        pub.validate_governance_decisions = boom
+        return pub
+    monkeypatch.setattr(MODULE, 'load_pinned_publisher', wrapper)
+    with pytest.raises(GitHistoryError, match='pinned baseline rejected the unmutated inputs: GitHistoryError: history gone'):
+        MODULE.pinned_mutation_run(a[0], a[4], a[5], a[6])
+
+
+def redirect_outputs(monkeypatch, name):
+    out = TMP / name
+    if out.exists():
+        shutil.rmtree(out, onexc=_rm_readonly)
+    out.mkdir()
+    paths = (out / 'notice.json', out / 'notice.md', out / 'notice.schema.json')
+    monkeypatch.setattr(MODULE, 'NOTICE_JSON', paths[0])
+    monkeypatch.setattr(MODULE, 'NOTICE_MD', paths[1])
+    monkeypatch.setattr(MODULE, 'NOTICE_SCHEMA', paths[2])
+    return out, paths
+
+
+def test_failed_build_validation_leaves_no_partial_files(monkeypatch):
+    cached_pinned_run(monkeypatch)
+    out, _paths = redirect_outputs(monkeypatch, 'atomic-fail')
+
+    def reject(notice, inputs=None):
+        raise AuthorityError('forced validation failure')
+    monkeypatch.setattr(MODULE, 'validate_notice_object', reject)
+    monkeypatch.setattr(sys, 'argv', ['build', '--build'])
+    with pytest.raises(AuthorityError, match='forced validation failure'):
+        MODULE.main()
+    assert list(out.iterdir()) == []
+
+
+def test_build_writes_all_three_files_atomically_and_matches_fresh_build(monkeypatch):
+    cached_pinned_run(monkeypatch)
+    out, (pj, md, ps) = redirect_outputs(monkeypatch, 'atomic-ok')
+    monkeypatch.setattr(sys, 'argv', ['build', '--build'])
+    MODULE.main()
+    assert sorted(x.name for x in out.iterdir()) == ['notice.json', 'notice.md', 'notice.schema.json']
+    notice = build()
+    assert pj.read_bytes() == MODULE.jtext(notice).encode('utf-8')
+    assert md.read_bytes() == MODULE.render_markdown(notice).encode('utf-8')
+    assert ps.read_bytes() == MODULE.jtext(MODULE.schema()).encode('utf-8')
+
+
+def test_built_rule_is_a_copy_of_the_authority_rule():
+    a = args()
+    notice = MODULE.build_notice(*a)
+    rule_id = notice['decisions']['rules'][0]['control_id']
+    row = next(r for r in a[0]['controls'] if r['control_id'] == rule_id)
+    before = copy.deepcopy(row['not_applicable_rule'])
+    notice['decisions']['rules'][0]['rule']['conditions'][0]['state'] = 'MUTATED'
+    assert row['not_applicable_rule'] == before
+
+
+def test_git_show_missing_git_hint_says_install_not_fetch(monkeypatch):
+    def no_git(argv, **kwargs):
+        raise FileNotFoundError('git')
+    monkeypatch.setattr(MODULE.subprocess, 'run', no_git)
+    with pytest.raises(GitHistoryError, match='git unavailable') as e:
+        MODULE.git_show(PUB, 'registry/x.json')
+    assert 'install git' in str(e.value) and 'fetch' not in str(e.value)
+
+
 def test_deferred_quote_is_followed_by_binding_note():
     notice = build()
     note = f'Plain --validate at the record commit checks that the record is consistent with the commit it names; step 3 checks that this commit is {PUB}.'

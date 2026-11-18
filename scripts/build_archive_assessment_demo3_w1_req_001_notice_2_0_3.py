@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.util
 import json
+import os
 import re
 import subprocess
 import tempfile
@@ -69,6 +71,7 @@ EXPECTED_COUNTS = {'decided_count': 21, 'rule_count': 3, 'no_rule_count': 18, 'n
 EXPECTED_MUTATION_RESULT = 'REJECTED_FAIL_CLOSED'
 LINEAGE_NORMALISATION = {'aa1_manifest': 'RAW_BYTES', 'aa2_approval': 'RAW_BYTES', 'aa2_closure': 'RAW_BYTES', 'catalog_reference': 'CRLF_TO_LF', 'governance_decisions': 'CRLF_TO_LF', 'supersedes': 'CRLF_TO_LF', 'v1_baseline': 'CRLF_TO_LF'}
 DIGEST_SCOPE_PAIRS = (('aa1_manifest_sha256', 'aa1_manifest'), ('aa2_approval_sha256', 'aa2_approval'), ('aa2_closure_sha256', 'aa2_closure'))
+EXPECTED_LINEAGE_COMMIT = {'catalog_reference': CATALOG_COMMIT, 'v1_baseline': CATALOG_COMMIT, 'supersedes': PREVIOUS_2_0_2_COMMIT}
 PINNED_CODE = ('scripts/publish_archive_assessment_applicability_authority_v2.py', 'scripts/build_archive_assessment_governance_decisions.py')
 PINNED_DATA = ('registry/archive_assessment_governance_decisions.json', 'registry/archive_assessment_applicability_authority.json',
                'registry/archive_assessment_not_applicable_rule_proposals.json', 'registry/archive_assessment_rule_proposals_drafting_record.json',
@@ -89,6 +92,15 @@ def dump(p: Path, value: object) -> None:
 def write_text(p: Path, text: str) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     with open(p, 'w', encoding='utf-8', newline='\n') as f: f.write(text)
+def write_atomic(files: list) -> None:
+    temps = [(p, p.with_name(p.name + '.tmp'), text) for p, text in files]
+    try:
+        for p, tmp, text in temps:
+            p.parent.mkdir(parents=True, exist_ok=True)
+            with open(tmp, 'w', encoding='utf-8', newline='\n') as f: f.write(text)
+        for p, tmp, _ in temps: os.replace(tmp, p)
+    finally:
+        for _, tmp, _ in temps: tmp.unlink(missing_ok=True)
 def contains_absolute(value: object) -> bool:
     if isinstance(value, str): return value.startswith(('/', '\\\\')) or (len(value) > 2 and value[1] == ':' and value[2] in '\\/')
     if isinstance(value, dict): return any(contains_absolute(v) for v in value.values())
@@ -99,7 +111,7 @@ def git_show(commit: str, relative_path: str) -> bytes:
     if not isinstance(commit, str) or not re.fullmatch(r'[0-9a-f]{40}', commit): raise AuthorityError(f'{relative_path}: commit must be a 40-character lowercase hex SHA')
     if bad_rel(relative_path): raise AuthorityError(f'{relative_path}: path must be repo-relative without ..')
     try: r = subprocess.run(['git', 'show', f'{commit}:{relative_path}', '--'], cwd=ROOT, capture_output=True)
-    except OSError as e: raise GitHistoryError(f'{relative_path}@{commit}: git unavailable: {e}; fetch full history (git fetch --unshallow)') from e
+    except OSError as e: raise GitHistoryError(f'{relative_path}@{commit}: git unavailable: {e}; install git and ensure it is on PATH') from e
     if r.returncode != 0:
         err = r.stderr.decode('utf-8', 'replace').strip()
         hint = 'fetch full history (git fetch --unshallow)'
@@ -162,11 +174,6 @@ def pinned_digest(commit: str, path: Path) -> str:
     return hashlib.sha256(lf_bytes(pinned_bytes(commit, path))).hexdigest()
 
 
-def pinned_raw_digest(commit: str, path: Path | str) -> str:
-    relative = rel(path) if isinstance(path, Path) else path
-    return hashlib.sha256(git_show(commit, relative)).hexdigest()
-
-
 def git(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(['git', *args], cwd=ROOT, capture_output=True, text=True)
 
@@ -222,6 +229,8 @@ def lineage_entries(authority: dict) -> list:
         if norm != LINEAGE_NORMALISATION[key]:
             raise AuthorityError(f'source_lineage {key}: normalisation {norm!r} differs from {LINEAGE_NORMALISATION[key]}')
         at = e.get('commit', NOTICE_PUBLICATION_COMMIT)
+        if at != EXPECTED_LINEAGE_COMMIT.get(key, NOTICE_PUBLICATION_COMMIT):
+            raise AuthorityError(f'source_lineage {key}: commit {at} differs from the expected commit')
         got = hashlib.sha256(NORMALISERS[norm](git_show(at, e['relative_path']))).hexdigest()
         if got != e['sha256']:
             raise AuthorityError(f'source_lineage {key}: recomputed sha256 at {at} differs from the recorded digest')
@@ -293,11 +302,12 @@ _WRAPPED = (ValueError, OSError, KeyError, TypeError, AttributeError, ImportErro
 def pinned_mutation_run(authority: dict, signoff: dict, decisions: dict, manifest: dict) -> dict:
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
+        pub = None
         try:
             pub = load_pinned_publisher(tmp)
         except AuthorityError: raise
         except _WRAPPED as e:
-            cls = GitHistoryError if type(e).__name__ == 'GitHistoryError' else AuthorityError
+            cls = GitHistoryError if pub is not None and isinstance(e, pub.GitHistoryError) else AuthorityError
             raise cls(f'pinned mutation run failed: {type(e).__name__}: {e}') from e
         publisher_bytes = (tmp / PINNED_CODE[0]).read_bytes()
         if hashlib.sha256(lf_bytes(publisher_bytes)).hexdigest() != manifest['publisher_script']['sha256']:
@@ -316,13 +326,13 @@ def pinned_mutation_run(authority: dict, signoff: dict, decisions: dict, manifes
             pub.validate_signoff(signoff, pub.sha_text(pub.jtext(authority)))
         except AuthorityError: raise
         except _WRAPPED as e:
-            if type(e).__name__ == 'GitHistoryError': raise GitHistoryError(str(e)) from e
-            raise AuthorityError(f'pinned baseline rejected the unmutated inputs: {type(e).__name__}: {e}') from e
+            cls = GitHistoryError if isinstance(e, pub.GitHistoryError) else AuthorityError
+            raise cls(f'pinned baseline rejected the unmutated inputs: {type(e).__name__}: {e}') from e
         try:
             outcomes = pub.run_mutations(authority, signoff, decisions)
         except AuthorityError: raise
         except _WRAPPED as e:
-            cls = GitHistoryError if type(e).__name__ == 'GitHistoryError' else AuthorityError
+            cls = GitHistoryError if isinstance(e, pub.GitHistoryError) else AuthorityError
             raise cls(f'pinned mutation run failed: {type(e).__name__}: {e}') from e
         b = pub._BUILDER
         names = {'ROOT': pub.ROOT, 'builder ROOT': b.ROOT, 'builder V2 ROOT': b.V2.ROOT, 'GOVERNANCE_DECISIONS': pub.GOVERNANCE_DECISIONS, 'V1_AUTHORITY': pub.V1_AUTHORITY, 'BUILDER_SCRIPT': pub.BUILDER_SCRIPT, 'builder __file__': b.__file__, 'builder V2 __file__': b.V2.__file__, 'PROPOSALS': b.PROPOSALS, 'DRAFTING_RECORD': b.DRAFTING_RECORD, 'ANSWERS': b.ANSWERS, 'WORDING_APPROVAL': b.WORDING_APPROVAL, 'DECISIONS_SCHEMA': b.DECISIONS_SCHEMA}
@@ -333,6 +343,12 @@ def pinned_mutation_run(authority: dict, signoff: dict, decisions: dict, manifes
 
 
 def load_inputs() -> tuple:
+    try: return _load_inputs()
+    except AuthorityError: raise
+    except (ValueError, KeyError, TypeError) as e: raise AuthorityError(f'pinned input is malformed: {type(e).__name__}: {e}') from e
+
+
+def _load_inputs() -> tuple:
     resolve_record_commit()
     authority = pinned_json(NOTICE_PUBLICATION_COMMIT, AUTHORITY)
     previous_2_0_2 = pinned_json(PREVIOUS_2_0_2_COMMIT, AUTHORITY)
@@ -362,7 +378,13 @@ def binding_note(pub: str) -> str:
     return f'Plain --validate at the record commit checks that the record is consistent with the commit it names; step 3 checks that this commit is {pub}.'
 
 
-def build_notice(authority: dict, previous_2_0_2: dict, previous_2_0_1: dict, record: dict, signoff: dict, decisions: dict, manifest: dict, frozen_schema: dict, negative: dict, rerun: dict) -> dict:
+def build_notice(*inputs: object) -> dict:
+    try: return _build_notice(*inputs)
+    except AuthorityError: raise
+    except (ValueError, KeyError, TypeError) as e: raise AuthorityError(f'notice inputs are malformed: {type(e).__name__}: {e}') from e
+
+
+def _build_notice(authority: dict, previous_2_0_2: dict, previous_2_0_1: dict, record: dict, signoff: dict, decisions: dict, manifest: dict, frozen_schema: dict, negative: dict, rerun: dict) -> dict:
     if authority['authority_id'] != NOTICE_AUTHORITY_ID or authority['version'] != NOTICE_VERSION:
         raise AuthorityError('frozen authority is not the 2.0.3 authority')
     if record['authority_id'] != authority['authority_id'] or record['version'] != authority['version']:
@@ -420,7 +442,7 @@ def build_notice(authority: dict, previous_2_0_2: dict, previous_2_0_1: dict, re
         'mutations': mutations,
         'lineage': lineage_entries(authority),
         'digest_scope_error': digest_scope_error(authority, previous_2_0_1),
-        'decisions': {**counts, 'rules': [{'control_id': r['control_id'], 'authority': r['not_applicable_authority'], 'rule': r['not_applicable_rule'], 'machine_form': rule_text(r['not_applicable_rule'])} for r in rule_rows], 'governance_decisions_sha256': decisions_sha, 'decisions_changed': False,
+        'decisions': {**counts, 'rules': [{'control_id': r['control_id'], 'authority': r['not_applicable_authority'], 'rule': copy.deepcopy(r['not_applicable_rule']), 'machine_form': rule_text(r['not_applicable_rule'])} for r in rule_rows], 'governance_decisions_sha256': decisions_sha, 'decisions_changed': False,
                       'no_rule_reasons_pointer': 'The reasons for the 18 no-rule decisions are in docs/DEMO3_W1_REQ_001_REPLY.md and registry/archive_assessment_governance_decisions.json.'},
         'verify': {
             'repository_url': REPOSITORY_URL,
@@ -598,8 +620,9 @@ def main() -> None:
         inputs = load_inputs()
         notice = build_notice(*inputs)
         validate_notice_object(notice, inputs)
-        json_text, md_text = jtext(notice), render_markdown(notice)
-        write_text(NOTICE_JSON, json_text); write_text(NOTICE_MD, md_text)
+        json_text, md_text, schema_text = jtext(notice), render_markdown(notice), jtext(schema())
+        jsonschema.Draft202012Validator.check_schema(schema())
+        write_atomic([(NOTICE_JSON, json_text), (NOTICE_MD, md_text), (NOTICE_SCHEMA, schema_text)])
         validate_notice()
     elif args.validate: validate_notice()
 
