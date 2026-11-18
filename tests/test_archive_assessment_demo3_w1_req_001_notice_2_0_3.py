@@ -730,10 +730,6 @@ def test_git_show_double_dash_survives_deep_checkout_root_with_real_git(monkeypa
         if cloned.returncode != 0:
             pytest.fail(f'git clone --shared --no-checkout failed: {cloned.stderr.decode(errors="replace")}', pytrace=False)
         assert git('config', 'core.longpaths', 'false', cwd=clone).returncode == 0
-        without = git('show', f'{PUB}:{long_rel}', cwd=clone)
-        reproduces = without.returncode != 0 and 'Filename too long' in without.stderr
-        if sys.platform == 'win32' and deep and reproduces:
-            assert without.returncode != 0 and 'Filename too long' in without.stderr
         monkeypatch.setattr(MODULE, 'ROOT', clone)
         assert MODULE.git_show(PUB, long_rel) == git('show', f'{PUB}:{long_rel}', '--', cwd=clone).stdout
     finally:
