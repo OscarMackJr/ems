@@ -88,13 +88,34 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
+| BASE-01 | Phase 16 | Pending |
+| BASE-02 | Phase 16 | Pending |
+| BASE-03 | Phase 16 | Pending |
+| BASE-04 | Phase 16 | Pending |
+| GATE-13 | Phase 16 | Pending |
+| GATE-14 | Phase 16 | Pending |
+| GATE-15 | Phase 16 | Pending |
+| BOOK-01 | Phase 16 | Pending |
+| BOOK-02 | Phase 16 | Pending |
+| SEC-01 | Phase 17 | Pending |
+| SEC-02 | Phase 17 | Pending |
+| SEC-03 | Phase 17 | Pending |
+| SEC-04 | Phase 17 | Pending |
+| GATE-11 | Phase 17 | Pending |
+| GATE-12 | Phase 17 | Pending |
+| PUB-13 | Phase 18 | Pending |
+| PUB-14 | Phase 18 | Pending |
+| PUB-15 | Phase 18 | Pending |
+| NOTICE-04 | Phase 19 | Pending |
+| NOTICE-05 | Phase 19 | Pending |
 | V2-01 | — (future) | Deferred |
 | V2-02 | — (future, Hayes-side) | Deferred |
 
 **Coverage:**
 - v1.3.0 requirements: 20 total
-- Mapped to phases: 0 (filled by roadmap)
+- Mapped to phases: 20 (100%)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-11-18*
-*Last updated: 2026-11-18 after initial definition*
+*Last updated: 2026-11-18 after roadmap creation*

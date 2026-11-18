@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v1.3.0
 milestone_name: Authority 2.0.4 Tech-Debt Closure
 status: planning
-last_updated: "2026-11-18T17:11:23.737Z"
+last_updated: "2026-11-18T17:30:00.000Z"
 last_activity: 2026-11-18
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -20,14 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-11-18)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Planning next milestone (v1.2.0 shipped 2026-11-18; Hayes re-pins to 2.0.3 at `1544dc1`)
+**Current focus:** Phase 16 - Test Robustness and Review Closure (v1.3.0)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 16 of 19 (Test Robustness and Review Closure)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-11-18 — Milestone v1.3.0 started
+Status: Roadmap created, ready to plan Phase 16
+Last activity: 2026-11-18 — v1.3.0 roadmap created
+
+Progress: [░░░░░░░░░░] 0% (0/4 phases)
 
 ## Performance Metrics
 
@@ -80,12 +82,16 @@ Last activity: 2026-11-18 — Milestone v1.3.0 started
 - v1.1.0 roadmap created 2026-10-20: Phase 7 Lineage Source and Per-Digest Scope (LIN-01..03), Phase 8 Gate and Schema Hardening (GATE-01..05, SCHEMA-07), Phase 9 Certified Republication 2.0.2 (PUB-07..09), Phase 10 Notice to Hayes (NOTICE-01..02)
 - v1.2.0 roadmap created 2026-11-13: Phase 11 Frozen Validators (FROZEN-01..04), Phase 12 Verify-at-Pin and Gate Hardening (PIN-01..02, GATE-06..10), Phase 13 Certified Republication 2.0.3 (PUB-10..12), Phase 14 Notice to Hayes 2.0.3 (NOTICE-03, PIN-03, CLAIM-01..03)
 - Phase 15 added: Address tech debt: notice long-path git_show and step 2 wording
+- v1.3.0 roadmap created 2026-11-18: Phase 16 Test Robustness and Review Closure (BASE-01..04, GATE-13..15, BOOK-01..02), Phase 17 Security Hardening and Schema Pinning (SEC-01..04, GATE-11..12), Phase 18 Certified Republication 2.0.4 (PUB-13..15), Phase 19 Notice to Hayes 2.0.4 (NOTICE-04..05)
 
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- [v1.3.0 Roadmap]: All code, schema and test changes (Phases 16-17) precede one 2.0.4 republication (Phase 18); red window accepted from the first publisher edit until the publication commit; the notice (Phase 19) follows because it cites the publication commit
+- [v1.3.0 Roadmap]: BOOK (planning-only) is placed in Phase 16; GATE-11/12 are schema changes and go with SEC in Phase 17
+- [v1.3.0 Roadmap]: 2.0.4 publication requires sign-off by Oscar Mack as EMS governance authority with the dual-role statement (human gate in Phase 18)
 - [Roadmap]: Phase order is fixed by the EMS authority: shape, blind drafting, governance decisions, publication, reply
 - [Roadmap]: Blind drafting (Phase 2) is committed before any governance decision (Phase 3); no phase compares a rule with a target repository
 - [Roadmap]: Phase 3 is a human gate; the user gives an individual disposition for each of the 21 proposals and nothing is published before it
@@ -124,9 +130,9 @@ Recent decisions affecting current work:
 ### Blockers/Concerns
 
 - [All phases]: The working tree holds unrelated modified files (`registry/adjudication_rules.json`, `registry/policy_decisions.json`, `.planning/config.json`) and about 60 untracked files from other work. Stage by explicit path only.
-- [Next publication]: 13-REVIEW WR-01: the D-10 baseline assertion fails at the next publication commit. Any future republication reopens a red window (hash certification).
+- [Next publication]: 13-REVIEW WR-01: the D-10 baseline assertion fails at the next publication commit (BASE-01 closes this in Phase 16). Any republication reopens a red window (hash certification).
 - [CI]: The `archive-assessment` job (261015-ci1) runs on PRs, pushes to main and `workflow_dispatch`, with `EMS_FAIL_ON_SKIP=1`. The latest green run is 44325017719 at `91d8847`: 1121 passed and 7 validators printed PASS.
-- [Notice 2.0.3]: Sending the notice is the authority's action. Record the commit that was sent (`91d8847` or later), because the notice does not name its own commit.
+- [Notice 2.0.3]: Sending the notice is the authority's action. Record the commit that was sent (`91d8847` or later), because the notice does not name its own commit (NOTICE-05, Phase 19).
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
 - [Publication 2.0.3]: EMS-AA3 authority 2.0.3 published at 1544dc19ba235d732c832d1651895550ed5a265d (Hayes pins this; signed off by Oscar Mack 2026-11-17), record commit 87a46d147413bd99e931c71a1ab165eb0903f014 (direct child of PUB), WR-03 commit 5498002c5eea3a6d9e3bfbb6766119880bb36804; CI run 44134035073 green (validate + archive-assessment) at headSha 5498002 (workflow_dispatch, 2026-11-17); publication bytes identical PUB..WR03; --validate --at-pin PASS in tree and in a fresh --no-local clone. Push scope: remote tip is 5498002; the .planning-only commits after WR03 (3fd54ac, and the docs(13-04) evidence commit) are local and are published by the Phase 14 push.
 - [Environment]: `git push` via the credential manager fails in this session (sh.exe crash); pushing with the GitHub CLI token as a one-command `http.extraheader` (env `GIT_CONFIG_*`, credential.helper cleared) works
@@ -155,9 +161,9 @@ Items acknowledged and deferred at the v1.2.0 milestone close on 2026-11-18:
 ## Session Continuity
 
 Last session: 2026-11-18
-Stopped at: Milestone v1.2.0 complete and archived (no tag, by decision)
+Stopped at: v1.3.0 roadmap created
 Resume file: None
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Run /gsd-plan-phase 16
