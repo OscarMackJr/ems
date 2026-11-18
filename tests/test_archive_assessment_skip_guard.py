@@ -179,6 +179,12 @@ def test_history_problem_git_unavailable(monkeypatch):
     assert 'git is unavailable' in history_problem(ROOT)
 
 
+def test_hint_says_opt_out_only_skips_guarded_tests():
+    import aa_history
+    assert 'only skips tests guarded by require_history' in aa_history.HINT
+    assert 'still fail' in aa_history.HINT
+
+
 @pytest.mark.parametrize('stdout', [b'', b'maybe', b'true'])
 def test_history_problem_unrecognised_shallow_output_is_problem(monkeypatch, stdout):
     import aa_history

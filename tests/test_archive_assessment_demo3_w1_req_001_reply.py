@@ -383,7 +383,7 @@ def test_resolve_record_commit_full_clone_passes_through(monkeypatch):
     ({'cat_rc': 128}, f'the frozen commit {MODULE.REPLY_RECORD_COMMIT} is not in the repository history'),
     ({'mb_rc': 1}, f'the frozen commit {MODULE.REPLY_RECORD_COMMIT} is not an ancestor of HEAD'),
     ({'mb_rc': 128}, 'cannot check ancestry.*git merge-base exit 128'),
-    ({'cat_exc': OSError('git gone')}, 'in the repository history'),
+    ({'cat_exc': OSError('git gone')}, 'cannot check whether the frozen commit'),
     ({'mb_exc': OSError('git gone')}, 'cannot check ancestry'),
 ])
 def test_resolve_record_commit_fails_when_commit_missing_or_not_ancestor(monkeypatch, kwargs, match):

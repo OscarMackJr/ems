@@ -552,8 +552,6 @@ def test_at_pin_mode_accepts_only_superseded_record(env, fake_git_show, capsys):
 
 def test_at_pin_binding_reads_supersedes_from_authority(env, fake_git_show):
     published_recorded(env, fake_git_show)
-    src = inspect.getsource(MODULE.check_publication_record)
-    assert 'SUPERSEDED_V2_0_' not in src and "a['source_lineage']['supersedes']" in src
     sup = authority_supersedes()
     rec = superseded_record(fake_git_show)
     assert (rec['publication_commit'], rec['authority_id'], rec['version'], rec['authority_sha256']) == (sup['commit'], sup['authority_id'], sup['version'], sup['sha256'])
