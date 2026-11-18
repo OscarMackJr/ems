@@ -44,7 +44,7 @@
 
 ### v1.3.0 Authority 2.0.4 Tech-Debt Closure (Phases 16-19)
 
-- [ ] **Phase 16: Test Robustness and Review Closure** - Baseline and git_show tests become honest, the 12/14/15 review info items are fixed or closed with a reason, and the planning bookkeeping is corrected
+- [x] **Phase 16: Test Robustness and Review Closure** - Baseline and git_show tests become honest, the 12/14/15 review info items are fixed or closed with a reason, and the planning bookkeeping is corrected (completed 2026-11-18)
 - [ ] **Phase 17: Security Hardening and Schema Pinning** - Pinned-publisher and decisions-builder digests are checked before use, the git seam is isolated, the CI scan covers `*.md`, and the schema pins superseded digests
 - [ ] **Phase 18: Certified Republication 2.0.4** - One publication of 2.0.4 with no decision change, after all code and schema changes
 - [ ] **Phase 19: Notice to Hayes (2.0.4)** - A generated notice that cites the 2.0.4 commit and the three-step verify sequence, with the sent commit recorded
@@ -76,7 +76,7 @@
 - [x] 16-03-PLAN.md — 16-REVIEW-CLOSURE.md ledger, GATE-13/15 rewording, ROADMAP criteria for 16/17/19
 
 **Wave 3** *(blocked on Wave 2 completion)*
-- [ ] 16-05-PLAN.md — Phase gate (frozen-file range diff from 9a10810, validators, pytest, CI workflow_dispatch checkpoint)
+- [x] 16-05-PLAN.md — Phase gate (frozen-file range diff from 9a10810, validators, pytest, CI workflow_dispatch checkpoint)
 
 ### Phase 17: Security Hardening and Schema Pinning
 
@@ -137,7 +137,7 @@
 | 13. Certified Republication 2.0.3 | v1.2.0 | 4/4 | Complete | 2026-11-17 |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 5/5 | Complete | 2026-11-17 |
 | 15. Address tech debt: notice long-path git_show and step 2 wording | v1.2.0 | 1/1 | Complete | 2026-11-18 |
-| 16. Test Robustness and Review Closure | v1.3.0 | 4/5 | In Progress|  |
+| 16. Test Robustness and Review Closure | v1.3.0 | 5/5 | Complete   | 2026-11-18 |
 | 17. Security Hardening and Schema Pinning | v1.3.0 | 0/? | Not started | - |
 | 18. Certified Republication 2.0.4 | v1.3.0 | 0/? | Not started | - |
 | 19. Notice to Hayes (2.0.4) | v1.3.0 | 0/? | Not started | - |
