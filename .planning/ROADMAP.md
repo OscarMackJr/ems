@@ -207,4 +207,4 @@ Plans:
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete    | 2026-11-16 |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 4/4 | Complete    | 2026-11-17 |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 5/5 | Complete    | 2026-11-17 |
-| 15. Address tech debt: notice long-path git_show and step 2 wording | v1.2.0 | 1/1 | Complete   | 2026-11-18 |
+| 15. Address tech debt: notice long-path git_show and step 2 wording | v1.2.0 | 1/1 | Complete    | 2026-11-18 |
