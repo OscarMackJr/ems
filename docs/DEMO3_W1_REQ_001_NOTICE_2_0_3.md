@@ -67,7 +67,7 @@ Prerequisites:
 
 | Result | Meaning | Action |
 | --- | --- | --- |
-| Step 1 prints PASS with mode AT_PIN and one deferred item | The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit. | Run step 2. |
+| Step 1 prints PASS with mode AT_PIN and one deferred item | The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit. Plain --validate at the record commit checks that the record is consistent with the commit it names; step 3 checks that this commit is 1544dc19ba235d732c832d1651895550ed5a265d. | Run step 2. |
 | Step 2 prints PASS at 87a46d147413bd99e931c71a1ab165eb0903f014 or a later commit | The publication files are byte-identical between the pin and the checked-out commit. Step 3 enforces the binding of the record to the pin. | Run step 3. |
 | Step 3 prints PASS at or after the commit that adds this notice, and steps 1 and 2 printed PASS | The notice was rebuilt from the frozen inputs, the mutations were rerun from the pinned publisher and the digests were recomputed, and all of them match the committed notice. Re-pin only when steps 1, 2 and 3 all print PASS. | Re-pin to 1544dc19ba235d732c832d1651895550ed5a265d. |
 | Plain --validate at the pin fails | This failure is by design: the record that binds the pin is added after the pin. The message points to --validate --at-pin. | Run --validate --at-pin at the pin. |
@@ -76,6 +76,8 @@ Prerequisites:
 The deferred item printed at the pin reads:
 
 > PUBLICATION_RECORD_BINDING: the publication record naming this commit is written in the next commit; run plain --validate at the record commit or any later commit to check it
+
+Plain --validate at the record commit checks that the record is consistent with the commit it names; step 3 checks that this commit is 1544dc19ba235d732c832d1651895550ed5a265d.
 
 ## What changed in 2.0.3
 

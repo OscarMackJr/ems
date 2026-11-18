@@ -358,6 +358,10 @@ VERIFICATION_CHANGES_LINE = 'Verification changes in 2.0.3: the publisher adds -
 PUBLISHER_CMD = 'python scripts/publish_archive_assessment_applicability_authority_v2.py'
 
 
+def binding_note(pub: str) -> str:
+    return f'Plain --validate at the record commit checks that the record is consistent with the commit it names; step 3 checks that this commit is {pub}.'
+
+
 def build_notice(authority: dict, previous_2_0_2: dict, previous_2_0_1: dict, record: dict, signoff: dict, decisions: dict, manifest: dict, frozen_schema: dict, negative: dict, rerun: dict) -> dict:
     if authority['authority_id'] != NOTICE_AUTHORITY_ID or authority['version'] != NOTICE_VERSION:
         raise AuthorityError('frozen authority is not the 2.0.3 authority')
@@ -429,7 +433,7 @@ def build_notice(authority: dict, previous_2_0_2: dict, previous_2_0_1: dict, re
                 {'step': 3, 'checkout': REMOTE_BRANCH, 'commands': ['git checkout ' + REMOTE_BRANCH, 'python ' + SCRIPT_REL + ' --validate'],
                  'pass_means': f'Run this at or after the commit that adds this notice. PASS means the builder rebuilt the notice, reran the {len(mutations)} mutations from the pinned publisher and recomputed the digests, and all of them match the committed notice.'}],
             'outcomes': [
-                {'case': 'Step 1 prints PASS with mode AT_PIN and one deferred item', 'meaning': 'The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit.', 'action': 'Run step 2.'},
+                {'case': 'Step 1 prints PASS with mode AT_PIN and one deferred item', 'meaning': 'The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit. ' + binding_note(pub), 'action': 'Run step 2.'},
                 {'case': f'Step 2 prints PASS at {rec} or a later commit', 'meaning': 'The publication files are byte-identical between the pin and the checked-out commit. Step 3 enforces the binding of the record to the pin.', 'action': 'Run step 3.'},
                 {'case': 'Step 3 prints PASS at or after the commit that adds this notice, and steps 1 and 2 printed PASS', 'meaning': 'The notice was rebuilt from the frozen inputs, the mutations were rerun from the pinned publisher and the digests were recomputed, and all of them match the committed notice. Re-pin only when steps 1, 2 and 3 all print PASS.', 'action': f'Re-pin to {pub}.'},
                 {'case': 'Plain --validate at the pin fails', 'meaning': 'This failure is by design: the record that binds the pin is added after the pin. The message points to --validate --at-pin.', 'action': 'Run --validate --at-pin at the pin.'},
@@ -477,7 +481,7 @@ def render_markdown(notice: dict) -> str:
     L += ['| Result | Meaning | Action |', '| --- | --- | --- |']
     for o in ver['outcomes']:
         L.append(f"| {o['case']} | {o['meaning']} | {o['action']} |")
-    L += ['', 'The deferred item printed at the pin reads:', '', f"> {ver['at_pin_deferred']}", '']
+    L += ['', 'The deferred item printed at the pin reads:', '', f"> {ver['at_pin_deferred']}", '', binding_note(pin['publication_commit']), '']
     L += ['## What changed in 2.0.3', '',
           f"- The supersedes entry moved from version {mv['from_version']} at {mv['from_commit']} to version {mv['to_version']} at {mv['to_commit']}.",
           f"- {rc['rows_differing']} of {rc['rows_compared']} control rows differ from version {rc['compared_with_version']} on {', '.join(rc['compared_keys'])}.",

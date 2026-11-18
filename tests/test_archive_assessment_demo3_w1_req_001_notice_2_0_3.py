@@ -724,6 +724,18 @@ def test_git_show_error_hint_names_long_paths_only_when_git_reports_them(monkeyp
     assert ('core.longpaths' in str(e.value)) is long_path_hint
 
 
+def test_deferred_quote_is_followed_by_binding_note():
+    notice = build()
+    note = f'Plain --validate at the record commit checks that the record is consistent with the commit it names; step 3 checks that this commit is {PUB}.'
+    assert MODULE.binding_note(PUB) == note
+    assert notice['verify']['outcomes'][0]['meaning'].endswith(note)
+    for md in (MODULE.render_markdown(notice), MODULE.NOTICE_MD.read_text(encoding='utf-8')):
+        quote = f"> {notice['verify']['at_pin_deferred']}"
+        assert quote + '\n\n' + note + '\n' in md
+    require_history(ROOT, commits=FROZEN_COMMITS)
+    assert notice['verify']['at_pin_deferred'] == at_pin_deferred_literal()
+
+
 def test_notice_has_long_path_prerequisite():
     v = build()['verify']
     assert any('core.longpaths' in p for p in v['prerequisites'])

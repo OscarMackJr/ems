@@ -374,7 +374,7 @@
       {
         "action": "Run step 2.",
         "case": "Step 1 prints PASS with mode AT_PIN and one deferred item",
-        "meaning": "The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit."
+        "meaning": "The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit. Plain --validate at the record commit checks that the record is consistent with the commit it names; step 3 checks that this commit is 1544dc19ba235d732c832d1651895550ed5a265d."
       },
       {
         "action": "Run step 3.",
