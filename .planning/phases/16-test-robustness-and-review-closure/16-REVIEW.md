@@ -15,7 +15,7 @@ findings:
   warning: 3
   info: 4
   total: 7
-status: issues_found
+status: fixed
 ---
 
 # Phase 16: Code Review Report
@@ -39,7 +39,7 @@ The warnings concern gaps in the new IN-02 and IN-03 behaviour. In each case the
 
 ## Warnings
 
-### WR-01: Malformed pinned input of the wrong JSON type escapes as a raw AttributeError, not AuthorityError
+### WR-01: Malformed pinned input of the wrong JSON type escapes as a raw AttributeError, not AuthorityError — FIXED in 08f7301
 
 **File:** `scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_3.py:348` and `:384`, with the unwrapped `.get` calls at `:213`, `:362`, `:398`, `:250` and `:255`
 
@@ -51,7 +51,7 @@ except (ValueError, KeyError, TypeError, AttributeError) as e:
 ```
 Apply this in both `load_inputs` and `build_notice`. Add test params such as `b'[]'` and `b'"x"'` for the publication record and manifest blobs (patch `git_show` for `NOTICE_RECORD_COMMIT` and the manifest path).
 
-### WR-02: `write_atomic` is not atomic across the three outputs, and `--build` validates again after replacing
+### WR-02: `write_atomic` is not atomic across the three outputs, and `--build` validates again after replacing — FIXED in 08f7301
 
 **File:** `scripts/build_archive_assessment_demo3_w1_req_001_notice_2_0_3.py:95-103` and `:620-626`
 
@@ -59,7 +59,7 @@ Apply this in both `load_inputs` and `build_notice`. Add test params such as `b'
 
 **Fix:** Either document and name it honestly (`write_staged`), or add a rollback. Read the old bytes first, then restore them if any replace or the post-write `validate_notice()` raises. The post-write validation can also be dropped, since `validate_notice_object(notice, inputs)` already ran on the same in-memory data. Add a test that monkeypatches `os.replace` to fail on the second call.
 
-### WR-03: `test_failed_build_validation_leaves_no_partial_files` does not exercise `write_atomic`
+### WR-03: `test_failed_build_validation_leaves_no_partial_files` does not exercise `write_atomic` — FIXED in 08f7301
 
 **File:** `tests/test_archive_assessment_demo3_w1_req_001_notice_2_0_3.py:821-831`
 
@@ -106,3 +106,10 @@ Apply this in both `load_inputs` and `build_notice`. Add test params such as `b'
 _Reviewed: 2026-11-18_
 _Reviewer: Claude (gsd-code-reviewer)_
 _Depth: standard_
+
+## Fix Log
+
+- 2026-11-18, commit 08f7301: WR-01, WR-02 and WR-03 fixed.
+  - Checks: 2.0.3 `--build`/`--validate` print PASS; the three 2.0.3 outputs are byte-identical; the frozen files are unchanged; the 2.0.3 notice tests give 120 passed, 0 skipped.
+  - WR-02 residual: rollback is best-effort. A crash between `os.replace` calls can still leave a mixed set.
+- Info IN-01..IN-04 were not in the fix scope (no `--all`).
