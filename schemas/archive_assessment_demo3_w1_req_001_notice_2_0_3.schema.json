@@ -454,8 +454,8 @@
             "minLength": 1,
             "type": "string"
           },
-          "maxItems": 4,
-          "minItems": 4,
+          "maxItems": 5,
+          "minItems": 5,
           "type": "array"
         },
         "repository_url": {

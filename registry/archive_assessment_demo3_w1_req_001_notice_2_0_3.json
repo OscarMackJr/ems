@@ -379,7 +379,7 @@
       {
         "action": "Run step 3.",
         "case": "Step 2 prints PASS at 87a46d147413bd99e931c71a1ab165eb0903f014 or a later commit",
-        "meaning": "The publication record binds the pin and the publication files are byte-identical between the pin and the checked-out commit."
+        "meaning": "The publication files are byte-identical between the pin and the checked-out commit. Step 3 enforces the binding of the record to the pin."
       },
       {
         "action": "Re-pin to 1544dc19ba235d732c832d1651895550ed5a265d.",
@@ -401,7 +401,8 @@
       "Python 3.12",
       "python -m pip install -r requirements.txt jsonschema==4.26.0",
       "A full clone (not shallow); run git fetch --unshallow if needed",
-      "No local edits to the pinned paths"
+      "No local edits to the pinned paths",
+      "On Windows, run git config core.longpaths true, or clone to a short checkout root such as C:\\ems, before step 3"
     ],
     "repository_url": "https://github.com/OscarMackJr/ems.git",
     "steps": [
@@ -423,7 +424,7 @@
           "git checkout 87a46d147413bd99e931c71a1ab165eb0903f014",
           "python scripts/publish_archive_assessment_applicability_authority_v2.py --validate"
         ],
-        "pass_means": "PASS means the publication record at this commit names 1544dc19ba235d732c832d1651895550ed5a265d and the publication files are byte-identical between the two commits. It is expected to pass at later commits on feature/ems-aa3-archive-applicability-authority that do not change the publication files.",
+        "pass_means": "Plain --validate at this commit checks that the publication files are byte-identical between the two commits. The binding of the record to 1544dc19ba235d732c832d1651895550ed5a265d is enforced by step 3, and all three steps are required before re-pinning. It is expected to pass at later commits on feature/ems-aa3-archive-applicability-authority that do not change the publication files.",
         "step": 2
       },
       {

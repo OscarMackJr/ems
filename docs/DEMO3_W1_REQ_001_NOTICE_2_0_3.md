@@ -39,6 +39,7 @@ Prerequisites:
 - python -m pip install -r requirements.txt jsonschema==4.26.0
 - A full clone (not shallow); run git fetch --unshallow if needed
 - No local edits to the pinned paths
+- On Windows, run git config core.longpaths true, or clone to a short checkout root such as C:\ems, before step 3
 
 1. Check out 1544dc19ba235d732c832d1651895550ed5a265d and run:
 
@@ -55,7 +56,7 @@ Prerequisites:
         git checkout 87a46d147413bd99e931c71a1ab165eb0903f014
         python scripts/publish_archive_assessment_applicability_authority_v2.py --validate
 
-   PASS means the publication record at this commit names 1544dc19ba235d732c832d1651895550ed5a265d and the publication files are byte-identical between the two commits. It is expected to pass at later commits on feature/ems-aa3-archive-applicability-authority that do not change the publication files.
+   Plain --validate at this commit checks that the publication files are byte-identical between the two commits. The binding of the record to 1544dc19ba235d732c832d1651895550ed5a265d is enforced by step 3, and all three steps are required before re-pinning. It is expected to pass at later commits on feature/ems-aa3-archive-applicability-authority that do not change the publication files.
 
 3. Check out feature/ems-aa3-archive-applicability-authority and run:
 
@@ -67,7 +68,7 @@ Prerequisites:
 | Result | Meaning | Action |
 | --- | --- | --- |
 | Step 1 prints PASS with mode AT_PIN and one deferred item | The pinned bytes are certified. The deferred item is the publication record binding, which cannot exist inside the pinned commit. | Run step 2. |
-| Step 2 prints PASS at 87a46d147413bd99e931c71a1ab165eb0903f014 or a later commit | The publication record binds the pin and the publication files are byte-identical between the pin and the checked-out commit. | Run step 3. |
+| Step 2 prints PASS at 87a46d147413bd99e931c71a1ab165eb0903f014 or a later commit | The publication files are byte-identical between the pin and the checked-out commit. Step 3 enforces the binding of the record to the pin. | Run step 3. |
 | Step 3 prints PASS at or after the commit that adds this notice, and steps 1 and 2 printed PASS | The notice was rebuilt from the frozen inputs, the mutations were rerun from the pinned publisher and the digests were recomputed, and all of them match the committed notice. Re-pin only when steps 1, 2 and 3 all print PASS. | Re-pin to 1544dc19ba235d732c832d1651895550ed5a265d. |
 | Plain --validate at the pin fails | This failure is by design: the record that binds the pin is added after the pin. The message points to --validate --at-pin. | Run --validate --at-pin at the pin. |
 | Any other failure, including a shallow clone | The check did not complete as described. | Do not consume the authority. Report the output to EMS. |
