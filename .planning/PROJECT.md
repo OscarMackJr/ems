@@ -15,6 +15,7 @@ The consumer is Hayes Verify, an external assessor that reads EMS at a pinned co
 - Verify at the pin: `--validate --at-pin` gives PASS at `1544dc1` and names the one check it defers. Plain `--validate` gives PASS at the record commit or any later commit.
 - Frozen validators: the DEMO3 reply (2.0.1) and the 2.0.2 notice read only git-pinned constants. Missing history fails closed, and CI fails on any skip.
 - Decisions: unchanged. There are 21 decided controls (3 rules and 18 no-rule, `AA4-GOV-001`..`021`) and 59 `NOT_YET_DECIDED`, and the decisions digest is still `4e746d1f…`.
+- v1.3.0 progress: Phase 16 (test robustness and review closure) is complete as of 2026-11-18. The D-10 baseline test and the deep-root test now check what they claim. 14/15-REVIEW info items are fixed with tests, and 12-REVIEW items are carried to Phase 17 (see `16-REVIEW-CLOSURE.md`). CI run `44408700761` at `b47a93f`: 1133 passed, 0 skipped. Frozen builders are unchanged.
 - Notice: a generated notice to Hayes (`docs/DEMO3_W1_REQ_001_NOTICE_2_0_3.md`) gives the three-step verify sequence. Its claims are enforced by `--validate`. The current text is on the remote at `91d8847`. Sending it is the authority's action; record the commit that was sent.
 
 Archives: `.planning/milestones/v1.0.0-*`, `v1.1.0-*` and `v1.2.0-*`.
@@ -253,4 +254,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-18 at v1.3.0 milestone start*
+*Last updated: 2026-11-18 after Phase 16*
