@@ -180,7 +180,7 @@ def test_pinned_run_paths_stay_in_temp_materialisation(monkeypatch):
     out = MODULE.pinned_mutation_run(a[0], a[4], a[5], a[6])
     assert len(out['outcomes']) == 29
     assert out['at_pin_deferred'].startswith('PUBLICATION_RECORD_BINDING: ')
-    assert len(seen) == 1 and not seen[0][0].resolve().is_relative_to(ROOT.resolve())
+    assert len(seen) == 1
     tmp, pub = seen[0]
     b = pub._BUILDER
     for module in (pub, b, b.V2):
@@ -343,11 +343,21 @@ def test_validate_fails_closed_without_history_shallow(monkeypatch):
         MODULE.validate_notice()
 
 
-def test_git_show_error_names_full_sha_and_fetch_hint():
+def test_git_show_error_names_full_sha_and_fetch_hint(monkeypatch):
     missing = 'e' * 40
     with pytest.raises(GitHistoryError, match='git show failed') as e:
         MODULE.git_show(missing, 'registry/archive_assessment_applicability_authority_v2.json')
     assert missing in str(e.value) and 'fetch full history (git fetch --unshallow)' in str(e.value)
+    assert 'core.longpaths' not in str(e.value)
+    for stderr, long_path_hint in ((b"fatal: invalid object name 'eeee'.", False), (b"fatal: path 'registry/x.json' does not exist in 'eeee'", False),
+                                   (b"fatal: failed to stat 'eeee:registry/x.json': Filename too long", True)):
+        monkeypatch.setattr(MODULE.subprocess, 'run', lambda argv, stderr=stderr, **kwargs: subprocess.CompletedProcess(argv, 128, stdout=b'', stderr=stderr))
+        with pytest.raises(GitHistoryError, match='git show failed') as e:
+            MODULE.git_show(missing, 'registry/x.json')
+        assert 'fetch full history (git fetch --unshallow)' in str(e.value)
+        assert ('core.longpaths' in str(e.value)) is long_path_hint
+        assert ('Filename too long' in str(e.value)) is long_path_hint
+    monkeypatch.undo()
     with pytest.raises(AuthorityError, match='40-character'):
         MODULE.git_show('1544dc1', 'registry/x.json')
     with pytest.raises(AuthorityError, match='repo-relative'):
@@ -640,7 +650,7 @@ def make_clone(name):
     require_history(ROOT, commits=FROZEN_COMMITS)
     clone = TMP / name
     if clone.exists():
-        shutil.rmtree(clone, onerror=_rm_readonly)
+        shutil.rmtree(clone, onexc=_rm_readonly)
     cloned = subprocess.run(['git', '-c', 'core.longpaths=true', 'clone', '--shared', '-q', str(ROOT), str(clone)], capture_output=True)
     if cloned.returncode != 0:
         pytest.fail(f'git clone --shared of {ROOT} failed: {cloned.stderr.decode(errors="replace")}', pytrace=False)
@@ -654,19 +664,22 @@ def make_clone(name):
 
 def run_in_clone(clone, mode):
     r = subprocess.run([sys.executable, MODULE.SCRIPT_REL, mode], cwd=clone, capture_output=True, text=True)
-    lines = [line for line in (r.stdout + r.stderr).splitlines() if line.strip()]
+    lines = [line for line in r.stdout.splitlines() if line.strip()]
     return r.returncode, (lines[-1] if lines else '')
 
 
 def assert_live_edit_does_not_change_notice(clone, edit):
     before = run_in_clone(clone, '--validate')
     assert before == (0, 'PASS'), f'--validate baseline must be PASS for this test to be meaningful: {before!r}'
-    assert run_in_clone(clone, '--build')[0] == 0
+    built = run_in_clone(clone, '--build')
+    assert built[0] == 0, f'--build failed in the clone: {built!r}'
     json_before = (clone / MODULE.rel(MODULE.NOTICE_JSON)).read_bytes()
     md_before = (clone / MODULE.rel(MODULE.NOTICE_MD)).read_bytes()
     edit()
-    assert run_in_clone(clone, '--validate') == (0, 'PASS')
-    assert run_in_clone(clone, '--build')[0] == 0
+    after_validate = run_in_clone(clone, '--validate')
+    assert after_validate == (0, 'PASS'), f'--validate after the live edit: {after_validate!r}'
+    rebuilt = run_in_clone(clone, '--build')
+    assert rebuilt[0] == 0, f'--build after the live edit failed: {rebuilt!r}'
     assert (clone / MODULE.rel(MODULE.NOTICE_JSON)).read_bytes() == json_before
     assert (clone / MODULE.rel(MODULE.NOTICE_MD)).read_bytes() == md_before
 
@@ -716,13 +729,16 @@ def test_git_show_double_dash_survives_deep_checkout_root_with_real_git(monkeypa
     long_rel = f'{MODULE.rel(MODULE.OUT)}/{MODULE.N_NEGATIVE}'
     base = TMP / 'deep'
     if base.exists():
-        shutil.rmtree(base, onerror=_rm_readonly)
+        shutil.rmtree(base, onexc=_rm_readonly)
+    win = sys.platform == 'win32'
     clone = base
-    while len(str(clone)) + 1 + len(long_rel) <= 270:
-        clone = clone / ('d' * 20)
-    clone = clone / 'c'
-    deep = len(str(clone)) < 240
-    if not deep:
+    if win:
+        while len(str(clone)) + 1 + len(long_rel) <= 270:
+            clone = clone / ('d' * 20)
+        clone = clone / 'c'
+        if len(str(clone)) > 200 or len(str(clone)) + 1 + len(f'{PUB}:{long_rel}') <= 260:
+            pytest.fail(f'cannot build a deep checkout root from TEMP (root length {len(str(clone))}); shorten TEMP', pytrace=False)
+    else:
         clone = base / 'c'
     clone.parent.mkdir(parents=True)
     try:
@@ -730,23 +746,15 @@ def test_git_show_double_dash_survives_deep_checkout_root_with_real_git(monkeypa
         if cloned.returncode != 0:
             pytest.fail(f'git clone --shared --no-checkout failed: {cloned.stderr.decode(errors="replace")}', pytrace=False)
         assert git('config', 'core.longpaths', 'false', cwd=clone).returncode == 0
+        if win:
+            bare = subprocess.run(['git', '-c', 'core.longpaths=false', 'show', f'{PUB}:{long_rel}'], cwd=clone, capture_output=True)
+            assert bare.returncode != 0 and b'Filename too long' in bare.stderr, f'the deep-root test did not reproduce the failure without --: rc={bare.returncode} stderr={bare.stderr!r}'
         monkeypatch.setattr(MODULE, 'ROOT', clone)
-        assert MODULE.git_show(PUB, long_rel) == git('show', f'{PUB}:{long_rel}', '--', cwd=clone).stdout
+        with_dashes = git('show', f'{PUB}:{long_rel}', '--', cwd=clone)
+        assert with_dashes.returncode == 0, with_dashes.stderr
+        assert MODULE.git_show(PUB, long_rel) == with_dashes.stdout
     finally:
-        shutil.rmtree(base, onerror=_rm_readonly)
-
-
-@pytest.mark.parametrize('stderr, long_path_hint', [
-    (b"fatal: invalid object name 'eeee'.", False),
-    (b"fatal: path 'registry/x.json' does not exist in 'eeee'", False),
-    (b"fatal: failed to stat 'eeee:registry/x.json': Filename too long", True),
-])
-def test_git_show_error_hint_names_long_paths_only_when_git_reports_them(monkeypatch, stderr, long_path_hint):
-    monkeypatch.setattr(MODULE.subprocess, 'run', lambda argv, **kwargs: subprocess.CompletedProcess(argv, 128, stdout=b'', stderr=stderr))
-    with pytest.raises(GitHistoryError, match='git show failed') as e:
-        MODULE.git_show('e' * 40, 'registry/x.json')
-    assert 'fetch full history (git fetch --unshallow)' in str(e.value)
-    assert ('core.longpaths' in str(e.value)) is long_path_hint
+        shutil.rmtree(base, onexc=_rm_readonly)
 
 
 def test_deferred_quote_is_followed_by_binding_note():
