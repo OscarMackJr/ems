@@ -123,6 +123,15 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 
   NOTICE-03, PIN-03 and CLAIM-01..03. Validated in Phase 14: Notice to Hayes 2.0.3 (verified 4/4). The notice tests gave 89 passed and 0 skipped. Review 14-REVIEW.md lists 3 non-blocking warnings: WR-01 (the pinned publisher's `ROOT` points at the live repository by convention), WR-02 (outcome table row 2 wording) and WR-03 (CI installs an unpinned `jsonschema`).
 
+  Phase 15 closed audit tech debt WARNING-1 and WARNING-2 in the 2.0.3 notice, with every change made through its builder (verified 7/7):
+  - Step 3 now calls `git show` with `--`, which fixes the Windows long-path failure.
+  - The `core.longpaths` hint appears only when git reports `Filename too long`.
+  - The long-path prerequisite now applies to the step 1 clone.
+  - Step 2 and its outcome row name the commits that are compared, and step 3 is named as the binding check.
+  - A clarifying sentence now follows the verbatim deferred quote.
+  - The notice, 2.0.2 notice and reply tests gave 340 passed.
+  - Still open: review info items IN-01..IN-03. The frozen reply and 2.0.2 builders still call `git show` without `--`, so a deep checkout root breaks them.
+
 ### Active
 
 <!-- Hypotheses until shipped and validated. -->
@@ -229,4 +238,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-17 after Phase 14 (Notice to Hayes 2.0.3)*
+*Last updated: 2026-11-18 after Phase 15 (notice long-path and step 2 wording tech debt)*
