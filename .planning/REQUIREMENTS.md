@@ -20,24 +20,24 @@
 
 - [ ] **GATE-11**: The published schema pins the superseded digests, so a 2.0.4 authority that names different superseded 2.0.3/2.0.2 digests fails schema validation. (13-REVIEW WR-02)
 - [ ] **GATE-12**: The sign-off `scope` no longer repeats a digest in unchecked free text; the digest is either removed or checked. (13-REVIEW IN-01)
-- [ ] **GATE-13**: Each 12-REVIEW info item (IN-01..IN-07) is either fixed with a test or closed with a recorded reason:
-  - IN-01: the plain-mode error message.
-  - IN-02: the "HEAD is the publication commit" diagnosis.
-  - IN-03: the at-pin wrong-record error points to plain mode.
-  - IN-04: the shallow check runs before history reads.
-  - IN-05: literal pathspecs.
-  - IN-06: GATE-06 scope.
-  - IN-07: weak assertions.
+- [ ] **GATE-13**: Each 12-REVIEW info item (IN-01..IN-07) is either fixed with a test, closed with a recorded reason, or carried to the phase that owns the edit, as recorded in `16-REVIEW-CLOSURE.md`:
+  - IN-01: the plain-mode error message. Carried to Phase 17 (DEFERRED-17): made with a test inside its red window.
+  - IN-02: the "HEAD is the publication commit" diagnosis. Carried to Phase 17 (DEFERRED-17).
+  - IN-03: the at-pin wrong-record error points to plain mode. Carried to Phase 17 (DEFERRED-17).
+  - IN-04: the shallow check runs before history reads. Carried to Phase 17 (DEFERRED-17).
+  - IN-05: literal pathspecs. Superseded by SEC-04; Phase 17 verification confirms.
+  - IN-06: GATE-06 scope. The `lf_digest(SCRIPT)` check move is carried to Phase 17 (DEFERRED-17); the decisions-builder scope is superseded by SEC-02.
+  - IN-07: weak assertions. Test parts fixed in Phase 16; the reply-builder message is closed as frozen (byte-unchanged).
 - [ ] **GATE-14**: Each 14-REVIEW info item (IN-01..IN-05) is either fixed with a test or closed with a recorded reason:
   - IN-01: unused helpers, and lineage recompute commits are cross-checked.
   - IN-02: malformed input raises a domain exception.
   - IN-03: `--build` writes atomically and refreshes the schema.
   - IN-04: the notice is decoupled from the input authority.
   - IN-05: test nits.
-- [ ] **GATE-15**: Each 15-REVIEW info item is fixed:
-  - IN-01: there is no absolute Windows path in the registry JSON string.
-  - IN-02: the duplicated hint test is removed.
-  - IN-03: the hint for a missing git binary does not tell the reader to fetch history.
+- [ ] **GATE-15**: Each 15-REVIEW info item is fixed or carried, as recorded in `16-REVIEW-CLOSURE.md`:
+  - IN-01: no absolute Windows path in the registry JSON string. Moved to Phase 19: the 2.0.4 notice builder avoids absolute-path example text and its `contains_absolute` scans the whole string. The 2.0.3 text is immutable because it was sent at 91d8847.
+  - IN-02: the duplicated hint test is removed (fixed in Phase 16).
+  - IN-03: the hint for a missing git binary does not tell the reader to fetch history (fixed in Phase 16).
 
 ### Security (SEC)
 
@@ -92,9 +92,9 @@
 | BASE-02 | Phase 16 | Pending |
 | BASE-03 | Phase 16 | Pending |
 | BASE-04 | Phase 16 | Pending |
-| GATE-13 | Phase 16 | Pending |
+| GATE-13 (IN-05..IN-07 test parts, ledger) | Phase 16 | Pending |
 | GATE-14 | Phase 16 | Pending |
-| GATE-15 | Phase 16 | Pending |
+| GATE-15 (IN-02, IN-03) | Phase 16 | Pending |
 | BOOK-01 | Phase 16 | Pending |
 | BOOK-02 | Phase 16 | Pending |
 | SEC-01 | Phase 17 | Pending |
@@ -103,11 +103,13 @@
 | SEC-04 | Phase 17 | Pending |
 | GATE-11 | Phase 17 | Pending |
 | GATE-12 | Phase 17 | Pending |
+| GATE-13 (IN-01..04, IN-06 digest-check move) | Phase 17 | Pending |
 | PUB-13 | Phase 18 | Pending |
 | PUB-14 | Phase 18 | Pending |
 | PUB-15 | Phase 18 | Pending |
 | NOTICE-04 | Phase 19 | Pending |
 | NOTICE-05 | Phase 19 | Pending |
+| GATE-15 (IN-01) | Phase 19 | Pending |
 | V2-01 | — (future) | Deferred |
 | V2-02 | — (future, Hayes-side) | Deferred |
 

@@ -60,7 +60,7 @@
 
   1. The D-10 baseline assertion passes at the next publication commit and at later commits, and it checks the working tree under test, not committed HEAD; `outcome()` decodes UTF-8 and keeps stderr separate.
   2. On Windows with a deep root the `git_show` test fails loudly unless `Filename too long` reproduces without `--`; on other platforms it asserts the `--` behaviour only; it runs no skips under `EMS_FAIL_ON_SKIP=1`.
-  3. Each 12-REVIEW (IN-01..07) and 14-REVIEW (IN-01..05) item is either fixed with a test or closed with a recorded reason, and the three 15-REVIEW items are fixed (no absolute Windows path in registry JSON, duplicate hint test removed, missing-git hint does not say to fetch history).
+  3. Every selected 11/12/14/15 REVIEW item has a recorded disposition in `16-REVIEW-CLOSURE.md`: 14-REVIEW IN-01..05 and 15-REVIEW IN-02/IN-03 are fixed with tests; 12-REVIEW IN-07 test parts are fixed and the reply-builder message closed as frozen; 12-REVIEW IN-01..04 and the IN-06 digest-check move are carried to Phase 17; 12-REVIEW IN-05 and the IN-06 decisions-builder scope are superseded by SEC-04 and SEC-02; 15-REVIEW IN-01 moves to Phase 19 (2.0.3 text is immutable).
   4. The history-failure hint describes what `EMS_ALLOW_NO_HISTORY=1` skips, and an unrecognised shallow-check output is reported verbatim, or each is recorded as out of scope because the code is in a frozen builder.
   5. The SUMMARY files for phases 11-13 carry `requirements-completed` frontmatter matching v1.2.0 traceability, V2-01 and V2-02 are listed as deferred, and unrelated working-tree changes stay out of the commits.
 
@@ -90,6 +90,7 @@
   3. The CI secret-pattern scan covers `*.md` files.
   4. With hostile `GIT_DIR`, `GIT_WORK_TREE`, `GIT_INDEX_FILE`, `GIT_OBJECT_DIRECTORY` or replace refs in the environment, the git seam still reads the intended repository and a fail-closed check cannot be redirected; pathspecs are literal.
   5. A 2.0.4 authority naming different superseded 2.0.3/2.0.2 digests fails schema validation, and the sign-off `scope` no longer carries an unchecked digest in free text.
+  6. The deferred 12-REVIEW items (IN-01..IN-04 and the IN-06 `lf_digest(SCRIPT)` check move) are made with tests inside the red window; 12-REVIEW IN-05 is confirmed superseded by SEC-04. The D-10 baseline test joins the accepted red-set inventory at the first publisher edit and closes at the 2.0.4 publication (not weakened).
 
 **Invariants**: as Phase 16. A red window (real-file tests red from hash certification) opens at the first publisher edit in Phases 16-17 and is accepted until the Phase 18 publication commit.
 **Plans**: TBD
@@ -119,6 +120,7 @@
   2. The step 1 clone command includes `-c core.longpaths=true`, and the line on plain `--validate` states exactly what it binds.
   3. When the notice is sent, the sent commit is recorded in a committed planning or registry artifact, along with the 2.0.3 send commit (`91d8847` or later) if that notice was sent.
   4. The frozen reply and 2.0.2 notice builders remain byte-unchanged and CI stays green with 0 skips.
+  5. The 2.0.4 notice builder has no absolute-path example text in the registry JSON, and its `contains_absolute` scans the whole string (15-REVIEW IN-01; the sent 2.0.3 text stays immutable).
 
 **Plans**: TBD
 
