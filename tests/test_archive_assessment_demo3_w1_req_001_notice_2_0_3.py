@@ -711,6 +711,34 @@ def test_git_show_passes_double_dash(monkeypatch):
     assert seen[0][-1] == '--' and seen[0][:3] == ['git', 'show', f'{PUB}:registry/x.json']
 
 
+@pytest.mark.skipif(sys.platform != 'win32', reason='MAX_PATH (260) only applies on Windows')
+def test_git_show_double_dash_survives_deep_checkout_root_with_real_git(monkeypatch):
+    require_history(ROOT, commits=FROZEN_COMMITS)
+    long_rel = f'{MODULE.rel(MODULE.OUT)}/{MODULE.N_NEGATIVE}'
+    base = TMP / 'deep'
+    if base.exists():
+        shutil.rmtree(base, onerror=_rm_readonly)
+    clone = base
+    while len(str(clone)) + 1 + len(long_rel) <= 270:
+        clone = clone / ('d' * 20)
+    clone = clone / 'c'
+    if len(str(clone)) >= 240:
+        pytest.skip(f'temporary directory too deep to build a clone root under the directory limit: {len(str(clone))} characters')
+    clone.parent.mkdir(parents=True)
+    try:
+        cloned = subprocess.run(['git', 'clone', '--shared', '--no-checkout', '-q', str(ROOT), str(clone)], capture_output=True)
+        if cloned.returncode != 0:
+            pytest.fail(f'git clone --shared --no-checkout failed: {cloned.stderr.decode(errors="replace")}', pytrace=False)
+        assert git('config', 'core.longpaths', 'false', cwd=clone).returncode == 0
+        without = git('show', f'{PUB}:{long_rel}', cwd=clone)
+        if without.returncode == 0 or 'Filename too long' not in without.stderr:
+            pytest.skip(f'this machine does not reproduce the long-path failure without --: exit {without.returncode}, {without.stderr!r}')
+        monkeypatch.setattr(MODULE, 'ROOT', clone)
+        assert MODULE.git_show(PUB, long_rel) == git('show', f'{PUB}:{long_rel}', '--').stdout
+    finally:
+        shutil.rmtree(base, onerror=_rm_readonly)
+
+
 @pytest.mark.parametrize('stderr, long_path_hint', [
     (b"fatal: invalid object name 'eeee'.", False),
     (b"fatal: path 'registry/x.json' does not exist in 'eeee'", False),
