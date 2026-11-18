@@ -68,9 +68,9 @@
 **Plans**: 5 plans
 
 **Wave 1**
-- [ ] 16-01-PLAN.md — D-10 baseline test (record-state mode, working-tree overlay, UTF-8 stdout), HINT assertion, 12 IN-07 test parts
-- [ ] 16-02-PLAN.md — Deep-root git_show test that can fail, 2.0.3 notice builder behaviour-only fixes, D-02 byte-identity gate
-- [ ] 16-04-PLAN.md — `requirements-completed` frontmatter for phase 11-13 SUMMARY files
+- [x] 16-01-PLAN.md — D-10 baseline test (record-state mode, working-tree overlay, UTF-8 stdout), HINT assertion, 12 IN-07 test parts
+- [x] 16-02-PLAN.md — Deep-root git_show test that can fail, 2.0.3 notice builder behaviour-only fixes, D-02 byte-identity gate
+- [x] 16-04-PLAN.md — `requirements-completed` frontmatter for phase 11-13 SUMMARY files
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 16-03-PLAN.md — 16-REVIEW-CLOSURE.md ledger, GATE-13/15 rewording, ROADMAP criteria for 16/17/19
@@ -135,7 +135,7 @@
 | 13. Certified Republication 2.0.3 | v1.2.0 | 4/4 | Complete | 2026-11-17 |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 5/5 | Complete | 2026-11-17 |
 | 15. Address tech debt: notice long-path git_show and step 2 wording | v1.2.0 | 1/1 | Complete | 2026-11-18 |
-| 16. Test Robustness and Review Closure | v1.3.0 | 0/? | Not started | - |
+| 16. Test Robustness and Review Closure | v1.3.0 | 3/5 | In Progress|  |
 | 17. Security Hardening and Schema Pinning | v1.3.0 | 0/? | Not started | - |
 | 18. Certified Republication 2.0.4 | v1.3.0 | 0/? | Not started | - |
 | 19. Notice to Hayes (2.0.4) | v1.3.0 | 0/? | Not started | - |
