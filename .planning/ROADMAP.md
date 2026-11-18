@@ -65,7 +65,18 @@
   5. The SUMMARY files for phases 11-13 carry `requirements-completed` frontmatter matching v1.2.0 traceability, V2-01 and V2-02 are listed as deferred, and unrelated working-tree changes stay out of the commits.
 
 **Invariants**: decisions digest stays `4e746d1f…`; 21 decided and 59 `NOT_YET_DECIDED`; frozen reply (2.0.1) and 2.0.2 notice builders byte-unchanged; CI `archive-assessment` green with 0 skips.
-**Plans**: TBD
+**Plans**: 5 plans
+
+**Wave 1**
+- [ ] 16-01-PLAN.md — D-10 baseline test (record-state mode, working-tree overlay, UTF-8 stdout), HINT assertion, 12 IN-07 test parts
+- [ ] 16-02-PLAN.md — Deep-root git_show test that can fail, 2.0.3 notice builder behaviour-only fixes, D-02 byte-identity gate
+- [ ] 16-04-PLAN.md — `requirements-completed` frontmatter for phase 11-13 SUMMARY files
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 16-03-PLAN.md — 16-REVIEW-CLOSURE.md ledger, GATE-13/15 rewording, ROADMAP criteria for 16/17/19
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [ ] 16-05-PLAN.md — Phase gate (frozen-file range diff from 9a10810, validators, pytest, CI workflow_dispatch checkpoint)
 
 ### Phase 17: Security Hardening and Schema Pinning
 
