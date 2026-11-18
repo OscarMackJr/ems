@@ -4,7 +4,7 @@
 
 - ✅ **v1.0.0 Not-Applicable Rule Publication** — Phases 1-6 (shipped 2026-10-15) — [archive](./milestones/v1.0.0-ROADMAP.md)
 - ✅ **v1.1.0 Authority 2.0.2 Lineage Correction** — Phases 7-10 (shipped 2026-11-13) — [archive](./milestones/v1.1.0-ROADMAP.md)
-- 🚧 **v1.2.0 Authority 2.0.3 Verification Hardening** — Phases 11-14 (in progress)
+- 🚧 **v1.2.0 Authority 2.0.3 Verification Hardening** — Phases 11-15 (in progress)
 
 ## Phases
 
@@ -30,12 +30,13 @@
 
 </details>
 
-### v1.2.0 Authority 2.0.3 Verification Hardening (Phases 11-14)
+### v1.2.0 Authority 2.0.3 Verification Hardening (Phases 11-15)
 
 - [x] **Phase 11: Frozen Validators** - Historical reply and 2.0.2 notice validators stop depending on live publisher code, and pinned-blob failures are loud (gap closure planned 2026-11-15) (completed 2026-11-16)
 - [x] **Phase 12: Verify-at-Pin and Gate Hardening** - Publisher and validator changes: `--validate` works at the pin, the gates fail closed, and the review cleanup items are closed (completed 2026-11-16)
 - [x] **Phase 13: Certified Republication 2.0.3** - One human-gated publication of 2.0.3 with no decision change (completed 2026-11-17)
 - [x] **Phase 14: Notice to Hayes (2.0.3)** - A generated, claim-enforced notice that cites the 2.0.3 commit and tells Hayes how to verify at the pin (completed 2026-11-17)
+- [ ] **Phase 15: Address tech debt: notice long-path git_show and step 2 wording** - 2.0.3 notice builder long-path fix and step 2 rewording, regenerated via the builder
 
 ## Phase Details
 
@@ -184,6 +185,16 @@
 
 - [x] 14-05-PLAN.md — notice commit, CI line commit, push checkpoint, push and CI green
 
+### Phase 15: Address tech debt: notice long-path git_show and step 2 wording
+
+**Goal:** Fix the Windows long-path failure of step 3 and the overstated step 2 wording in the 2.0.3 notice to Hayes, by editing the 2.0.3 builder and regenerating the notice, with the frozen reply and 2.0.2 builders untouched.
+**Requirements**: Tech debt from v1.2.0 audit (WARNING-1, WARNING-2; against PIN-02, PIN-03, NOTICE-03)
+**Depends on:** Phase 14
+**Plans:** 1 plan
+Plans:
+
+- [ ] 15-01-PLAN.md — 2.0.3 builder fix ('--', core.longpaths hint and prerequisite, step 2 rewording), tests, regenerate via builder
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -196,3 +207,4 @@
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete    | 2026-11-16 |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 4/4 | Complete    | 2026-11-17 |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 5/5 | Complete    | 2026-11-17 |
+| 15. Address tech debt: notice long-path git_show and step 2 wording | v1.2.0 | 0/0 | Not started | - |

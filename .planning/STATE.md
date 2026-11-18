@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
-status: milestone_complete
-stopped_at: Milestone complete (Phase 14 was final phase)
-last_updated: 2026-11-17T19:45:43.416Z
-last_activity: 2026-11-17 -- Phase 14 planning complete
+status: executing
+last_updated: "2026-11-18T01:55:39.072Z"
+last_activity: 2026-11-18 -- Phase 15 planning complete
 progress:
-  total_phases: 4
-  completed_phases: 3
-  total_plans: 23
-  completed_plans: 71
-  percent: 75
+  total_phases: 5
+  completed_phases: 4
+  total_plans: 24
+  completed_plans: 23
+  percent: 80
+stopped_at: Milestone complete (Phase 14 was final phase)
 ---
 
 # Project State
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 
 Phase: 14 of 14 (notice to hayes (2.0.3)
 Plan: Not started
-Status: Milestone complete
-Last activity: 2026-11-17
+Status: Ready to execute
+Last activity: 2026-11-18 -- Phase 15 planning complete
 
 Progress: [█████░░░░░] 50%
 
@@ -81,6 +81,7 @@ Progress: [█████░░░░░] 50%
 - Phase 6 added: Address tech debt: publication gate hardening (2.0.1)
 - v1.1.0 roadmap created 2026-10-20: Phase 7 Lineage Source and Per-Digest Scope (LIN-01..03), Phase 8 Gate and Schema Hardening (GATE-01..05, SCHEMA-07), Phase 9 Certified Republication 2.0.2 (PUB-07..09), Phase 10 Notice to Hayes (NOTICE-01..02)
 - v1.2.0 roadmap created 2026-11-13: Phase 11 Frozen Validators (FROZEN-01..04), Phase 12 Verify-at-Pin and Gate Hardening (PIN-01..02, GATE-06..10), Phase 13 Certified Republication 2.0.3 (PUB-10..12), Phase 14 Notice to Hayes 2.0.3 (NOTICE-03, PIN-03, CLAIM-01..03)
+- Phase 15 added: Address tech debt: notice long-path git_show and step 2 wording
 
 ### Decisions
 
