@@ -36,7 +36,7 @@
 - [x] **Phase 12: Verify-at-Pin and Gate Hardening** - Publisher and validator changes: `--validate` works at the pin, the gates fail closed, and the review cleanup items are closed (completed 2026-11-16)
 - [x] **Phase 13: Certified Republication 2.0.3** - One human-gated publication of 2.0.3 with no decision change (completed 2026-11-17)
 - [x] **Phase 14: Notice to Hayes (2.0.3)** - A generated, claim-enforced notice that cites the 2.0.3 commit and tells Hayes how to verify at the pin (completed 2026-11-17)
-- [ ] **Phase 15: Address tech debt: notice long-path git_show and step 2 wording** - 2.0.3 notice builder long-path fix and step 2 rewording, regenerated via the builder
+- [x] **Phase 15: Address tech debt: notice long-path git_show and step 2 wording** - 2.0.3 notice builder long-path fix and step 2 rewording, regenerated via the builder (completed 2026-11-18)
 
 ## Phase Details
 
@@ -190,10 +190,10 @@
 **Goal:** Fix the Windows long-path failure of step 3 and the overstated step 2 wording in the 2.0.3 notice to Hayes, by editing the 2.0.3 builder and regenerating the notice, with the frozen reply and 2.0.2 builders untouched.
 **Requirements**: Tech debt from v1.2.0 audit (WARNING-1, WARNING-2; against PIN-02, PIN-03, NOTICE-03)
 **Depends on:** Phase 14
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 
-- [ ] 15-01-PLAN.md — 2.0.3 builder fix ('--', core.longpaths hint and prerequisite, step 2 rewording), tests, regenerate via builder
+- [x] 15-01-PLAN.md — 2.0.3 builder fix ('--', core.longpaths hint and prerequisite, step 2 rewording), tests, regenerate via builder
 
 ## Progress
 
@@ -207,4 +207,4 @@ Plans:
 | 12. Verify-at-Pin and Gate Hardening | v1.2.0 | 8/8 | Complete    | 2026-11-16 |
 | 13. Certified Republication 2.0.3 | v1.2.0 | 4/4 | Complete    | 2026-11-17 |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 5/5 | Complete    | 2026-11-17 |
-| 15. Address tech debt: notice long-path git_show and step 2 wording | v1.2.0 | 0/0 | Not started | - |
+| 15. Address tech debt: notice long-path git_show and step 2 wording | v1.2.0 | 1/1 | Complete   | 2026-11-18 |
