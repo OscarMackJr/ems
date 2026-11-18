@@ -137,7 +137,7 @@
 | 13. Certified Republication 2.0.3 | v1.2.0 | 4/4 | Complete | 2026-11-17 |
 | 14. Notice to Hayes (2.0.3) | v1.2.0 | 5/5 | Complete | 2026-11-17 |
 | 15. Address tech debt: notice long-path git_show and step 2 wording | v1.2.0 | 1/1 | Complete | 2026-11-18 |
-| 16. Test Robustness and Review Closure | v1.3.0 | 5/5 | Complete   | 2026-11-18 |
+| 16. Test Robustness and Review Closure | v1.3.0 | 5/5 | Complete    | 2026-11-18 |
 | 17. Security Hardening and Schema Pinning | v1.3.0 | 0/? | Not started | - |
 | 18. Certified Republication 2.0.4 | v1.3.0 | 0/? | Not started | - |
 | 19. Notice to Hayes (2.0.4) | v1.3.0 | 0/? | Not started | - |

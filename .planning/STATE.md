@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.3.0
 milestone_name: Authority 2.0.4 Tech-Debt Closure
-status: executing
-last_updated: "2026-11-18T20:08:51.881Z"
+status: ready_to_plan
+last_updated: 2026-11-18T22:20:52.882Z
 last_activity: 2026-11-18 -- Phase 16 execution started
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 5
-  completed_plans: 0
+  completed_plans: 77
   percent: 0
+stopped_at: Phase 16 complete (5/5) — ready to discuss Phase 17
 ---
 
 # Project State
@@ -20,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-11-18)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Phase 16 — test-robustness-and-review-closure
+**Current focus:** Phase 17 — security hardening and schema pinning
 
 ## Current Position
 
-Phase: 16 (test-robustness-and-review-closure) — EXECUTING
-Plan: 1 of 5
-Status: Executing Phase 16
-Last activity: 2026-11-18 -- Phase 16 execution started
+Phase: 17
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-11-18
 
 Progress: [░░░░░░░░░░] 0% (0/4 phases)
 
@@ -35,7 +36,7 @@ Progress: [░░░░░░░░░░] 0% (0/4 phases)
 
 **Velocity:**
 
-- Total plans completed: 72
+- Total plans completed: 77
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -57,6 +58,7 @@ Progress: [░░░░░░░░░░] 0% (0/4 phases)
 | 13 | 4 | - | - |
 | 14 | 5 | - | - |
 | 15 | 1 | - | - |
+| 16 | 5 | - | - |
 
 **Recent Trend:**
 

@@ -11,16 +11,16 @@
 
 ### Test Robustness (BASE)
 
-- [ ] **BASE-01**: The D-10 baseline assertion passes at the next publication commit, the one Hayes pins, as well as at later commits. It does not demand that plain `--validate` returns PASS at a commit where the record cannot exist yet. (13-REVIEW WR-01)
-- [ ] **BASE-02**: The deep-root `git_show` test is not tautological. On Windows with a deep root it asserts that `Filename too long` reproduces without `--`, and it fails loudly if that does not happen. On other platforms it asserts the `--` behaviour without claiming MAX_PATH coverage. The test runs no skips under `EMS_FAIL_ON_SKIP=1`. (N-1, quick-261118-cgq)
-- [ ] **BASE-03**: The D-10 validate test checks the working tree under test, not committed HEAD. `outcome()` decodes subprocess output as UTF-8 and keeps stderr separate from stdout. (13-REVIEW IN-02, IN-03)
-- [ ] **BASE-04**: The history-failure hint describes what `EMS_ALLOW_NO_HISTORY=1` actually skips. An unrecognised shallow-check output is reported verbatim. Both are fixed only where the code is outside the frozen builders; otherwise they are recorded as out of scope. (11-REVIEW IN-08, IN-09)
+- [x] **BASE-01**: The D-10 baseline assertion passes at the next publication commit, the one Hayes pins, as well as at later commits. It does not demand that plain `--validate` returns PASS at a commit where the record cannot exist yet. (13-REVIEW WR-01)
+- [x] **BASE-02**: The deep-root `git_show` test is not tautological. On Windows with a deep root it asserts that `Filename too long` reproduces without `--`, and it fails loudly if that does not happen. On other platforms it asserts the `--` behaviour without claiming MAX_PATH coverage. The test runs no skips under `EMS_FAIL_ON_SKIP=1`. (N-1, quick-261118-cgq)
+- [x] **BASE-03**: The D-10 validate test checks the working tree under test, not committed HEAD. `outcome()` decodes subprocess output as UTF-8 and keeps stderr separate from stdout. (13-REVIEW IN-02, IN-03)
+- [x] **BASE-04**: The history-failure hint describes what `EMS_ALLOW_NO_HISTORY=1` actually skips. An unrecognised shallow-check output is reported verbatim. Both are fixed only where the code is outside the frozen builders; otherwise they are recorded as out of scope. (11-REVIEW IN-08, IN-09)
 
 ### Schema and Gates (GATE)
 
 - [ ] **GATE-11**: The published schema pins the superseded digests, so a 2.0.4 authority that names different superseded 2.0.3/2.0.2 digests fails schema validation. (13-REVIEW WR-02)
 - [ ] **GATE-12**: The sign-off `scope` no longer repeats a digest in unchecked free text; the digest is either removed or checked. (13-REVIEW IN-01)
-- [ ] **GATE-13**: Each 12-REVIEW info item (IN-01..IN-07) is either fixed with a test, closed with a recorded reason, or carried to the phase that owns the edit, as recorded in `16-REVIEW-CLOSURE.md`:
+- [x] **GATE-13**: Each 12-REVIEW info item (IN-01..IN-07) is either fixed with a test, closed with a recorded reason, or carried to the phase that owns the edit, as recorded in `16-REVIEW-CLOSURE.md`:
   - IN-01: the plain-mode error message. Carried to Phase 17 (DEFERRED-17): made with a test inside its red window.
   - IN-02: the "HEAD is the publication commit" diagnosis. Carried to Phase 17 (DEFERRED-17).
   - IN-03: the at-pin wrong-record error points to plain mode. Carried to Phase 17 (DEFERRED-17).
@@ -28,13 +28,13 @@
   - IN-05: literal pathspecs. Superseded by SEC-04; Phase 17 verification confirms.
   - IN-06: GATE-06 scope. The `lf_digest(SCRIPT)` check move is carried to Phase 17 (DEFERRED-17); the decisions-builder scope is superseded by SEC-02.
   - IN-07: weak assertions. Test parts fixed in Phase 16; the reply-builder message is closed as frozen (byte-unchanged).
-- [ ] **GATE-14**: Each 14-REVIEW info item (IN-01..IN-05) is either fixed with a test or closed with a recorded reason:
+- [x] **GATE-14**: Each 14-REVIEW info item (IN-01..IN-05) is either fixed with a test or closed with a recorded reason:
   - IN-01: unused helpers, and lineage recompute commits are cross-checked.
   - IN-02: malformed input raises a domain exception.
   - IN-03: `--build` writes atomically and refreshes the schema.
   - IN-04: the notice is decoupled from the input authority.
   - IN-05: test nits.
-- [ ] **GATE-15**: Each 15-REVIEW info item is fixed or carried, as recorded in `16-REVIEW-CLOSURE.md`:
+- [x] **GATE-15**: Each 15-REVIEW info item is fixed or carried, as recorded in `16-REVIEW-CLOSURE.md`:
   - IN-01: no absolute Windows path in the registry JSON string. Moved to Phase 19: the 2.0.4 notice builder avoids absolute-path example text and its `contains_absolute` scans the whole string. The 2.0.3 text is immutable because it was sent at 91d8847.
   - IN-02: the duplicated hint test is removed (fixed in Phase 16).
   - IN-03: the hint for a missing git binary does not tell the reader to fetch history (fixed in Phase 16).
@@ -65,8 +65,8 @@
 
 ### Bookkeeping (BOOK)
 
-- [ ] **BOOK-01**: The SUMMARY files for phases 11-13 carry `requirements-completed` frontmatter that matches the v1.2.0 traceability. Unrelated working-tree state in those files stays out of the commit.
-- [ ] **BOOK-02**: The traceability table lists V2-01 and V2-02 as deferred.
+- [x] **BOOK-01**: The SUMMARY files for phases 11-13 carry `requirements-completed` frontmatter that matches the v1.2.0 traceability. Unrelated working-tree state in those files stays out of the commit.
+- [x] **BOOK-02**: The traceability table lists V2-01 and V2-02 as deferred.
 
 ## Future Requirements
 
@@ -88,15 +88,15 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BASE-01 | Phase 16 | Pending |
-| BASE-02 | Phase 16 | Pending |
-| BASE-03 | Phase 16 | Pending |
-| BASE-04 | Phase 16 | Pending |
-| GATE-13 (IN-05..IN-07 test parts, ledger) | Phase 16 | Pending |
-| GATE-14 | Phase 16 | Pending |
-| GATE-15 (IN-02, IN-03) | Phase 16 | Pending |
-| BOOK-01 | Phase 16 | Pending |
-| BOOK-02 | Phase 16 | Pending |
+| BASE-01 | Phase 16 | Complete |
+| BASE-02 | Phase 16 | Complete |
+| BASE-03 | Phase 16 | Complete |
+| BASE-04 | Phase 16 | Complete |
+| GATE-13 (IN-05..IN-07 test parts, ledger) | Phase 16 | Complete |
+| GATE-14 | Phase 16 | Complete |
+| GATE-15 (IN-02, IN-03) | Phase 16 | Complete |
+| BOOK-01 | Phase 16 | Complete |
+| BOOK-02 | Phase 16 | Complete |
 | SEC-01 | Phase 17 | Pending |
 | SEC-02 | Phase 17 | Pending |
 | SEC-03 | Phase 17 | Pending |
