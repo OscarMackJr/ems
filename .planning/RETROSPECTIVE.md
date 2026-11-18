@@ -82,6 +82,49 @@
 
 ---
 
+## Milestone: v1.2.0 — Authority 2.0.3 Verification Hardening
+
+**Shipped:** 2026-11-18
+**Phases:** 5 (11-15) | **Plans:** 24 | **Commits:** 128 (2026-11-14 → 2026-11-18, including 1 quick task)
+
+### What Was Built
+- Frozen validators. The DEMO3 reply (2.0.1) and the 2.0.2 notice read only git-pinned constants. A missing history fails closed. With `EMS_FAIL_ON_SKIP=1`, every skip fails, including collection-level skips.
+- Verify at the pin:
+  - `--validate --at-pin` binds the pinned tree to HEAD blobs and names the one check it defers.
+  - Plain `--validate` checks ancestry, byte identity, and the publisher-script digest.
+  - Malformed input raises domain errors, with schema validation first.
+- Authority 2.0.3 was published at `1544dc1` (record commit `87a46d1`) with the decisions digest unchanged and CI green.
+- The 2.0.3 notice gives Hayes a three-step verify sequence. Its claims are enforced: the 29 mutations are rerun, the 7 lineage digests are recomputed, and raw ≠ LF is computed.
+- Phase 15 and quick task 261118-cgq fixed the long-path failure in notice step 3 and the step 2 wording, and made the deep-root test skip-free.
+
+### What Worked
+- Both v1.1.0 lessons were applied directly. Phase 12 built verification at the pin before the republication. Phase 11 froze the validators before any publisher edit, so the reply and the 2.0.2 notice stayed green throughout.
+- Gap closure inside phases: 11-05/11-06 and 12-08 (CR-01) closed verifier gaps before moving on.
+- Running the milestone audit twice. The first audit found two notice warnings, which led to Phase 15. The re-audit after Phase 15 found that the new Windows-only `skipif` would fail CI under the skip guard (B-1). Both were fixed before close.
+- The skip guard proved its worth: CI caught a skip that local Windows runs could never show.
+
+### What Was Inefficient
+- Phase 15's verifier marked the Windows-only test "skipped on CI" without checking it against the project's own skip guard, so the CI break surfaced only at the re-audit.
+- The B-1 fix went through two rounds. The executor's version had a check that could never fail. Removing it also removed the evidence that `--` is the fix (N-1).
+- On this machine Git's `sh.exe` began failing on every local `git clone` during the milestone. Clone-based tests could not run locally, so CI became the only full run.
+- At close, the SDK's one-line summary extraction returned meaningless lines from SUMMARY bodies, and the open-artifact scanner flagged complete quick tasks as `missing`.
+
+### Patterns Established
+- `--validate --at-pin` as a named mode, with its deferred check stated in its output.
+- External notices state their verification steps, and the validator checks each claim.
+- Platform-specific tests make a real assertion on every platform instead of skipping.
+
+### Key Lessons
+1. Treat the CI skip guard as part of the definition of done. A `skipif` in the archive suite is a CI failure, so verifiers should check skip markers against `EMS_FAIL_ON_SKIP`.
+2. When you remove an assertion that cannot fail, replace it with one that can. Do not just delete it.
+3. Push and run CI before auditing, so the audit sees the same tree Hayes will see.
+
+### Cost Observations
+- As in v1.0.0 and v1.1.0, tests and validators ran from the orchestrator, because subagents lack PowerShell and Bash is unreliable here.
+- The re-audit after the fix used one focused, delta-scoped integration check instead of a full re-run.
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -90,6 +133,7 @@
 |-----------|--------|------------|
 | v1.0.0 | 6 | Human-gated authority publication with blind drafting; tech-debt phase inserted after review |
 | v1.1.0 | 4 | All code changes first, then one republication with a declared red window; review before publication |
+| v1.2.0 | 5 | Frozen validators before publisher edits; verify-at-pin designed before publishing; audit run again after each fix |
 
 ### Cumulative Quality
 
@@ -97,9 +141,11 @@
 |-----------|--------------------------|------------|
 | v1.0.0 | 492 passing | 5 `--validate` CLIs PASS |
 | v1.1.0 | 720 passing | `--validate` PASS (authority at the record commit, notice) |
+| v1.2.0 | 1121 passing, 0 skipped (CI) | 7 `--validate` PASS in CI; `--at-pin` PASS at `1544dc1` |
 
 ### Top Lessons (Verified Across Milestones)
 
 1. Review before publication. v1.0.0 needed an extra phase because review came after publication; v1.1.0 closed its findings before publishing.
 2. Plan the hash-certification red window explicitly. Done in both milestones; it held in v1.1.0.
-3. Generate external documents from the authority and never hand-write claims about enforcement.
+3. Generate external documents from the authority and never hand-write claims about enforcement. In v1.2.0 the validator also enforces those claims.
+4. Freeze anything already sent. v1.1.0 identified the risk, and v1.2.0 froze the validators before touching the publisher.
