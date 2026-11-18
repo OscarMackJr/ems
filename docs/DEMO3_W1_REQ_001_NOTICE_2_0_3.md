@@ -39,7 +39,7 @@ Prerequisites:
 - python -m pip install -r requirements.txt jsonschema==4.26.0
 - A full clone (not shallow); run git fetch --unshallow if needed
 - No local edits to the pinned paths
-- On Windows, run git config core.longpaths true, or clone to a short checkout root such as C:\ems, before step 3
+- On Windows with a deep checkout root, the clone and checkout in step 1 need long paths: clone with git clone -c core.longpaths=true (or run git config --global core.longpaths true before step 1), or clone to a short checkout root such as C:\ems
 
 1. Check out 1544dc19ba235d732c832d1651895550ed5a265d and run:
 

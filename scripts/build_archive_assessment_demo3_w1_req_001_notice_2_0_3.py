@@ -416,7 +416,7 @@ def build_notice(authority: dict, previous_2_0_2: dict, previous_2_0_1: dict, re
                       'no_rule_reasons_pointer': 'The reasons for the 18 no-rule decisions are in docs/DEMO3_W1_REQ_001_REPLY.md and registry/archive_assessment_governance_decisions.json.'},
         'verify': {
             'repository_url': REPOSITORY_URL,
-            'prerequisites': ['Python 3.12', INSTALL_COMMAND, 'A full clone (not shallow); run git fetch --unshallow if needed', 'No local edits to the pinned paths', 'On Windows, run git config core.longpaths true, or clone to a short checkout root such as C:\\ems, before step 3'],
+            'prerequisites': ['Python 3.12', INSTALL_COMMAND, 'A full clone (not shallow); run git fetch --unshallow if needed', 'No local edits to the pinned paths', 'On Windows with a deep checkout root, the clone and checkout in step 1 need long paths: clone with git clone -c core.longpaths=true (or run git config --global core.longpaths true before step 1), or clone to a short checkout root such as C:\\ems'],
             'steps': [
                 {'step': 1, 'checkout': pub, 'commands': ['git clone ' + REPOSITORY_URL, 'cd ems', 'git checkout ' + pub, INSTALL_COMMAND, PUBLISHER_CMD + ' --validate --at-pin'],
                  'pass_means': 'One JSON object with status PASS and mode AT_PIN, with exactly one deferred item. The pinned bytes are certified.'},

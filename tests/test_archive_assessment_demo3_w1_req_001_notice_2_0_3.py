@@ -721,6 +721,10 @@ def test_notice_has_long_path_prerequisite():
     v = build()['verify']
     assert any('core.longpaths' in p for p in v['prerequisites'])
     assert len(v['prerequisites']) == 5
+    long_path = [p for p in v['prerequisites'] if 'core.longpaths' in p]
+    assert len(long_path) == 1
+    assert 'step 1' in long_path[0] and 'step 3' not in long_path[0]
+    assert 'git clone -c core.longpaths=true' in long_path[0] and 'git config --global core.longpaths true' in long_path[0]
 
 
 def test_step2_wording_does_not_overstate():
