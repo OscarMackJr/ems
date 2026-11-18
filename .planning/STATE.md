@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-11-13)
 Phase: 15
 Plan: Not started
 Status: Milestone complete
-Last activity: 2026-11-18
+Last activity: 2026-11-18 - Completed quick task 261118-cgq: Make the deep-root git_show test skip-free so the CI skip guard stays green
 
 Progress: [██████████] 100%
 
@@ -148,6 +148,7 @@ Recent decisions affecting current work:
 | 261014-vau | Fix reply gate wording (audit AUDIT-W1, AUDIT-W2) | 2026-10-15 | 258875d | [261014-vau-fix-reply-gate-wording](./quick/261014-vau-fix-reply-gate-wording/) |
 | 261015-ci1 | Run archive-assessment tests and validators in CI | 2026-10-15 | f767c64 | [261015-ci1-ci-archive-assessment-gates](./quick/261015-ci1-ci-archive-assessment-gates/) |
 | 261019-st1 | Record EMS 2.0.1 status paragraph | 2026-10-19 | 3131e6e | [261019-st1-ems-2-0-1-status-paragraph](./quick/261019-st1-ems-2-0-1-status-paragraph/) |
+| 261118-cgq | Make the deep-root git_show test skip-free so the CI skip guard stays green (audit B-1) | 2026-11-18 | 72a5c06 | [261118-cgq-make-the-windows-only-deep-root-git-show](./quick/261118-cgq-make-the-windows-only-deep-root-git-show/) |
 
 ## Deferred Items
 
