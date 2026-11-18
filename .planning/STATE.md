@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.2.0
 milestone_name: Authority 2.0.3 Verification Hardening
-status: milestone_complete
-last_updated: 2026-11-18T04:51:22.231Z
-last_activity: 2026-11-18
+status: Awaiting next milestone
+last_updated: "2026-11-18T15:01:50.131Z"
+last_activity: 2026-11-18 — Milestone v1.2.0 completed and archived
 progress:
   total_phases: 5
   completed_phases: 5
   total_plans: 24
-  completed_plans: 72
+  completed_plans: 24
   percent: 100
 stopped_at: Milestone complete (Phase 15 was final phase)
 ---
@@ -18,19 +18,17 @@ stopped_at: Milestone complete (Phase 15 was final phase)
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-11-13)
+See: .planning/PROJECT.md (updated 2026-11-18)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Milestone complete
+**Current focus:** Planning next milestone (v1.2.0 shipped 2026-11-18; Hayes re-pins to 2.0.3 at `1544dc1`)
 
 ## Current Position
 
-Phase: 15
-Plan: Not started
-Status: Milestone complete
-Last activity: 2026-11-18 - Completed quick task 261118-cgq: Make the deep-root git_show test skip-free so the CI skip guard stays green
-
-Progress: [██████████] 100%
+Phase: Milestone v1.2.0 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-11-18 — Milestone v1.2.0 completed and archived
 
 ## Performance Metrics
 
@@ -127,15 +125,9 @@ Recent decisions affecting current work:
 ### Blockers/Concerns
 
 - [All phases]: The working tree holds unrelated modified files (`registry/adjudication_rules.json`, `registry/policy_decisions.json`, `.planning/config.json`) and about 60 untracked files from other work. Stage by explicit path only.
-- [Phase 12]: Any publisher, schema or authority edit turns the real-file tests red until the 2.0.3 publication commit (hash certification). The red window is accepted and planned.
-- [Phase 12]: 12-07: SUPERSEDED_V2_0_1 replaced by SUPERSEDED_V2_0_2 (ae15c74, a44eea1f..., decisions 4e746d1f...); VERSION '2.0.3'; superseded-version messages derive from the constant
-- [Phase 12]: 12-07: frozen 2.0.1 sign-off test reads the 2.0.1 identity from the 2.0.2 authority's source_lineage.supersedes at ae15c74
-- [Phase 12]: 12-07: end-of-phase accepted red set is 3 tests (committed schema, real published files, publisher digest) + CI validator 1; closed by Phase 13 publication and record commits
-- [Phase 12]: 12-08: at-pin runs check_tree_matches_head over the 10 D-05 paths + publisher script (HEAD blob under CRLF_TO_LF, present on disk, index tag 'H' only), then hardened git status (--literal-pathspecs, --untracked-files=all, --ignored=matching) over those paths and the output folder
-- [Phase 12]: 12-08: plain --validate ends with check_tree_matches_head(publication_paths()) (WR-01)
-- [Phase 12]: 12-08: WR-02 stays advisory; WR-03 (assert before == (0, 'PASS') in the D-10 subprocess test) is a Phase 13 follow-up
-- [v1.2.0]: Scope is the v1.1.0 audit tech debt (`.planning/milestones/v1.1.0-MILESTONE-AUDIT.md`); no decision content changes (decisions digest `4e746d1f…` is pinned).
-- [CI]: `archive-assessment` job (261015-ci1) green on ubuntu-latest, run 38744767442: 492 passed, 5 validators PASS; runs on PRs, pushes to main, and `workflow_dispatch`
+- [Next publication]: 13-REVIEW WR-01: the D-10 baseline assertion fails at the next publication commit. Any future republication reopens a red window (hash certification).
+- [CI]: The `archive-assessment` job (261015-ci1) runs on PRs, pushes to main and `workflow_dispatch`, with `EMS_FAIL_ON_SKIP=1`. The latest green run is 44325017719 at `91d8847`: 1121 passed and 7 validators printed PASS.
+- [Notice 2.0.3]: Sending the notice is the authority's action. Record the commit that was sent (`91d8847` or later), because the notice does not name its own commit.
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
 - [Publication 2.0.3]: EMS-AA3 authority 2.0.3 published at 1544dc19ba235d732c832d1651895550ed5a265d (Hayes pins this; signed off by Oscar Mack 2026-11-17), record commit 87a46d147413bd99e931c71a1ab165eb0903f014 (direct child of PUB), WR-03 commit 5498002c5eea3a6d9e3bfbb6766119880bb36804; CI run 44134035073 green (validate + archive-assessment) at headSha 5498002 (workflow_dispatch, 2026-11-17); publication bytes identical PUB..WR03; --validate --at-pin PASS in tree and in a fresh --no-local clone. Push scope: remote tip is 5498002; the .planning-only commits after WR03 (3fd54ac, and the docs(13-04) evidence commit) are local and are published by the Phase 14 push.
 - [Environment]: `git push` via the credential manager fails in this session (sh.exe crash); pushing with the GitHub CLI token as a one-command `http.extraheader` (env `GIT_CONFIG_*`, credential.helper cleared) works
@@ -152,18 +144,21 @@ Recent decisions affecting current work:
 
 ## Deferred Items
 
-Items acknowledged and carried forward from previous milestone close:
+Items acknowledged and deferred at the v1.2.0 milestone close on 2026-11-18:
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| *(none)* | | | |
+| quick_task | 261014-vau-fix-reply-gate-wording | scanner reports `missing`; complete (`261014-vau-SUMMARY.md` present) | v1.2.0 close |
+| quick_task | 261015-ci1-ci-archive-assessment-gates | scanner reports `missing`; complete (`261015-ci1-SUMMARY.md` present) | v1.2.0 close |
+| quick_task | 261019-st1-ems-2-0-1-status-paragraph | scanner reports `missing`; complete (`261019-st1-SUMMARY.md` present) | v1.2.0 close |
+| quick_task | 261118-cgq-make-the-windows-only-deep-root-git-show | scanner reports `missing`; complete (`261118-cgq-SUMMARY.md` present) | v1.2.0 close |
 
 ## Session Continuity
 
-Last session: 2026-11-17T17:50:54.362Z
-Stopped at: Phase 14 context gathered
-Resume file: .planning/phases/14-notice-to-hayes-2-0-3/14-CONTEXT.md
+Last session: 2026-11-18
+Stopped at: Milestone v1.2.0 complete and archived (no tag, by decision)
+Resume file: None
 
 ## Operator Next Steps
 
-- Plan the first phase with /gsd-plan-phase 11
+- Start the next milestone with /gsd-new-milestone

@@ -8,42 +8,29 @@ The consumer is Hayes Verify, an external assessor that reads EMS at a pinned co
 
 ## Current State
 
-**Shipped:** v1.1.0 Authority 2.0.2 Lineage Correction (2026-11-13).
+**Shipped:** v1.2.0 Authority 2.0.3 Verification Hardening (2026-11-18).
 
-`EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.2` is published at `ae15c7458e49c8f55cc58c61bab04bc716aa9892` (Hayes pins this commit). The record commit is `a71257e`, and CI run `43332405316` is green. It supersedes 2.0.1 at `31addfa`.
+`EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3` is published at `1544dc19ba235d732c832d1651895550ed5a265d` (Hayes re-pins to this commit). The record commit is `87a46d1`. It supersedes 2.0.2 at `ae15c74`. CI is green at publication (run `44134035073`) and at the shipped head `91d8847` (run `44325017719`: 1121 passed, 0 skipped).
 
-- Lineage: each digest declares its own scope (`RAW_BYTES` or `CRLF_TO_LF`) and is recomputed from a committed file. The AA1 manifest is now committed.
-- Gates and schema: both fail closed.
+- Verify at the pin: `--validate --at-pin` gives PASS at `1544dc1` and names the one check it defers. Plain `--validate` gives PASS at the record commit or any later commit.
+- Frozen validators: the DEMO3 reply (2.0.1) and the 2.0.2 notice read only git-pinned constants. Missing history fails closed, and CI fails on any skip.
 - Decisions: unchanged. There are 21 decided controls (3 rules and 18 no-rule, `AA4-GOV-001`..`021`) and 59 `NOT_YET_DECIDED`, and the decisions digest is still `4e746d1f…`.
-- Notice: a generated notice to Hayes (`docs/DEMO3_W1_REQ_001_NOTICE_2_0_2.md`, commit `052f0f1`) asks Hayes to re-pin. Sending it is the authority's action.
+- Notice: a generated notice to Hayes (`docs/DEMO3_W1_REQ_001_NOTICE_2_0_3.md`) gives the three-step verify sequence. Its claims are enforced by `--validate`. The current text is on the remote at `91d8847`. Sending it is the authority's action; record the commit that was sent.
 
-Archives: `.planning/milestones/v1.0.0-*` and `.planning/milestones/v1.1.0-*`.
+Archives: `.planning/milestones/v1.0.0-*`, `v1.1.0-*` and `v1.2.0-*`.
 
-**Previous:** v1.0.0 Not-Applicable Rule Publication (2026-10-15). It published 2.0.1 at `31addfa`, and the DEMO3-W1-REQ-001 reply cites it.
+**Previous:** v1.1.0 Authority 2.0.2 Lineage Correction (2026-11-13), published at `ae15c74`. v1.0.0 Not-Applicable Rule Publication (2026-10-15), published 2.0.1 at `31addfa`; the DEMO3-W1-REQ-001 reply cites it.
 
-## Current Milestone: v1.2.0 Authority 2.0.3 Verification Hardening
+## Next Milestone Goals
 
-**Goal:** Close the v1.1.0 audit tech debt. When it is done, Hayes can verify EMS at the pinned commit, every claim a notice makes is enforced in code, and the frozen validators do not depend on the live publisher. The milestone ends with one certified 2.0.3 republication and a notice asking Hayes to re-pin.
-
-**Target features:**
-- **Verify-at-pin.** A documented validation mode returns PASS at the pinned publication commit. The notice tells Hayes how to verify at the pin.
-- **Frozen validators.** The reply and notice validators read git-pinned constants, not the live publisher. A missing 2.0.1 blob fails closed. Pytest runs over the committed notice files.
-- **Notice claim enforcement.** Each of the 29 mutation rejections is asserted individually. All 7 lineage digests are re-hashed. The wrong-scope claim (raw ≠ LF) is computed.
-- **Gate and validator hardening.**
-  - `--validate` checks the publisher-script digest.
-  - Malformed shapes fail closed instead of crashing.
-  - `norm_templated` uniqueness is enforced in `validate_decisions`.
-  - The D-10 and D-13 tests are stronger.
-  - The dead DIFFER branch is removed, and IN-02, IN-03, IN-04 and IN-06 are cleaned up.
-- **2.0.3 republication.**
-  - Oscar Mack signs it off as EMS governance authority.
-  - No decision changes: 21 decided, 59 `NOT_YET_DECIDED`, decisions digest `4e746d1f…`.
-  - A new notice asks Hayes to re-pin.
-
-**Key context:**
-- An accepted red window opens at the first publisher edit and closes at the 2.0.3 publication commit.
-- Bookkeeping debt (the SUMMARY frontmatter keys) is out of scope.
-- Still deferred: V2-01 (decisions for the other 59 controls) and V2-02 (Hayes re-run).
+Not defined yet. Candidates:
+- V2-01: rule-or-no-rule decisions for the other 59 controls.
+- V2-02: Hayes re-run confirmation (on the Hayes side).
+- v1.2.0 tech debt, from `.planning/milestones/v1.2.0-MILESTONE-AUDIT.md`:
+  - 13-REVIEW WR-01: the D-10 baseline fails at the next publication commit;
+  - 13-REVIEW WR-02: the schema does not pin the superseded digests;
+  - N-1: the deep-root test strength;
+  - wording in the notice.
 
 ## Core Value
 
@@ -115,6 +102,11 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
   - The 2.0.3 publisher supersedes 2.0.2 (`ae15c74`) through `SUPERSEDED_V2_0_2`.
 
   PIN-01..02 and GATE-06..10. Validated in Phase 12: Verify-at-Pin and Gate Hardening (re-verified 8/8 after the 12-08 gap closure of review CR-01). The guarded run gave 1020 passed and 3 failed. The 3 failures and CI validator 1 are the D-16 red window, accepted by design: they stay red until the certified 2.0.3 republication in Phase 13. Watching at-pin PASS at a real 2.0.3 pin is a Phase 13 success criterion. Deferred: WR-02 (scrubbing `GIT_*` env), and WR-03 (the D-10 subprocess test should assert `(0, 'PASS')`), which moves to Phase 13.
+- ✓ `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3` is published with certification, manifest and traceability at publication commit `1544dc1`. Oscar Mack signed it off as EMS governance authority on 2026-11-17, with the dual-role statement. It supersedes 2.0.2 at `ae15c74`, and the record commit is `87a46d1`, a direct child of the publication commit.
+  - No decision changed: the decisions digest is still `4e746d1f…`, all 80 rows are identical to 2.0.2, and the counts stay at 21 decided and 59 undecided.
+  - The publication commit holds only the deliberate publication changes. CI run `44134035073` is green, and the red window is closed.
+
+  PUB-10..12. Validated in Phase 13: Certified Republication 2.0.3; shipped v1.2.0.
 - ✓ The 2.0.3 notice to Hayes is generated, validated and pushed:
   - `docs/DEMO3_W1_REQ_001_NOTICE_2_0_3.md`, plus its JSON and closed schema, is in notice commit `e10b240`. It asks Hayes to re-pin to `1544dc1…` and gives the three-step verify sequence (`--validate --at-pin` at the pin, plain `--validate` at record commit `87a46d1`, then the notice `--validate`) with an outcome table.
   - `--validate` reruns the 29 mutations from the publisher at the pin, recomputes the 7 lineage digests from git and computes raw ≠ LF for the 3 RAW_BYTES files.
@@ -132,17 +124,13 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
   - The notice, 2.0.2 notice and reply tests gave 340 passed.
   - Still open: review info items IN-01..IN-03. The frozen reply and 2.0.2 builders still call `git show` without `--`, so a deep checkout root breaks them.
 
+  Quick task 261118-cgq removed the skips from the Windows-only deep-root test, so CI no longer fails it. CI run `44325017719` at `91d8847` passed 1121 with 0 skipped. Shipped v1.2.0.
+
 ### Active
 
 <!-- Hypotheses until shipped and validated. -->
 
-v1.2.0 requirements are listed in `.planning/REQUIREMENTS.md`. In outline:
-
-- verify-at-pin;
-- frozen validators;
-- notice claim enforcement;
-- gate and validator hardening;
-- the 2.0.3 republication and the re-pin notice.
+None. The next milestone defines its requirements with `/gsd-new-milestone`. The candidates are listed under Next Milestone Goals.
 
 ### Out of Scope
 
@@ -213,12 +201,17 @@ v1.2.0 requirements are listed in `.planning/REQUIREMENTS.md`. In outline:
 | EMS chooses the rule shape; Hayes's placeholder shape is not adopted | Hayes stated the shape is EMS's to choose and its placeholder is a stand-in | ✓ Good |
 | Unrelated in-flight work left out of this project's commits | Assumed default, stated to the user before the PROJECT.md gate and not objected to | ✓ Good: staged by explicit path throughout |
 | Republish as 2.0.1 to harden gates instead of patching 2.0.0 (Phase 6) | Phase 4 review found fail-open gates; hash certification forbids hand edits | ✓ Good: no decision changed, decisions digest pinned to 2.0.0 |
-| No git tag for the milestone | Hayes pins by commit; a release-style tag could be cited by mistake | ✓ Good (applied again at v1.1.0) |
+| No git tag for the milestone | Hayes pins by commit; a release-style tag could be cited by mistake | ✓ Good (applied again at v1.1.0 and v1.2.0) |
 | v1.1.0: all code and schema changes before a single 2.0.2 republication, with an accepted red window | Hash certification turns real-file tests red on any publisher edit, and one publication keeps the history clean | ✓ Good: the window was closed at `ae15c74` (720 passed) |
 | v1.1.0: per-digest normalisation scope instead of one global field | 2.0.1's global `CRLF_TO_LF` contradicted three raw-byte digests | ✓ Good: each digest can be recomputed from a committed file |
 | v1.1.0: catalog read at the pinned commit `62a8955`, not the live `registry/control_catalog.yaml` | Shared catalog edits from unrelated work could change `--validate` results | ✓ Good |
-| v1.1.0: the DEMO3 reply validator is frozen on the 2.0.1 artifacts it was sent with | The reply is a historical document; it must not move with 2.0.2 | ⚠️ Revisit: frozen validators still load live publisher constants (audit WR-02) |
-| v1.1.0: plain `--validate` at the pin `ae15c74` fails by design (the record names 2.0.1 until `a71257e`) | A commit SHA cannot be recorded in the commit it names | ⚠️ Revisit: the notice does not tell Hayes how to verify at the pin |
+| v1.1.0: the DEMO3 reply validator is frozen on the 2.0.1 artifacts it was sent with | The reply is a historical document; it must not move with 2.0.2 | ✓ Resolved in v1.2.0 Phase 11: frozen on git-pinned constants, no live publisher imports |
+| v1.1.0: plain `--validate` at the pin `ae15c74` fails by design (the record names 2.0.1 until `a71257e`) | A commit SHA cannot be recorded in the commit it names | ✓ Resolved in v1.2.0: `--validate --at-pin` names its deferred check, and the 2.0.3 notice gives the three-step verify |
+| v1.2.0: freeze the historical validators before any publisher edit | A later publisher change must not change the result for a document that was already sent | ✓ Good: reply and 2.0.2 notice PASS at every commit through `91d8847` |
+| v1.2.0: one 2.0.3 republication after all code changes, with an accepted red window (as in v1.1.0) | Hash certification turns real-file tests red on any publisher edit | ✓ Good: window closed at `1544dc1`/`87a46d1`, with no decision change |
+| v1.2.0: notice claims enforced by its validator, not asserted in prose | The v1.1.0 notice echoed digests and counted mutations instead of checking them | ✓ Good: 29 mutations rerun, 7 digests recomputed, raw ≠ LF computed |
+| v1.2.0: Phase 15 fixed notice wording through the builder, with the frozen builders untouched | Hand edits break the generated-and-validated contract; the frozen builders must not move | ⚠️ Revisit: the frozen builders keep `git show` without `--` (deep Windows roots) |
+| v1.2.0: CI treats every skip in the archive suite as a failure | A silently skipped check is not a passed check | ✓ Good. It caught the Windows-only `skipif` from Phase 15 at audit, which was fixed by quick task 261118-cgq |
 
 ## Evolution
 
@@ -238,4 +231,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-18 after Phase 15 (notice long-path and step 2 wording tech debt)*
+*Last updated: 2026-11-18 after v1.2.0 milestone*
