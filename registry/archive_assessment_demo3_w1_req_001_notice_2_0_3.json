@@ -379,7 +379,7 @@
       {
         "action": "Run step 3.",
         "case": "Step 2 prints PASS at 87a46d147413bd99e931c71a1ab165eb0903f014 or a later commit",
-        "meaning": "The publication files are byte-identical between the pin and the checked-out commit. Step 3 enforces the binding of the record to the pin."
+        "meaning": "The publication files are byte-identical between the commit named by the publication record and the checked-out commit. Step 3 checks that this is the pin."
       },
       {
         "action": "Re-pin to 1544dc19ba235d732c832d1651895550ed5a265d.",
@@ -424,7 +424,7 @@
           "git checkout 87a46d147413bd99e931c71a1ab165eb0903f014",
           "python scripts/publish_archive_assessment_applicability_authority_v2.py --validate"
         ],
-        "pass_means": "Plain --validate at this commit checks that the publication files are byte-identical between the two commits. The binding of the record to 1544dc19ba235d732c832d1651895550ed5a265d is enforced by step 3, and all three steps are required before re-pinning. It is expected to pass at later commits on feature/ems-aa3-archive-applicability-authority that do not change the publication files.",
+        "pass_means": "Plain --validate at this commit checks that the publication files are byte-identical between the commit named by the publication record and this commit. Step 3 checks that the record names 1544dc19ba235d732c832d1651895550ed5a265d, and all three steps are required before re-pinning. It is expected to pass at later commits on feature/ems-aa3-archive-applicability-authority that do not change the publication files.",
         "step": 2
       },
       {

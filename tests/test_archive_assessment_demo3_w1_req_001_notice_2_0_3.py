@@ -749,7 +749,12 @@ def test_notice_has_long_path_prerequisite():
 def test_step2_wording_does_not_overstate():
     notice = build()
     pass_means = notice['verify']['steps'][1]['pass_means']
-    assert 'enforced by step 3' in pass_means and 'all three steps' in pass_means
+    assert f'Step 3 checks that the record names {PUB}' in pass_means and 'all three steps' in pass_means
+    assert 'between the commit named by the publication record and this commit' in pass_means
+    assert 'between the two commits' not in pass_means
+    row = notice['verify']['outcomes'][1]['meaning']
+    assert row.startswith('The publication files are byte-identical between the commit named by the publication record and the checked-out commit.')
+    assert 'Step 3 checks that this is the pin.' in row and 'between the pin and' not in row
     old_step2 = 'PASS means the publication record at this commit names'
     old_row = 'The publication record binds the pin'
     assert old_step2 not in pass_means
