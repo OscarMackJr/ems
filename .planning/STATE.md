@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.2.0
-milestone_name: Authority 2.0.3 Verification Hardening
-status: Awaiting next milestone
-last_updated: "2026-11-18T15:01:50.131Z"
-last_activity: 2026-11-18 — Milestone v1.2.0 completed and archived
+milestone: v1.3.0
+milestone_name: Authority 2.0.4 Tech-Debt Closure
+status: planning
+last_updated: "2026-11-18T17:11:23.737Z"
+last_activity: 2026-11-18
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 24
-  completed_plans: 24
-  percent: 100
-stopped_at: Milestone complete (Phase 15 was final phase)
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -25,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-11-18)
 
 ## Current Position
 
-Phase: Milestone v1.2.0 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-11-18 — Milestone v1.2.0 completed and archived
+Status: Defining requirements
+Last activity: 2026-11-18 — Milestone v1.3.0 started
 
 ## Performance Metrics
 

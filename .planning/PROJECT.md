@@ -21,16 +21,38 @@ Archives: `.planning/milestones/v1.0.0-*`, `v1.1.0-*` and `v1.2.0-*`.
 
 **Previous:** v1.1.0 Authority 2.0.2 Lineage Correction (2026-11-13), published at `ae15c74`. v1.0.0 Not-Applicable Rule Publication (2026-10-15), published 2.0.1 at `31addfa`; the DEMO3-W1-REQ-001 reply cites it.
 
-## Next Milestone Goals
+## Current Milestone: v1.3.0 Authority 2.0.4 Tech-Debt Closure
 
-Not defined yet. Candidates:
-- V2-01: rule-or-no-rule decisions for the other 59 controls.
-- V2-02: Hayes re-run confirmation (on the Hayes side).
-- v1.2.0 tech debt, from `.planning/milestones/v1.2.0-MILESTONE-AUDIT.md`:
-  - 13-REVIEW WR-01: the D-10 baseline fails at the next publication commit;
-  - 13-REVIEW WR-02: the schema does not pin the superseded digests;
-  - N-1: the deep-root test strength;
-  - wording in the notice.
+**Goal:** Close the tech debt from the v1.2.0 audit and republish once as `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.4`, with no change to any decision. A new generated notice asks Hayes to re-pin.
+
+**Target features:**
+- 13-REVIEW WR-01: the D-10 baseline assertion survives the next publication commit.
+- 13-REVIEW WR-02: the published schema pins the superseded digests. This fix is why 2.0.4 must be published.
+- N-1: the deep-root `git_show` test fails loudly when it does not reproduce, instead of being tautological.
+- Notice wording:
+  - W-3: the step 1 clone uses `-c core.longpaths=true`.
+  - W-4: the line on plain `--validate` is more precise.
+  - The commit actually sent is recorded.
+- Open review info items:
+  - 13-REVIEW IN-01..03 and 14-REVIEW IN-01..05.
+  - 15-REVIEW IN-01..03, which includes the absolute `C:\ems` example in the registry JSON.
+  - 11-REVIEW IN-01, unless it needs a frozen-builder edit.
+- Phase 14 security observations:
+  - The pinned publisher's digest is checked before the publisher runs.
+  - The pinned decisions-builder blob gets a manifest digest.
+  - The CI secret scan covers `*.md`.
+- AR-03 (12-REVIEW WR-02): the git seam is isolated from inherited `GIT_*` environment variables and replace refs.
+- Bookkeeping:
+  - SUMMARY `requirements-completed` for phases 11-13.
+  - V2 rows in the traceability table.
+
+**Key context:**
+- Decisions are unchanged:
+  - 21 controls are decided (3 rules and 18 no-rule, `AA4-GOV-001`..`021`) and 59 are `NOT_YET_DECIDED`.
+  - The decisions digest stays `4e746d1f…`.
+- The frozen reply (2.0.1) and 2.0.2 notice builders stay byte-unchanged. W-2 (they call `git show` without `--`) and any item that needs a frozen-builder edit are out of scope.
+- All code and schema changes come before one 2.0.4 republication, with an accepted red window, as in v1.1.0 and v1.2.0.
+- Deferred: V2-01 (decisions for the other 59 controls) and V2-02 (Hayes re-run confirmation).
 
 ## Core Value
 
@@ -130,7 +152,7 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 
 <!-- Hypotheses until shipped and validated. -->
 
-None. The next milestone defines its requirements with `/gsd-new-milestone`. The candidates are listed under Next Milestone Goals.
+v1.3.0 (Authority 2.0.4 Tech-Debt Closure) — see `.planning/REQUIREMENTS.md` for the scoped requirements and REQ-IDs.
 
 ### Out of Scope
 
@@ -231,4 +253,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-18 after v1.2.0 milestone*
+*Last updated: 2026-11-18 at v1.3.0 milestone start*
