@@ -143,7 +143,7 @@ In `validate_signoff` (L607-627) after the non-empty check at L620-621, when the
 - Tests need fixtures: a 2.0.4-form sign-off (valid scope without digests) built in memory, plus negative cases: scope with a 7-char, 40-char and 64-char hex; scope missing id; missing version; and a positive case that a 2.0.3-version call still accepts the old scope text (D-12). The exact current `Mutation` entries for sign-off (L560-582) use the real sign-off; switch them to a constructed 2.0.4 record.
 
 ### Pattern 6: SEC-03 (Claude's discretion)
-`.github/workflows/ems-validate.yml` L64-65: `grep -RInE "$secret_pattern" . --exclude-dir=.git --exclude-dir=.venv --exclude='*.md'`. Remove `--exclude='*.md'`. Verified: `grep -RInE` of the pattern over the whole working tree restricted to `*.md` (excluding .git/.venv) found 0 files, and over `git ls-files '*.md'` 0 hits [VERIFIED: ran both locally]. Note the CI checkout contains only tracked files and `.planning/` is tracked, so `.planning/**/*.md` (including this research and 17-CONTEXT) are scanned; do not write literal token examples (e.g. `ghp_` followed by 20+ alphanumerics, `BEGIN PRIVATE KEY`, `AWS_SECRET_ACCESS_KEY =`) in any .md. This file avoids them. No narrow exclusion is needed. Add a lightweight pytest guard (`tests/test_ci_secret_scan_covers_markdown.py` or inside an existing archive test file; note CI runs only `tests/test_archive_assessment_*.py`, so name it `test_archive_assessment_ci_workflow.py`) that reads the workflow text and asserts the secret-scan step contains no `--exclude='*.md'` (regex over the step) and that the pattern string is unchanged.
+`.github/workflows/ems-validate.yml` L64-65: `grep -RInE "$secret_pattern" . --exclude-dir=.git --exclude-dir=.venv --exclude='*.md'`. Remove `--exclude='*.md'`. Verified: `grep -RInE` of the pattern over the whole working tree restricted to `*.md` (excluding .git/.venv) found 0 files, and over `git ls-files '*.md'` 0 hits [VERIFIED: ran both locally]. Note the CI checkout contains only tracked files and `.planning/` is tracked, so `.planning/**/*.md` (including this research and 17-CONTEXT) are scanned; do not write literal token examples (for example a GitHub token prefix followed by 20+ alphanumerics, a PEM private-key header line, or the AWS secret-key variable name followed by an equals sign) in any .md. This file avoids them (its own literal examples were reworded in plan revision 1 so the pattern no longer matches it). No narrow exclusion is needed. Add a lightweight pytest guard (`tests/test_ci_secret_scan_covers_markdown.py` or inside an existing archive test file; note CI runs only `tests/test_archive_assessment_*.py`, so name it `test_archive_assessment_ci_workflow.py`) that reads the workflow text and asserts the secret-scan step contains no `--exclude='*.md'` (regex over the step) and that the pattern string is unchanged.
 
 ### DEFERRED-17 fixes (D-03), exact current locations
 | Item | Current text / location | Change | Test hook |
@@ -239,19 +239,22 @@ def test_git_seam_ignores_hostile_environment(tmp_path, monkeypatch):
 
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
-| A1 | ubuntu-latest git supports `GIT_CONFIG_GLOBAL` (>=2.32) and `GIT_CONFIG_COUNT` (>=2.31) | Pattern 3 | CI hostile-env test fails; CI `workflow_dispatch` is the authoritative run |
+| A1 (OPEN: stays open until the CI `workflow_dispatch` run confirms it) | ubuntu-latest git supports `GIT_CONFIG_GLOBAL` (>=2.32) and `GIT_CONFIG_COUNT` (>=2.31) | Pattern 3 | CI hostile-env test fails; CI `workflow_dispatch` is the authoritative run |
 | A2 | Differently-owned checkouts failing with "dubious ownership" after dropping global `safe.directory` is acceptable fail-closed behaviour | Pattern 3 | Operator friction only |
-| A3 | Env-based `GIT_CONFIG_COUNT` is acceptable in place of `-c` argv (CONTEXT D-09 wording says `-c`) | Pattern 3 | If `-c` is mandated, update argv-shape tests |
+| A3 (RESOLVED: D-09 amended to env config) | Env-based `GIT_CONFIG_COUNT` is acceptable in place of `-c` argv (CONTEXT D-09 wording says `-c`) | Pattern 3 | If `-c` is mandated, update argv-shape tests |
 | A4 | Dry-run/manifest note wording changes are free text decided by the planner/Phase 18 | Pattern 5 | Notice wording mismatch later |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Scripts' working-tree EOL under isolation**
    - Known: repo-local autocrlf=true saves the real repo; publication files have `eol=lf`; the two scripts have no eol attribute and are CRLF in the working tree.
    - Unclear: behaviour of `git_dirty` (at-pin, includes `rel(SCRIPT)`, and builder if added) on a fresh Windows clone.
    - Recommendation: add `text eol=lf` for the publisher and decisions builder to `.gitattributes` in a green-safe commit (changes no index bytes), and have the hostile-env test cover `git_dirty` on a CRLF working file in a scratch repo configured with and without local autocrlf.
+   - RESOLVED: `.gitattributes` `text eol=lf` for the publisher and decisions-builder scripts, committed in 17-01 before the first publisher edit (D-09a); the hostile-env test in 17-03 covers `git_dirty`.
 2. **`-c` vs env for longpaths.** Recommendation: env (A3). Confirm with the user only if strictness on the wording matters.
+   - RESOLVED: env `GIT_CONFIG_COUNT`/`GIT_CONFIG_KEY_0`/`GIT_CONFIG_VALUE_0`, not `-c` (D-09 amended, git >= 2.32).
 3. **Should `decisions_builder()` itself take the expected digest** (defence in depth for any other caller), or only `validate_published`? Recommendation: parameter on `decisions_builder`, passed from `validate_published`.
+   - RESOLVED: `decisions_builder(expected_sha256=None)`, digest checked on every call outside the `_BUILDER` cache, forwarded from `validate_published` (17-05, D-06).
 
 ## Environment Availability
 

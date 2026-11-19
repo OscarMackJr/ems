@@ -93,7 +93,30 @@
   6. The deferred 12-REVIEW items (IN-01..IN-04 and the IN-06 `lf_digest(SCRIPT)` check move) are made with tests inside the red window; 12-REVIEW IN-05 is confirmed superseded by SEC-04. The D-10 baseline test joins the accepted red-set inventory at the first publisher edit and closes at the 2.0.4 publication (not weakened).
 
 **Invariants**: as Phase 16. A red window (real-file tests red from hash certification) opens at the first publisher edit in Phases 16-17 and is accepted until the Phase 18 publication commit.
-**Plans**: TBD
+**Plans**: 9 plans
+
+**Wave 1**
+- [ ] 17-01-PLAN.md — Red-set ledger baseline (17-BASELINE-RED.md), `.gitattributes` `text eol=lf` for the publisher and decisions builder (D-09a), CI secret scan widened to `*.md` with a `git grep -E` parity guard test (SEC-03)
+- [ ] 17-02-PLAN.md — 2.0.3 notice builder: hash-before-exec for the pinned publisher, frozen decisions-builder digest checked before exec, `git_env()` on its git calls and shim (SEC-01, SEC-02, SEC-04)
+- [ ] 17-03-PLAN.md — `tests/aa_history.py` `git_env()`, hostile-env test and git >= 2.32 guard (SEC-04)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 17-04-PLAN.md — First publisher edit, which opens the red window: `git_env()` on `git_show`/`git_run`, IN-01..IN-04, three-copy same-policy test (SEC-04)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [ ] 17-05-PLAN.md — `decisions_builder_script` manifest entry, `decisions_builder(expected_sha256=)`, `validate_published` reorder (IN-06), `check_publication_record(..., builder_sha256)` (SEC-02)
+
+**Wave 4** *(blocked on Wave 3 completion)*
+- [ ] 17-06-PLAN.md — 2.0.4 form: `VERSION`, `SUPERSEDED_V2_0_3` rename with constants-vs-git test (GATE-11)
+
+**Wave 5** *(blocked on Wave 4 completion)*
+- [ ] 17-07-PLAN.md — Schema `const` pins for the four lineage digests and the schema-must-reject mutations (GATE-11)
+
+**Wave 6** *(blocked on Wave 5 completion)*
+- [ ] 17-08-PLAN.md — `validate_signoff` scope rule for versions >= 2.0.4: no 7+ hex runs; `AUTHORITY_ID` and `VERSION` required (GATE-12)
+
+**Wave 7** *(blocked on Wave 6 completion)*
+- [ ] 17-09-PLAN.md — 17-CLOSURE.md: D-04 cross-check, frozen builders CLOSED, invariants evidence, A1 CI status, Phase 18 handoff
 
 ### Phase 18: Certified Republication 2.0.4
 
