@@ -77,7 +77,8 @@ Invariants:
 - **D-09: Isolation depth.**
   - Build `env=` from `os.environ` with **every** `GIT_*` variable dropped.
   - Then set `GIT_NO_REPLACE_OBJECTS=1`, `GIT_LITERAL_PATHSPECS=1`, `GIT_CONFIG_NOSYSTEM=1`, and `GIT_CONFIG_GLOBAL` pointing to an empty file or the null device.
-  - Pass any setting the seam needs explicitly on the command line (`-c key=value`), for example `core.longpaths=true` on Windows.
+  - Pass any setting the seam needs explicitly in the sanitized env through `GIT_CONFIG_COUNT` / `GIT_CONFIG_KEY_n` / `GIT_CONFIG_VALUE_n`, for example `core.longpaths=true` on Windows. Do not add it to argv as `-c`. *(Amended 2026-11-18 at plan-phase by the user: the env form keeps the argv test `test_git_show_argv_ends_with_double_dash` valid. It requires git 2.31 or later in CI.)*
+- **D-09a: Line endings for the pinned scripts** *(added 2026-11-18 at plan-phase by the user)*. Add `text eol=lf` for the publisher script and the decisions-builder script to `.gitattributes`. This goes in an early green-safe commit, before the first publisher edit, so that at-pin `git_dirty` does not flag them on a fresh Windows clone.
   - Pathspecs are literal. `git_dirty` already passes `--literal-pathspecs`; the env makes this the default.
   - A test sets a hostile `GIT_DIR`, `GIT_WORK_TREE`, `GIT_INDEX_FILE` and `GIT_OBJECT_DIRECTORY`, plus a `refs/replace` substitution (or `GIT_REPLACE_REF_BASE`), and shows that each fail-closed check still reads the intended repository and blob.
 - **D-10: One copy per script, not a shared module.**
