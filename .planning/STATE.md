@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.3.0
 milestone_name: Authority 2.0.4 Tech-Debt Closure
-status: ready_to_plan
-last_updated: 2026-11-18T22:20:52.882Z
-last_activity: 2026-11-18 -- Phase 16 execution started
+status: planning
+last_updated: "2026-11-19T01:37:43.232Z"
+last_activity: 2026-11-18
 progress:
   total_phases: 4
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 5
-  completed_plans: 77
-  percent: 0
+  completed_plans: 5
+  percent: 25
 stopped_at: Phase 16 complete (5/5) — ready to discuss Phase 17
 ---
 
@@ -162,9 +162,9 @@ Items acknowledged and deferred at the v1.2.0 milestone close on 2026-11-18:
 
 ## Session Continuity
 
-Last session: 2026-11-18T19:38:15.466Z
-Stopped at: Phase 16 context gathered
-Resume file: .planning/phases/16-test-robustness-and-review-closure/16-CONTEXT.md
+Last session: 2026-11-19T01:37:43.207Z
+Stopped at: Phase 17 context gathered
+Resume file: .planning/phases/17-security-hardening-and-schema-pinning/17-CONTEXT.md
 
 ## Operator Next Steps
 
