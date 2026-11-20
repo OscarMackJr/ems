@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-11-18)
 Phase: 17
 Plan: Not started
 Status: Ready to execute
-Last activity: 2026-11-19 - Completed quick task 261119-shp: Working tree triage for demo
+Last activity: 2026-11-19 - Completed quick task 261119-szw: Branch cleanup for demo
 
 Progress: [░░░░░░░░░░] 0% (0/4 phases)
 
@@ -150,7 +150,8 @@ Recent decisions affecting current work:
 | 261019-st1 | Record EMS 2.0.1 status paragraph | 2026-10-19 | 3131e6e | [261019-st1-ems-2-0-1-status-paragraph](./quick/261019-st1-ems-2-0-1-status-paragraph/) |
 | 261118-cgq | Make the deep-root git_show test skip-free so the CI skip guard stays green (audit B-1) | 2026-11-18 | 72a5c06 | [261118-cgq-make-the-windows-only-deep-root-git-show](./quick/261118-cgq-make-the-windows-only-deep-root-git-show/) |
 | 261119-sd5 | Record EMS demo pin (755cb27) and 2.0.3 notice send commit (91d8847) | 2026-11-19 | 428e00a | [261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen](./quick/261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen/) |
-| 261119-shp | Working tree triage for demo: August work parked on wip/aug-2026-domain-authorities (f6bb4a3), 26 EOL-only files restored, .pytest-* removed and ignored | 2026-11-19 | (this commit) | [261119-shp-working-tree-triage-for-demo](./quick/261119-shp-working-tree-triage-for-demo/) |
+| 261119-shp | Working tree triage for demo: August work parked on wip/aug-2026-domain-authorities (f6bb4a3), 26 EOL-only files restored, .pytest-* removed and ignored | 2026-11-19 | 0b50a4f | [261119-shp-working-tree-triage-for-demo](./quick/261119-shp-working-tree-triage-for-demo/) |
+| 261119-szw | Branch cleanup for demo: tags ems-aa3-authority-2.0.3 (1544dc1) and ems-demo-2026-12 (755cb27) pushed; 16 stale branches and 5 worktrees removed (archive/* tags kept); PR #8 closed; AA4 chain untouched | 2026-11-19 | (this commit) | [261119-szw-branch-cleanup-for-demo](./quick/261119-szw-branch-cleanup-for-demo/) |
 
 ## Deferred Items
 
