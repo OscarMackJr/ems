@@ -30,3 +30,4 @@ evidence/cache/
 Thumbs.db
 .vscode/
 .idea/
+.pytest-*/
