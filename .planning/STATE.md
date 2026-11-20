@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-11-18)
 Phase: 17
 Plan: Not started
 Status: Ready to execute
-Last activity: 2026-11-19 -- Phase 17 planning complete
+Last activity: 2026-11-19 - Completed quick task 261119-sd5: Record EMS demo pin and 2.0.3 notice send commit
 
 Progress: [░░░░░░░░░░] 0% (0/4 phases)
 
@@ -134,7 +134,8 @@ Recent decisions affecting current work:
 - [All phases]: The working tree holds unrelated modified files (`registry/adjudication_rules.json`, `registry/policy_decisions.json`, `.planning/config.json`) and about 60 untracked files from other work. Stage by explicit path only.
 - [Next publication]: 13-REVIEW WR-01: the D-10 baseline assertion fails at the next publication commit (BASE-01 closes this in Phase 16). Any republication reopens a red window (hash certification).
 - [CI]: The `archive-assessment` job (261015-ci1) runs on PRs, pushes to main and `workflow_dispatch`, with `EMS_FAIL_ON_SKIP=1`. The latest green run is 44325017719 at `91d8847`: 1121 passed and 7 validators printed PASS.
-- [Notice 2.0.3]: Sending the notice is the authority's action. Record the commit that was sent (`91d8847` or later), because the notice does not name its own commit (NOTICE-05, Phase 19).
+- [Notice 2.0.3]: Recorded. Notice sent to Hayes at 91d88473129a8996e97da23be58de33076ec5b51 (91d8847, 2026-11-18), confirmed by Oscar Mack; 2.0.3 half of NOTICE-05 recorded in .planning/quick/261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen/261119-sd5-DEMO-PIN.md. NOTICE-05 stays Pending until the 2.0.4 send commit is recorded (Phase 19).
+- [Demo pin]: Demo uses EMS commit 755cb275564f44b0af15dcad86267d809fe23f79 (755cb27; remote tip, CI run 44423016638 green). v1.3.0 Phases 17-19 are parked until after the demo; plan 17-04 must not start before then. Known gap: Hayes demo3/run-service records still pin EMS 62a8955, not 1544dc1. See 261119-sd5-DEMO-PIN.md.
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
 - [Publication 2.0.3]: EMS-AA3 authority 2.0.3 published at 1544dc19ba235d732c832d1651895550ed5a265d (Hayes pins this; signed off by Oscar Mack 2026-11-17), record commit 87a46d147413bd99e931c71a1ab165eb0903f014 (direct child of PUB), WR-03 commit 5498002c5eea3a6d9e3bfbb6766119880bb36804; CI run 44134035073 green (validate + archive-assessment) at headSha 5498002 (workflow_dispatch, 2026-11-17); publication bytes identical PUB..WR03; --validate --at-pin PASS in tree and in a fresh --no-local clone. Push scope: remote tip is 5498002; the .planning-only commits after WR03 (3fd54ac, and the docs(13-04) evidence commit) are local and are published by the Phase 14 push.
 - [Environment]: `git push` via the credential manager fails in this session (sh.exe crash); pushing with the GitHub CLI token as a one-command `http.extraheader` (env `GIT_CONFIG_*`, credential.helper cleared) works
@@ -148,6 +149,7 @@ Recent decisions affecting current work:
 | 261015-ci1 | Run archive-assessment tests and validators in CI | 2026-10-15 | f767c64 | [261015-ci1-ci-archive-assessment-gates](./quick/261015-ci1-ci-archive-assessment-gates/) |
 | 261019-st1 | Record EMS 2.0.1 status paragraph | 2026-10-19 | 3131e6e | [261019-st1-ems-2-0-1-status-paragraph](./quick/261019-st1-ems-2-0-1-status-paragraph/) |
 | 261118-cgq | Make the deep-root git_show test skip-free so the CI skip guard stays green (audit B-1) | 2026-11-18 | 72a5c06 | [261118-cgq-make-the-windows-only-deep-root-git-show](./quick/261118-cgq-make-the-windows-only-deep-root-git-show/) |
+| 261119-sd5 | Record EMS demo pin (755cb27) and 2.0.3 notice send commit (91d8847) | 2026-11-19 | (this commit) | [261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen](./quick/261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen/) |
 
 ## Deferred Items
 
