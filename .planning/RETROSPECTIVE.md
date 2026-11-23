@@ -125,6 +125,43 @@
 
 ---
 
+## Milestone: v1.3.0 — Authority 2.0.4 Tech-Debt Closure
+
+**Closed:** 2026-11-22 (partial: Phase 16 and SEC-03 shipped; Phases 17-19 deferred)
+**Phases:** 1 of 4 (16) | **Plans:** 5 executed, 9 planned and not executed (Phase 17) | **Commits:** 44 (2026-11-18 → 2026-11-22, including 7 quick tasks)
+
+### What Was Built
+- Honest baseline and deep-root tests (BASE-01..04). The D-10 assertion survives the publication commit, and the deep-root `git_show` test can fail.
+- Review closure (GATE-13..15): each 12/14/15-REVIEW info item is fixed, closed with a reason or carried, as recorded in `16-REVIEW-CLOSURE.md`.
+- Bookkeeping (BOOK-01/02).
+- SEC-03 as quick task 261122-v8y: the CI secret scan covers `*.md`, with a `git grep -E` parity guard and a positive control.
+- Demo preparation: the demo pin tag, the 2.0.3 notice send record, working-tree and branch cleanup, and a rehearsed demo script.
+
+### What Worked
+- Asking what the consumer will pin before republishing. Once Oscar Mack decided that Hayes pins 2.0.3, a 2.0.4 that changes no decision had no reader, and stopping avoided a red window, a sign-off and a notice for nothing.
+- Splitting off a change that touches no certified path (SEC-03) so it could ship without a republication.
+- Parking Phase 17 behind the demo pin kept the demo commit stable while planning continued.
+
+### What Was Inefficient
+- Phase 17 was fully planned (context, research, patterns, 9 plans and a plan-check round) before the consumer question was asked. That planning is now on hold.
+- A pasted milestone-close message from the Hayes session was briefly read as describing EMS.
+- Local runs stayed unreliable: the `git clone` sh.exe crash and a CRLF working copy of the 2.0.3 notice files gave 4 local failures that CI did not reproduce.
+
+### Patterns Established
+- A republication needs a consumer. Check which version the consumer will pin before planning one.
+- A change that touches no certified path (CI, tests) can ship outside the republication window.
+- Record cross-repository status (the Hayes close, the Hayes pin) as dated, attributed STATE entries.
+
+### Key Lessons
+1. Ask "who will pin this?" at milestone start, not after the plans are written.
+2. Treat CI `workflow_dispatch` as the authoritative full run on this machine; local clone and EOL failures need a named cause before they are dismissed.
+3. Keep deferred plans in place with a re-check note, rather than deleting them or executing them speculatively.
+
+### Cost Observations
+- The close and SEC-03 ran inline in the main session; the planning-only and CI-only changes did not need subagents.
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -134,6 +171,7 @@
 | v1.0.0 | 6 | Human-gated authority publication with blind drafting; tech-debt phase inserted after review |
 | v1.1.0 | 4 | All code changes first, then one republication with a declared red window; review before publication |
 | v1.2.0 | 5 | Frozen validators before publisher edits; verify-at-pin designed before publishing; audit run again after each fix |
+| v1.3.0 | 1 of 4 | Republication dropped once the consumer chose to pin 2.0.3; work that touches no certified path shipped separately |
 
 ### Cumulative Quality
 
@@ -142,6 +180,7 @@
 | v1.0.0 | 492 passing | 5 `--validate` CLIs PASS |
 | v1.1.0 | 720 passing | `--validate` PASS (authority at the record commit, notice) |
 | v1.2.0 | 1121 passing, 0 skipped (CI) | 7 `--validate` PASS in CI; `--at-pin` PASS at `1544dc1` |
+| v1.3.0 | 1148 passing, 0 skipped (CI run `45108276889`) | 7 `--validate` PASS in CI at `d0beb7a` |
 
 ### Top Lessons (Verified Across Milestones)
 
