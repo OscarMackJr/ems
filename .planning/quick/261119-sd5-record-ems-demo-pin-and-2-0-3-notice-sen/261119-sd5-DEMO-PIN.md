@@ -6,7 +6,8 @@ Scope: record-only. No code, registry, or Hayes change is made by this task.
 
 ## 1. Demo pin decision
 
-- Demo commit: `755cb275564f44b0af15dcad86267d809fe23f79` (755cb27), tip of `origin/feature/ems-aa3-archive-applicability-authority` (pushed).
+- Demo commit: `755cb275564f44b0af15dcad86267d809fe23f79` (755cb27), tip of `origin/feature/ems-aa3-archive-applicability-authority` (pushed) when recorded on 2026-11-19.
+  - Update 2026-11-22 (quick 261122-trn): the branch was pushed to 53b4db8, so 755cb27 is no longer the remote tip. The demo pin is held by tag `ems-demo-2026-12`, which still points to 755cb27. The 13 commits 755cb27..53b4db8 change `.planning/` files and `.gitignore` only.
 - CI "EMS Validate" run 44423016638 (workflow_dispatch, 2026-11-18 23:42 UTC) concluded success at 755cb27.
 - Decision: v1.3.0 Phases 17-19 are parked until after the demo (about 2 weeks). Phase 17 has not started. Plan 17-04 (first publisher edit) opens the red window and must not run before the demo.
 
