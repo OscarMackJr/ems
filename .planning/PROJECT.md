@@ -8,21 +8,35 @@ The consumer is Hayes Verify, an external assessor that reads EMS at a pinned co
 
 ## Current State
 
-**Shipped:** v1.2.0 Authority 2.0.3 Verification Hardening (2026-11-18).
+**Closed:** v1.3.0 Authority 2.0.4 Tech-Debt Closure (2026-11-22, partial). Phase 16 and SEC-03 shipped; Phases 17-19 (the 2.0.4 republication) are deferred because Oscar Mack decided on 2026-11-22 that Hayes Verify pins 2.0.3. No milestone is open.
 
-`EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3` is published at `1544dc19ba235d732c832d1651895550ed5a265d` (Hayes re-pins to this commit). The record commit is `87a46d1`. It supersedes 2.0.2 at `ae15c74`. CI is green at publication (run `44134035073`) and at the shipped head `91d8847` (run `44325017719`: 1121 passed, 0 skipped).
+**Current authority:** `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3`, published at `1544dc19ba235d732c832d1651895550ed5a265d` (Hayes pins this commit). The record commit is `87a46d1`. It supersedes 2.0.2 at `ae15c74`. CI is green at publication (run `44134035073`) and at the shipped head `91d8847` (run `44325017719`: 1121 passed, 0 skipped).
 
 - Verify at the pin: `--validate --at-pin` gives PASS at `1544dc1` and names the one check it defers. Plain `--validate` gives PASS at the record commit or any later commit.
 - Frozen validators: the DEMO3 reply (2.0.1) and the 2.0.2 notice read only git-pinned constants. Missing history fails closed, and CI fails on any skip.
 - Decisions: unchanged. There are 21 decided controls (3 rules and 18 no-rule, `AA4-GOV-001`..`021`) and 59 `NOT_YET_DECIDED`, and the decisions digest is still `4e746d1f…`.
-- v1.3.0 progress: Phase 16 (test robustness and review closure) is complete as of 2026-11-18. The D-10 baseline test and the deep-root test now check what they claim. 14/15-REVIEW info items are fixed with tests, and 12-REVIEW items are carried to Phase 17 (see `16-REVIEW-CLOSURE.md`). CI run `44408700761` at `b47a93f`: 1133 passed, 0 skipped. Frozen builders are unchanged.
-- Notice: a generated notice to Hayes (`docs/DEMO3_W1_REQ_001_NOTICE_2_0_3.md`) gives the three-step verify sequence. Its claims are enforced by `--validate`. The current text is on the remote at `91d8847`. Sending it is the authority's action; record the commit that was sent.
+- v1.3.0 (Phase 16): the D-10 baseline test and the deep-root test now check what they claim. 14/15-REVIEW info items are fixed with tests; the 12-REVIEW items carried to Phase 17 are deferred with it (see `16-REVIEW-CLOSURE.md`). Frozen builders are unchanged.
+- v1.3.0 (SEC-03, quick 261122-v8y): the CI secret scan covers `*.md`. CI run `45108276889` at `d0beb7a`: 1148 passed, 0 skipped, 7 validators PASS.
+- Notice: the 2.0.3 notice (`docs/DEMO3_W1_REQ_001_NOTICE_2_0_3.md`) was sent to Hayes at `91d8847` on 2026-11-18 (recorded in quick 261119-sd5).
+- Demo: pinned at tag `ems-demo-2026-12` (`755cb27`); the demo had not happened at the v1.3.0 close.
+- Hayes side (reported 2026-11-22): no Hayes milestone is open; the Hayes v1 chain is still on EMS `62a8955` and the 2.0.3 reader is not wired in yet. Moving Hayes to 2.0.3 is Hayes-side work.
 
-Archives: `.planning/milestones/v1.0.0-*`, `v1.1.0-*` and `v1.2.0-*`.
+Archives: `.planning/milestones/v1.0.0-*`, `v1.1.0-*`, `v1.2.0-*` and `v1.3.0-*`.
 
-**Previous:** v1.1.0 Authority 2.0.2 Lineage Correction (2026-11-13), published at `ae15c74`. v1.0.0 Not-Applicable Rule Publication (2026-10-15), published 2.0.1 at `31addfa`; the DEMO3-W1-REQ-001 reply cites it.
+**Previous:** v1.2.0 Authority 2.0.3 Verification Hardening (2026-11-18), published 2.0.3 at `1544dc1`. v1.1.0 Authority 2.0.2 Lineage Correction (2026-11-13), published at `ae15c74`. v1.0.0 Not-Applicable Rule Publication (2026-10-15), published 2.0.1 at `31addfa`; the DEMO3-W1-REQ-001 reply cites it.
 
-## Current Milestone: v1.3.0 Authority 2.0.4 Tech-Debt Closure
+## Next Milestone Goals
+
+No milestone is open. Candidates, each the authority's choice:
+
+- 2.0.4 republication, if a future pin needs it: Phase 17's 9 plans (SEC-01/02/04, GATE-11/12) are kept in `.planning/phases/17-security-hardening-and-schema-pinning/`, then PUB-13..15 and NOTICE-04/05.
+- V2-01: decisions for the other 59 controls.
+- V2-02: Hayes re-run confirmation, after Hayes wires the 2.0.3 reader (Hayes-side).
+
+<details>
+<summary>v1.3.0 milestone scope (closed 2026-11-22)</summary>
+
+### v1.3.0 Authority 2.0.4 Tech-Debt Closure
 
 **Goal:** Close the tech debt from the v1.2.0 audit and republish once as `EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.4`, with no change to any decision. A new generated notice asks Hayes to re-pin.
 
@@ -54,6 +68,8 @@ Archives: `.planning/milestones/v1.0.0-*`, `v1.1.0-*` and `v1.2.0-*`.
 - The frozen reply (2.0.1) and 2.0.2 notice builders stay byte-unchanged. W-2 (they call `git show` without `--`) and any item that needs a frozen-builder edit are out of scope.
 - All code and schema changes come before one 2.0.4 republication, with an accepted red window, as in v1.1.0 and v1.2.0.
 - Deferred: V2-01 (decisions for the other 59 controls) and V2-02 (Hayes re-run confirmation).
+
+</details>
 
 ## Core Value
 
@@ -149,11 +165,13 @@ For every one of the 21 requested controls, EMS publishes an explicit, machine-r
 
   Quick task 261118-cgq removed the skips from the Windows-only deep-root test, so CI no longer fails it. CI run `44325017719` at `91d8847` passed 1121 with 0 skipped. Shipped v1.2.0.
 
+- ✓ v1.3.0 (partial): BASE-01..04, GATE-13..15 (Phase 16 parts) and BOOK-01..02 were validated in Phase 16 (Test Robustness and Review Closure). The D-10 baseline test survives the publication commit, and the deep-root `git_show` test can fail. Each selected review info item is fixed, closed or carried, as recorded in `16-REVIEW-CLOSURE.md`. SEC-03 shipped as quick task 261122-v8y (CI secret scan covers `*.md`, run `45108276889` green at `d0beb7a`). The remaining v1.3.0 requirements are deferred (see Out of Scope).
+
 ### Active
 
 <!-- Hypotheses until shipped and validated. -->
 
-v1.3.0 (Authority 2.0.4 Tech-Debt Closure) — see `.planning/REQUIREMENTS.md` for the scoped requirements and REQ-IDs.
+None. No milestone is open; see Next Milestone Goals.
 
 ### Out of Scope
 
@@ -166,6 +184,7 @@ v1.3.0 (Authority 2.0.4 Tech-Debt Closure) — see `.planning/REQUIREMENTS.md` f
 - Shaping rules to produce a wanted outcome against RiskMVP — rules are drafted blind to the 10/1 result
 - Landing the in-flight uncommitted work in this tree (onboarding, dependency supply chain, release integrity, test quality, real-repository pilot, and the modified `registry/adjudication_rules.json` and `registry/policy_decisions.json`) — unrelated to the request; left untouched and kept out of this project's commits
 - General codebase hardening (script sprawl, `.bak` files, unpinned dev dependencies) — not needed to answer the request
+- The 2.0.4 republication and its hardening (SEC-01, SEC-02, SEC-04, GATE-11, GATE-12, the GATE-13/15 carries, PUB-13..15, NOTICE-04, the 2.0.4 half of NOTICE-05) — deferred at the v1.3.0 close on 2026-11-22: Hayes pins 2.0.3, so 2.0.4 has no consumer and would change no decision. Phase 17's plans are kept in case a later pin needs it.
 
 ## Context
 
@@ -224,7 +243,7 @@ v1.3.0 (Authority 2.0.4 Tech-Debt Closure) — see `.planning/REQUIREMENTS.md` f
 | EMS chooses the rule shape; Hayes's placeholder shape is not adopted | Hayes stated the shape is EMS's to choose and its placeholder is a stand-in | ✓ Good |
 | Unrelated in-flight work left out of this project's commits | Assumed default, stated to the user before the PROJECT.md gate and not objected to | ✓ Good: staged by explicit path throughout |
 | Republish as 2.0.1 to harden gates instead of patching 2.0.0 (Phase 6) | Phase 4 review found fail-open gates; hash certification forbids hand edits | ✓ Good: no decision changed, decisions digest pinned to 2.0.0 |
-| No git tag for the milestone | Hayes pins by commit; a release-style tag could be cited by mistake | ✓ Good (applied again at v1.1.0 and v1.2.0) |
+| No git tag for the milestone | Hayes pins by commit; a release-style tag could be cited by mistake | ✓ Good (applied again at v1.1.0, v1.2.0 and v1.3.0) |
 | v1.1.0: all code and schema changes before a single 2.0.2 republication, with an accepted red window | Hash certification turns real-file tests red on any publisher edit, and one publication keeps the history clean | ✓ Good: the window was closed at `ae15c74` (720 passed) |
 | v1.1.0: per-digest normalisation scope instead of one global field | 2.0.1's global `CRLF_TO_LF` contradicted three raw-byte digests | ✓ Good: each digest can be recomputed from a committed file |
 | v1.1.0: catalog read at the pinned commit `62a8955`, not the live `registry/control_catalog.yaml` | Shared catalog edits from unrelated work could change `--validate` results | ✓ Good |
@@ -235,6 +254,9 @@ v1.3.0 (Authority 2.0.4 Tech-Debt Closure) — see `.planning/REQUIREMENTS.md` f
 | v1.2.0: notice claims enforced by its validator, not asserted in prose | The v1.1.0 notice echoed digests and counted mutations instead of checking them | ✓ Good: 29 mutations rerun, 7 digests recomputed, raw ≠ LF computed |
 | v1.2.0: Phase 15 fixed notice wording through the builder, with the frozen builders untouched | Hand edits break the generated-and-validated contract; the frozen builders must not move | ⚠️ Revisit: the frozen builders keep `git show` without `--` (deep Windows roots) |
 | v1.2.0: CI treats every skip in the archive suite as a failure | A silently skipped check is not a passed check | ✓ Good. It caught the Windows-only `skipif` from Phase 15 at audit, which was fixed by quick task 261118-cgq |
+| v1.3.0: Hayes pins 2.0.3; close v1.3.0 after Phase 16 and defer Phases 17-19 (Oscar Mack, 2026-11-22) | 2.0.4 would change no decision (PUB-14), and its hardening only reaches a consumer through a new pin; any publisher edit without a republication leaves CI red | ✓ Good: CI stays green, and 2.0.3 remains current |
+| v1.3.0: SEC-03 taken out of Phase 17 as a quick task | It touches only the CI workflow and a test, with no certified path | ✓ Good: run `45108276889` green at `d0beb7a` |
+| v1.3.0: Phase 17 parked until after the demo before the close | Plan 17-04 opens the red window, and the demo runs from tag `ems-demo-2026-12` | ✓ Superseded by the deferral |
 
 ## Evolution
 
@@ -254,4 +276,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-18 after Phase 16*
+*Last updated: 2026-11-22 after v1.3.0 milestone close*

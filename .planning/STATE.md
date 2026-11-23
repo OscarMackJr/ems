@@ -2,35 +2,33 @@
 gsd_state_version: 1.0
 milestone: v1.3.0
 milestone_name: Authority 2.0.4 Tech-Debt Closure
-status: executing
-last_updated: "2026-11-22T00:00:00.000Z"
-last_activity: 2026-11-22 -- Quick task 261122-tjr: Hayes milestone close recorded
+status: Awaiting next milestone
+last_updated: "2026-11-22T23:00:00.000Z"
+last_activity: 2026-11-22 — Milestone v1.3.0 closed (Phase 16 + SEC-03 shipped; Phases 17-19 deferred)
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 14
   completed_plans: 5
   percent: 25
-stopped_at: Phase 17 planned (0/9), parked until after the demo
+stopped_at: v1.3.0 closed; no milestone open
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-11-18)
+See: .planning/PROJECT.md (updated 2026-11-22)
 
 **Core value:** For every one of the 21 requested controls, EMS publishes an explicit, machine-readable, authority-backed applicability decision that Hayes can cite — so that "EMS decided" is always distinguishable from "EMS has not decided yet".
-**Current focus:** Phase 17 — security hardening and schema pinning
+**Current focus:** No milestone open — choose the next step (e.g. /gsd-new-milestone)
 
 ## Current Position
 
-Phase: 17
-Plan: Not started (0/9 planned)
-Status: Ready to execute — parked until after the demo
-Last activity: 2026-11-22 - Completed quick task 261122-tjr: Hayes milestone close recorded
-
-Progress: [███░░░░░░░] 25% (1/4 phases; Phase 16 complete)
+Phase: Milestone v1.3.0 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-11-22 — Milestone v1.3.0 closed (Phase 16 + SEC-03 shipped; Phases 17-19 deferred, Hayes pins 2.0.3)
 
 ## Performance Metrics
 
@@ -133,11 +131,11 @@ Recent decisions affecting current work:
 ### Blockers/Concerns
 
 - [All phases]: Working tree cleaned 2026-11-19 (quick 261119-shp). The unrelated August work (109 untracked files plus the `registry/adjudication_rules.json` and `registry/policy_decisions.json` changes) is parked on local branch `wip/aug-2026-domain-authorities` (`f6bb4a3`, not pushed). Still stage by explicit path only.
-- [Next publication]: 13-REVIEW WR-01: the D-10 baseline assertion fails at the next publication commit (BASE-01 closes this in Phase 16). Any republication reopens a red window (hash certification).
-- [CI]: The `archive-assessment` job (261015-ci1) runs on PRs, pushes to main and `workflow_dispatch`, with `EMS_FAIL_ON_SKIP=1`. The latest green run is 44325017719 at `91d8847`: 1121 passed and 7 validators printed PASS.
-- [Notice 2.0.3]: Recorded. Notice sent to Hayes at 91d88473129a8996e97da23be58de33076ec5b51 (91d8847, 2026-11-18), confirmed by Oscar Mack; 2.0.3 half of NOTICE-05 recorded in .planning/quick/261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen/261119-sd5-DEMO-PIN.md. NOTICE-05 stays Pending until the 2.0.4 send commit is recorded (Phase 19).
-- [Demo pin]: Demo uses EMS commit 755cb275564f44b0af15dcad86267d809fe23f79 (755cb27; held by tag `ems-demo-2026-12`; CI run 44423016638 green; it was the remote branch tip until 2026-11-22, when the push of 53b4db8 moved the tip on with planning-only commits plus a `.gitignore` change — see quick 261122-trn). v1.3.0 Phases 17-19 are parked until after the demo; plan 17-04 must not start before then. Known gap: Hayes demo3/run-service records still pin EMS 62a8955, not 1544dc1. See 261119-sd5-DEMO-PIN.md.
-- [Hayes close]: Reported by Oscar Mack 2026-11-22 (quick 261122-tjr): Hayes closed its milestone and no Hayes milestone is open now. The Hayes v1 chain is still pinned at EMS 62a8955, and the 2.0.3 reader is still not wired in; neither is decided by that close. EMS v1.3.0 stays open and is not affected; the Hayes-side next step (e.g. a new Hayes milestone) is the authority's choice.
+- [Next publication]: none planned (2.0.4 deferred). BASE-01 (Phase 16) closed 13-REVIEW WR-01. Any future republication reopens a red window (hash certification); Phase 17 plans are kept for that case.
+- [CI]: The `archive-assessment` job (261015-ci1) runs on PRs, pushes to main and `workflow_dispatch`, with `EMS_FAIL_ON_SKIP=1`. The latest green run is 45108276889 at `d0beb7a` (workflow_dispatch, 2026-11-22): 1148 passed, 0 skipped, and 7 validators printed PASS.
+- [Notice 2.0.3]: Recorded. Notice sent to Hayes at 91d88473129a8996e97da23be58de33076ec5b51 (91d8847, 2026-11-18), confirmed by Oscar Mack; 2.0.3 half of NOTICE-05 recorded in .planning/quick/261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen/261119-sd5-DEMO-PIN.md. The 2.0.4 half of NOTICE-05 is deferred with Phase 19 (v1.3.0 close).
+- [Demo pin]: Demo uses EMS commit 755cb275564f44b0af15dcad86267d809fe23f79 (755cb27; held by tag `ems-demo-2026-12`; CI run 44423016638 green; it was the remote branch tip until 2026-11-22, when the push of 53b4db8 moved the tip on with planning-only commits plus a `.gitignore` change — see quick 261122-trn). v1.3.0 Phases 17-19 were deferred at the v1.3.0 close (2026-11-22). Known gap: Hayes demo3/run-service records still pin EMS 62a8955, not 1544dc1. See 261119-sd5-DEMO-PIN.md.
+- [Hayes close]: Reported by Oscar Mack 2026-11-22 (quick 261122-tjr): Hayes closed its milestone and no Hayes milestone is open now. The Hayes v1 chain is still pinned at EMS 62a8955, and the 2.0.3 reader is still not wired in; neither is decided by that close. The EMS version for Hayes is now decided (see [Hayes pin 2.0.3]); wiring the reader is Hayes-side.
 - [Hayes pin 2.0.3]: Decided by Oscar Mack 2026-11-22: Hayes Verify will pin EMS-AA3 authority 2.0.3 (1544dc1). This decides the EMS version Hayes moves to from 62a8955; wiring the 2.0.3 reader is Hayes-side work. Consequence (option 3): no 2.0.4 is needed; v1.3.0 closes after Phase 16 with Phases 17-19 deferred (SEC-01, SEC-02, SEC-04, GATE-11, GATE-12, PUB-13..15, NOTICE-04, 2.0.4 half of NOTICE-05); SEC-03 done as quick 261122-v8y (CI/test only, no certified path).
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
 - [Publication 2.0.3]: EMS-AA3 authority 2.0.3 published at 1544dc19ba235d732c832d1651895550ed5a265d (Hayes pins this; signed off by Oscar Mack 2026-11-17), record commit 87a46d147413bd99e931c71a1ab165eb0903f014 (direct child of PUB), WR-03 commit 5498002c5eea3a6d9e3bfbb6766119880bb36804; CI run 44134035073 green (validate + archive-assessment) at headSha 5498002 (workflow_dispatch, 2026-11-17); publication bytes identical PUB..WR03; --validate --at-pin PASS in tree and in a fresh --no-local clone. Push scope: remote tip is 5498002; the .planning-only commits after WR03 (3fd54ac, and the docs(13-04) evidence commit) are local and are published by the Phase 14 push.
@@ -158,7 +156,7 @@ Recent decisions affecting current work:
 | 261119-t1l | EMS demo script (DEMO-SCRIPT.md + show_decisions.py), rehearsed on a fresh public clone: steps 1-3 PASS at the demo tags | 2026-11-19 | 9cc0937 | [261119-t1l-ems-demo-script](./quick/261119-t1l-ems-demo-script/) |
 | 261122-tjr | Record Hayes milestone close (no Hayes milestone open; v1 chain still on EMS 62a8955; 2.0.3 reader not wired in) and fix stale STATE fields | 2026-11-22 | 53b4db8 | [261122-tjr-record-hayes-milestone-close-in-state-md](./quick/261122-tjr-record-hayes-milestone-close-in-state-md/) |
 | 261122-trn | Demo-pin note: 755cb27 is no longer the remote tip (branch pushed to 53b4db8); pin held by tag ems-demo-2026-12 | 2026-11-22 | 2ce8dea | [261122-trn-fix-demo-pin-remote-tip-note](./quick/261122-trn-fix-demo-pin-remote-tip-note/) |
-| 261122-v8y | SEC-03: CI secret scan covers *.md, guard test tests/test_archive_assessment_ci_workflow.py; Hayes 2.0.3 pin decision recorded | 2026-11-22 | (this commit) | [261122-v8y-sec-03-secret-scan-covers-md](./quick/261122-v8y-sec-03-secret-scan-covers-md/) |
+| 261122-v8y | SEC-03: CI secret scan covers *.md, guard test tests/test_archive_assessment_ci_workflow.py; Hayes 2.0.3 pin decision recorded | 2026-11-22 | d0beb7a | [261122-v8y-sec-03-secret-scan-covers-md](./quick/261122-v8y-sec-03-secret-scan-covers-md/) |
 
 ## Deferred Items
 
@@ -171,13 +169,25 @@ Items acknowledged and deferred at the v1.2.0 milestone close on 2026-11-18:
 | quick_task | 261019-st1-ems-2-0-1-status-paragraph | scanner reports `missing`; complete (`261019-st1-SUMMARY.md` present) | v1.2.0 close |
 | quick_task | 261118-cgq-make-the-windows-only-deep-root-git-show | scanner reports `missing`; complete (`261118-cgq-SUMMARY.md` present) | v1.2.0 close |
 
+Items acknowledged at the v1.3.0 milestone close on 2026-11-22: the open-artifact scan flagged 11 quick tasks `missing` (the 4 above again, plus the 7 below). All have a complete `{id}-SUMMARY.md` (scanner file-name mismatch).
+
+| Category | Item | Status | Deferred At |
+|----------|------|--------|-------------|
+| quick_task | 261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen | scanner reports `missing`; complete (`261119-sd5-SUMMARY.md` present) | v1.3.0 close |
+| quick_task | 261119-shp-working-tree-triage-for-demo | scanner reports `missing`; complete (`261119-shp-SUMMARY.md` present) | v1.3.0 close |
+| quick_task | 261119-szw-branch-cleanup-for-demo | scanner reports `missing`; complete (`261119-szw-SUMMARY.md` present) | v1.3.0 close |
+| quick_task | 261119-t1l-ems-demo-script | scanner reports `missing`; complete (`261119-t1l-SUMMARY.md` present) | v1.3.0 close |
+| quick_task | 261122-tjr-record-hayes-milestone-close-in-state-md | scanner reports `missing`; complete (`261122-tjr-SUMMARY.md` present) | v1.3.0 close |
+| quick_task | 261122-trn-fix-demo-pin-remote-tip-note | scanner reports `missing`; complete (`261122-trn-SUMMARY.md` present) | v1.3.0 close |
+| quick_task | 261122-v8y-sec-03-secret-scan-covers-md | scanner reports `missing`; complete (`261122-v8y-SUMMARY.md` present) | v1.3.0 close |
+
 ## Session Continuity
 
 Last session: 2026-11-22
-Stopped at: Session resumed; Hayes milestone close recorded (quick 261122-tjr); Phase 17 planned (9 plans), not started, parked until after the demo
-Resume file: .planning/phases/17-security-hardening-and-schema-pinning/17-CONTEXT.md
+Stopped at: v1.3.0 closed (Phase 16 + SEC-03 shipped; Phases 17-19 deferred because Hayes pins 2.0.3); no milestone open
+Resume file: None
 
 ## Operator Next Steps
 
-- Hold Phase 17 until after the demo (demo runs from tag `ems-demo-2026-12`, 755cb27). Plan 17-04 opens the red window and must not run before the demo.
-- After the demo: run /gsd-execute-phase 17
+- No milestone is open. The next step is the authority's choice, for example /gsd-new-milestone.
+- If a future pin needs 2.0.4: Phase 17's 9 plans are in `.planning/phases/17-security-hardening-and-schema-pinning/` (re-check them against the code before executing).

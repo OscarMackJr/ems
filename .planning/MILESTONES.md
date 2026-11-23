@@ -1,5 +1,40 @@
 # Milestones
 
+## v1.3.0 Authority 2.0.4 Tech-Debt Closure (Closed: 2026-11-22, partial)
+
+**Delivered:** The tests and validators that guard EMS-AA3 authority 2.0.3 are more honest, the review info items from phases 11-15 are fixed or closed with a reason, and the CI secret scan now covers `*.md`. No authority was republished and no decision changed: 2.0.3 at `1544dc1` remains current. The planned 2.0.4 republication was not made, because Oscar Mack decided on 2026-11-22 that Hayes Verify pins 2.0.3.
+
+**Phases completed:** 1 of 4 (Phase 16, 5 plans), plus quick tasks 261119-sd5, 261119-shp, 261119-szw, 261119-t1l, 261122-tjr, 261122-trn and 261122-v8y (SEC-03)
+**Git range:** c7b7419 → d0beb7a (44 commits after the v1.2.0 archive, 2026-11-18 → 2026-11-22); 9 non-planning files, +404 / −51 lines
+**Tag:** none (Hayes pins by commit; same decision as v1.0.0-v1.2.0)
+
+**Key accomplishments:**
+
+- Honest baseline test (BASE-01, BASE-03): the D-10 assertion passes at the publication commit Hayes pins and at later commits. It checks the working tree under test, and `outcome()` decodes UTF-8 with stderr kept separate.
+- Deep-root `git_show` test that can fail (BASE-02): on Windows it fails loudly unless `Filename too long` reproduces without `--`. It has no skips under `EMS_FAIL_ON_SKIP=1`.
+- Review closure (GATE-13..15, BASE-04): each 12/14/15-REVIEW info item is fixed with a test, closed with a reason, or carried, as recorded in `16-REVIEW-CLOSURE.md`. The frozen builders are untouched.
+- Bookkeeping (BOOK-01, BOOK-02): `requirements-completed` frontmatter is set for phases 11-13, and V2-01/V2-02 are listed as deferred.
+- SEC-03 (quick 261122-v8y): the CI secret scan covers `*.md`, with a `git grep -E` parity guard test. CI run `45108276889` is green at `d0beb7a`: 1148 passed, 0 skipped, 7 validators PASS.
+- Demo preparation: the demo is pinned at tag `ems-demo-2026-12` (`755cb27`), the 2.0.3 notice send commit is recorded (`91d8847`), the working tree and branches are cleaned up, and a rehearsed demo script exists.
+
+**Audit:** none for v1.3.0. The close was decided directly; the gaps below are known.
+
+### Known Gaps
+
+Deferred by decision of Oscar Mack (2026-11-22): Hayes Verify pins authority 2.0.3 (`1544dc1`), so no 2.0.4 is published. Phase 17's 9 plans stay in `.planning/phases/17-security-hardening-and-schema-pinning/` in case 2.0.4 is picked up later.
+
+- SEC-01: the pinned publisher digest is checked before execution
+- SEC-02: the decisions-builder blob gets a manifest digest, checked by `--validate`
+- SEC-04: the git seam is isolated from the caller's environment
+- GATE-11: the schema pins the superseded digests
+- GATE-12: the sign-off `scope` carries no unchecked digest
+- GATE-13 carry (12-REVIEW IN-01..04, IN-06 digest-check move) and GATE-15 carry (15-REVIEW IN-01)
+- PUB-13..15: the 2.0.4 certified republication
+- NOTICE-04 and the 2.0.4 half of NOTICE-05 (the 2.0.3 half is recorded in 261119-sd5)
+
+**Known deferred items at close:** 11 quick tasks were flagged `missing` by the open-artifact scan. All 11 have a complete `{id}-SUMMARY.md`, so this is the same scanner file-name mismatch as at v1.2.0 (see STATE.md Deferred Items).
+
+---
 ## v1.2.0 Authority 2.0.3 Verification Hardening (Shipped: 2026-11-18)
 
 **Delivered:** EMS-AA3-ARCHIVE-APPLICABILITY-AUTHORITY-2.0.3, published at commit 1544dc19ba235d732c832d1651895550ed5a265d. Hayes can now verify EMS at the pinned commit, the claims in the notice are enforced in code, and the historical validators are frozen. No applicability decision changed. A generated notice asks Hayes to re-pin.
