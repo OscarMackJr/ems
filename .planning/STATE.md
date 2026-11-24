@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.3.0
 milestone_name: Authority 2.0.4 Tech-Debt Closure
 status: Awaiting next milestone
-last_updated: "2026-11-22T23:00:00.000Z"
-last_activity: 2026-11-22 — Milestone v1.3.0 closed (Phase 16 + SEC-03 shipped; Phases 17-19 deferred)
+last_updated: "2026-11-24T17:50:00.000Z"
+last_activity: 2026-11-24 — Quick 261124-hsc: STATE [CI] line updated to green run 45451164734 at b55f54c
 progress:
   total_phases: 4
   completed_phases: 1
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-11-22)
 Phase: Milestone v1.3.0 complete
 Plan: —
 Status: Awaiting next milestone
-Last activity: 2026-11-22 — Milestone v1.3.0 closed (Phase 16 + SEC-03 shipped; Phases 17-19 deferred, Hayes pins 2.0.3)
+Last activity: 2026-11-24 — Quick 261124-hsc: CI green at b55f54c (run 45451164734). Previously 2026-11-22: milestone v1.3.0 closed (Phase 16 + SEC-03 shipped; Phases 17-19 deferred, Hayes pins 2.0.3)
 
 ## Performance Metrics
 
@@ -132,7 +132,7 @@ Recent decisions affecting current work:
 
 - [All phases]: Working tree cleaned 2026-11-19 (quick 261119-shp). The unrelated August work (109 untracked files plus the `registry/adjudication_rules.json` and `registry/policy_decisions.json` changes) is parked on local branch `wip/aug-2026-domain-authorities` (`f6bb4a3`, not pushed). Still stage by explicit path only.
 - [Next publication]: none planned (2.0.4 deferred). BASE-01 (Phase 16) closed 13-REVIEW WR-01. Any future republication reopens a red window (hash certification); Phase 17 plans are kept for that case.
-- [CI]: The `archive-assessment` job (261015-ci1) runs on PRs, pushes to main and `workflow_dispatch`, with `EMS_FAIL_ON_SKIP=1`. The latest green run is 45108276889 at `d0beb7a` (workflow_dispatch, 2026-11-22): 1148 passed, 0 skipped, and 7 validators printed PASS.
+- [CI]: The `archive-assessment` job (261015-ci1) runs on PRs, pushes to main and `workflow_dispatch`, with `EMS_FAIL_ON_SKIP=1`. The latest green run is 45451164734 at `b55f54c` (workflow_dispatch, 2026-11-24, after the v1.3.0 close): 1148 passed, 0 skipped, and 7 validators printed PASS. The previous one was 45108276889 at `d0beb7a` (2026-11-22), with the same counts.
 - [Notice 2.0.3]: Recorded. Notice sent to Hayes at 91d88473129a8996e97da23be58de33076ec5b51 (91d8847, 2026-11-18), confirmed by Oscar Mack; 2.0.3 half of NOTICE-05 recorded in .planning/quick/261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen/261119-sd5-DEMO-PIN.md. The 2.0.4 half of NOTICE-05 is deferred with Phase 19 (v1.3.0 close).
 - [Demo pin]: Demo uses EMS commit 755cb275564f44b0af15dcad86267d809fe23f79 (755cb27; held by tag `ems-demo-2026-12`; CI run 44423016638 green; it was the remote branch tip until 2026-11-22, when the push of 53b4db8 moved the tip on with planning-only commits plus a `.gitignore` change — see quick 261122-trn). v1.3.0 Phases 17-19 were deferred at the v1.3.0 close (2026-11-22). Known gap: Hayes demo3/run-service records still pin EMS 62a8955, not 1544dc1. See 261119-sd5-DEMO-PIN.md.
 - [Hayes close]: Reported by Oscar Mack 2026-11-22 (quick 261122-tjr): Hayes closed its milestone and no Hayes milestone is open now. The Hayes v1 chain is still pinned at EMS 62a8955, and the 2.0.3 reader is still not wired in; neither is decided by that close. The EMS version for Hayes is now decided (see [Hayes pin 2.0.3]); wiring the reader is Hayes-side.
@@ -157,6 +157,7 @@ Recent decisions affecting current work:
 | 261122-tjr | Record Hayes milestone close (no Hayes milestone open; v1 chain still on EMS 62a8955; 2.0.3 reader not wired in) and fix stale STATE fields | 2026-11-22 | 53b4db8 | [261122-tjr-record-hayes-milestone-close-in-state-md](./quick/261122-tjr-record-hayes-milestone-close-in-state-md/) |
 | 261122-trn | Demo-pin note: 755cb27 is no longer the remote tip (branch pushed to 53b4db8); pin held by tag ems-demo-2026-12 | 2026-11-22 | 2ce8dea | [261122-trn-fix-demo-pin-remote-tip-note](./quick/261122-trn-fix-demo-pin-remote-tip-note/) |
 | 261122-v8y | SEC-03: CI secret scan covers *.md, guard test tests/test_archive_assessment_ci_workflow.py; Hayes 2.0.3 pin decision recorded | 2026-11-22 | d0beb7a | [261122-v8y-sec-03-secret-scan-covers-md](./quick/261122-v8y-sec-03-secret-scan-covers-md/) |
+| 261124-hsc | STATE [CI] line: latest green run 45451164734 at b55f54c (1148 passed, 0 skipped, 7 validators PASS) | 2026-11-24 | pending | [261124-hsc-update-state-ci-line](./quick/261124-hsc-update-state-ci-line/) |
 
 ## Deferred Items
 
