@@ -4,7 +4,7 @@ milestone: v1.3.0
 milestone_name: Authority 2.0.4 Tech-Debt Closure
 status: Awaiting next milestone
 last_updated: "2026-11-24T17:50:00.000Z"
-last_activity: 2026-11-24 — Quick 261124-hsc: STATE [CI] line updated to green run 45451164734 at b55f54c
+last_activity: 2026-11-24 — Quick 261124-htn: 2.0.3 demo readiness checklist recorded
 progress:
   total_phases: 4
   completed_phases: 1
@@ -134,9 +134,10 @@ Recent decisions affecting current work:
 - [Next publication]: none planned (2.0.4 deferred). BASE-01 (Phase 16) closed 13-REVIEW WR-01. Any future republication reopens a red window (hash certification); Phase 17 plans are kept for that case.
 - [CI]: The `archive-assessment` job (261015-ci1) runs on PRs, pushes to main and `workflow_dispatch`, with `EMS_FAIL_ON_SKIP=1`. The latest green run is 45451164734 at `b55f54c` (workflow_dispatch, 2026-11-24, after the v1.3.0 close): 1148 passed, 0 skipped, and 7 validators printed PASS. The previous one was 45108276889 at `d0beb7a` (2026-11-22), with the same counts.
 - [Notice 2.0.3]: Recorded. Notice sent to Hayes at 91d88473129a8996e97da23be58de33076ec5b51 (91d8847, 2026-11-18), confirmed by Oscar Mack; 2.0.3 half of NOTICE-05 recorded in .planning/quick/261119-sd5-record-ems-demo-pin-and-2-0-3-notice-sen/261119-sd5-DEMO-PIN.md. The 2.0.4 half of NOTICE-05 is deferred with Phase 19 (v1.3.0 close).
-- [Demo pin]: Demo uses EMS commit 755cb275564f44b0af15dcad86267d809fe23f79 (755cb27; held by tag `ems-demo-2026-12`; CI run 44423016638 green; it was the remote branch tip until 2026-11-22, when the push of 53b4db8 moved the tip on with planning-only commits plus a `.gitignore` change — see quick 261122-trn). v1.3.0 Phases 17-19 were deferred at the v1.3.0 close (2026-11-22). Known gap: Hayes demo3/run-service records still pin EMS 62a8955, not 1544dc1. See 261119-sd5-DEMO-PIN.md.
+- [Demo pin]: Demo uses EMS commit 755cb275564f44b0af15dcad86267d809fe23f79 (755cb27; held by tag `ems-demo-2026-12`; CI run 44423016638 green; it was the remote branch tip until 2026-11-22, when the push of 53b4db8 moved the tip on with planning-only commits plus a `.gitignore` change — see quick 261122-trn). v1.3.0 Phases 17-19 were deferred at the v1.3.0 close (2026-11-22). Known gap (updated 2026-11-24, quick 261124-htn): the Hayes run-service records now cite EMS 1544dc1 (Hayes 9478bbf5ce, plan 63-04), but Hayes v6.5 is not finished, and DEMO-1A/1B still read 62a8955 by design (Hayes v6.5 ruling Q2). See [Demo 2.0.3 readiness] and 261119-sd5-DEMO-PIN.md.
 - [Hayes close]: Reported by Oscar Mack 2026-11-22 (quick 261122-tjr): Hayes closed its milestone and no Hayes milestone is open now. The Hayes v1 chain is still pinned at EMS 62a8955, and the 2.0.3 reader is still not wired in; neither is decided by that close. The EMS version for Hayes is now decided (see [Hayes pin 2.0.3]); wiring the reader is Hayes-side.
 - [Hayes pin 2.0.3]: Decided by Oscar Mack 2026-11-22: Hayes Verify will pin EMS-AA3 authority 2.0.3 (1544dc1). This decides the EMS version Hayes moves to from 62a8955; wiring the 2.0.3 reader is Hayes-side work. Consequence (option 3): no 2.0.4 is needed; v1.3.0 closes after Phase 16 with Phases 17-19 deferred (SEC-01, SEC-02, SEC-04, GATE-11, GATE-12, PUB-13..15, NOTICE-04, 2.0.4 half of NOTICE-05); SEC-03 done as quick 261122-v8y (CI/test only, no certified path).
+- [Demo 2.0.3 readiness]: Checked 2026-11-24 (quick 261124-htn; Hayes repo read only, at Hayes 9caa05aa5a). EMS side ready: 2.0.3 at 1544dc1, contained in demo tag `ems-demo-2026-12` (755cb27, pushed), CI green at b55f54c (45451164734), notice sent, demo script rehearsed (261119-t1l). Run the EMS steps from a fresh clone, not this working copy (local CRLF on the two 2.0.3 notice files). Hayes side not ready: v6.5 "EMS 2.0.3 Wiring" in progress. Checklist in Operator Next Steps.
 - [Publication 2.0.2]: EMS-AA3 authority 2.0.2 published at ae15c7458e49c8f55cc58c61bab04bc716aa9892 (Hayes pins this), record commit a71257ed267410138a3c4daba412b00c116663d8; CI run 43332405316 green (validate + archive-assessment) at headSha a71257e (workflow_dispatch, 2026-11-12); publication bytes identical pub..record
 - [Publication 2.0.3]: EMS-AA3 authority 2.0.3 published at 1544dc19ba235d732c832d1651895550ed5a265d (Hayes pins this; signed off by Oscar Mack 2026-11-17), record commit 87a46d147413bd99e931c71a1ab165eb0903f014 (direct child of PUB), WR-03 commit 5498002c5eea3a6d9e3bfbb6766119880bb36804; CI run 44134035073 green (validate + archive-assessment) at headSha 5498002 (workflow_dispatch, 2026-11-17); publication bytes identical PUB..WR03; --validate --at-pin PASS in tree and in a fresh --no-local clone. Push scope: remote tip is 5498002; the .planning-only commits after WR03 (3fd54ac, and the docs(13-04) evidence commit) are local and are published by the Phase 14 push.
 - [Environment]: `git push` via the credential manager fails in this session (sh.exe crash); pushing with the GitHub CLI token as a one-command `http.extraheader` (env `GIT_CONFIG_*`, credential.helper cleared) works
@@ -158,6 +159,7 @@ Recent decisions affecting current work:
 | 261122-trn | Demo-pin note: 755cb27 is no longer the remote tip (branch pushed to 53b4db8); pin held by tag ems-demo-2026-12 | 2026-11-22 | 2ce8dea | [261122-trn-fix-demo-pin-remote-tip-note](./quick/261122-trn-fix-demo-pin-remote-tip-note/) |
 | 261122-v8y | SEC-03: CI secret scan covers *.md, guard test tests/test_archive_assessment_ci_workflow.py; Hayes 2.0.3 pin decision recorded | 2026-11-22 | d0beb7a | [261122-v8y-sec-03-secret-scan-covers-md](./quick/261122-v8y-sec-03-secret-scan-covers-md/) |
 | 261124-hsc | STATE [CI] line: latest green run 45451164734 at b55f54c (1148 passed, 0 skipped, 7 validators PASS) | 2026-11-24 | b3dbb5f | [261124-hsc-update-state-ci-line](./quick/261124-hsc-update-state-ci-line/) |
+| 261124-htn | Record 2.0.3 demo readiness checklist: EMS ready; Hayes v6.5 Phase 63 open (2 R5 warnings), Phase 64 not started; live-run and demo-path decisions open | 2026-11-24 | pending | [261124-htn-record-2-0-3-demo-readiness-checklist](./quick/261124-htn-record-2-0-3-demo-readiness-checklist/) |
 
 ## Deferred Items
 
@@ -184,11 +186,33 @@ Items acknowledged at the v1.3.0 milestone close on 2026-11-22: the open-artifac
 
 ## Session Continuity
 
-Last session: 2026-11-22
-Stopped at: v1.3.0 closed (Phase 16 + SEC-03 shipped; Phases 17-19 deferred because Hayes pins 2.0.3); no milestone open
+Last session: 2026-11-24
+Stopped at: 2.0.3 demo readiness checklist recorded (quick 261124-htn); v1.3.0 closed; no milestone open
 Resume file: None
 
 ## Operator Next Steps
 
 - No milestone is open. The next step is the authority's choice, for example /gsd-new-milestone.
 - If a future pin needs 2.0.4: Phase 17's 9 plans are in `.planning/phases/17-security-hardening-and-schema-pinning/` (re-check them against the code before executing).
+
+### Demo readiness checklist (EMS 2.0.3 target)
+
+Recorded 2026-11-24 (quick 261124-htn). Hayes status read from the Hayes repo at 9caa05aa5a; re-check there before acting.
+
+EMS side (no work needed):
+- [x] Authority 2.0.3 at 1544dc1; demo tag `ems-demo-2026-12` -> 755cb27 contains it, pushed
+- [x] CI green at the branch tip b55f54c (run 45451164734)
+- [x] 2.0.3 notice sent (91d8847); demo script rehearsed (261119-t1l)
+- [ ] At demo time, run the EMS verify steps from a fresh clone, not `C:\temp\standars\ems` (local CRLF on the two 2.0.3 notice files)
+
+Hayes side (Hayes session work):
+- [ ] 1. Finish Phase 63 (binding switch): settle code-review round 5 warnings CR63R5-WR-01 (HEAD read forgeable via GIT_OBJECT_DIRECTORY/GIT_COMMON_DIR) and WR-02 (overwritten loose object), re-review, verify; tick WBIND-01, WSPLIT-01, WGATE-01; update the Hayes ROADMAP and STATE
+- [ ] 2. Phase 64 (outcomes): per-file rulings on each changed expected/golden output (WOUT-01); full governed suite once and the audit (WREG-01)
+- [ ] 3. Close Hayes v6.5
+
+Decisions for Oscar Mack:
+- [ ] 4. Live run or fixtures: v6.5 is fixture-only (Hayes ruling Q1); a live Hayes run against EMS 2.0.3 needs a separate ruling and run request
+- [ ] 5. Which Hayes path to demo: only the run service reads 2.0.3; DEMO-1A/1B read EMS 62a8955 by design (Hayes ruling Q2)
+- [ ] 6. End-to-end rehearsal: EMS verify steps on a fresh clone, then the Hayes run service at its v6.5 close commit
+
+Decide 4 and 5 before Hayes Phase 64, so its outputs match what will be shown.
