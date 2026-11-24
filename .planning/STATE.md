@@ -157,7 +157,7 @@ Recent decisions affecting current work:
 | 261122-tjr | Record Hayes milestone close (no Hayes milestone open; v1 chain still on EMS 62a8955; 2.0.3 reader not wired in) and fix stale STATE fields | 2026-11-22 | 53b4db8 | [261122-tjr-record-hayes-milestone-close-in-state-md](./quick/261122-tjr-record-hayes-milestone-close-in-state-md/) |
 | 261122-trn | Demo-pin note: 755cb27 is no longer the remote tip (branch pushed to 53b4db8); pin held by tag ems-demo-2026-12 | 2026-11-22 | 2ce8dea | [261122-trn-fix-demo-pin-remote-tip-note](./quick/261122-trn-fix-demo-pin-remote-tip-note/) |
 | 261122-v8y | SEC-03: CI secret scan covers *.md, guard test tests/test_archive_assessment_ci_workflow.py; Hayes 2.0.3 pin decision recorded | 2026-11-22 | d0beb7a | [261122-v8y-sec-03-secret-scan-covers-md](./quick/261122-v8y-sec-03-secret-scan-covers-md/) |
-| 261124-hsc | STATE [CI] line: latest green run 45451164734 at b55f54c (1148 passed, 0 skipped, 7 validators PASS) | 2026-11-24 | pending | [261124-hsc-update-state-ci-line](./quick/261124-hsc-update-state-ci-line/) |
+| 261124-hsc | STATE [CI] line: latest green run 45451164734 at b55f54c (1148 passed, 0 skipped, 7 validators PASS) | 2026-11-24 | b3dbb5f | [261124-hsc-update-state-ci-line](./quick/261124-hsc-update-state-ci-line/) |
 
 ## Deferred Items
 
